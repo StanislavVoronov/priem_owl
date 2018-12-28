@@ -11,6 +11,8 @@
     "url": "http://monitoring.mgutm.ru:81/stas/priem_owl.git"
   },
   "dependencies": {
+    "@mgutm-fcu/auth": "latest",
+    "@mgutm-fcu/dictionary": "latest",
     "@material-ui/core": "^3.7.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
