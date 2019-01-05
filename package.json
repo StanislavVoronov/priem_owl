@@ -4,31 +4,37 @@
   "description": "priem for mgutm ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tsc": "rm -rf build/dist && tsc",
+    "lint": "tslint src/**/*.{tsx,ts} --fix",
+    "build": "./node_modules/.bin/webpack && sh delivery.sh"
   },
   "repository": {
     "type": "git",
     "url": "http://monitoring.mgutm.ru:81/stas/priem_owl.git"
   },
   "dependencies": {
+    "@material-ui/core": "^3.7.1",
     "@mgutm-fcu/auth": "latest",
     "@mgutm-fcu/dictionary": "latest",
-    "@material-ui/core": "^3.7.1",
+    "@types/react-autosuggest": "^9.3.6",
+    "@types/lodash": "latest",
+    "@types/autosuggest-highlight": "latest",
+    "autosuggest-highlight": "latest",
+    "lodash": "latest",
     "react": "^16.7.0",
+    "react-autosuggest": "latest",
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",
     "redux-actions": "^2.6.4",
-    "redux-thunk": "latest"
-  },
-  "scripts": {
-    "tsc": "rm -rf build/dist && tsc",
-    "lint": "tslint src/**/*.{tsx,ts} --fix",
-    "build": "./node_modules/.bin/webpack && sh delivery.sh"
+    "redux-thunk": "latest",
+    "react-select": "^2.2.0"
   },
   "homepage": "https://monitoring.mgutm.ru/dev/priem/unstable/dictionary",
   "devDependencies": {
     "@types/node": "^10.12.15",
+    "@types/react-select": "^2.0.11",
+    "@types/redux": "^3.6.0",
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
     "@types/react-redux": "^6.0.11",
