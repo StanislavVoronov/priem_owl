@@ -11,6 +11,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import RadioGroupButton from './RadioGroupButton';
+import DocDataForm from './DocDataForm';
 import Select from 'react-select';
 export {
 	Autocomplete,
@@ -29,4 +30,5 @@ export {
 	RadioGroupButton,
 	TextField,
 	Select,
+	DocDataForm,
 };
