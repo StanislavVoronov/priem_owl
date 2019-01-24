@@ -1,18 +1,29 @@
 import React from 'react';
 import deburr from 'lodash/deburr';
-import Autosuggest from 'react-autosuggest';
+import Autosuggest, { SuggestionSelectedEventData } from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
-import { EMarginSpaceType } from '../models/';
+import { EMarginSpaceType, ITextFieldChange } from '../models/';
 interface IInputProps {
 	label?: string;
 	placeholder?: string;
+	margin?: EMarginSpaceType;
+	onChange: <T>(event: any, data?: T) => void;
+	style?: any;
 }
 function renderInputComponent(inputProps: IInputProps) {
-	return <TextField fullWidth={true} {...inputProps} />;
+	return (
+		<TextField
+			InputLabelProps={{
+				shrink: true,
+			}}
+			fullWidth={true}
+			{...inputProps}
+		/>
+	);
 }
 
 function renderSuggestion(suggestion: string, { query, isHighlighted }: { query: string; isHighlighted: boolean }) {
@@ -24,7 +35,7 @@ function renderSuggestion(suggestion: string, { query, isHighlighted }: { query:
 			<div>
 				{parts.map((part: any, index: number) => {
 					return part.highlight ? (
-						<span key={String(index)} style={{ fontWeight: 500 }}>
+						<span key={String(index)} style={{ fontWeight: 'bold' }}>
 							{part.text}
 						</span>
 					) : (
@@ -38,22 +49,23 @@ function renderSuggestion(suggestion: string, { query, isHighlighted }: { query:
 	);
 }
 
-function getSuggestions(value: string, suggestions: string[]) {
+function getSuggestions(value: string, suggestions: string[], field: string) {
 	const inputValue = deburr(value.trim()).toLowerCase();
 	const inputLength = inputValue.length;
 	let count = 0;
-
 	return inputLength === 0
 		? []
-		: suggestions.filter(suggestion => {
-				const keep = count < 5 && suggestion.slice(0, inputLength).toLowerCase() === inputValue;
+		: suggestions
+				.map((item: any) => item[field])
+				.filter(suggestion => {
+					const keep = count < 5 && suggestion.slice(0, inputLength).toLowerCase() === inputValue;
 
-				if (keep) {
-					count += 1;
-				}
+					if (keep) {
+						count += 1;
+					}
 
-				return keep;
-		  });
+					return keep;
+				});
 }
 
 function getSuggestionValue(suggestion: string) {
@@ -87,8 +99,8 @@ const styles = {
 
 interface IAutoCompleteProps extends IInputProps {
 	suggestions: string[];
+	field: string;
 	required?: boolean;
-	margin?: EMarginSpaceType;
 }
 
 interface IAutoCompleteState {
@@ -104,6 +116,9 @@ const renderSuggestionsContainer = (options: any) => {
 	);
 };
 class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoCompleteState> {
+	defaultProps = {
+		field: 'name',
+	};
 	public state = {
 		single: '',
 		suggestions: [],
@@ -111,7 +126,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 
 	public handleSuggestionsFetchRequested = ({ value }: { value: string }) => {
 		this.setState({
-			suggestions: getSuggestions(value, this.props.suggestions),
+			suggestions: getSuggestions(value, this.props.suggestions, this.props.field),
 		});
 	};
 
@@ -125,8 +140,15 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 		this.setState({
 			single: newValue,
 		});
+		this.props.onChange({ target: { value: newValue } });
 	};
-
+	onSelectSuggestion = (event: any, data: SuggestionSelectedEventData<string>) => {
+		console.log('data', data, this.state.suggestions);
+		this.props.onChange(
+			{ target: { value: data.suggestion } },
+			this.props.suggestions.find(item => item[this.props.field] === data.suggestion),
+		);
+	};
 	public render() {
 		const autosuggestProps = {
 			renderInputComponent,
@@ -153,7 +175,9 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 						suggestionsList: styles.suggestionsList,
 						suggestion: styles.suggestion,
 					}}
+					focusInputOnSuggestionClick={false}
 					renderSuggestionsContainer={renderSuggestionsContainer}
+					onSuggestionSelected={this.onSelectSuggestion}
 				/>
 			</div>
 		);

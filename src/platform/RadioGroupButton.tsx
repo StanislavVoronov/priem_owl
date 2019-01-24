@@ -15,9 +15,14 @@ interface IRadioGroupButton {
 
 const RadionGroupButton = (props: IRadioGroupButton) => {
 	return (
-		<FormControl>
+		<FormControl style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
 			<FormLabel>{props.title}</FormLabel>
-			<RadioGroup aria-label="Gender" name="gender1" value={props.currentValue} onChange={props.onChange}>
+			<RadioGroup
+				style={{ display: 'flex', flexDirection: 'row', marginLeft: 20 }}
+				aria-label="Gender"
+				name="gender1"
+				value={props.currentValue}
+				onChange={props.onChange}>
 				{props.values.map((item, index) => (
 					<FormControlLabel key={`${item.value}-${index}`} value={item.value} control={<Radio />} label={item.label} />
 				))}

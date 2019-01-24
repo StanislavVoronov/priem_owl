@@ -1,18 +1,18 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { userReducer } from '@mgutm-fcu/auth';
-import { dictionaryReducer } from '@mgutm-fcu/dictionary';
+import { currentUser, currentUserInitialState, IUserStore } from '@mgutm-fcu/auth';
+import { reducerDictionaries, IDictionaryStore } from '@mgutm-fcu/dictionary';
 import { Provider } from 'react-redux';
-import { combineReducers, createStore } from 'redux';
-
+import { applyMiddleware, combineReducers, createStore } from 'redux';
+import thunk from 'redux-thunk';
 import App from './App';
 
-const state = combineReducers({
-	user: userReducer as any,
-	dictionaries: dictionaryReducer as any,
+interface PriemOwlState extends IUserStore, IDictionaryStore {}
+const state = combineReducers<PriemOwlState>({
+	...currentUser,
+	...reducerDictionaries,
 });
-
-const store = createStore(state);
+const store = createStore(state, { ...currentUserInitialState, dictionaries: {} }, applyMiddleware(thunk));
 
 ReactDOM.render(
 	<Provider store={store}>

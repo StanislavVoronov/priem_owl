@@ -1,48 +1,56 @@
 import React from 'react';
 import { TextField, FormControl } from './';
-interface IDocDataForm {
+import { ITextFieldChange } from '../models';
+interface IDocDataForm extends ITextFieldChange {
 	requireSeries?: boolean;
-	series: string;
-	number: string;
-	date: string;
-	issued: string;
-	onChangeSeries: (event: any) => void;
-	onChangeNumber: (event: any) => void;
-	onChangeDate: (event: any) => void;
-	onChangeIssued: (event: any) => void;
+	seriesValidateErrorMessage?: string;
 }
+const styles = {
+	space: {
+		marginTop: 10,
+		marginBottom: 5,
+	},
+};
 const DocDataForm = (props: IDocDataForm) => {
 	return (
 		<FormControl>
 			<TextField
 				required={props.requireSeries}
-				value={props.series}
-				margin={'normal'}
+				style={styles.space}
 				placeholder="Введите серию документа"
 				label="Серия"
-				onChange={props.onChangeSeries}
+				InputLabelProps={{
+					shrink: true,
+				}}
+				onChange={props.onChangeTextField('series')}
 			/>
 			<TextField
-				value={props.number}
-				margin={'normal'}
+				style={styles.space}
 				placeholder="Введите номер документа"
 				label="Номер"
-				onChange={props.onChangeNumber}
+				InputLabelProps={{
+					shrink: true,
+				}}
+				onChange={props.onChangeTextField('number')}
 			/>
 			<TextField
-				value={props.date}
-				margin={'normal'}
-				placeholder="Введите дату выдачи документа"
+				style={styles.space}
+				type="date"
+				InputLabelProps={{
+					shrink: true,
+				}}
 				label="Дата выдачи"
-				onChange={props.onChangeDate}
+				onChange={props.onChangeTextField('date')}
 			/>
 			<TextField
-				value={props.issued}
-				margin={'normal'}
+				style={styles.space}
 				placeholder="Введите кем выдан документ"
 				label="Кем выдан"
+				InputLabelProps={{
+					shrink: true,
+				}}
 				multiline
-				onChange={props.onChangeIssued}
+				onChange={props.onChangeTextField('issued')}
 			/>
 		</FormControl>
 	);

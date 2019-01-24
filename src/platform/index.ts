@@ -13,6 +13,10 @@ import FormLabel from '@material-ui/core/FormLabel';
 import RadioGroupButton from './RadioGroupButton';
 import DocDataForm from './DocDataForm';
 import Select from 'react-select';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 export {
 	Autocomplete,
 	Stepper,
@@ -31,4 +35,8 @@ export {
 	TextField,
 	Select,
 	DocDataForm,
+	Tab,
+	Tabs,
+	Card,
+	CardContent,
 };
