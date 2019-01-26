@@ -6,11 +6,10 @@ import parse from 'autosuggest-highlight/parse';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
-import { EMarginSpaceType, ITextFieldChange } from '../models/';
-interface IInputProps {
+import { ISpacable } from '../common/';
+interface IInputProps extends ISpacable {
 	label?: string;
 	placeholder?: string;
-	margin?: EMarginSpaceType;
 	onChange: <T>(event: any, data?: T) => void;
 	style?: any;
 }
@@ -98,7 +97,7 @@ const styles = {
 };
 
 interface IAutoCompleteProps extends IInputProps {
-	suggestions: string[];
+	suggestions: any[];
 	field: string;
 	required?: boolean;
 }
@@ -135,17 +134,19 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 			suggestions: [],
 		});
 	};
-
+	public onBlur = (event: any) => {
+		if (event && event.target && event.target.value) {
+			this.props.onChange(event.targer.value);
+		}
+	};
 	public handleChange = (name: string) => (event: any, { newValue }: { newValue: string }) => {
 		this.setState({
 			single: newValue,
 		});
-		this.props.onChange({ target: { value: newValue } });
 	};
 	onSelectSuggestion = (event: any, data: SuggestionSelectedEventData<string>) => {
-		console.log('data', data, this.state.suggestions);
 		this.props.onChange(
-			{ target: { value: data.suggestion } },
+			data.suggestion,
 			this.props.suggestions.find(item => item[this.props.field] === data.suggestion),
 		);
 	};
@@ -166,6 +167,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 					inputProps={{
 						...inputProps,
 						value: this.state.single,
+						onBlur: this.onBlur,
 						onChange: this.handleChange('single'),
 					}}
 					// @ts-ignore

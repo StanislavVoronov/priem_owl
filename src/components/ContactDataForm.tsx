@@ -1,14 +1,14 @@
 import React from 'react';
-import { TextField, FormControl, FormLabel } from '../platform';
-import { ITextFieldChange } from '../models/';
+import { TextInput, FormControl, FormLabel } from '../platform';
+import { ITextFieldChanged } from '../common/';
 
-const ContactDataForm = (props: ITextFieldChange) => {
+const ContactDataForm = (props: ITextFieldChanged) => {
 	return (
 		<FormControl>
 			<FormLabel>Адрес регистрации</FormLabel>
-			<TextField label={'Индекс'} onChange={props.onChangeTextField('regIndex')} />
-			<TextField label={'Область'} onChange={props.onChangeTextField('regRegion')} />
-			<TextField label={'Населенный пункт'} onChange={props.onChangeTextField('regLocality')} />
+			<TextInput label={'Индекс'} onBlur={props.onChangeTextField('regIndex')} />
+			<TextInput label={'Область'} onBlur={props.onChangeTextField('regRegion')} />
+			<TextInput label={'Населенный пункт'} onBlur={props.onChangeTextField('regLocality')} />
 		</FormControl>
 	);
 };

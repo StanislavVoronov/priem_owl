@@ -1,7 +1,7 @@
 import React from 'react';
-import { TextField, FormControl } from './';
-import { ITextFieldChange } from '../models';
-interface IDocDataForm extends ITextFieldChange {
+import { TextInput, FormControl } from './';
+import { ITextFieldChanged } from '../common';
+interface IDocDataForm extends ITextFieldChanged {
 	requireSeries?: boolean;
 	seriesValidateErrorMessage?: string;
 }
@@ -14,43 +14,26 @@ const styles = {
 const DocDataForm = (props: IDocDataForm) => {
 	return (
 		<FormControl>
-			<TextField
+			<TextInput
 				required={props.requireSeries}
-				style={styles.space}
 				placeholder="Введите серию документа"
 				label="Серия"
-				InputLabelProps={{
-					shrink: true,
-				}}
-				onChange={props.onChangeTextField('series')}
+				onBlur={props.onChangeTextField('series')}
 			/>
-			<TextField
-				style={styles.space}
+			<TextInput
+				required
 				placeholder="Введите номер документа"
 				label="Номер"
-				InputLabelProps={{
-					shrink: true,
-				}}
-				onChange={props.onChangeTextField('number')}
+				type="number"
+				onBlur={props.onChangeTextField('number')}
 			/>
-			<TextField
-				style={styles.space}
-				type="date"
-				InputLabelProps={{
-					shrink: true,
-				}}
-				label="Дата выдачи"
-				onChange={props.onChangeTextField('date')}
-			/>
-			<TextField
-				style={styles.space}
+			<TextInput required type="date" label="Дата выдачи документа" onBlur={props.onChangeTextField('date')} />
+			<TextInput
+				required
 				placeholder="Введите кем выдан документ"
-				label="Кем выдан"
-				InputLabelProps={{
-					shrink: true,
-				}}
+				label="Кем выдан документ"
 				multiline
-				onChange={props.onChangeTextField('issued')}
+				onBlur={props.onChangeTextField('issued')}
 			/>
 		</FormControl>
 	);

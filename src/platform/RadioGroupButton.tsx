@@ -4,10 +4,11 @@ import { FormControlLabel, Radio, RadioGroup, FormControl, FormLabel } from './'
 
 interface IRadioButton {
 	label: string;
-	value: string;
+	value: string | number;
+	color?: any; //'primary' | 'secondary'
 }
 interface IRadioGroupButton {
-	currentValue: string;
+	currentValue: number | null;
 	values: IRadioButton[];
 	title: string;
 	onChange: (event: any, value: string) => void;
@@ -20,11 +21,16 @@ const RadionGroupButton = (props: IRadioGroupButton) => {
 			<RadioGroup
 				style={{ display: 'flex', flexDirection: 'row', marginLeft: 20 }}
 				aria-label="Gender"
-				name="gender1"
-				value={props.currentValue}
+				name="gender"
+				value={String(props.currentValue)}
 				onChange={props.onChange}>
 				{props.values.map((item, index) => (
-					<FormControlLabel key={`${item.value}-${index}`} value={item.value} control={<Radio />} label={item.label} />
+					<FormControlLabel
+						key={`${item.value}-${index}`}
+						value={item.value.toString()}
+						control={<Radio color={item.color} />}
+						label={item.label}
+					/>
 				))}
 			</RadioGroup>
 		</FormControl>

@@ -1,5 +1,5 @@
 import Autocomplete from './Autocomplete';
-import TextField from '@material-ui/core/TextField';
+import TextInput from './TextInput';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -12,7 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import RadioGroupButton from './RadioGroupButton';
 import DocDataForm from './DocDataForm';
-import Select from 'react-select';
+import DropdownSelect from './DropdownSelect';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Card from '@material-ui/core/Card';
@@ -32,8 +32,8 @@ export {
 	FormControlLabel,
 	FormHelperText,
 	RadioGroupButton,
-	TextField,
-	Select,
+	TextInput,
+	DropdownSelect,
 	DocDataForm,
 	Tab,
 	Tabs,

@@ -1,115 +1,80 @@
 import React from 'react';
-import { Autocomplete, RadioGroupButton, TextField, DocDataForm, Select, FormControl, FormLabel } from '../platform/';
-import { EMarginSpaceType, ITextFieldChange } from '../models';
+import { Autocomplete, RadioGroupButton, TextInput, DocDataForm, DropdownSelect } from '../platform/';
+import {
+	IDictionaryNames,
+	ITextFieldChanged,
+	IAutocompleteChanged,
+	ISelectChanged,
+	ISpacable,
+	makeSpace,
+} from '../common';
 
 interface IPersonDataFormProps {
-	onChangeGender: (gender: number) => void;
-	gender?: string;
+	onChangeGender: (event: any, gender: string) => void;
 	dictionaryGorverments: any[];
 	dictionaryPersonDocTypes: any[];
-	dictionaryFirstNames: any[];
+	dictionaryFirstNames: IDictionaryNames[];
+	dictionaryMiddleNames: IDictionaryNames[];
+	gender: number | null;
 }
 const styles = {
-	spaceSelector: {
-		marginTop: 16,
-		marginBottom: 8,
-	},
-	spaceTextField: {
-		marginTop: 12,
-		marginBottom: 6,
-	},
+	main: { display: 'flex', flexDirection: 'column' },
 };
-type IProps = ITextFieldChange & IPersonDataFormProps;
+
+type IProps = ITextFieldChanged & IPersonDataFormProps & IAutocompleteChanged & ISelectChanged & ISpacable;
+const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { value: 2, label: 'Жен.' }];
 const PersonDataForm = (props: IProps) => {
+	const { space = 'small' } = props;
+
 	return (
-		<div style={{ display: 'flex', flexDirection: 'column' }}>
-			<TextField
-				InputLabelProps={{
-					shrink: true,
-				}}
-				style={styles.spaceTextField}
+		// @ts-ignore
+		<div style={styles.main}>
+			<TextInput
+				required
+				placeholder={'Введите фамилию'}
 				label="Фамилия"
-				onChange={props.onChangeTextField('lastName')}
+				onBlur={props.onChangeTextField('lastName')}
 			/>
 			<Autocomplete
 				field="name"
 				label={'Имя'}
-				onChange={props.onChangeTextField('firstName')}
+				required
+				onChange={props.onChangeAutocompleteTextField('firstName')}
 				placeholder={'Введите имя'}
-				style={styles.spaceTextField}
+				style={makeSpace(space)}
 				suggestions={props.dictionaryFirstNames}
 			/>
 			<Autocomplete
 				field="name"
 				label={'Отчество'}
-				onChange={props.onChangeTextField('middle')}
+				onChange={props.onChangeAutocompleteTextField('middle')}
 				placeholder={'Введите отчество'}
-				style={styles.spaceTextField}
-				suggestions={props.dictionaryFirstNames}
+				style={makeSpace(space)}
+				suggestions={props.dictionaryMiddleNames}
 			/>
-			<RadioGroupButton
-				title="Пол"
-				currentValue={props.gender || ''}
-				values={[{ value: '2', label: 'Муж.' }, { value: '1', label: 'Жен.' }]}
-				onChange={props.onChangeGender}
+			<RadioGroupButton title="Пол" currentValue={props.gender} values={GENDERS} onChange={props.onChangeGender} />
+			<TextInput required label="Дата рождения" type="date" onBlur={props.onChangeTextField('birthday')} />
+			<DropdownSelect
+				required={true}
+				options={props.dictionaryGorverments}
+				placeholder="Выберите гражданство"
+				onChangeSelect={props.onChangeSelect('goverment')}
+				title="Гражданство"
 			/>
-			<TextField
-				label="Дата рождения"
-				style={styles.spaceTextField}
-				type="date"
-				onChange={props.onChangeTextField('birthday')}
-				defaultValue={new Date().toISOString()}
-				InputLabelProps={{
-					shrink: true,
-				}}
+
+			<DropdownSelect
+				required={true}
+				options={props.dictionaryPersonDocTypes}
+				placeholder="Выберите документ, удостоверающий личность"
+				onChangeSelect={props.onChangeSelect('personDoc')}
+				title="Тип документа удостоверяющего личность"
 			/>
-			<FormControl style={styles.spaceSelector}>
-				<FormLabel
-					style={{
-						marginBottom: 8,
-						position: 'absolute',
-						top: 0,
-						left: 0,
-						transform: 'translate(0, 1.5px)  scale(0.75)',
-					}}>
-					{'Гражданство'}
-				</FormLabel>
-				<Select
-					className="basic-single"
-					classNamePrefix="select"
-					defaultValue={undefined}
-					placeholder={'Выберите гражданство'}
-					isClearable={true}
-					isSearchable={true}
-					getOptionLabel={(item: any) => item.name}
-					getOptionValue={(item: any) => item.id}
-					options={props.dictionaryGorverments}
-				/>
-			</FormControl>
-			<FormControl style={styles.spaceSelector}>
-				<FormLabel style={{ marginBottom: 8, transform: 'translate(0, 1.5px)  scale(0.75)' }}>
-					{'Тип документа удостоверяющего личность'}
-				</FormLabel>
-				<Select
-					className="basic-single"
-					classNamePrefix="select"
-					placeholder={'Выберите документ, удостоверающий личность'}
-					defaultValue={undefined}
-					isClearable={true}
-					isSearchable={true}
-					getOptionLabel={(item: any) => item.name}
-					getOptionValue={(item: any) => item.id}
-					options={props.dictionaryPersonDocTypes}
-				/>
-			</FormControl>
 			<DocDataForm requireSeries={false} onChangeTextField={props.onChangeTextField} />
-			<TextField
-				InputLabelProps={{
-					shrink: true,
-				}}
+			<TextInput
 				label="Код подразделения"
-				style={styles.spaceTextField}
-				onChange={props.onChangeTextField('personDocCodeDepartment')}
+				type="number"
+				placeholder={'Введите код подразделения'}
+				onBlur={props.onChangeTextField('personDocCodeDepartment')}
 			/>
 		</div>
 	);
