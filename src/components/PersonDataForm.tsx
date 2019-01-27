@@ -7,34 +7,29 @@ import {
 	ISelectChanged,
 	ISpacable,
 	makeSpace,
+	composeStyles,
+	Styles,
+	IDataChanged,
 } from '../common';
+import { IDictionary } from '@mgutm-fcu/dictionary';
 
 interface IPersonDataFormProps {
 	onChangeGender: (event: any, gender: string) => void;
-	dictionaryGorverments: any[];
-	dictionaryPersonDocTypes: any[];
+	dictionaryGovernments: IDictionary[];
+	dictionaryPersonDocTypes: IDictionary[];
 	dictionaryFirstNames: IDictionaryNames[];
 	dictionaryMiddleNames: IDictionaryNames[];
 	gender: number | null;
 }
-const styles = {
-	main: { display: 'flex', flexDirection: 'column' },
-};
 
-type IProps = ITextFieldChanged & IPersonDataFormProps & IAutocompleteChanged & ISelectChanged & ISpacable;
+type IProps = IPersonDataFormProps & IAutocompleteChanged & IDataChanged & ISpacable;
 const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { value: 2, label: 'Жен.' }];
 const PersonDataForm = (props: IProps) => {
-	const { space = 'small' } = props;
+	const { space = 'v-small' } = props;
 
 	return (
-		// @ts-ignore
-		<div style={styles.main}>
-			<TextInput
-				required
-				placeholder={'Введите фамилию'}
-				label="Фамилия"
-				onBlur={props.onChangeTextField('lastName')}
-			/>
+		<div style={composeStyles(Styles.flexColumn)}>
+			<TextInput required placeholder={'Введите фамилию'} label="Фамилия" onBlur={props.onChangeData('lastName')} />
 			<Autocomplete
 				field="name"
 				label={'Имя'}
@@ -48,17 +43,16 @@ const PersonDataForm = (props: IProps) => {
 				field="name"
 				label={'Отчество'}
 				onChange={props.onChangeAutocompleteTextField('middle')}
-				placeholder={'Введите отчество'}
 				style={makeSpace(space)}
 				suggestions={props.dictionaryMiddleNames}
 			/>
 			<RadioGroupButton title="Пол" currentValue={props.gender} values={GENDERS} onChange={props.onChangeGender} />
-			<TextInput required label="Дата рождения" type="date" onBlur={props.onChangeTextField('birthday')} />
+			<TextInput required label="Дата рождения" type="date" onBlur={props.onChangeData('birthday')} />
 			<DropdownSelect
 				required={true}
-				options={props.dictionaryGorverments}
+				options={props.dictionaryGovernments}
 				placeholder="Выберите гражданство"
-				onChangeSelect={props.onChangeSelect('goverment')}
+				onChangeSelect={props.onChangeData('goverment')}
 				title="Гражданство"
 			/>
 
@@ -66,15 +60,20 @@ const PersonDataForm = (props: IProps) => {
 				required={true}
 				options={props.dictionaryPersonDocTypes}
 				placeholder="Выберите документ, удостоверающий личность"
-				onChangeSelect={props.onChangeSelect('personDoc')}
+				onChangeSelect={props.onChangeData('personDoc')}
 				title="Тип документа удостоверяющего личность"
 			/>
-			<DocDataForm requireSeries={false} onChangeTextField={props.onChangeTextField} />
+			<DocDataForm
+				title={'Тип документа удостоверяющего личность0'}
+				dictionary={props.dictionaryPersonDocTypes}
+				requireSeries={false}
+				onChangeData={props.onChangeData}
+			/>
 			<TextInput
 				label="Код подразделения"
 				type="number"
 				placeholder={'Введите код подразделения'}
-				onBlur={props.onChangeTextField('personDocCodeDepartment')}
+				onBlur={props.onChangeData('personDocCodeDepartment')}
 			/>
 		</div>
 	);

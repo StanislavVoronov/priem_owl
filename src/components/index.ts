@@ -1,3 +1,4 @@
 import PersonDataForm from './PersonDataForm';
-import ContactDataForm from './ContactDataForm';
-export { PersonDataForm, ContactDataForm };
+import ContactsDataForm from './ContactsDataForm';
+import EducationDataForm from './EducationDataForm';
+export { PersonDataForm, ContactsDataForm, EducationDataForm };

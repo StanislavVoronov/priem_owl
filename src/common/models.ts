@@ -1,4 +1,5 @@
 import { Style } from 'jss/css';
+import { IDictionary } from '@mgutm-fcu/dictionary';
 
 export interface IState {
 	user: any;
@@ -18,21 +19,13 @@ export interface IAutocompleteChanged {
 export interface ITextFieldChanged {
 	onChangeTextField: (field: string) => (text: string) => void;
 }
-export interface ISelectChanged {
-	onChangeSelect: (field: string) => (value: ISelectItem) => void;
+
+export interface IDataChanged {
+	onChangeData: <T>(field: string) => (item: T) => void;
 }
 
-export interface IPersonDataState {
-	firstName: string;
-	lastName: string;
-	middleName: string;
-	gender?: string;
-	birthday: string;
-	personDocSeries: string;
-	personDocNumber: string;
-	personDocDate: string;
-	personDocIssued: string;
-	personDocCodeDepartment: string;
+export interface ISelectChanged {
+	onChangeSelect: (field: string) => (value: ISelectItem) => void;
 }
 
 export interface IDictionaryPersonDocTypeFilter {
@@ -44,7 +37,18 @@ export interface IDictionaryNames {
 	sex: number;
 	type: number;
 }
-export type Space = 'none' | 'small' | 'middle' | 'big';
+export type Space =
+	| 'none'
+	| 'v-little'
+	| 'v-small'
+	| 'v-middle'
+	| 'v-big'
+	| 'v-large'
+	| 'h-little'
+	| 'h-small'
+	| 'h-middle'
+	| 'h-big'
+	| 'h-large';
 export interface ISpacable {
 	space?: Space;
 }
@@ -58,3 +62,34 @@ export interface ISelectItem {
 export interface IStylable {
 	style?: Style;
 }
+
+export interface IHelperText {
+	helperText?: string;
+}
+
+interface IDocDataForm {
+	type: string;
+	docNumber: string;
+	docSeries: string;
+	docIssued: string;
+	docDate: string;
+}
+export interface IHasError {
+	hasError?: boolean;
+}
+
+export interface IDictionaries {
+	dictionaries: IDictionary[];
+}
+
+export interface IPersonDataState extends IDocDataForm {
+	firstName: string;
+	middleName?: string;
+	lastName: string;
+	birthday: Date | null;
+	codeDepartment: string;
+	gender: number | null;
+}
+
+export interface IContactsDataState extends IDocDataForm {}
+export interface IEducationDataState extends IDocDataForm {}

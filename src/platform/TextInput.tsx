@@ -1,8 +1,9 @@
-import { ISpacable, IStylable, makeSpace } from '../common';
+import { composeStyles, IHasError, IHelperText, ISpacable, IStylable, makeSpace } from '../common';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
+import { FormLabel } from '@material-ui/core';
 
-export interface IInputProps extends ISpacable, IStylable {
+export interface IInputProps extends ISpacable, IStylable, IHasError, IHelperText {
 	onChange?: (text: string) => void;
 	placeholder?: string;
 	type?: 'date' | 'number' | 'text';
@@ -12,11 +13,14 @@ export interface IInputProps extends ISpacable, IStylable {
 	label?: string;
 	required?: boolean;
 	multiline?: boolean;
+	value?: string;
+	prefix?: string | number;
+	postfix?: string | number;
 }
 
 class TextInput extends React.PureComponent<IInputProps> {
 	static defaultProps = {
-		space: 'small',
+		space: 'v-small',
 		type: 'text',
 		required: false,
 		isTopLabel: true,
@@ -33,22 +37,27 @@ class TextInput extends React.PureComponent<IInputProps> {
 		}
 	};
 	render() {
-		console.log('proprs', this.props);
 		return (
-			<TextField
-				required={this.props.required}
-				multiline={this.props.multiline}
-				label={this.props.label}
-				placeholder={this.props.placeholder}
-				style={Object.assign(makeSpace(this.props.space), this.props.style)}
-				type={this.props.type}
-				onBlur={this.onBlur}
-				onChange={this.onChange}
-				defaultValue={this.props.defaultValue}
-				InputLabelProps={{
-					shrink: this.props.isTopLabel,
-				}}
-			/>
+			<React.Fragment>
+				{this.props.prefix && <FormLabel>{this.props.prefix}</FormLabel>}
+				<TextField
+					value={this.props.value}
+					error={this.props.hasError}
+					helperText={this.props.helperText}
+					required={this.props.required}
+					multiline={this.props.multiline}
+					label={this.props.label}
+					placeholder={this.props.placeholder}
+					style={composeStyles(makeSpace(this.props.space!), this.props.style)}
+					type={this.props.type}
+					onBlur={this.onBlur}
+					onChange={this.onChange}
+					defaultValue={this.props.defaultValue}
+					InputLabelProps={{
+						shrink: this.props.isTopLabel,
+					}}
+				/>
+			</React.Fragment>
 		);
 	}
 }

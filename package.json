@@ -26,7 +26,9 @@
     "react-select": "^2.2.0",
     "redux": "^4.0.1",
     "redux-actions": "^2.6.4",
-    "redux-thunk": "latest"
+    "redux-thunk": "latest",
+    "react-avatar-editor": "latest",
+    "react-dropzone": "latest"
   },
   "homepage": "https://monitoring.mgutm.ru/dev/priem/unstable/dictionary",
   "devDependencies": {

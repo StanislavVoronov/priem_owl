@@ -1,7 +1,8 @@
 import { FormControl, FormLabel } from '../platform/';
 import React from 'react';
 import Select from 'react-select';
-interface ISelect {
+import { composeStyles, IHasError, IHelperText, ISelectItem, ISpacable, IStylable, makeSpace } from '../common';
+interface ISelectProps extends IStylable, ISpacable, IHasError, IHelperText {
 	placeholder?: string;
 	onChangeSelect: (data: any) => void;
 	options: any[];
@@ -11,48 +12,48 @@ interface ISelect {
 	isSearchable?: boolean;
 	isClearable?: boolean;
 	defaultValue?: any;
+	isMulti?: boolean;
 	required?: boolean;
 }
 const styles = {
-	spaceSelector: {
-		marginTop: 15,
-		marginBottom: 10,
-	},
 	label: {
 		fontSize: '0.75em',
 		marginBottom: 5,
 	},
 };
-const DropdownSelect = (props: ISelect) => {
-	const {
-		label = 'name',
-		defaultValue,
-		value = 'id',
-		placeholder,
-		title,
-		isSearchable = true,
-		isClearable = true,
-	} = props;
-	return (
-		<FormControl style={styles.spaceSelector}>
-			<FormLabel style={styles.label}>
-				{title}
-				{props.required ? ' *' : ''}
-			</FormLabel>
-			<Select
-				className="basic-single"
-				classNamePrefix="select"
-				defaultValue={undefined}
-				placeholder={placeholder}
-				onChange={props.onChangeSelect}
-				isClearable={isClearable}
-				isSearchable={isSearchable}
-				getOptionLabel={(item: any) => item[label]}
-				getOptionValue={(item: any) => item[value]}
-				options={props.options}
-			/>
-		</FormControl>
-	);
-};
+class DropdownSelect extends React.PureComponent<ISelectProps> {
+	static defaultProps = {
+		isSearchable: true,
+		isClearable: true,
+		space: 'v-middle',
+		value: 'id',
+		label: 'name',
+		options: [],
+	};
+	render() {
+		return (
+			<FormControl style={composeStyles(makeSpace(this.props.space!), this.props.style)}>
+				<FormLabel style={styles.label}>
+					{this.props.title}
+					{this.props.required ? ' *' : ''}
+				</FormLabel>
+				<Select
+					className="basic-single"
+					isMulti={this.props.isMulti}
+					defaultValue={this.props.defaultValue}
+					classNamePrefix="select"
+					placeholder={this.props.placeholder}
+					onChange={this.props.onChangeSelect}
+					isClearable={this.props.isClearable}
+					isSearchable={this.props.isSearchable}
+					getOptionLabel={(item: any) => item[this.props.label!]}
+					getOptionValue={(item: any) => item[this.props.value!]}
+					options={this.props.options}
+				/>
+				{this.props.hasError && <FormLabel style={composeStyles({ color: 'red' })}>{this.props.helperText}</FormLabel>}
+			</FormControl>
+		);
+	}
+}
 
 export default DropdownSelect;

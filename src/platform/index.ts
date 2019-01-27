@@ -16,6 +16,7 @@ import DropdownSelect from './DropdownSelect';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Card from '@material-ui/core/Card';
+import { H2 } from './Headers';
 import CardContent from '@material-ui/core/CardContent';
 export {
 	Autocomplete,
@@ -39,4 +40,5 @@ export {
 	Tabs,
 	Card,
 	CardContent,
+	H2,
 };
