@@ -3,6 +3,7 @@ export enum EDictionaryNameList {
 	MiddleNames = 'directory_doc_middle_names',
 	PersonDocTypes = 'directory_doc_subtypes_person_doc',
 	CoolnessTypes = 'directory_coolness_types',
+	DocTypes = 'directory_doc_types',
 	EducationDocTypes = 'directory_doc_subtypes_education_doc',
 	Governments = 'directory_goverments',
 	PreviousEducation = 'directory_prev_educations',

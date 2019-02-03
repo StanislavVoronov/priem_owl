@@ -10,10 +10,11 @@ import {
 	composeStyles,
 	Styles,
 	IDataChanged,
+	IDocDataForm,
 } from '../common';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 
-interface IPersonDataFormProps {
+interface IPersonDataFormProps extends IDocDataForm {
 	onChangeGender: (event: any, gender: string) => void;
 	dictionaryGovernments: IDictionary[];
 	dictionaryPersonDocTypes: IDictionary[];
@@ -42,7 +43,7 @@ const PersonDataForm = (props: IProps) => {
 			<Autocomplete
 				field="name"
 				label={'Отчество'}
-				onChange={props.onChangeAutocompleteTextField('middle')}
+				onChange={props.onChangeAutocompleteTextField('middleName')}
 				style={makeSpace(space)}
 				suggestions={props.dictionaryMiddleNames}
 			/>
@@ -56,24 +57,20 @@ const PersonDataForm = (props: IProps) => {
 				title="Гражданство"
 			/>
 
-			<DropdownSelect
-				required={true}
-				options={props.dictionaryPersonDocTypes}
-				placeholder="Выберите документ, удостоверающий личность"
-				onChangeSelect={props.onChangeData('personDoc')}
-				title="Тип документа удостоверяющего личность"
-			/>
 			<DocDataForm
-				title={'Тип документа удостоверяющего личность0'}
-				dictionary={props.dictionaryPersonDocTypes}
+				dictionarySubTypes={props.dictionaryPersonDocTypes}
+				subTitle={'Тип документа удостоверяющего личность'}
 				requireSeries={false}
 				onChangeData={props.onChangeData}
-			/>
-			<TextInput
-				label="Код подразделения"
-				type="number"
-				placeholder={'Введите код подразделения'}
-				onBlur={props.onChangeData('personDocCodeDepartment')}
+				docFile={props.docFile}
+				extraFields={
+					<TextInput
+						label="Код подразделения"
+						type="number"
+						placeholder={'Введите код подразделения'}
+						onBlur={props.onChangeData('codeDepartment')}
+					/>
+				}
 			/>
 		</div>
 	);

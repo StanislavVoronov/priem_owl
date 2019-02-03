@@ -18,6 +18,8 @@ import Tab from '@material-ui/core/Tab';
 import Card from '@material-ui/core/Card';
 import { H2 } from './Headers';
 import CardContent from '@material-ui/core/CardContent';
+import Checkbox from '@material-ui/core/Checkbox';
+
 export {
 	Autocomplete,
 	Stepper,
@@ -41,4 +43,5 @@ export {
 	Card,
 	CardContent,
 	H2,
+	Checkbox,
 };

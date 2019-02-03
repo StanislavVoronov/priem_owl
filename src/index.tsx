@@ -8,8 +8,7 @@ import thunk from 'redux-thunk';
 import App from './App';
 import Auth from '@mgutm-fcu/auth/Auth';
 import Dictionary from '@mgutm-fcu/dictionary/Dictionary';
-import { EDictionaryNameList } from './common/';
-import { IDictionaryPersonDocTypeFilter } from './common';
+import { EDictionaryNameList, IDictionaryScanableFilter, IDictionaryTypeFilter } from './common/';
 
 interface PriemOwlState extends IUserStore, IDictionaryStore {}
 const state = combineReducers<PriemOwlState>({
@@ -40,27 +39,32 @@ ReactDOM.render(
 					{ table: EDictionaryNameList.Governments, columns: ['id', 'name', 'phone_code'] },
 					{
 						name: EDictionaryNameList.PersonDocTypes,
-						table: 'directory_doc_subtypes',
+						table: 'directory_doc_types',
 						columns: ['id', 'name', 'type'],
-						filter: (item: IDictionaryPersonDocTypeFilter) => item.type === 1,
+						filter: (item: IDictionaryTypeFilter) => item.type === 1,
+					},
+					{
+						table: EDictionaryNameList.DocTypes,
+						columns: ['id', 'name', 'scanable'],
+						filter: (item: IDictionaryScanableFilter) => item.scanable === 1,
 					},
 					{
 						name: EDictionaryNameList.EducationDocTypes,
 						table: 'directory_doc_subtypes',
 						columns: ['id', 'name', 'type'],
-						filter: (item: IDictionaryPersonDocTypeFilter) => item.type === 2,
+						filter: (item: IDictionaryTypeFilter) => item.type === 2,
 					},
 					{
 						name: EDictionaryNameList.FirstNames,
 						table: 'directory_names',
 						columns: ['id', 'name', 'type', 'sex'],
-						filter: (item: IDictionaryPersonDocTypeFilter) => item.type === 0,
+						filter: (item: IDictionaryTypeFilter) => item.type === 0,
 					},
 					{
 						name: EDictionaryNameList.MiddleNames,
 						table: 'directory_names',
 						columns: ['id', 'name', 'type', 'sex'],
-						filter: (item: IDictionaryPersonDocTypeFilter) => item.type === 1,
+						filter: (item: IDictionaryTypeFilter) => item.type === 1,
 					},
 					{
 						table: EDictionaryNameList.PreviousEducation,

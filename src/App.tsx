@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import * as React from 'react';
 
-import { Stepper, StepContent, StepLabel, Step, Typography, Button, FormLabel } from './platform/';
+import { Stepper, StepContent, StepLabel, Step, Typography, Button, FormLabel, DocDataForm } from './platform/';
 import { PersonDataForm, ContactsDataForm, EducationDataForm } from './components/';
 import {
 	IState,
@@ -14,78 +14,71 @@ import {
 	Styles,
 	composeStyles,
 	IPersonDataState,
+	IContactDataState,
+	IEducationDataState,
+	IUploadFile,
+	IDocDataForm,
 } from './common';
 import { Dispatch } from 'redux';
 interface IAppState {
 	activeStep: number;
 	personData: IPersonDataState;
-	contactData: { [key: string]: any };
-	educationData: {
-		hasEge: boolean;
-		prevEduc: ISelectItem | null;
-		levelEduc: ISelectItem | null;
-	};
+	contactData: IContactDataState;
+	educationData: IEducationDataState;
+	docList: IDocDataForm[];
 }
 const renderPersonStep = (
-	gender: number | null,
-	directories: IDictionary[],
+	state: IPersonDataState,
+	dictionaries: IDictionary[],
 	onChangeGender: (event: any, gender: string) => void,
 	onChangeData: (field: string) => (value: string | ISelectItem) => void,
 	onChangeAutocompleteTextField: (field: string) => (value: string, data?: any) => void,
 ) => {
 	const dictionaryMiddleNames =
-		directories[EDictionaryNameList.MiddleNames] && directories[EDictionaryNameList.MiddleNames].values;
+		dictionaries[EDictionaryNameList.MiddleNames] && dictionaries[EDictionaryNameList.MiddleNames].values;
 	return (
 		<PersonDataForm
-			onChangeSelect={onChangeData}
 			dictionaryFirstNames={
-				directories[EDictionaryNameList.FirstNames] && directories[EDictionaryNameList.FirstNames].values
+				dictionaries[EDictionaryNameList.FirstNames] && dictionaries[EDictionaryNameList.FirstNames].values
 			}
 			dictionaryMiddleNames={
-				gender !== null
-					? dictionaryMiddleNames.filter((item: IDictionaryNames) => item.sex === gender)
+				state.gender !== null
+					? dictionaryMiddleNames.filter((item: IDictionaryNames) => item.sex === state.gender)
 					: dictionaryMiddleNames
 			}
 			dictionaryGovernments={
-				directories[EDictionaryNameList.Governments] && directories[EDictionaryNameList.Governments].values
+				dictionaries[EDictionaryNameList.Governments] && dictionaries[EDictionaryNameList.Governments].values
 			}
 			dictionaryPersonDocTypes={
-				directories[EDictionaryNameList.PersonDocTypes] && directories[EDictionaryNameList.PersonDocTypes].values
+				dictionaries[EDictionaryNameList.PersonDocTypes] && dictionaries[EDictionaryNameList.PersonDocTypes].values
 			}
 			onChangeAutocompleteTextField={onChangeAutocompleteTextField}
-			onChangeTextField={onChangeData}
-			gender={gender}
+			onChangeData={onChangeData}
+			{...state}
 			onChangeGender={onChangeGender}
 		/>
 	);
 };
 const renderContactStep = (
-	mobPhone: string,
-	mobCountry: ISelectItem,
-	isRegAddressEqualLive: boolean,
-	needDormitory: boolean,
-	directories: IDictionary[],
-	onChangeData: (field: string) => (value: string | ISelectItem) => void,
+	state: IContactDataState,
+	dictionaries: IDictionary[],
+	onChangeData: (field: string) => (value: string | ISelectItem | IUploadFile) => void,
 ) => {
 	return (
 		<ContactsDataForm
 			dictionaryGovernments={
-				directories[EDictionaryNameList.Governments] && directories[EDictionaryNameList.Governments].values
+				dictionaries[EDictionaryNameList.Governments] && dictionaries[EDictionaryNameList.Governments].values
 			}
-			mobPhone={mobPhone}
-			mobCountry={mobCountry}
-			isRegAddressEqualLive={isRegAddressEqualLive}
-			needDormitory={needDormitory}
-			onChangeTextField={onChangeData}
-			onChangeSelect={onChangeData}
+			onChangeData={onChangeData}
+			{...state}
 		/>
 	);
 };
 
 const renderEducationStep = (
-	hasEGE: boolean,
+	state: IEducationDataState,
 	directories: IDictionary[],
-	onChangeData: (field: string) => (value: string | ISelectItem) => void,
+	onChangeData: (field: string) => (value: string | ISelectItem | IUploadFile) => void,
 ) => {
 	return (
 		<EducationDataForm
@@ -99,11 +92,48 @@ const renderEducationStep = (
 				directories[EDictionaryNameList.EducationDocTypes] && directories[EDictionaryNameList.EducationDocTypes].values
 			}
 			onChangeSelect={onChangeData}
-			onChangeTextField={onChangeData}
+			onChangeData={onChangeData}
+			{...state}
 		/>
 	);
 };
 
+const renderDocStep = (
+	docList: IDocDataForm[],
+	addNewDoc: () => void,
+	onChangeData: (index: number) => (name: string) => (value: string | ISelectItem | IUploadFile) => void,
+	dictionaries: IDictionary[],
+) => {
+	return (
+		<div style={Styles.flexColumn}>
+			{docList.map((item: IDocDataForm, index: number) => (
+				<div style={Styles.flexColumn}>
+					<DocDataForm
+						title={'Тип документа'}
+						subTitle={item.docType ? ` Тип ${item.docType.name}` : ''}
+						dictionaryTypes={
+							dictionaries[EDictionaryNameList.DocTypes] && dictionaries[EDictionaryNameList.DocTypes].values
+						}
+						dictionarySubTypes={
+							(item.docType && item.docType.id === 1 && dictionaries[EDictionaryNameList.PersonDocTypes].values) ||
+							(item.docType && item.docType.id === 2 && dictionaries[EDictionaryNameList.EducationDocTypes].values)
+						}
+						key={`${index}${item.docNumber}${item.docSeries}`}
+						onChangeData={onChangeData(index)}
+						docFile={item.docFile}
+					/>
+					<Button style={{ color: 'red' }} onClick={addNewDoc}>
+						Удалить документ
+					</Button>
+					<div style={composeStyles({ magrinBottom: 10, borderStyle: 'solid', borderWidth: 1, borderColor: 'grey' })} />
+				</div>
+			))}
+			<Button style={{ color: 'green' }} onClick={addNewDoc}>
+				Добавить новый документ
+			</Button>
+		</div>
+	);
+};
 const steps = ['Персональные данные', 'Контактные данные', 'Образование', 'Документы', 'Заявления'];
 
 export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IAppState> {
@@ -111,13 +141,30 @@ export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IA
 		super(props);
 		this.state = {
 			activeStep: 0,
+			docList: [],
 			contactData: {
-				isRegAddressEqualLive: true,
+				regIndex: '',
+				email: '',
+				regHome: '',
+				regRegion: '',
+				regStreet: '',
+				regLocality: '',
 				needDormitory: false,
 				mobPhone: '',
 				mobCountry: { id: 1, name: 'Россия', phone_code: '7' },
+				isRegAddressEqualLive: true,
+				docFile: null,
+				docType: { id: 3, name: '' },
 			},
 			personData: {
+				docFile: null,
+				birthday: null,
+				docType: { id: 1, name: '' },
+				docDate: null,
+				codeDepartment: '',
+				docIssued: '',
+				docNumber: '',
+				docSeries: '',
 				firstName: '',
 				gender: null,
 				middleName: '',
@@ -127,6 +174,13 @@ export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IA
 				hasEge: false,
 				prevEduc: null,
 				levelEduc: null,
+				isfFirstHighEducation: false,
+				docNumber: '',
+				docType: { id: 2, name: '' },
+				docSeries: '',
+				docIssued: '',
+				docDate: null,
+				docFile: null,
 			},
 		};
 	}
@@ -162,7 +216,27 @@ export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IA
 		};
 		this.setState(() => state);
 	};
-	onChangePersonData = (name: string) => (value: string | ISelectItem) => {
+	onChangeDocData = (index: number) => (name: string) => (value: string | ISelectItem | IUploadFile) => {
+		const docData = { ...this.state.docList[index], [name]: value };
+		const docList = [...this.state.docList];
+		docList[index] = docData;
+		const state = {
+			...this.state,
+			docList,
+		};
+		this.setState(() => state);
+	};
+	addNewDocFile = () => {
+		const state = {
+			...this.state,
+			docList: [
+				...this.state.docList,
+				{ docNumber: '', docType: null, docSeries: '', docIssued: '', docDate: null, docFile: null },
+			],
+		};
+		this.setState(() => state);
+	};
+	onChangePersonData = (name: string) => (value: string | ISelectItem | IUploadFile) => {
 		const state = {
 			...this.state,
 			personData: {
@@ -172,7 +246,7 @@ export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IA
 		};
 		this.setState(() => state);
 	};
-	onChangeConcatData = (name: string) => (value: string | ISelectItem) => {
+	onChangeContactData = (name: string) => (value: string | ISelectItem | boolean | IUploadFile) => {
 		const state = {
 			...this.state,
 			contactData: {
@@ -182,7 +256,7 @@ export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IA
 		};
 		this.setState(() => state);
 	};
-	onChangeEducationData = (name: string) => (value: string | ISelectItem) => {
+	onChangeEducationData = (name: string) => (value: string | ISelectItem | IUploadFile) => {
 		const state = {
 			...this.state,
 			educationData: {
@@ -203,28 +277,18 @@ export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IA
 							<StepContent>
 								{index === 0 &&
 									renderPersonStep(
-										this.state.personData.gender,
+										this.state.personData,
 										this.props.dictionaries,
 										this.onChangeGender,
 										this.onChangePersonData,
 										this.onChangeAutocompleteTextField,
 									)}
 								{index === 1 &&
-									renderContactStep(
-										this.state.contactData.mobPhone,
-										this.state.contactData.mobCountry,
-										this.state.contactData.isRegAddressEqualLive,
-										this.state.contactData.needDormitory,
-										this.props.dictionaries,
-										this.onChangeConcatData,
-									)}
+									renderContactStep(this.state.contactData, this.props.dictionaries, this.onChangeContactData)}
 								{index === 2 &&
-									renderEducationStep(
-										this.state.educationData.hasEge,
-										this.props.dictionaries,
-										this.onChangeEducationData,
-									)}
-
+									renderEducationStep(this.state.educationData, this.props.dictionaries, this.onChangeEducationData)}
+								{index === 3 &&
+									renderDocStep(this.state.docList, this.addNewDocFile, this.onChangeDocData, this.props.dictionaries)}
 								<div style={composeStyles(Styles.flexRow, Styles.flexRowVerCenter, makeSpace('v-big'))}>
 									{index !== 0 && (
 										<React.Fragment>

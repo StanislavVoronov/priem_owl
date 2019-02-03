@@ -1,13 +1,20 @@
 import React from 'react';
-import { TextInput, H2, FormLabel, DropdownSelect } from '../platform';
-import { composeStyles, ISelectChanged, ISelectItem, ITextFieldChanged, makeSpace, Styles } from '../common/';
+import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocDataForm } from '../platform';
+import {
+	composeStyles,
+	IContactDataState,
+	IDataChanged,
+	ISelectChanged,
+	ITextFieldChanged,
+	makeSpace,
+	Styles,
+} from '../common/';
 import { IDictionary } from '@mgutm-fcu/dictionary';
+const styles = {
+	checkFormControlLabel: { justifyContent: 'flex-end', marginLeft: 0 },
+};
 
-interface IContactDataForm extends ITextFieldChanged, ISelectChanged {
-	mobPhone: string;
-	mobCountry: ISelectItem;
-	needDormitory: boolean;
-	isRegAddressEqualLive: boolean;
+interface IContactDataForm extends IDataChanged, IContactDataState {
 	dictionaryGovernments: IDictionary[];
 }
 const ContactsDataForm = (props: IContactDataForm) => {
@@ -39,67 +46,84 @@ const ContactsDataForm = (props: IContactDataForm) => {
 				<H2>Адрес регистрации</H2>
 				<TextInput
 					label={'Индекс'}
+					type="number"
 					placeholder={'Введите индекс'}
 					required
-					onBlur={props.onChangeTextField('regIndex')}
+					onBlur={props.onChangeData('regIndex')}
 				/>
 				<TextInput
 					label={'Область'}
 					placeholder={'Введите область'}
 					required
-					onBlur={props.onChangeTextField('regRegion')}
+					onBlur={props.onChangeData('regRegion')}
 				/>
 				<TextInput
 					label={'Населенный пункт'}
 					placeholder={'Введите населенный пункт'}
 					required
-					onBlur={props.onChangeTextField('regLocality')}
+					onBlur={props.onChangeData('regLocality')}
 				/>
-				<TextInput
-					label={'Улица'}
-					placeholder={'Введите улицу'}
-					required
-					onBlur={props.onChangeTextField('regStreet')}
-				/>
-				<TextInput label={'Дом'} placeholder={'Введите дом'} required onBlur={props.onChangeTextField('regHome')} />
-				<TextInput label={'Корпус'} onBlur={props.onChangeTextField('regBlock')} />
-				<TextInput label={'Квартира'} onBlur={props.onChangeTextField('regFlat')} />
+				<TextInput label={'Улица'} placeholder={'Введите улицу'} required onBlur={props.onChangeData('regStreet')} />
+				<TextInput label={'Дом'} placeholder={'Введите дом'} required onBlur={props.onChangeData('regHome')} />
+				<TextInput label={'Корпус'} onBlur={props.onChangeData('regBlock')} />
+				<TextInput label={'Квартира'} onBlur={props.onChangeData('regFlat')} />
 			</div>
-			<div style={composeStyles(Styles.flexColumn, makeSpace('v-small'))}>
-				<H2>Адрес проживания</H2>
-				<TextInput
-					label={'Индекс'}
-					placeholder={'Введите индекс'}
-					required
-					onBlur={props.onChangeTextField('liveIndex')}
-				/>
-				<TextInput
-					label={'Область'}
-					placeholder={'Введите область'}
-					required
-					onBlur={props.onChangeTextField('liveRegion')}
-				/>
-				<TextInput
-					label={'Населенный пункт'}
-					placeholder={'Введите населенный пункт'}
-					required
-					onBlur={props.onChangeTextField('liveLocality')}
-				/>
-				<TextInput
-					label={'Улица'}
-					required
-					placeholder={'Введите улицу'}
-					onBlur={props.onChangeTextField('liveStreet')}
-				/>
-				<TextInput label={'Дом'} placeholder={'Введите дом'} required onBlur={props.onChangeTextField('liveHome')} />
-				<TextInput label={'Корпус'} onBlur={props.onChangeTextField('liveBlock')} />
-				<TextInput label={'Квартира'} onBlur={props.onChangeTextField('liveFlat')} />
-			</div>
-
+			<FormControlLabel
+				style={styles.checkFormControlLabel}
+				control={
+					<Checkbox
+						color="primary"
+						checked={props.isRegAddressEqualLive}
+						onChange={(event, checked) => props.onChangeData('isRegAddressEqualLive')(checked)}
+					/>
+				}
+				label="Фактический адрес проживания	совпадает с адресом регистрации"
+				labelPlacement="start"
+			/>
+			<DocDataForm onChangeData={props.onChangeData} docFile={props.docFile} isNeedData={false} />
+			{!props.isRegAddressEqualLive && (
+				<div style={composeStyles(Styles.flexColumn, makeSpace('v-small'))}>
+					<H2>Адрес проживания</H2>
+					<TextInput
+						label={'Индекс'}
+						placeholder={'Введите индекс'}
+						required
+						onBlur={props.onChangeData('liveIndex')}
+					/>
+					<TextInput
+						label={'Область'}
+						placeholder={'Введите область'}
+						required
+						onBlur={props.onChangeData('liveRegion')}
+					/>
+					<TextInput
+						label={'Населенный пункт'}
+						placeholder={'Введите населенный пункт'}
+						required
+						onBlur={props.onChangeData('liveLocality')}
+					/>
+					<TextInput label={'Улица'} required placeholder={'Введите улицу'} onBlur={props.onChangeData('liveStreet')} />
+					<TextInput label={'Дом'} placeholder={'Введите дом'} required onBlur={props.onChangeData('liveHome')} />
+					<TextInput label={'Корпус'} onBlur={props.onChangeData('liveBlock')} />
+					<TextInput label={'Квартира'} onBlur={props.onChangeData('liveFlat')} />
+				</div>
+			)}
+			<FormControlLabel
+				style={styles.checkFormControlLabel}
+				control={
+					<Checkbox
+						color="primary"
+						checked={props.isRegAddressEqualLive}
+						onChange={(event, checked) => props.onChangeData('needDormitory')(checked)}
+					/>
+				}
+				label="Нуждаюсь в предоставлении общежития"
+				labelPlacement="start"
+			/>
 			<DropdownSelect
 				isClearable={false}
 				defaultValue={props.dictionaryGovernments.length && props.mobCountry}
-				onChangeSelect={props.onChangeSelect('mobCountry')}
+				onChangeSelect={props.onChangeData('mobCountry')}
 				title={'Страна оператора сотовой связи'}
 				options={props.dictionaryGovernments}
 			/>
@@ -108,15 +132,15 @@ const ContactsDataForm = (props: IContactDataForm) => {
 				placeholder={'555-555-55-55'}
 				label={'Мобильный телефон'}
 				required
-				onChange={props.onChangeTextField('mobPhone')}
+				onChange={props.onChangeData('mobPhone')}
 			/>
 			<TextInput
 				label={'Электронная почта'}
 				placeholder={'Введите электронную почту'}
 				required
-				onBlur={props.onChangeTextField('email')}
+				onBlur={props.onChangeData('email')}
 			/>
-			<TextInput label={'Домашний телефон'} onBlur={props.onChangeTextField('mobPhone')} />
+			<TextInput label={'Домашний телефон'} onBlur={props.onChangeData('mobPhone')} />
 		</div>
 	);
 };

@@ -21,15 +21,28 @@ export interface ITextFieldChanged {
 }
 
 export interface IDataChanged {
-	onChangeData: <T>(field: string) => (item: T) => void;
+	onChangeData: (field: string) => (item: any) => void;
+}
+
+export interface IUploadFile {
+	lastModified: Date;
+	lastModifiedDate: Date;
+	name: string;
+	size: number;
+	type: string;
+	binary: string;
 }
 
 export interface ISelectChanged {
 	onChangeSelect: (field: string) => (value: ISelectItem) => void;
 }
 
-export interface IDictionaryPersonDocTypeFilter {
+export interface IDictionaryTypeFilter {
 	type: number;
+}
+
+export interface IDictionaryScanableFilter {
+	scanable: number;
 }
 
 export interface IDictionaryNames {
@@ -67,12 +80,14 @@ export interface IHelperText {
 	helperText?: string;
 }
 
-interface IDocDataForm {
-	type: string;
-	docNumber: string;
-	docSeries: string;
-	docIssued: string;
-	docDate: string;
+export interface IDocDataForm {
+	docType?: ISelectItem | null;
+	docSubType?: ISelectItem | null;
+	docNumber?: string;
+	docSeries?: string;
+	docIssued?: string;
+	docDate?: Date | null;
+	docFile: IUploadFile | null;
 }
 export interface IHasError {
 	hasError?: boolean;
@@ -91,5 +106,34 @@ export interface IPersonDataState extends IDocDataForm {
 	gender: number | null;
 }
 
+export interface IEducationDataState extends IDocDataForm {
+	hasEge: boolean;
+	isfFirstHighEducation: boolean;
+	prevEduc: ISelectItem | null;
+	levelEduc: ISelectItem | null;
+}
+
+export interface IContactDataState extends IDocDataForm {
+	regIndex: string;
+	regRegion: string;
+	regLocality: string;
+	regStreet: string;
+	regHome: string;
+	regBlock?: string;
+	regFlat?: string;
+	isRegAddressEqualLive: boolean;
+	liveIndex?: string;
+	liveRegion?: string;
+	liveLocality?: string;
+	liveStreet?: string;
+	liveHome?: string;
+	liveBlock?: string;
+	liveFlat?: string;
+	needDormitory: boolean;
+	mobCountry: ISelectItem;
+	mobPhone: string;
+	homePhone?: string;
+	email: string;
+}
 export interface IContactsDataState extends IDocDataForm {}
 export interface IEducationDataState extends IDocDataForm {}

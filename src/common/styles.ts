@@ -1,4 +1,4 @@
-export const Styles = {
+export const Styles: any = {
 	flexRow: {
 		display: 'flex',
 		flexDirection: 'row',
