@@ -18,14 +18,17 @@ import {
 	IEducationDataState,
 	IUploadFile,
 	IDocDataForm,
+	IApplicationDataForm,
 } from './common';
 import { Dispatch } from 'redux';
+import { ApplicationsDataForm } from './components/ApplicationsDataForm';
 interface IAppState {
 	activeStep: number;
 	personData: IPersonDataState;
 	contactData: IContactDataState;
 	educationData: IEducationDataState;
 	docList: IDocDataForm[];
+	applicationData: IApplicationDataForm;
 }
 const renderPersonStep = (
 	state: IPersonDataState,
@@ -101,6 +104,7 @@ const renderEducationStep = (
 const renderDocStep = (
 	docList: IDocDataForm[],
 	addNewDoc: () => void,
+	deleteDoc: (index: number) => void,
 	onChangeData: (index: number) => (name: string) => (value: string | ISelectItem | IUploadFile) => void,
 	dictionaries: IDictionary[],
 ) => {
@@ -122,17 +126,39 @@ const renderDocStep = (
 						onChangeData={onChangeData(index)}
 						docFile={item.docFile}
 					/>
-					<Button style={{ color: 'red' }} onClick={addNewDoc}>
+					<Button
+						style={{ backgroundColor: 'red', color: 'white' }}
+						variant="contained"
+						onClick={() => deleteDoc(index)}>
 						Удалить документ
 					</Button>
 					<div style={composeStyles({ magrinBottom: 10, borderStyle: 'solid', borderWidth: 1, borderColor: 'grey' })} />
 				</div>
 			))}
-			<Button style={{ color: 'green' }} onClick={addNewDoc}>
+			<Button
+				style={{
+					boxShadow: 'none',
+					textTransform: 'none',
+					fontSize: 16,
+					padding: '6px 12px',
+					border: '1px solid',
+					lineHeight: 1.5,
+					backgroundColor: '#007bff',
+					borderColor: '#007bff',
+					color: 'white',
+				}}
+				onClick={addNewDoc}>
 				Добавить новый документ
 			</Button>
 		</div>
 	);
+};
+
+const renderApplicationsStep = (
+	onChangeData: (name: string) => (value: ISelectItem) => void,
+	dictionaries: IDictionary[],
+) => {
+	return <ApplicationsDataForm onChangeSelect={onChangeData} dictionaries={dictionaries} />;
 };
 const steps = ['Персональные данные', 'Контактные данные', 'Образование', 'Документы', 'Заявления'];
 
@@ -142,6 +168,11 @@ export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IA
 		this.state = {
 			activeStep: 0,
 			docList: [],
+			applicationData: {
+				category: null,
+				department: null,
+				applicationList: [],
+			},
 			contactData: {
 				regIndex: '',
 				email: '',
@@ -226,6 +257,13 @@ export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IA
 		};
 		this.setState(() => state);
 	};
+	deleteDocFile = (index: number) => {
+		const state = {
+			...this.state,
+			docList: [...this.state.docList.splice(index, 1)],
+		};
+		this.setState(() => state);
+	};
 	addNewDocFile = () => {
 		const state = {
 			...this.state,
@@ -266,6 +304,26 @@ export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IA
 		};
 		this.setState(() => state);
 	};
+	addNewApplication = (value: any) => {
+		const state = {
+			...this.state,
+			applicationData: {
+				...this.state.applicationData,
+				applicationList: [...this.state.applicationData.applicationList, value],
+			},
+		};
+		this.setState(() => state);
+	};
+	onChangeApplicationData = (name: string) => (value: ISelectItem) => {
+		const state = {
+			...this.state,
+			applicationData: {
+				...this.state.applicationData,
+				[name]: value,
+			},
+		};
+		this.setState(() => state);
+	};
 	render() {
 		console.log(this.state);
 		return (
@@ -288,23 +346,30 @@ export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IA
 								{index === 2 &&
 									renderEducationStep(this.state.educationData, this.props.dictionaries, this.onChangeEducationData)}
 								{index === 3 &&
-									renderDocStep(this.state.docList, this.addNewDocFile, this.onChangeDocData, this.props.dictionaries)}
-								<div style={composeStyles(Styles.flexRow, Styles.flexRowVerCenter, makeSpace('v-big'))}>
-									{index !== 0 && (
-										<React.Fragment>
-											<FormLabel>
-												{steps[index - 1]}
-												{' <'}
-											</FormLabel>
-											<Button
-												style={makeSpace('h-middle')}
-												variant="contained"
-												color="primary"
-												onClick={this.handleBack}>
-												{'Назад'}
-											</Button>
-										</React.Fragment>
+									renderDocStep(
+										this.state.docList,
+										this.addNewDocFile,
+										this.deleteDocFile,
+										this.onChangeDocData,
+										this.props.dictionaries,
 									)}
+								{index === 4 && renderApplicationsStep(this.onChangeApplicationData, this.props.dictionaries)}
+								<div style={composeStyles(Styles.flexRow, Styles.flexRowVerCenter, makeSpace('v-big'))}>
+									{/*{index !== 0 && (*/}
+									{/*<React.Fragment>*/}
+									{/*<FormLabel>*/}
+									{/*{steps[index - 1]}*/}
+									{/*{' <'}*/}
+									{/*</FormLabel>*/}
+									{/*<Button*/}
+									{/*style={makeSpace('h-middle')}*/}
+									{/*variant="contained"*/}
+									{/*color="primary"*/}
+									{/*onClick={this.handleBack}>*/}
+									{/*{'Назад'}*/}
+									{/*</Button>*/}
+									{/*</React.Fragment>*/}
+									{/*)}*/}
 									{index + 1 !== steps.length && (
 										<div style={makeSpace(index !== 0 ? 'h-large' : 'none')}>
 											<Button variant="contained" color="primary" onClick={this.validateDataStep}>

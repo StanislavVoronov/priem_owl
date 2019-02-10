@@ -74,6 +74,10 @@ ReactDOM.render(
 						table: EDictionaryNameList.PriemDepartments,
 						columns: ['id', 'name'],
 					},
+					{
+						table: EDictionaryNameList.PriemSpecialCategories,
+						columns: ['id', 'name'],
+					},
 				]}>
 				<App />
 			</Dictionary>

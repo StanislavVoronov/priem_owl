@@ -15,4 +15,5 @@ export enum EDictionaryNameList {
 	PriemFormEducation = 'directory_form_education',
 	PriemLevelEducation = 'directory_education_level',
 	PriemPaySources = 'directory_financial_sources',
+	PriemSpecialCategories = 'directory_cheat_types',
 }

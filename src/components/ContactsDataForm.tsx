@@ -1,14 +1,6 @@
 import React from 'react';
 import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocDataForm } from '../platform';
-import {
-	composeStyles,
-	IContactDataState,
-	IDataChanged,
-	ISelectChanged,
-	ITextFieldChanged,
-	makeSpace,
-	Styles,
-} from '../common/';
+import { composeStyles, IContactDataState, IDataChanged, makeSpace, Styles } from '../common/';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 const styles = {
 	checkFormControlLabel: { justifyContent: 'flex-end', marginLeft: 0 },
@@ -113,7 +105,7 @@ const ContactsDataForm = (props: IContactDataForm) => {
 				control={
 					<Checkbox
 						color="primary"
-						checked={props.isRegAddressEqualLive}
+						checked={props.needDormitory}
 						onChange={(event, checked) => props.onChangeData('needDormitory')(checked)}
 					/>
 				}

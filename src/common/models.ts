@@ -135,5 +135,23 @@ export interface IContactDataState extends IDocDataForm {
 	homePhone?: string;
 	email: string;
 }
+
+export interface IApplicationDataForm {
+	category?: ISelectItem | null;
+	department?: ISelectItem | null;
+	applicationList: IApplication[];
+}
+
+export interface IApplication {
+	filial?: ISelectItem | null;
+	inst?: ISelectItem | null;
+	direction?: ISelectItem | null;
+	profile?: ISelectItem | null;
+	educationForm?: ISelectItem | null;
+	payForm: ISelectItem | null;
+	educationLevel: ISelectItem | null;
+	id: number;
+}
+
 export interface IContactsDataState extends IDocDataForm {}
 export interface IEducationDataState extends IDocDataForm {}
