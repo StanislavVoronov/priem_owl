@@ -1,19 +1,21 @@
 import React from 'react';
 import deburr from 'lodash/deburr';
-import Autosuggest, { SuggestionSelectedEventData } from 'react-autosuggest';
+import Autosuggest, { InputProps, SuggestionSelectedEventData } from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { ISpacable } from '../common/';
+
 interface IInputProps extends ISpacable {
 	label?: string;
 	placeholder?: string;
-	onChange: <T>(event: any, data?: T) => void;
+	onSelect: (data: string, index?: number) => void;
+	onChange: (data: string) => void;
 	style?: any;
 }
-function renderInputComponent(inputProps: IInputProps) {
+function renderInputComponent(inputProps: any) {
 	return (
 		<TextField
 			InputLabelProps={{
@@ -48,23 +50,21 @@ function renderSuggestion(suggestion: string, { query, isHighlighted }: { query:
 	);
 }
 
-function getSuggestions(value: string, suggestions: string[], field: string) {
+function getSuggestions(value: string, suggestions: string[]) {
 	const inputValue = deburr(value.trim()).toLowerCase();
 	const inputLength = inputValue.length;
 	let count = 0;
 	return inputLength === 0
 		? []
-		: suggestions
-				.map((item: any) => item[field])
-				.filter(suggestion => {
-					const keep = count < 5 && suggestion.slice(0, inputLength).toLowerCase() === inputValue;
+		: suggestions.filter(suggestion => {
+				const keep = count < 5 && suggestion.slice(0, inputLength).toLowerCase() === inputValue;
 
-					if (keep) {
-						count += 1;
-					}
+				if (keep) {
+					count += 1;
+				}
 
-					return keep;
-				});
+				return keep;
+		  });
 }
 
 function getSuggestionValue(suggestion: string) {
@@ -97,8 +97,7 @@ const styles = {
 };
 
 interface IAutoCompleteProps extends IInputProps {
-	suggestions: any[];
-	field: string;
+	suggestions: string[];
 	required?: boolean;
 }
 
@@ -116,7 +115,7 @@ const renderSuggestionsContainer = (options: any) => {
 };
 class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoCompleteState> {
 	defaultProps = {
-		field: 'name',
+		suggestions: [],
 	};
 	public state = {
 		single: '',
@@ -125,7 +124,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 
 	public handleSuggestionsFetchRequested = ({ value }: { value: string }) => {
 		this.setState({
-			suggestions: getSuggestions(value, this.props.suggestions, this.props.field),
+			suggestions: getSuggestions(value, this.props.suggestions),
 		});
 	};
 
@@ -139,16 +138,14 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 			this.props.onChange(event.targer.value);
 		}
 	};
-	public handleChange = (name: string) => (event: any, { newValue }: { newValue: string }) => {
+	public handleChange = (event: any, { newValue }: { newValue: string }) => {
 		this.setState({
 			single: newValue,
 		});
 	};
 	onSelectSuggestion = (event: any, data: SuggestionSelectedEventData<string>) => {
-		this.props.onChange(
-			data.suggestion,
-			this.props.suggestions.find(item => item[this.props.field] === data.suggestion),
-		);
+		const index = this.props.suggestions.findIndex(item => item == data.suggestion) || 0;
+		this.props.onSelect(data.suggestion, index);
 	};
 	public render() {
 		const autosuggestProps = {
@@ -165,10 +162,13 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 				<Autosuggest
 					{...autosuggestProps}
 					inputProps={{
-						...inputProps,
+						required: inputProps.required,
+						style: inputProps.style,
+						label: inputProps.label,
+						placeholder: inputProps.placeholder,
 						value: this.state.single,
 						onBlur: this.onBlur,
-						onChange: this.handleChange('single'),
+						onChange: this.handleChange,
 					}}
 					// @ts-ignore
 					theme={{

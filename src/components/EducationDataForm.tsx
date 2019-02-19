@@ -31,12 +31,12 @@ const EducationDataForm = (props: IEducationDataFormProps) => {
 				options={props.dictionaryPreviousEducation}
 				title={'Предыдущее образование'}
 			/>
-			<DocDataForm
-				docFile={props.docFile}
-				subTitle={'Выберите уровень образования'}
-				dictionarySubTypes={props.dictionaryLevelEducation}
-				onChangeData={props.onChangeData}
-			/>
+			{/*<DocDataForm*/}
+			{/*docFile={props.docFile}*/}
+			{/*subTitle={'Выберите уровень образования'}*/}
+			{/*dictionarySubTypes={props.dictionaryLevelEducation}*/}
+			{/*onChangeData={props.onChangeData}*/}
+			{/*/>*/}
 			<DropdownSelect
 				placeholder={'Выберите достижения'}
 				onChangeSelect={props.onChangeSelect('coolnessTypes')}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocDataForm } from '../platform';
-import { composeStyles, IContactDataState, IDataChanged, makeSpace, Styles } from '../common/';
+import { composeStyles, IContactDataState, IDataChanged, makeVerticalSpace, Styles } from '../common/';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 const styles = {
 	checkFormControlLabel: { justifyContent: 'flex-end', marginLeft: 0 },
@@ -34,7 +34,7 @@ const ContactsDataForm = (props: IContactDataForm) => {
 	//TODO Нуждаюсь в предоставлении общежития, Фактический адрес проживания добавить
 	return (
 		<div style={composeStyles(Styles.flexColumn)}>
-			<div style={composeStyles(Styles.flexColumn, makeSpace('v-small'))}>
+			<div style={composeStyles(Styles.flexColumn, makeVerticalSpace('small'))}>
 				<H2>Адрес регистрации</H2>
 				<TextInput
 					label={'Индекс'}
@@ -72,9 +72,9 @@ const ContactsDataForm = (props: IContactDataForm) => {
 				label="Фактический адрес проживания	совпадает с адресом регистрации"
 				labelPlacement="start"
 			/>
-			<DocDataForm onChangeData={props.onChangeData} docFile={props.docFile} isNeedData={false} />
+			{/*<DocDataForm onChangeData={props.onChangeData} docFile={props.docFile} isNeedData={false} />*/}
 			{!props.isRegAddressEqualLive && (
-				<div style={composeStyles(Styles.flexColumn, makeSpace('v-small'))}>
+				<div style={composeStyles(Styles.flexColumn, makeVerticalSpace('small'))}>
 					<H2>Адрес проживания</H2>
 					<TextInput
 						label={'Индекс'}

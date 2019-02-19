@@ -1,7 +1,7 @@
 import { Style } from 'jss/css';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 
-export interface IState {
+export interface IRootState {
 	user: any;
 	dictionaries: any[];
 }
@@ -45,7 +45,7 @@ export interface IDictionaryScanableFilter {
 	scanable: number;
 }
 
-export interface IDictionaryNames {
+export interface IDictionaryName {
 	name: string;
 	sex: number;
 	type: number;
@@ -62,8 +62,11 @@ export type Space =
 	| 'h-middle'
 	| 'h-big'
 	| 'h-large';
+
+export type TypeSpace = 'none' | 'minor' | 'small' | 'normal' | 'large';
 export interface ISpacable {
-	space?: Space;
+	verticalSpace?: TypeSpace;
+	horizontalSpace?: TypeSpace;
 }
 
 export interface ISelectItem {
@@ -75,7 +78,9 @@ export interface ISelectItem {
 export interface IStylable {
 	style?: Style;
 }
-
+export interface IExtensible {
+	fullWidth?: boolean;
+}
 export interface IHelperText {
 	helperText?: string;
 }

@@ -1,7 +1,7 @@
 import { FormControl, FormLabel } from '../platform/';
 import React from 'react';
 import Select from 'react-select';
-import { composeStyles, IHasError, IHelperText, ISelectItem, ISpacable, IStylable, makeSpace } from '../common';
+import { composeStyles, IHasError, IHelperText, ISelectItem, ISpacable, IStylable, makeVerticalSpace } from '../common';
 interface ISelectProps extends IStylable, ISpacable, IHasError, IHelperText {
 	placeholder?: string;
 	onChangeSelect: (data: any) => void;
@@ -25,14 +25,14 @@ class DropdownSelect extends React.PureComponent<ISelectProps> {
 	static defaultProps = {
 		isSearchable: true,
 		isClearable: true,
-		space: 'v-middle',
+		verticalSpace: 'normal',
 		value: 'id',
 		label: 'name',
 		options: [],
 	};
 	render() {
 		return (
-			<FormControl style={composeStyles(makeSpace(this.props.space!), this.props.style)}>
+			<FormControl style={composeStyles(makeVerticalSpace(this.props.verticalSpace), this.props.style)}>
 				<FormLabel style={styles.label}>
 					{this.props.title}
 					{this.props.required ? ' *' : ''}

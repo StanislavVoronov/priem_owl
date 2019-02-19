@@ -19,6 +19,8 @@ import Card from '@material-ui/core/Card';
 import { H2 } from './Headers';
 import CardContent from '@material-ui/core/CardContent';
 import Checkbox from '@material-ui/core/Checkbox';
+import Slider from '@material-ui/lab/Slider';
+import Fab from '@material-ui/core/Fab';
 
 export {
 	Autocomplete,
@@ -44,4 +46,6 @@ export {
 	CardContent,
 	H2,
 	Checkbox,
+	Slider,
+	Fab,
 };

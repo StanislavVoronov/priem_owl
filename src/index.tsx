@@ -39,7 +39,7 @@ ReactDOM.render(
 					{ table: EDictionaryNameList.Governments, columns: ['id', 'name', 'phone_code'] },
 					{
 						name: EDictionaryNameList.PersonDocTypes,
-						table: 'directory_doc_types',
+						table: 'directory_doc_subtypes',
 						columns: ['id', 'name', 'type'],
 						filter: (item: IDictionaryTypeFilter) => item.type === 1,
 					},

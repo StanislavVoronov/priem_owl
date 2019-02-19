@@ -1,9 +1,9 @@
-import { composeStyles, IHasError, IHelperText, ISpacable, IStylable, makeSpace } from '../common';
+import { composeStyles, IExtensible, IHasError, IHelperText, ISpacable, IStylable, makeVerticalSpace } from '../common';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
 import { FormLabel } from '@material-ui/core';
 
-export interface IInputProps extends ISpacable, IStylable, IHasError, IHelperText {
+export interface IInputProps extends ISpacable, IStylable, IHasError, IHelperText, IExtensible {
 	onChange?: (text: string) => void;
 	placeholder?: string;
 	type?: 'date' | 'number' | 'text';
@@ -20,7 +20,8 @@ export interface IInputProps extends ISpacable, IStylable, IHasError, IHelperTex
 
 class TextInput extends React.PureComponent<IInputProps> {
 	static defaultProps = {
-		space: 'v-small',
+		horizontalSpace: 'small',
+		verticalSpace: 'small',
 		type: 'text',
 		required: false,
 		isTopLabel: true,
@@ -48,7 +49,7 @@ class TextInput extends React.PureComponent<IInputProps> {
 					multiline={this.props.multiline}
 					label={this.props.label}
 					placeholder={this.props.placeholder}
-					style={composeStyles(makeSpace(this.props.space!), this.props.style)}
+					style={composeStyles(makeVerticalSpace(this.props.verticalSpace!), this.props.style)}
 					type={this.props.type}
 					onBlur={this.onBlur}
 					onChange={this.onChange}

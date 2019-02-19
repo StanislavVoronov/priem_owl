@@ -1,13 +1,14 @@
 import React from 'react';
 
 import { FormControlLabel, Radio, RadioGroup, FormControl, FormLabel } from './';
-
+import { composeStyles, makeVerticalSpace } from '../common';
 interface IRadioButton {
 	label: string;
 	value: string | number;
 	color?: any; //'primary' | 'secondary'
 }
 interface IRadioGroupButton {
+	required?: boolean;
 	currentValue: number | null;
 	values: IRadioButton[];
 	title: string;
@@ -16,8 +17,11 @@ interface IRadioGroupButton {
 
 const RadionGroupButton = (props: IRadioGroupButton) => {
 	return (
-		<FormControl style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
-			<FormLabel>{props.title}</FormLabel>
+		<FormControl style={composeStyles({ display: 'flex', flexDirection: 'column' }, makeVerticalSpace('small'))}>
+			<FormLabel>
+				{props.title}
+				{props.required && '*'}
+			</FormLabel>
 			<RadioGroup
 				style={{ display: 'flex', flexDirection: 'row', marginLeft: 20 }}
 				aria-label="Gender"
