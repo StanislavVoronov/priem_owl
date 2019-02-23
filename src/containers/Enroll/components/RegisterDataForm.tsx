@@ -40,7 +40,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IRegisterFormData> {
 		this.setState(state => ({
 			...state,
 			firstName: value,
-			gender: dictionaryFirstNames.values[index]['sex'],
+			gender: dictionaryFirstNames.values[index]['sex'].toString(),
 		}));
 	};
 	onChangeGender = (gender: string) => {
