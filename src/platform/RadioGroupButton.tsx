@@ -9,7 +9,7 @@ interface IRadioButton {
 }
 interface IRadioGroupButton {
 	required?: boolean;
-	currentValue: number | null;
+	currentValue: string;
 	values: IRadioButton[];
 	title: string;
 	onChange: (event: any, value: string) => void;
@@ -26,7 +26,7 @@ const RadionGroupButton = (props: IRadioGroupButton) => {
 				style={{ display: 'flex', flexDirection: 'row', marginLeft: 20 }}
 				aria-label="Gender"
 				name="gender"
-				value={String(props.currentValue)}
+				value={props.currentValue}
 				onChange={props.onChange}>
 				{props.values.map((item, index) => (
 					<FormControlLabel

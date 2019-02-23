@@ -31,10 +31,10 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 		this.setState(state => ({ ...state, scale: scale <= 0 ? state.scale : scale }));
 	};
 	setRotateLeft = () => {
-		this.setState(state => ({ ...state, rotate: state.rotate - 180 }));
+		this.setState(state => ({ ...state, rotate: state.rotate - 90 }));
 	};
 	setRotateRight = () => {
-		this.setState(state => ({ ...state, rotate: state.rotate + 180 }));
+		this.setState(state => ({ ...state, rotate: state.rotate + 90 }));
 	};
 	removeImage = () => {
 		this.props.removeImage!();
@@ -56,7 +56,7 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 						height: 20,
 					}}>
 					<Slider
-						style={{ marginLeft: 20, marginRight: 20 }}
+						style={{ marginLeft: 30, marginRight: 30 }}
 						value={this.state.scale}
 						aria-labelledby="label"
 						onChange={this.setScale}

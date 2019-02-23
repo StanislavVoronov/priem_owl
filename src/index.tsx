@@ -9,11 +9,13 @@ import App from './App';
 import Auth from '@mgutm-fcu/auth/Auth';
 import Dictionary from '@mgutm-fcu/dictionary/Dictionary';
 import { EDictionaryNameList, IDictionaryScanableFilter, IDictionaryTypeFilter } from './common/';
-
+import { enrollReducer } from './containers/Enroll/reducers';
 interface PriemOwlState extends IUserStore, IDictionaryStore {}
+
 const state = combineReducers<PriemOwlState>({
 	...currentUser,
 	...reducerDictionaries,
+	...enrollReducer,
 });
 const store = createStore(state, { ...currentUserInitialState, dictionaries: {} }, applyMiddleware(thunk));
 

@@ -3,7 +3,7 @@ import { IDictionary } from '@mgutm-fcu/dictionary';
 
 export interface IRootState {
 	user: any;
-	dictionaries: any[];
+	dictionaries: Record<string, IDictionary>;
 }
 
 export interface ITextFieldChangeEvent {

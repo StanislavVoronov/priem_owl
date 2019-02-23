@@ -1,7 +1,7 @@
-import { composeStyles, EDictionaryNameList, ISelectChanged, ITextFieldChanged, Styles } from '../common';
+import { composeStyles, EDictionaryNameList, ISelectChanged, ITextFieldChanged, Styles } from '../../../common';
 import React from 'react';
 import { IDictionary } from '@mgutm-fcu/dictionary';
-import DropdownSelect from '../platform/DropdownSelect';
+import DropdownSelect from '../../../platform/DropdownSelect';
 
 interface ApplicationsDataFormProps extends ISelectChanged {
 	dictionaries: IDictionary[];

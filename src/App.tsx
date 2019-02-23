@@ -1,25 +1,24 @@
 import { IDictionary } from '@mgutm-fcu/dictionary';
-import { connect } from 'react-redux';
+import { connect, Provider } from 'react-redux';
 
 import * as React from 'react';
 
 import { Stepper, StepContent, StepLabel, Step, Typography, Button, FormLabel, DocDataForm } from './platform/';
-import PersonDataForm from './components/Enroll/PersonDataForm';
+import { RegisterDataForm } from './containers/Enroll';
 import {
 	IRootState,
-	ISelectItem,
 	makeVerticalSpace,
 	Styles,
 	composeStyles,
 	IPersonDataState,
 	IContactDataState,
 	IEducationDataState,
-	IUploadFile,
 	IDocDataForm,
 	IApplicationDataForm,
-	makeHorizontalSpace,
 } from './common';
 import { Dispatch } from 'redux';
+import { IPersonData } from './containers/Enroll/models';
+import Network from './modules/Network';
 interface IAppState {
 	activeStep: number;
 	personData: IPersonDataState;
@@ -29,62 +28,14 @@ interface IAppState {
 	applicationData: IApplicationDataForm;
 }
 
-const renderDocStep = (
-	docList: IDocDataForm[],
-	addNewDoc: () => void,
-	deleteDoc: (index: number) => void,
-	onChangeData: (index: number) => (name: string) => (value: string | ISelectItem | IUploadFile) => void,
-	dictionaries: IDictionary[],
-) => {
-	return (
-		<div style={Styles.flexColumn}>
-			{docList.map((item: IDocDataForm, index: number) => (
-				<div style={Styles.flexColumn}>
-					{/*<DocDataForm*/}
-					{/*title={'Тип документа'}*/}
-					{/*subTitle={item.docType ? ` Тип ${item.docType.name}` : ''}*/}
-					{/*dictionaryTypes={*/}
-					{/*dictionaries[EDictionaryNameList.DocTypes] && dictionaries[EDictionaryNameList.DocTypes].values*/}
-					{/*}*/}
-					{/*dictionarySubTypes={*/}
-					{/*(item.docType && item.docType.id === 1 && dictionaries[EDictionaryNameList.PersonDocTypes].values) ||*/}
-					{/*(item.docType && item.docType.id === 2 && dictionaries[EDictionaryNameList.EducationDocTypes].values)*/}
-					{/*}*/}
-					{/*key={`${index}${item.docNumber}${item.docSeries}`}*/}
-					{/*onChangeData={onChangeData(index)}*/}
-					{/*docFile={item.docFile}*/}
-					{/*/>*/}
-					<Button
-						style={{ backgroundColor: 'red', color: 'white' }}
-						variant="contained"
-						onClick={() => deleteDoc(index)}>
-						Удалить документ
-					</Button>
-					<div style={composeStyles({ magrinBottom: 10, borderStyle: 'solid', borderWidth: 1, borderColor: 'grey' })} />
-				</div>
-			))}
-			<Button
-				style={{
-					boxShadow: 'none',
-					textTransform: 'none',
-					fontSize: 16,
-					padding: '6px 12px',
-					border: '1px solid',
-					lineHeight: 1.5,
-					backgroundColor: '#007bff',
-					borderColor: '#007bff',
-					color: 'white',
-				}}
-				onClick={addNewDoc}>
-				Добавить новый документ
-			</Button>
-		</div>
-	);
-};
+const steps = ['Регистрация', 'Персональные данные', 'Контактные данные', 'Образование', 'Документы', 'Заявления'];
 
-const steps = ['Персональные данные', 'Контактные данные', 'Образование', 'Документы', 'Заявления'];
-
-export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IAppState> {
+export const AppContext = React.createContext<Record<string, any>>([]);
+interface IStateToProps {
+	dictionaries: Record<string, IDictionary>;
+}
+type IProps = IStateToProps;
+export class App extends React.PureComponent<IProps, IAppState> {
 	constructor(props: never) {
 		super(props);
 		this.state = {
@@ -165,58 +116,31 @@ export class App extends React.PureComponent<{ dictionaries: IDictionary[] }, IA
 		};
 		this.setState(() => state);
 	};
-
+	submitPersonData = (data: IPersonData) => {};
 	render() {
-		console.log(this.state);
 		return (
-			<div>
-				<Stepper activeStep={this.state.activeStep} orientation={'vertical'}>
-					{steps.map((label, index) => (
-						<Step key={label}>
-							<StepLabel>{label}</StepLabel>
-							<StepContent>
-								{index === 0 && <PersonDataForm submit={data => {}} />}
-								{/*{index === 3 &&*/}
-								{/*renderDocStep(*/}
-								{/*this.state.docList,*/}
-								{/*this.addNewDocFile,*/}
-								{/*this.deleteDocFile,*/}
-								{/*this.onChangeDocData,*/}
-								{/*this.props.dictionaries,*/}
-								{/*)}*/}
-								<div style={composeStyles(Styles.flexRow, Styles.flexRowVerCenter, makeVerticalSpace('large'))}>
-									{/*{index !== 0 && (*/}
-									{/*<React.Fragment>*/}
-									{/*<FormLabel>*/}
-									{/*{steps[index - 1]}*/}
-									{/*{' <'}*/}
-									{/*</FormLabel>*/}
-									{/*<Button*/}
-									{/*style={makeSpace('h-middle')}*/}
-									{/*variant="contained"*/}
-									{/*color="primary"*/}
-									{/*onClick={this.handleBack}>*/}
-									{/*{'Назад'}*/}
-									{/*</Button>*/}
-									{/*</React.Fragment>*/}
+			<React.Fragment>
+				<AppContext.Provider value={this.props.dictionaries}>
+					<Stepper activeStep={this.state.activeStep} orientation={'vertical'}>
+						{steps.map((label, index) => (
+							<Step key={label}>
+								<StepLabel>{label}</StepLabel>
+								<StepContent>
+									{index === 0 && <RegisterDataForm submit={this.submitPersonData} />}
+									{/*{index === 3 &&*/}
+									{/*renderDocStep(*/}
+									{/*this.state.docList,*/}
+									{/*this.addNewDocFile,*/}
+									{/*this.deleteDocFile,*/}
+									{/*this.onChangeDocData,*/}
+									{/*this.props.dictionaries,*/}
 									{/*)}*/}
-									{index + 1 !== steps.length && (
-										<div>
-											<Button variant="contained" color="primary" onClick={this.handleNext}>
-												{'Дальше'}
-											</Button>
-											<FormLabel style={makeHorizontalSpace('normal')}>
-												{'> '}
-												{steps[index + 1]}
-											</FormLabel>
-										</div>
-									)}
-								</div>
-							</StepContent>
-						</Step>
-					))}
-				</Stepper>
-			</div>
+								</StepContent>
+							</Step>
+						))}
+					</Stepper>
+				</AppContext.Provider>
+			</React.Fragment>
 		);
 	}
 }

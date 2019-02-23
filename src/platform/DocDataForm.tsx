@@ -22,6 +22,7 @@ interface IDocDataProps {
 	onChangeSeries: (value: string) => void;
 	onChangeIssieBy: (value: string) => void;
 	onDownloadFile: (file: string | File | null) => void;
+	onChangeDate: (date: string) => void;
 }
 
 const styles = {
@@ -44,6 +45,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 		selectDocType: (data: ISelectItem) => void 0,
 		selectDocSubType: (data: ISelectItem) => void 0,
 	};
+
 	renderDocImage = (data: DropzoneRenderArgs) => {
 		const file = data.draggedFiles[0];
 		return <Image source={file} />;
@@ -116,7 +118,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 							type="number"
 							onBlur={this.props.onChangeNumber}
 						/>
-						<TextInput required type="date" label="Дата выдачи документа" onBlur={this.props.onChangeNumber} />
+						<TextInput required type="date" label="Дата выдачи документа" onBlur={this.props.onChangeDate} />
 						<TextInput
 							required
 							placeholder="Введите кем выдан документ"

@@ -1,6 +1,6 @@
-import { composeStyles, IDataChanged, IDocDataForm, ISelectChanged, ITextFieldChanged, Styles } from '../common';
+import { composeStyles, IDataChanged, IDocDataForm, ISelectChanged, ITextFieldChanged, Styles } from '../../../common';
 import React from 'react';
-import { DocDataForm, DropdownSelect } from '../platform';
+import { DocDataForm, DropdownSelect } from '../../../platform';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';

@@ -1,6 +1,6 @@
 import React from 'react';
-import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocDataForm } from '../platform';
-import { composeStyles, IContactDataState, IDataChanged, makeVerticalSpace, Styles } from '../common/';
+import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocDataForm } from '../../../platform';
+import { composeStyles, IContactDataState, IDataChanged, makeVerticalSpace, Styles } from '../../../common';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 const styles = {
 	checkFormControlLabel: { justifyContent: 'flex-end', marginLeft: 0 },
