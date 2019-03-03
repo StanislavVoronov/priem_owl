@@ -1,4 +1,5 @@
-import { TypeSpace } from './models';
+import { IRootState, TypeSpace } from './models';
+import { Action } from 'redux-actions';
 
 export const composeStyles = (...rest: any) => Object.assign({}, ...rest);
 
@@ -22,7 +23,7 @@ export const makeVerticalSpace = (space: TypeSpace = 'none'): Object => {
 	}
 };
 
-export const makeHorizontalSpace = (space: TypeSpace = 'none'): Object => {
+export const makeHorizontalSpace = (space: TypeSpace = 'none'): Record<string, number> => {
 	switch (space) {
 		case 'minor': {
 			return { marginHorizontal: 10 };
@@ -37,4 +38,21 @@ export const makeHorizontalSpace = (space: TypeSpace = 'none'): Object => {
 			return {};
 		}
 	}
+};
+
+export const checkPayload = <State, Payload>(action: Action<any>, callback: (data: Payload) => State) => {
+	const data = action.payload;
+
+	return callback(data);
+};
+
+export const validateDataForm = (invalidState: Record<string, any>): boolean => {
+	let invalidData = false;
+	for (let value in invalidState) {
+		if (invalidData) {
+			return invalidData;
+		}
+		invalidData = invalidState[value];
+	}
+	return invalidData;
 };

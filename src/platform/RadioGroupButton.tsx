@@ -1,24 +1,26 @@
 import React from 'react';
 
 import { FormControlLabel, Radio, RadioGroup, FormControl, FormLabel } from './';
-import { composeStyles, makeVerticalSpace } from '../common';
+import { composeStyles, IHasError, IHelperText, makeVerticalSpace } from '../common';
+import { FormHelperText } from '@material-ui/core';
 interface IRadioButton {
 	label: string;
 	value: string | number;
-	color?: any; //'primary' | 'secondary'
+	color?: any; // 'primary' | 'secondary'
 }
-interface IRadioGroupButton {
+interface IRadioGroupButton extends IHelperText, IHasError {
 	required?: boolean;
 	currentValue: string;
 	values: IRadioButton[];
 	title: string;
+	helperText?: string;
 	onChange: (event: any, value: string) => void;
 }
 
 const RadionGroupButton = (props: IRadioGroupButton) => {
 	return (
-		<FormControl style={composeStyles({ display: 'flex', flexDirection: 'column' }, makeVerticalSpace('small'))}>
-			<FormLabel>
+		<FormControl style={{ display: 'flex', flexDirection: 'column', marginTop: 15, marginBottom: 15 }}>
+			<FormLabel style={{ color: props.hasError ? 'red' : 'black' }}>
 				{props.title}
 				{props.required && '*'}
 			</FormLabel>
@@ -37,6 +39,11 @@ const RadionGroupButton = (props: IRadioGroupButton) => {
 					/>
 				))}
 			</RadioGroup>
+			{props.helperText && (
+				<FormHelperText style={{ marginTop: 0, color: props.hasError ? 'red' : 'black' }}>
+					{props.helperText}
+				</FormHelperText>
+			)}
 		</FormControl>
 	);
 };

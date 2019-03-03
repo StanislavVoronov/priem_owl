@@ -1,18 +1,17 @@
 import React from 'react';
 import deburr from 'lodash/deburr';
-import Autosuggest, { InputProps, SuggestionSelectedEventData } from 'react-autosuggest';
+import Autosuggest, { BlurEvent, InputProps, SuggestionSelectedEventData } from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
-import { ISpacable } from '../common/';
+import { IHasError, IHelperText, ISpacable } from '../common/';
 
 interface IInputProps extends ISpacable {
 	label?: string;
 	placeholder?: string;
-	onSelect: (data: string, index?: number) => void;
-	onChange: (data: string) => void;
+	onChange: (data: string, index?: number) => void;
 	style?: any;
 }
 function renderInputComponent(inputProps: any) {
@@ -96,13 +95,13 @@ const styles = {
 	},
 };
 
-interface IAutoCompleteProps extends IInputProps {
+interface IAutoCompleteProps extends IInputProps, IHasError, IHelperText {
 	suggestions: string[];
 	required?: boolean;
 }
 
 interface IAutoCompleteState {
-	single: string;
+	value: string;
 	suggestions: string[];
 }
 
@@ -114,11 +113,11 @@ const renderSuggestionsContainer = (options: any) => {
 	);
 };
 class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoCompleteState> {
-	defaultProps = {
+	public defaultProps = {
 		suggestions: [],
 	};
 	public state = {
-		single: '',
+		value: '',
 		suggestions: [],
 	};
 
@@ -133,19 +132,18 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 			suggestions: [],
 		});
 	};
-	public onBlur = (event: any) => {
-		if (event && event.target && event.target.value) {
-			this.props.onChange(event.targer.value);
-		}
-	};
 	public handleChange = (event: any, { newValue }: { newValue: string }) => {
 		this.setState({
-			single: newValue,
+			value: newValue,
 		});
+		this.props.onChange(newValue);
 	};
-	onSelectSuggestion = (event: any, data: SuggestionSelectedEventData<string>) => {
+	public onSelectSuggestion = (event: any, data: SuggestionSelectedEventData<string>) => {
 		const index = this.props.suggestions.findIndex(item => item == data.suggestion) || 0;
-		this.props.onSelect(data.suggestion, index);
+		this.setState(state => {
+			return { ...state, value: data.suggestion };
+		});
+		this.props.onChange(data.suggestion, index);
 	};
 	public render() {
 		const autosuggestProps = {
@@ -157,6 +155,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 			renderSuggestion,
 		};
 		const { suggestions, ...inputProps } = this.props;
+
 		return (
 			<div>
 				<Autosuggest
@@ -166,9 +165,10 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 						style: inputProps.style,
 						label: inputProps.label,
 						placeholder: inputProps.placeholder,
-						value: this.state.single,
-						onBlur: this.onBlur,
+						value: this.state.value,
 						onChange: this.handleChange,
+						helperText: this.props.helperText,
+						error: this.props.hasError,
 					}}
 					// @ts-ignore
 					theme={{

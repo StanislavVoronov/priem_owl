@@ -41,19 +41,19 @@ const styles = {
 	},
 };
 class DocDataForm extends React.PureComponent<IDocDataProps> {
-	static defaultProps = {
+	public static defaultProps = {
 		selectDocType: (data: ISelectItem) => void 0,
 		selectDocSubType: (data: ISelectItem) => void 0,
 	};
 
-	renderDocImage = (data: DropzoneRenderArgs) => {
+	public renderDocImage = (data: DropzoneRenderArgs) => {
 		const file = data.draggedFiles[0];
 		return <Image source={file} />;
 	};
-	removeImage = () => {
+	public removeImage = () => {
 		this.props.onDownloadFile(null);
 	};
-	render() {
+	public render() {
 		return (
 			<FormControl>
 				{this.props.dictionaryTypes && this.props.title && (
@@ -91,7 +91,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 					}}>
 					{({ getRootProps, getInputProps, isDragActive }) => {
 						return (
-							<div {...getRootProps()} style={makeVerticalSpace('small')}>
+							<div {...getRootProps()} style={{ marginTop: 10, marginBottom: 10 }}>
 								{this.props.file ? (
 									<React.Fragment>
 										<Image source={this.props.file} removeImage={this.removeImage} />
@@ -112,18 +112,18 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 					<React.Fragment>
 						<TextInput placeholder="Введите серию документа" label="Серия" onBlur={this.props.onChangeSeries} />
 						<TextInput
-							required
+							required={true}
 							placeholder="Введите номер документа"
 							label="Номер"
 							type="number"
 							onBlur={this.props.onChangeNumber}
 						/>
-						<TextInput required type="date" label="Дата выдачи документа" onBlur={this.props.onChangeDate} />
+						<TextInput required={true} type="date" label="Дата выдачи документа" onBlur={this.props.onChangeDate} />
 						<TextInput
-							required
+							required={true}
 							placeholder="Введите кем выдан документ"
 							label="Кем выдан документ"
-							multiline
+							multiline={true}
 							onBlur={this.props.onChangeIssieBy}
 						/>
 					</React.Fragment>

@@ -31,7 +31,7 @@ const ContactsDataForm = (props: IContactDataForm) => {
 				: '');
 	}
 
-	//TODO Нуждаюсь в предоставлении общежития, Фактический адрес проживания добавить
+	// TODO Нуждаюсь в предоставлении общежития, Фактический адрес проживания добавить
 	return (
 		<div style={composeStyles(Styles.flexColumn)}>
 			<div style={composeStyles(Styles.flexColumn, makeVerticalSpace('small'))}>
@@ -40,23 +40,28 @@ const ContactsDataForm = (props: IContactDataForm) => {
 					label={'Индекс'}
 					type="number"
 					placeholder={'Введите индекс'}
-					required
+					required={true}
 					onBlur={props.onChangeData('regIndex')}
 				/>
 				<TextInput
 					label={'Область'}
 					placeholder={'Введите область'}
-					required
+					required={true}
 					onBlur={props.onChangeData('regRegion')}
 				/>
 				<TextInput
 					label={'Населенный пункт'}
 					placeholder={'Введите населенный пункт'}
-					required
+					required={true}
 					onBlur={props.onChangeData('regLocality')}
 				/>
-				<TextInput label={'Улица'} placeholder={'Введите улицу'} required onBlur={props.onChangeData('regStreet')} />
-				<TextInput label={'Дом'} placeholder={'Введите дом'} required onBlur={props.onChangeData('regHome')} />
+				<TextInput
+					label={'Улица'}
+					placeholder={'Введите улицу'}
+					required={true}
+					onBlur={props.onChangeData('regStreet')}
+				/>
+				<TextInput label={'Дом'} placeholder={'Введите дом'} required={true} onBlur={props.onChangeData('regHome')} />
 				<TextInput label={'Корпус'} onBlur={props.onChangeData('regBlock')} />
 				<TextInput label={'Квартира'} onBlur={props.onChangeData('regFlat')} />
 			</div>
@@ -79,23 +84,33 @@ const ContactsDataForm = (props: IContactDataForm) => {
 					<TextInput
 						label={'Индекс'}
 						placeholder={'Введите индекс'}
-						required
+						required={true}
 						onBlur={props.onChangeData('liveIndex')}
 					/>
 					<TextInput
 						label={'Область'}
 						placeholder={'Введите область'}
-						required
+						required={true}
 						onBlur={props.onChangeData('liveRegion')}
 					/>
 					<TextInput
 						label={'Населенный пункт'}
 						placeholder={'Введите населенный пункт'}
-						required
+						required={true}
 						onBlur={props.onChangeData('liveLocality')}
 					/>
-					<TextInput label={'Улица'} required placeholder={'Введите улицу'} onBlur={props.onChangeData('liveStreet')} />
-					<TextInput label={'Дом'} placeholder={'Введите дом'} required onBlur={props.onChangeData('liveHome')} />
+					<TextInput
+						label={'Улица'}
+						required={true}
+						placeholder={'Введите улицу'}
+						onBlur={props.onChangeData('liveStreet')}
+					/>
+					<TextInput
+						label={'Дом'}
+						placeholder={'Введите дом'}
+						required={true}
+						onBlur={props.onChangeData('liveHome')}
+					/>
 					<TextInput label={'Корпус'} onBlur={props.onChangeData('liveBlock')} />
 					<TextInput label={'Квартира'} onBlur={props.onChangeData('liveFlat')} />
 				</div>
@@ -123,13 +138,13 @@ const ContactsDataForm = (props: IContactDataForm) => {
 				value={maskMobPhone}
 				placeholder={'555-555-55-55'}
 				label={'Мобильный телефон'}
-				required
+				required={true}
 				onChange={props.onChangeData('mobPhone')}
 			/>
 			<TextInput
 				label={'Электронная почта'}
 				placeholder={'Введите электронную почту'}
-				required
+				required={true}
 				onBlur={props.onChangeData('email')}
 			/>
 			<TextInput label={'Домашний телефон'} onBlur={props.onChangeData('mobPhone')} />

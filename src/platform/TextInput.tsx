@@ -1,9 +1,18 @@
-import { composeStyles, IExtensible, IHasError, IHelperText, ISpacable, IStylable, makeVerticalSpace } from '../common';
+import {
+	composeStyles,
+	IDisabled,
+	IExtensible,
+	IHasError,
+	IHelperText,
+	ISpacable,
+	IStylable,
+	makeVerticalSpace,
+} from '../common';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
 import { FormLabel } from '@material-ui/core';
 
-export interface IInputProps extends ISpacable, IStylable, IHasError, IHelperText, IExtensible {
+export interface IInputProps extends ISpacable, IStylable, IHasError, IHelperText, IExtensible, IDisabled {
 	onChange?: (text: string) => void;
 	placeholder?: string;
 	type?: 'date' | 'number' | 'text';
@@ -16,10 +25,14 @@ export interface IInputProps extends ISpacable, IStylable, IHasError, IHelperTex
 	value?: string;
 	prefix?: string | number;
 	postfix?: string | number;
+	regExp?: string;
 }
 
-class TextInput extends React.PureComponent<IInputProps> {
-	static defaultProps = {
+class TextInput extends React.PureComponent<IInputProps, { value: string }> {
+	state = {
+		value: '',
+	};
+	public static defaultProps = {
 		horizontalSpace: 'small',
 		verticalSpace: 'small',
 		type: 'text',
@@ -27,22 +40,26 @@ class TextInput extends React.PureComponent<IInputProps> {
 		isTopLabel: true,
 		style: {},
 	};
-	onChange = (event: any) => {
+	public onChange = (event: any) => {
+		if (this.props.regExp && !new RegExp(this.props.regExp).test(event.target.value)) {
+			return;
+		}
+		this.setState({ value: event.target.value });
 		if (this.props.onChange) {
 			this.props.onChange(event.target.value);
 		}
 	};
-	onBlur = (event: any) => {
+	public onBlur = (event: any) => {
 		if (this.props.onBlur) {
 			this.props.onBlur(event.target.value);
 		}
 	};
-	render() {
+	public render() {
 		return (
 			<React.Fragment>
 				{this.props.prefix && <FormLabel>{this.props.prefix}</FormLabel>}
 				<TextField
-					value={this.props.value}
+					value={this.state.value}
 					error={this.props.hasError}
 					helperText={this.props.helperText}
 					required={this.props.required}

@@ -29,6 +29,8 @@
     "redux-actions": "^2.6.4",
     "redux-thunk": "latest",
     "react-avatar-editor": "latest",
+    "cyrillic-to-translit-js": "^2.1.0",
+    "reselect": "^4.0.0",
     "react-dropzone": "latest"
   },
   "homepage": "https://monitoring.mgutm.ru/dev/priem/unstable/dictionary",
@@ -37,6 +39,7 @@
     "@types/react-dropzone": "^4.2.2",
     "@types/react-avatar-editor": "^10.3.3",
     "@types/react": "^16.7.17",
+    "@types/reselect": "^2.2.0",
     "@types/react-dom": "^16.0.11",
     "@types/react-redux": "^6.0.12",
     "@types/react-select": "^2.0.11",

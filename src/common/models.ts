@@ -1,9 +1,11 @@
 import { Style } from 'jss/css';
 import { IDictionary } from '@mgutm-fcu/dictionary';
+import { IEnrollReducer } from '../containers/Enroll';
 
 export interface IRootState {
 	user: any;
 	dictionaries: Record<string, IDictionary>;
+	enroll: IEnrollReducer;
 }
 
 export interface ITextFieldChangeEvent {
@@ -69,6 +71,10 @@ export interface ISpacable {
 	horizontalSpace?: TypeSpace;
 }
 
+export interface IDisabled {
+	disabled?: boolean;
+}
+
 export interface ISelectItem {
 	name: string;
 	id: number;
@@ -97,7 +103,6 @@ export interface IDocDataForm {
 export interface IHasError {
 	hasError?: boolean;
 }
-
 export interface IDictionaries {
 	dictionaries: IDictionary[];
 }
@@ -157,6 +162,12 @@ export interface IApplication {
 	educationLevel: ISelectItem | null;
 	id: number;
 }
+export interface IServerResponseResult<T> {
+	result: T[];
+}
 
+export interface IServerError {
+	error: any;
+}
 export interface IContactsDataState extends IDocDataForm {}
 export interface IEducationDataState extends IDocDataForm {}

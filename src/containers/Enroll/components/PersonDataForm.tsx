@@ -1,126 +1,86 @@
 import React, { useState } from 'react';
-import { Autocomplete, RadioGroupButton, TextInput, DocDataForm, DropdownSelect, Button } from '../../../platform';
+import { DropdownSelect, Button, DocDataForm, TextInput } from '../../../platform';
 import { AppContext } from '../../../App';
-import {
-	composeStyles,
-	Styles,
-	IRootState,
-	makeVerticalSpace,
-	EDictionaryNameList,
-	ISelectItem,
-} from '../../../common';
+import { composeStyles, Styles, EDictionaryNameList, ISelectItem } from '../../../common';
 
-import { IDictionary } from '@mgutm-fcu/dictionary';
-import { IPersonData } from '../models';
+import { IPersonFormData } from '../models';
 
 interface IOwnProps {
-	submit: (data: IPersonData) => void;
+	submit: (data: IPersonFormData) => void;
 }
 
-interface IState {
-	personData: IPersonData;
-}
+interface IState extends IPersonFormData {}
 type IProps = IOwnProps;
-class PersonDataForm extends React.PureComponent<IProps, IState> {
-	state = {
-		personData: {
-			lastName: '',
-			firstName: '',
-			middleName: '',
-			gender: '',
-			docSeries: '',
-			docNumber: '',
-			docIssieBy: '',
-			codeDepartment: '',
-			docDate: '',
-			docFile: null,
-			birthday: null,
-			government: null,
-		},
-	};
-	onSelectFirstName = (value: string, index: number) => {
-		this.setState(state => ({
-			...state,
-			personData: {
-				...state.personData,
-				firstName: value,
-				// gender: this.props.dictionaryFirstNames.values[index]['sex'],
-			},
-		}));
-	};
-	onChangeTextField = (name: string) => (value: string) => {
-		this.setState(state => ({
-			...state,
-			personData: {
-				...state.personData,
-				[name]: value,
-			},
-		}));
-	};
-	onChangeSelectField = (name: string) => (value: ISelectItem) => {
-		this.setState(state => ({
-			...state,
-			personData: {
-				...state.personData,
-				[name]: value,
-			},
-		}));
-	};
 
-	prepareDictionarySuggestions = (dictionary: IDictionary) => {
-		if (!dictionary || !Array.isArray(dictionary.values)) return [];
-		return [];
-		// return this.props.dictionaryFirstNames.values.map(item => item.name);
+class PersonDataForm extends React.PureComponent<IProps, IState> {
+	public state = {
+		docSeries: '',
+		docNumber: '',
+		docIssieBy: '',
+		codeDepartment: '',
+		docDate: '',
+		docFile: null,
+		government: null,
 	};
-	onDownloadFile = (doc: File) => {
+	public onChangeTextField = (name: string) => (value: string) => {
 		this.setState(state => ({
 			...state,
-			personData: {
-				...state.personData,
-				docFile: doc,
-			},
+			[name]: value,
 		}));
 	};
-	submit = () => {
-		this.props.submit(this.state.personData);
+	public onChangeSelectField = (name: string) => (value: ISelectItem) => {
+		this.setState(state => ({
+			...state,
+			[name]: value,
+		}));
 	};
-	render() {
+	public onDownloadFile = (doc: File) => {
+		this.setState(state => ({
+			...state,
+			docFile: doc,
+		}));
+	};
+	public submit = () => {};
+	public render() {
 		return (
 			<AppContext.Consumer>
 				{context => {
-					console.log('context', context);
+					const dictionaryGovernments = context[EDictionaryNameList.Governments];
+					const dictionaryPersonDocTypes = context[EDictionaryNameList.PersonDocTypes];
 					return (
 						<div style={composeStyles(Styles.flexColumn)}>
-							{/*<DropdownSelect*/}
-							{/*required={true}*/}
-							{/*options={this.props.dictionaryGovernments && this.props.dictionaryGovernments.values}*/}
-							{/*placeholder="Выберите гражданство"*/}
-							{/*onChangeSelect={this.onChangeSelectField('government')}*/}
-							{/*title="Гражданство"*/}
-							{/*/>*/}
+							<DropdownSelect
+								required={true}
+								options={dictionaryGovernments && dictionaryGovernments.values}
+								placeholder="Выберите гражданство"
+								onChangeSelect={this.onChangeSelectField('government')}
+								title="Гражданство"
+							/>
 
-							{/*<DocDataForm*/}
-							{/*isNeedData*/}
-							{/*file={this.state.personData.docFile}*/}
-							{/*onDownloadFile={this.onDownloadFile}*/}
-							{/*onChangeSeries={this.onChangeTextField('docSeries')}*/}
-							{/*onChangeNumber={this.onChangeTextField('docNumber')}*/}
-							{/*onChangeIssieBy={this.onChangeTextField('docIssieBy')}*/}
-							{/*onChangeDate={this.onChangeTextField('docDate')}*/}
-							{/*dictionarySubTypes={this.props.dictionaryPersonDocTypes && this.props.dictionaryPersonDocTypes.values}*/}
-							{/*subTitle={'Тип документа удостоверяющего личность'}*/}
-							{/*extraFields={*/}
-							{/*<TextInput*/}
-							{/*label="Код подразделения"*/}
-							{/*type="number"*/}
-							{/*placeholder={'Введите код подразделения'}*/}
-							{/*onBlur={this.onChangeTextField('codeDepartment')}*/}
-							{/*/>*/}
-							{/*}*/}
-							{/*/>*/}
-							<Button variant="contained" color="primary" onClick={this.submit}>
-								{'Регистрация'}
-							</Button>
+							<DocDataForm
+								isNeedData
+								file={this.state.docFile}
+								onDownloadFile={this.onDownloadFile}
+								onChangeSeries={this.onChangeTextField('docSeries')}
+								onChangeNumber={this.onChangeTextField('docNumber')}
+								onChangeIssieBy={this.onChangeTextField('docIssieBy')}
+								onChangeDate={this.onChangeTextField('docDate')}
+								dictionarySubTypes={dictionaryPersonDocTypes && dictionaryPersonDocTypes.values}
+								subTitle={'Тип документа удостоверяющего личность'}
+								extraFields={
+									<TextInput
+										label="Код подразделения"
+										type="number"
+										placeholder={'Введите код подразделения'}
+										onBlur={this.onChangeTextField('codeDepartment')}
+									/>
+								}
+							/>
+							<div style={{ marginTop: 30, marginBottom: 30 }}>
+								<Button variant="contained" color="primary" onClick={this.submit}>
+									{'Далее'}
+								</Button>
+							</div>
 						</div>
 					);
 				}}
