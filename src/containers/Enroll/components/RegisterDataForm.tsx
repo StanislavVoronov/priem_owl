@@ -7,7 +7,7 @@ import {
 	EDictionaryNameList,
 	IRootState,
 	makeVerticalSpace,
-	Styles,
+	GlobalStyles,
 	validateDataForm,
 } from '../../../common';
 import { IDictionary } from '@mgutm-fcu/dictionary';
@@ -172,7 +172,7 @@ class RegisterDataForm extends React.PureComponent<
 						? { values: dictionaryMiddleNames.values.filter((item: any) => item.sex == this.state.gender) }
 						: dictionaryMiddleNames;
 					return (
-						<div style={composeStyles(Styles.flexColumn)}>
+						<div style={composeStyles(GlobalStyles.flexColumn)}>
 							<TextInput
 								required={true}
 								placeholder={'Введите фамилию'}

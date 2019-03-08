@@ -1,4 +1,4 @@
-export const Styles: any = {
+export const GlobalStyles: any = {
 	flexRow: {
 		display: 'flex',
 		flexDirection: 'row',
@@ -9,5 +9,9 @@ export const Styles: any = {
 	},
 	flexRowVerCenter: {
 		alignItems: 'center',
+	},
+	buttonNext: {
+		marginTop: 15,
+		marginBottom: 15,
 	},
 };

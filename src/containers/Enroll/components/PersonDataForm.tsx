@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { DropdownSelect, Button, DocDataForm, TextInput } from '../../../platform';
 import { AppContext } from '../../../App';
-import { composeStyles, Styles, EDictionaryNameList, ISelectItem } from '../../../common';
+import { composeStyles, EDictionaryNameList, ISelectItem, validateDataForm, GlobalStyles } from '../../../common';
 
-import { IPersonFormData } from '../models';
+import { IPersonDataForm } from '../models';
 
 interface IOwnProps {
-	submit: (data: IPersonFormData) => void;
+	submit: (data: IPersonDataForm) => void;
 }
 
-interface IState extends IPersonFormData {}
+interface IState extends IPersonDataForm {
+	docFile: File | null;
+}
 type IProps = IOwnProps;
 
 class PersonDataForm extends React.PureComponent<IProps, IState> {
@@ -40,7 +42,9 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 			docFile: doc,
 		}));
 	};
-	public submit = () => {};
+	public submit = () => {
+		this.props.submit(this.state);
+	};
 	public render() {
 		return (
 			<AppContext.Consumer>
@@ -48,7 +52,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 					const dictionaryGovernments = context[EDictionaryNameList.Governments];
 					const dictionaryPersonDocTypes = context[EDictionaryNameList.PersonDocTypes];
 					return (
-						<div style={composeStyles(Styles.flexColumn)}>
+						<div style={composeStyles(GlobalStyles.flexColumn)}>
 							<DropdownSelect
 								required={true}
 								options={dictionaryGovernments && dictionaryGovernments.values}
@@ -58,7 +62,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 							/>
 
 							<DocDataForm
-								isNeedData
+								docTitle="Файл документа, удостоверяющего личность"
 								file={this.state.docFile}
 								onDownloadFile={this.onDownloadFile}
 								onChangeSeries={this.onChangeTextField('docSeries')}
@@ -76,8 +80,12 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 									/>
 								}
 							/>
-							<div style={{ marginTop: 30, marginBottom: 30 }}>
-								<Button variant="contained" color="primary" onClick={this.submit}>
+							<div style={GlobalStyles.buttonNext}>
+								<Button
+									variant="contained"
+									color="primary"
+									disabled={validateDataForm(this.state)}
+									onClick={this.submit}>
 									{'Далее'}
 								</Button>
 							</div>

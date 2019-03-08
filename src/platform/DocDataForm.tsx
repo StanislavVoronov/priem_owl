@@ -5,24 +5,27 @@ import DropdownSelect from './DropdownSelect';
 import Dropzone, { DropzoneRenderArgs } from 'react-dropzone';
 import Image from './ImageEditor';
 import { IDictionary } from '@mgutm-fcu/dictionary';
+import FormLabel from '@material-ui/core/FormLabel';
 interface IDocDataProps {
 	requireSeries?: boolean;
-	isNeedData?: boolean;
+	hideDataFields?: boolean;
+	required?: boolean;
 	dictionaryTypes?: IDictionary[];
 	dictionarySubTypes?: IDictionary[];
 	title?: string;
 	subTitle?: string;
+	docTitle?: string;
 	file: string | File | null;
 	extraFields?: ReactElement<any>;
 	defaultType?: ISelectItem;
 	defaultSubType?: ISelectItem;
 	selectDocType?: (type: ISelectItem) => void;
 	selectDocSubType?: (subType: ISelectItem) => void;
-	onChangeNumber: (value: string) => void;
-	onChangeSeries: (value: string) => void;
-	onChangeIssieBy: (value: string) => void;
+	onChangeNumber?: (value: string) => void;
+	onChangeSeries?: (value: string) => void;
+	onChangeIssieBy?: (value: string) => void;
 	onDownloadFile: (file: string | File | null) => void;
-	onChangeDate: (date: string) => void;
+	onChangeDate?: (date: string) => void;
 }
 
 const styles = {
@@ -42,6 +45,7 @@ const styles = {
 };
 class DocDataForm extends React.PureComponent<IDocDataProps> {
 	public static defaultProps = {
+		required: true,
 		selectDocType: (data: ISelectItem) => void 0,
 		selectDocSubType: (data: ISelectItem) => void 0,
 	};
@@ -76,6 +80,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 						title={this.props.subTitle}
 					/>
 				)}
+
 				<Dropzone
 					onDrop={acceptedFiles => {
 						acceptedFiles.forEach(file => {
@@ -92,6 +97,12 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 					{({ getRootProps, getInputProps, isDragActive }) => {
 						return (
 							<div {...getRootProps()} style={{ marginTop: 10, marginBottom: 10 }}>
+								{this.props.docTitle && (
+									<FormLabel style={{ fontSize: '0.75em' }}>
+										{this.props.docTitle}
+										{this.props.required ? ' *' : ''}
+									</FormLabel>
+								)}
 								{this.props.file ? (
 									<React.Fragment>
 										<Image source={this.props.file} removeImage={this.removeImage} />
@@ -100,7 +111,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 									<React.Fragment>
 										<input {...getInputProps()} />
 										<div style={composeStyles(styles.dropZone)}>
-											Добавить новый документ или перетащите в отмеченную область
+											Нажмите, чтобы добавить файл или перетащите файл в отмеченную область
 										</div>
 									</React.Fragment>
 								)}
@@ -108,7 +119,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 						);
 					}}
 				</Dropzone>
-				{this.props.isNeedData !== false && (
+				{!this.props.hideDataFields && (
 					<React.Fragment>
 						<TextInput placeholder="Введите серию документа" label="Серия" onBlur={this.props.onChangeSeries} />
 						<TextInput
@@ -128,48 +139,6 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 						/>
 					</React.Fragment>
 				)}
-				{/*{props.extraFields}*/}
-
-				{/*<Dropzone*/}
-				{/*onDrop={acceptedFiles => {*/}
-				{/*acceptedFiles.forEach(file => {*/}
-				{/*const reader = new FileReader();*/}
-				{/*reader.onload = () => {*/}
-				{/*const fileAsBinaryString = reader.result;*/}
-				{/*console.log('file', file);*/}
-				{/*props.onChangeData('docFile')({*/}
-				{/*name: file.name,*/}
-				{/*size: file.size,*/}
-				{/*type: file.type,*/}
-				{/*binary: fileAsBinaryString,*/}
-				{/*});*/}
-				{/*};*/}
-				{/*reader.onabort = () => console.log('file reading was aborted');*/}
-				{/*reader.onerror = () => console.log('file reading has failed');*/}
-
-				{/*reader.readAsBinaryString(file);*/}
-				{/*});*/}
-				{/*}}>*/}
-				{/*{({getRootProps, getInputProps, isDragActive}) => {*/}
-				{/*return (*/}
-
-				{/*style={composeStyles(styles.dropZone, styles.fileInDropZone)}>{props.docFile.name}</div>*/}
-				{/*)}*/}
-				{/*{isDragActive ? (*/}
-				{/*<div style={composeStyles(styles.dropZone, styles.activeDropZone)}>*/}
-				{/*{props.docFile ? 'Заменить документ' : 'Добавить документ...'}*/}
-				{/*</div>*/}
-				{/*) : (*/}
-				{/*!props.docFile && (*/}
-				{/*<div style={composeStyles(styles.dropZone)}>*/}
-				{/*Добавить новый документ или перетащите в отмеченную область*/}
-				{/*</div>*/}
-				{/*)*/}
-				{/*)}*/}
-				{/*</div>*/}
-				{/*);*/}
-				{/*}}*/}
-				{/*</Dropzone>*/}
 			</FormControl>
 		);
 	}

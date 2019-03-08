@@ -31,6 +31,7 @@ class DropdownSelect extends React.PureComponent<ISelectProps> {
 		options: [],
 	};
 	public render() {
+		console.log('default', this.props.defaultValue);
 		return (
 			<FormControl style={composeStyles(makeVerticalSpace(this.props.verticalSpace), this.props.style)}>
 				<FormLabel style={styles.label}>

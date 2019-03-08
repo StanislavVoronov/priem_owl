@@ -77,8 +77,8 @@ export interface IDisabled {
 
 export interface ISelectItem {
 	name: string;
-	id: number;
-	[key: string]: string | number;
+	id: string;
+	[key: string]: string;
 }
 
 export interface IStylable {

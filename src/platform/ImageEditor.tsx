@@ -27,14 +27,14 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 	};
 	public state = {
 		file: null,
-		scale: 0.5,
+		scale: 1,
 		rotate: 0,
 		hidden: false,
 		width: window.innerWidth / 3,
 		height: window.innerHeight / 3,
 	};
 	public setScale = (event: React.ChangeEvent<{}>, scale: number) => {
-		this.setState(state => ({ ...state, scale: scale <= 0 ? state.scale : scale }));
+		this.setState(state => ({ ...state, scale: scale <= 1 ? state.scale : scale }));
 	};
 	public setRotateLeft = () => {
 		this.setState(state => ({ ...state, rotate: state.rotate - 90 }));
@@ -52,8 +52,7 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 	public render() {
 		return (
 			<div style={{ width: this.state.width, justifyContent: 'center', display: 'flex', flexDirection: 'column' }}>
-				<FormLabel style={{ fontSize: '0.75em' }}>Название файла</FormLabel>
-				<div style={{ marginTop: 6, marginBottom: 12 }}>{this.props.source && this.props.source['name']}</div>
+				<div style={{ marginTop: 10, marginBottom: 12 }}>{this.props.source && this.props.source['name']}</div>
 				{!this.state.hidden && (
 					<React.Fragment>
 						<AvatarEditor
@@ -66,7 +65,7 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 						/>
 						<p
 							style={{
-								height: 20,
+								height: 10,
 							}}>
 							<Slider
 								style={{ marginLeft: 30, marginRight: 30 }}
@@ -78,7 +77,7 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 					</React.Fragment>
 				)}
 				<div
-					style={composeStyles(makeVerticalSpace('normal'), {
+					style={composeStyles(makeVerticalSpace('small'), {
 						display: 'flex',
 						paddingLeft: 20,
 						paddingRight: 20,
@@ -92,9 +91,9 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 					)}
 					<div style={{ display: 'flex' }}>
 						<Fab variant="extended" onClick={this.toggleImage} size="small">
-							<VisibilityOff />
+							{this.state.hidden ? <Visibility /> : <VisibilityOff />}
 						</Fab>
-						<div style={{ marginLeft: 15, marginRight: 15 }} />
+						<div style={{ marginLeft: 20, marginRight: 20 }} />
 						<Fab style={{ backgroundColor: 'red' }} variant="extended" onClick={this.removeImage} size="small">
 							<Delete style={{ color: 'white' }} />
 						</Fab>

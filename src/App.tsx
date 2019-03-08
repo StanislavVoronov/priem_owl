@@ -7,9 +7,6 @@ import { Stepper, StepContent, StepLabel, Step } from './platform/';
 import { RegisterDataForm } from './containers/Enroll';
 import {
 	IRootState,
-	makeVerticalSpace,
-	Styles,
-	composeStyles,
 	IPersonDataState,
 	IContactDataState,
 	IEducationDataState,
@@ -18,8 +15,7 @@ import {
 	dictionariesStateSelector,
 } from './common';
 
-import { IRegisterFormData } from './containers/Enroll';
-import { PersonDataForm } from './containers';
+import { ContactsDataForm, EducationDataForm, PersonDataForm } from './containers';
 interface IAppState {
 	activeStep: number;
 	personData: IPersonDataState;
@@ -37,88 +33,19 @@ interface IStateToProps {
 }
 interface IDispatchProps {}
 type IProps = IStateToProps & IDispatchProps;
-export class App extends React.PureComponent<IProps, IAppState> {
-	constructor(props: never) {
-		super(props);
-		this.state = {
-			activeStep: 1,
-			docList: [],
-			applicationData: {
-				category: null,
-				department: null,
-				applicationList: [],
-			},
-			contactData: {
-				regIndex: '',
-				email: '',
-				regHome: '',
-				regRegion: '',
-				regStreet: '',
-				regLocality: '',
-				needDormitory: false,
-				mobPhone: '',
-				mobCountry: { id: 1, name: 'Россия', phone_code: '7' },
-				isRegAddressEqualLive: true,
-				docFile: null,
-				docType: { id: 3, name: '' },
-			},
-			personData: {
-				docFile: null,
-				birthday: null,
-				docType: { id: 1, name: '' },
-				docDate: null,
-				codeDepartment: '',
-				docIssued: '',
-				docNumber: '',
-				docSeries: '',
-				firstName: '',
-				gender: null,
-				middleName: '',
-				lastName: '',
-			},
-			educationData: {
-				hasEge: false,
-				prevEduc: null,
-				levelEduc: null,
-				isfFirstHighEducation: false,
-				docNumber: '',
-				docType: { id: 2, name: '' },
-				docSeries: '',
-				docIssued: '',
-				docDate: null,
-				docFile: null,
-			},
-		};
-	}
-	public componentDidMount() {}
+export class App extends React.PureComponent<IProps, { activeStep: number }> {
+	state = {
+		activeStep: 3,
+	};
 
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
-		console.log(error, info);
 	}
 	public handleNext = () => {
 		this.setState(state => ({ activeStep: state.activeStep + 1 }));
 	};
 	public handleBack = () => {
 		this.setState(state => ({ activeStep: state.activeStep - 1 }));
-	};
-
-	public deleteDocFile = (index: number) => {
-		const state = {
-			...this.state,
-			docList: [...this.state.docList.splice(index, 1)],
-		};
-		this.setState(() => state);
-	};
-	public addNewDocFile = () => {
-		const state = {
-			...this.state,
-			docList: [
-				...this.state.docList,
-				{ docNumber: '', docType: null, docSeries: '', docIssued: '', docDate: null, docFile: null },
-			],
-		};
-		this.setState(() => state);
 	};
 	public render() {
 		return (
@@ -131,6 +58,8 @@ export class App extends React.PureComponent<IProps, IAppState> {
 								<StepContent>
 									{index === 0 && <RegisterDataForm submit={this.handleNext} />}
 									{index === 1 && <PersonDataForm submit={this.handleNext} />}
+									{index === 2 && <ContactsDataForm submit={this.handleNext} />}
+									{index === 3 && <EducationDataForm submit={this.handleNext} />}
 									{/*)}*/}
 								</StepContent>
 							</Step>

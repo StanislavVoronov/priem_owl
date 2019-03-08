@@ -1,4 +1,4 @@
-import { composeStyles, EDictionaryNameList, ISelectChanged, ITextFieldChanged, Styles } from '../../../common';
+import { composeStyles, EDictionaryNameList, GlobalStyles, ISelectChanged } from '../../../common';
 import React from 'react';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import DropdownSelect from '../../../platform/DropdownSelect';
@@ -8,7 +8,7 @@ interface ApplicationsDataFormProps extends ISelectChanged {
 }
 export const ApplicationsDataForm = (props: ApplicationsDataFormProps) => {
 	return (
-		<div style={composeStyles(Styles.flexColumn)}>
+		<div style={composeStyles(GlobalStyles.flexColumn)}>
 			<DropdownSelect
 				onChangeSelect={props.onChangeSelect('specialCategory')}
 				defaultValue={{ id: 0, name: 'Нет преимуществ' }}

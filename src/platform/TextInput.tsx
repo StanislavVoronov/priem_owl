@@ -30,7 +30,7 @@ export interface IInputProps extends ISpacable, IStylable, IHasError, IHelperTex
 
 class TextInput extends React.PureComponent<IInputProps, { value: string }> {
 	state = {
-		value: '',
+		value: this.props.value || '',
 	};
 	public static defaultProps = {
 		horizontalSpace: 'small',
@@ -41,10 +41,12 @@ class TextInput extends React.PureComponent<IInputProps, { value: string }> {
 		style: {},
 	};
 	public onChange = (event: any) => {
-		if (this.props.regExp && !new RegExp(this.props.regExp).test(event.target.value)) {
+		if (event.target.value.length && this.props.regExp && !new RegExp(this.props.regExp).test(event.target.value)) {
 			return;
 		}
-		this.setState({ value: event.target.value });
+		if (this.props.value === undefined) {
+			this.setState({ value: event.target.value });
+		}
 		if (this.props.onChange) {
 			this.props.onChange(event.target.value);
 		}
@@ -59,7 +61,7 @@ class TextInput extends React.PureComponent<IInputProps, { value: string }> {
 			<React.Fragment>
 				{this.props.prefix && <FormLabel>{this.props.prefix}</FormLabel>}
 				<TextField
-					value={this.state.value}
+					value={this.props.value !== undefined ? this.props.value : this.state.value}
 					error={this.props.hasError}
 					helperText={this.props.helperText}
 					required={this.props.required}
