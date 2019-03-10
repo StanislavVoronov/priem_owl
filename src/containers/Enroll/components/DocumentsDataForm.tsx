@@ -70,9 +70,9 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 		this.setState({ documents });
 	};
 	deleteDoc = (index: number) => () => {
-		const documents: IDocDataForm[] = this.state.documents.splice(index, 1);
+		const documents: IDocDataForm[] = this.state.documents.filter((item, key) => key !== index);
 
-		this.setState({ documents: [...documents] });
+		this.setState({ documents });
 	};
 	submit = () => {
 		this.props.submit(this.state.documents);
