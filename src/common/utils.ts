@@ -47,13 +47,13 @@ export const checkPayload = <State, Payload>(action: Action<any>, callback: (dat
 };
 
 export const validateDataForm = (invalidState: Record<string, any>): boolean => {
-	let invalidData = false;
+	let invalidData = true;
 	for (let field in invalidState) {
-		if (invalidData) {
+		if (!invalidData) {
 			return invalidData;
 		}
 		const value = invalidState[field];
-		invalidData = !(typeof value === 'string' ? value.length > 0 : !!value);
+		invalidData = typeof value === 'string' ? value.length > 0 : !!value;
 	}
 	return invalidData;
 };

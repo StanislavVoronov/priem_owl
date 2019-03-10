@@ -26,15 +26,6 @@ export interface IDataChanged {
 	onChangeData: (field: string) => (item: any) => void;
 }
 
-export interface IUploadFile {
-	lastModified: Date;
-	lastModifiedDate: Date;
-	name: string;
-	size: number;
-	type: string;
-	binary: string;
-}
-
 export interface ISelectChanged {
 	onChangeSelect: (field: string) => (value: ISelectItem) => void;
 }
@@ -91,15 +82,6 @@ export interface IHelperText {
 	helperText?: string;
 }
 
-export interface IDocDataForm {
-	docType?: ISelectItem | null;
-	docSubType?: ISelectItem | null;
-	docNumber?: string;
-	docSeries?: string;
-	docIssued?: string;
-	docDate?: Date | null;
-	docFile: IUploadFile | null;
-}
 export interface IHasError {
 	hasError?: boolean;
 }
@@ -107,61 +89,6 @@ export interface IDictionaries {
 	dictionaries: IDictionary[];
 }
 
-export interface IPersonDataState extends IDocDataForm {
-	firstName: string;
-	middleName?: string;
-	lastName: string;
-	birthday: Date | null;
-	codeDepartment: string;
-	gender: number | null;
-}
-
-export interface IEducationDataState extends IDocDataForm {
-	hasEge: boolean;
-	isfFirstHighEducation: boolean;
-	prevEduc: ISelectItem | null;
-	levelEduc: ISelectItem | null;
-}
-
-export interface IContactDataState extends IDocDataForm {
-	regIndex: string;
-	regRegion: string;
-	regLocality: string;
-	regStreet: string;
-	regHome: string;
-	regBlock?: string;
-	regFlat?: string;
-	isRegAddressEqualLive: boolean;
-	liveIndex?: string;
-	liveRegion?: string;
-	liveLocality?: string;
-	liveStreet?: string;
-	liveHome?: string;
-	liveBlock?: string;
-	liveFlat?: string;
-	needDormitory: boolean;
-	mobCountry: ISelectItem;
-	mobPhone: string;
-	homePhone?: string;
-	email: string;
-}
-
-export interface IApplicationDataForm {
-	category?: ISelectItem | null;
-	department?: ISelectItem | null;
-	applicationList: IApplication[];
-}
-
-export interface IApplication {
-	filial?: ISelectItem | null;
-	inst?: ISelectItem | null;
-	direction?: ISelectItem | null;
-	profile?: ISelectItem | null;
-	educationForm?: ISelectItem | null;
-	payForm: ISelectItem | null;
-	educationLevel: ISelectItem | null;
-	id: number;
-}
 export interface IServerResponseResult<T> {
 	result: T[];
 }
@@ -169,5 +96,3 @@ export interface IServerResponseResult<T> {
 export interface IServerError {
 	error: any;
 }
-export interface IContactsDataState extends IDocDataForm {}
-export interface IEducationDataState extends IDocDataForm {}

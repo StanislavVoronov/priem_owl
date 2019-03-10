@@ -1,18 +1,25 @@
 import { ISelectItem, IServerError } from '../../common';
 
-export interface IRegisterFormData {
+export interface PersonInfo {
 	lastName: string;
 	firstName: string;
-	middleName?: string;
+	middleName: string;
 	birthday: string;
+}
+export interface IRegisterFormData extends PersonInfo {
 	gender: string;
 	email: string;
+	login: string;
+	password: string;
 }
 export interface IDocDataForm {
-	docSeries: string;
-	docNumber: string;
-	docIssieBy: string;
-	docDate: string;
+	hideDataFields?: boolean;
+	type?: ISelectItem | null;
+	subType?: ISelectItem | null;
+	docSeries?: string;
+	docNumber?: string;
+	docIssieBy?: string;
+	docDate?: string;
 	docFile: File | null;
 }
 
@@ -23,7 +30,7 @@ export interface IPersonDataForm extends IDocDataForm {
 
 export interface IEducationDataForm extends IDocDataForm {
 	firstHighEducation: boolean;
-	personCoolnessTypes: ISelectItem[];
+	coolnessTypes: ISelectItem[];
 	prevEducation: ISelectItem | null;
 	hasEge: boolean;
 }

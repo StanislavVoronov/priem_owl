@@ -47,7 +47,7 @@ ReactDOM.render(
 					},
 					{
 						table: EDictionaryNameList.DocTypes,
-						columns: ['id', 'name', 'scanable'],
+						columns: ['id', 'name', 'scanable', 'need_info'],
 						filter: (item: IDictionaryScanableFilter) => item.scanable === 1,
 					},
 					{

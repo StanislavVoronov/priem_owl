@@ -18,7 +18,7 @@ interface IState extends IEducationDataForm {}
 class EducationDataForm extends React.PureComponent<IProps> {
 	state = {
 		firstHighEducation: true,
-		personCoolnessTypes: [],
+		coolnessTypes: [],
 		prevEducation: null,
 		hasEge: false,
 		docFile: null,
@@ -37,7 +37,7 @@ class EducationDataForm extends React.PureComponent<IProps> {
 		this.setState({ prevEducation: item });
 	};
 	onChangePersonCoolnessTypes = (items: ISelectItem[]) => {
-		this.setState({ personCoolnessTypes: items });
+		this.setState({ coolnessTypes: items });
 	};
 	downloadFile = (file: File | null) => {
 		this.setState({ docFile: file });
@@ -67,6 +67,7 @@ class EducationDataForm extends React.PureComponent<IProps> {
 							/>
 							<DropdownSelect
 								verticalSpace={'minor'}
+								required
 								placeholder={'Выберите предыдущее образование'}
 								onChangeSelect={this.onChangePreviousEducation}
 								options={previousEducationDictionary && previousEducationDictionary.values}

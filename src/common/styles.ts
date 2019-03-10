@@ -12,6 +12,6 @@ export const GlobalStyles: any = {
 	},
 	buttonNext: {
 		marginTop: 15,
-		marginBottom: 15,
+		marginBottom: 5,
 	},
 };

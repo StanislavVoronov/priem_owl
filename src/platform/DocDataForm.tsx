@@ -1,11 +1,32 @@
 import React, { ReactElement } from 'react';
-import { TextInput, FormControl, Button } from './';
-import { composeStyles, IDataChanged, ISelectItem, IDocDataForm, makeVerticalSpace } from '../common';
+import { TextInput, FormControl } from './';
+import { composeStyles, ISelectItem } from '../common';
 import DropdownSelect from './DropdownSelect';
 import Dropzone, { DropzoneRenderArgs } from 'react-dropzone';
 import Image from './ImageEditor';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import FormLabel from '@material-ui/core/FormLabel';
+
+interface IUploadFile {
+	lastModified: Date;
+	lastModifiedDate: Date;
+	name: string;
+	size: number;
+	type: string;
+	binary: string;
+}
+
+export interface IDocDataForm {
+	docType?: ISelectItem | null;
+	docSubType?: ISelectItem | null;
+	docNumber?: string;
+	docSeries?: string;
+	docIssued?: string;
+	docDate?: string;
+	docFile: IUploadFile | null;
+	hideDataFields?: boolean;
+}
+
 interface IDocDataProps {
 	requireSeries?: boolean;
 	hideDataFields?: boolean;

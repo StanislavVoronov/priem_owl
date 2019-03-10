@@ -4,25 +4,21 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import { Stepper, StepContent, StepLabel, Step } from './platform/';
-import { RegisterDataForm } from './containers/Enroll';
-import {
-	IRootState,
-	IPersonDataState,
-	IContactDataState,
-	IEducationDataState,
-	IDocDataForm,
-	IApplicationDataForm,
-	dictionariesStateSelector,
-} from './common';
+import { IEducationDataForm, IPersonDataForm, IRegisterFormData, RegisterDataForm } from './containers/Enroll';
+import { IRootState, dictionariesStateSelector } from './common';
 
 import { ContactsDataForm, EducationDataForm, PersonDataForm } from './containers';
+import DocumentsDataForm, { IDocDataItem } from './containers/Enroll/components/DocumentsDataForm';
+
+class IContactsDataForm {}
+
 interface IAppState {
 	activeStep: number;
-	personData: IPersonDataState;
-	contactData: IContactDataState;
-	educationData: IEducationDataState;
-	docList: IDocDataForm[];
-	applicationData: IApplicationDataForm;
+	registerData?: IRegisterFormData;
+	personData?: IPersonDataForm;
+	contactsData?: IContactsDataForm;
+	educationData?: IEducationDataForm;
+	documents?: IDocDataItem[];
 }
 
 const steps = ['Регистрация', 'Персональные данные', 'Контактные данные', 'Образование', 'Документы', 'Заявления'];
@@ -33,9 +29,9 @@ interface IStateToProps {
 }
 interface IDispatchProps {}
 type IProps = IStateToProps & IDispatchProps;
-export class App extends React.PureComponent<IProps, { activeStep: number }> {
+export class App extends React.PureComponent<IProps, IAppState> {
 	state = {
-		activeStep: 3,
+		activeStep: 4,
 	};
 
 	public componentDidCatch(error: any, info: any) {
@@ -47,6 +43,26 @@ export class App extends React.PureComponent<IProps, { activeStep: number }> {
 	public handleBack = () => {
 		this.setState(state => ({ activeStep: state.activeStep - 1 }));
 	};
+	submitRegisterDataForm = (registerData: IRegisterFormData) => {
+		this.setState({ registerData });
+		this.handleNext();
+	};
+	submitAddDocumentsDataForm = (documents: IDocDataItem[]) => {
+		this.setState({ documents });
+		this.handleNext();
+	};
+	submitPersonDataForm = (personData: IPersonDataForm) => {
+		this.setState({ personData });
+		this.handleNext();
+	};
+	submitContactsDataForm = (contactsData: IContactsDataForm) => {
+		this.setState({ contactsData });
+		this.handleNext();
+	};
+	submitEducationDataForm = (educationData: IEducationDataForm) => {
+		this.setState({ educationData });
+		this.handleNext();
+	};
 	public render() {
 		return (
 			<React.Fragment>
@@ -56,10 +72,11 @@ export class App extends React.PureComponent<IProps, { activeStep: number }> {
 							<Step key={label}>
 								<StepLabel>{label}</StepLabel>
 								<StepContent>
-									{index === 0 && <RegisterDataForm submit={this.handleNext} />}
-									{index === 1 && <PersonDataForm submit={this.handleNext} />}
-									{index === 2 && <ContactsDataForm submit={this.handleNext} />}
-									{index === 3 && <EducationDataForm submit={this.handleNext} />}
+									{index === 0 && <RegisterDataForm submit={this.submitRegisterDataForm} />}
+									{index === 1 && <PersonDataForm submit={this.submitPersonDataForm} />}
+									{index === 2 && <ContactsDataForm submit={this.submitContactsDataForm} />}
+									{index === 3 && <EducationDataForm submit={this.submitEducationDataForm} />}
+									{index === 4 && <DocumentsDataForm submit={this.submitAddDocumentsDataForm} />}
 									{/*)}*/}
 								</StepContent>
 							</Step>

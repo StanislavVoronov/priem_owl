@@ -1,12 +1,11 @@
-import { IServerResponseResult } from '../common';
-
-class PriemApi {
+class PriemEnroll {
 	public static host = 'https://monitoring.mgutm.ru/dev-bin';
 	public static path = '/priem_enroll_verify';
-	public static fetchData = <T>(api: string, payload?: any): Promise<T> => {
+	public static post = <T>(api: string, payload?: any): Promise<T> => {
 		const body = new FormData();
+		body.append('api', api);
 		body.append('values', JSON.stringify(payload));
-		return fetch(`${PriemApi.host}${PriemApi.path}/${api}`, {
+		return fetch(`${PriemEnroll.host}${PriemEnroll.path}`, {
 			method: 'POST',
 			credentials: 'include',
 			body,
@@ -20,4 +19,4 @@ class PriemApi {
 	};
 }
 
-export default PriemApi;
+export default PriemEnroll;

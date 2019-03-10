@@ -9,9 +9,7 @@ interface IOwnProps {
 	submit: (data: IPersonDataForm) => void;
 }
 
-interface IState extends IPersonDataForm {
-	docFile: File | null;
-}
+interface IState extends IPersonDataForm {}
 type IProps = IOwnProps;
 
 class PersonDataForm extends React.PureComponent<IProps, IState> {
