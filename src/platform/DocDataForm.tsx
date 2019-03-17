@@ -37,7 +37,7 @@ interface IDocDataProps {
 	subTitle?: string;
 	docTitle?: string;
 	file: string | File | null;
-	extraFields?: ReactElement<any>;
+	extraFields?: ReactElement<any> | null;
 	defaultType?: ISelectItem;
 	defaultSubType?: ISelectItem;
 	selectDocType?: (type: ISelectItem) => void;
@@ -160,6 +160,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 						/>
 					</React.Fragment>
 				)}
+				{this.props.extraFields}
 			</FormControl>
 		);
 	}

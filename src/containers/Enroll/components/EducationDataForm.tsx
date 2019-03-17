@@ -95,7 +95,7 @@ class EducationDataForm extends React.PureComponent<IProps> {
 							<FormControlLabel
 								style={styles.checkFormControlLabel}
 								control={<Checkbox color="primary" onChange={this.toggleHasEgeStatus} />}
-								label="Имею результатам ЕГЭ"
+								label="Имею результаты ЕГЭ"
 								labelPlacement="start"
 							/>
 							<div style={GlobalStyles.buttonNext}>

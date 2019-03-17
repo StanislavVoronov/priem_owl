@@ -13,7 +13,7 @@ interface IState extends IPersonDataForm {}
 type IProps = IOwnProps;
 
 class PersonDataForm extends React.PureComponent<IProps, IState> {
-	public state = {
+	public state: IState = {
 		docSeries: '',
 		docNumber: '',
 		docIssieBy: '',
@@ -21,6 +21,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 		docDate: '',
 		docFile: null,
 		government: null,
+		subType: null,
 	};
 	public onChangeTextField = (name: string) => (value: string) => {
 		this.setState(state => ({
@@ -39,6 +40,9 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 			...state,
 			docFile: doc,
 		}));
+	};
+	selectSubType = (subType: ISelectItem) => {
+		this.setState({ subType });
 	};
 	public submit = () => {
 		this.props.submit(this.state);
@@ -62,6 +66,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 							<DocDataForm
 								docTitle="Файл документа, удостоверяющего личность"
 								file={this.state.docFile}
+								selectDocSubType={this.selectSubType}
 								onDownloadFile={this.onDownloadFile}
 								onChangeSeries={this.onChangeTextField('docSeries')}
 								onChangeNumber={this.onChangeTextField('docNumber')}
@@ -70,12 +75,14 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 								dictionarySubTypes={dictionaryPersonDocTypes && dictionaryPersonDocTypes.values}
 								subTitle={'Тип документа удостоверяющего личность'}
 								extraFields={
-									<TextInput
-										label="Код подразделения"
-										type="number"
-										placeholder={'Введите код подразделения'}
-										onBlur={this.onChangeTextField('codeDepartment')}
-									/>
+									this.state.subType && parseInt(this.state.subType.id) === 1 ? (
+										<TextInput
+											label="Код подразделения"
+											type="number"
+											placeholder={'Введите код подразделения'}
+											onChange={this.onChangeTextField('codeDepartment')}
+										/>
+									) : null
 								}
 							/>
 							<div style={GlobalStyles.buttonNext}>

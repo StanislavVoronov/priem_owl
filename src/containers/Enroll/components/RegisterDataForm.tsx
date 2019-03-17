@@ -38,7 +38,7 @@ interface IDispatchProps {
 	checkPersonLogin(login: string): void;
 	registerNewPerson(login: string, password: string): Promise<number>;
 	verifyPerson(email: string): void;
-	confirmRegisterCode(registerCode: string): void;
+	confirmRegisterCode(registerCode: string): Promise<void>;
 }
 interface IStateProps {
 	npId: number;
@@ -128,13 +128,17 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 		}
 	};
 	confirmRegisterCode = () => {
-		this.props.confirmRegisterCode(this.state.registerCode);
+		this.props.confirmRegisterCode(this.state.registerCode).then(this.submit);
 	};
-	submit = () => {
+	registerNewPerson = () => {
 		const { login, password, email } = this.state;
 		this.props.registerNewPerson(login, password).then(() => {
 			this.props.verifyPerson(email);
 		});
+	};
+	submit = () => {
+		const { registerCode, repeatPassword, ...rest } = this.state;
+		this.props.submit(rest);
 	};
 	public render() {
 		console.log('state', this.state);
@@ -244,7 +248,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 										}
 										variant="contained"
 										color="primary"
-										onClick={this.submit}>
+										onClick={this.registerNewPerson}>
 										{'Регистрация'}
 									</Button>
 								) : (
