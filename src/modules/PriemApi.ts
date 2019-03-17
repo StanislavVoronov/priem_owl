@@ -1,9 +1,11 @@
 import { IServerResponseResult } from '../common';
+import { IPriemApiServerResponse } from '../containers/Enroll/ServerModels';
+import { PriemApiName } from '../containers/Enroll/apiNames';
 
 class PriemApi {
 	public static host = 'https://monitoring.mgutm.ru/dev-bin';
 	public static path = '/priem_api.fcgi';
-	public static fetchData = <T>(api: string, payload?: any): Promise<T> => {
+	public static checkData = <Request, Response>(api: string, payload: Request): Promise<Response> => {
 		const body = new FormData();
 		body.append('api', api);
 		body.append('values', JSON.stringify(payload));
@@ -16,10 +18,10 @@ class PriemApi {
 				return response.json();
 			})
 			.then(data => {
-				return Promise.resolve(data);
+				return Promise.resolve(data.result[0]);
 			});
 	};
-	public static post = <T>(api: string, payload?: any): Promise<T> => {
+	public static post = <Request, Response>(api: PriemApiName, payload: Request): Promise<Response> => {
 		const body = new FormData();
 		body.append('api', api);
 		body.append('values', JSON.stringify(payload));
@@ -32,6 +34,9 @@ class PriemApi {
 				return response.json();
 			})
 			.then(data => {
+				if (data.error) {
+					return Promise.reject({ message: data.error.string, type: data.error.id });
+				}
 				return Promise.resolve(data);
 			});
 	};

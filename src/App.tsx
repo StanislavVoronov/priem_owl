@@ -31,7 +31,7 @@ interface IDispatchProps {}
 type IProps = IStateToProps & IDispatchProps;
 export class App extends React.PureComponent<IProps, IAppState> {
 	state = {
-		activeStep: 4,
+		activeStep: 0,
 	};
 
 	public componentDidCatch(error: any, info: any) {

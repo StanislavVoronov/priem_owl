@@ -96,7 +96,7 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 						</Fab>
 						<div style={styles.buttonContainer} />
 						<Fab style={styles.deleteButton} variant="extended" onClick={this.removeImage} size="small">
-							<Delete style={{ color: 'white' }} />
+							<Delete style={{ color: 'white' }} titleAccess="Удалить изображение" />
 						</Fab>
 					</div>
 					{!this.state.hidden && (

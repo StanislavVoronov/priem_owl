@@ -13,9 +13,16 @@ import {
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import { IRegisterFormData, PersonInfo } from '../models';
 import { connect, MapStateToProps } from 'react-redux';
-import { checkPersonExist, checkPersonLogin, registerNewPerson, verifyPerson } from '../operations';
+import {
+	checkPersonExist,
+	checkPersonLogin,
+	registerNewPerson,
+	verifyPerson,
+	confirmRegisterCode,
+} from '../operations';
 import { enrollStateSelector } from '../selectors';
 import Button from '@material-ui/core/Button';
+import { IServerError } from '../ServerModels';
 
 const prepareDictionarySuggestions = (dictionary: IDictionary) => {
 	if (!dictionary || !Array.isArray(dictionary.values)) {
@@ -31,17 +38,23 @@ interface IDispatchProps {
 	checkPersonLogin(login: string): void;
 	registerNewPerson(login: string, password: string): Promise<number>;
 	verifyPerson(email: string): void;
+	confirmRegisterCode(registerCode: string): void;
 }
 interface IStateProps {
-	npId: string;
-	personLoginExists: boolean;
+	npId: number;
+	confirmationCodeAvailable: boolean;
+	checkPersonLoginError: IServerError | null;
 }
 type IProps = IOwnProps & IStateProps & IDispatchProps;
 
 const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { value: 2, label: 'Жен.' }];
 
-class RegisterDataForm extends React.PureComponent<IProps, IRegisterFormData & { repeatPassword: string }> {
-	public state = {
+interface IState extends IRegisterFormData {
+	repeatPassword: string;
+	registerCode: string;
+}
+class RegisterDataForm extends React.PureComponent<IProps, IState> {
+	public state: IState = {
 		gender: '',
 		lastName: '',
 		firstName: '',
@@ -51,6 +64,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IRegisterFormData & {
 		password: '',
 		repeatPassword: '',
 		email: '',
+		registerCode: '',
 	};
 	public onChangeTextField = (name: string) => (value: string) => {
 		this.setState(
@@ -73,6 +87,12 @@ class RegisterDataForm extends React.PureComponent<IProps, IRegisterFormData & {
 		this.setState(state => ({
 			...state,
 			password: value,
+		}));
+	};
+	onChangeRegisterCode = (value: string) => {
+		this.setState(state => ({
+			...state,
+			registerCode: value,
 		}));
 	};
 	onChangeRepeatPasswordField = (value: string) => {
@@ -107,7 +127,9 @@ class RegisterDataForm extends React.PureComponent<IProps, IRegisterFormData & {
 			this.props.checkPersonExist({ firstName, lastName, birthday, middleName });
 		}
 	};
-
+	confirmRegisterCode = () => {
+		this.props.confirmRegisterCode(this.state.registerCode);
+	};
 	submit = () => {
 		const { login, password, email } = this.state;
 		this.props.registerNewPerson(login, password).then(() => {
@@ -175,8 +197,12 @@ class RegisterDataForm extends React.PureComponent<IProps, IRegisterFormData & {
 									regExp={'[a-zA-z0-9]'}
 									label="Логин"
 									onChange={this.onChangeLoginField}
-									hasError={this.props.personLoginExists}
-									helperText={this.props.personLoginExists ? 'Логин занят' : 'Логин должен быть не менее 5 символов'}
+									hasError={!!this.props.checkPersonLoginError}
+									helperText={
+										this.props.checkPersonLoginError
+											? this.props.checkPersonLoginError.message
+											: 'Логин должен быть не менее 5 символов'
+									}
 								/>
 
 								<TextInput
@@ -197,7 +223,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IRegisterFormData & {
 
 								<TextInput
 									required={true}
-									disabled={this.props.npId !== ''}
+									disabled={!!this.props.npId}
 									regExp={'[a-zA-z0-9_-]'}
 									label="Электронная почта"
 									onBlur={this.onChangeTextField('email')}
@@ -205,9 +231,44 @@ class RegisterDataForm extends React.PureComponent<IProps, IRegisterFormData & {
 								/>
 							</React.Fragment>
 							<div style={{ marginTop: 30, marginBottom: 30 }}>
-								<Button disabled={validateDataForm(rest)} variant="contained" color="primary" onClick={this.submit}>
-									{'Регистрация'}
-								</Button>
+								{!this.props.confirmationCodeAvailable ? (
+									<Button
+										disabled={
+											!validateDataForm(rest) &&
+											!isValidPassword &&
+											!isValidRepeatPassword &&
+											!this.props.checkPersonLoginError &&
+											this.state.login.length < 5 &&
+											this.state.password.length < 7 &&
+											!this.props.confirmationCodeAvailable
+										}
+										variant="contained"
+										color="primary"
+										onClick={this.submit}>
+										{'Регистрация'}
+									</Button>
+								) : (
+									<React.Fragment>
+										<div>
+											<TextInput
+												required={true}
+												type="number"
+												label="Код подтверждения регистрации"
+												onChange={this.onChangeRegisterCode}
+												helperText={`Введите код, отравленный на ${this.state.email}`}
+											/>
+										</div>
+										<div style={{ marginTop: 20, marginBottom: 20 }}>
+											<Button
+												disabled={!this.state.registerCode}
+												variant="contained"
+												color="primary"
+												onClick={this.confirmRegisterCode}>
+												{'Подтвердить'}
+											</Button>
+										</div>
+									</React.Fragment>
+								)}
 							</div>
 						</div>
 					);
@@ -217,10 +278,11 @@ class RegisterDataForm extends React.PureComponent<IProps, IRegisterFormData & {
 	}
 }
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, IRootState> = state => {
-	const { npId, personLoginExists } = enrollStateSelector(state);
+	const { npId, confirmationCodeAvailable, checkPersonLoginError } = enrollStateSelector(state);
 	return {
 		npId,
-		personLoginExists,
+		confirmationCodeAvailable,
+		checkPersonLoginError,
 	};
 };
 export default connect(
@@ -230,5 +292,6 @@ export default connect(
 		checkPersonLogin,
 		registerNewPerson,
 		verifyPerson,
+		confirmRegisterCode,
 	},
 )(RegisterDataForm);

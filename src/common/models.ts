@@ -92,7 +92,3 @@ export interface IDictionaries {
 export interface IServerResponseResult<T> {
 	result: T[];
 }
-
-export interface IServerError {
-	error: any;
-}

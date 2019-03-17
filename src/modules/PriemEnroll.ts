@@ -1,7 +1,10 @@
+import { EnrollApiName } from '../containers/Enroll/apiNames';
+
 class PriemEnroll {
 	public static host = 'https://monitoring.mgutm.ru/dev-bin';
 	public static path = '/priem_enroll_verify';
-	public static post = <T>(api: string, payload?: any): Promise<T> => {
+
+	public static post = <Request, Response>(api: EnrollApiName, payload: Request): Promise<Response> => {
 		const body = new FormData();
 		body.append('api', api);
 		body.append('values', JSON.stringify(payload));
@@ -14,6 +17,9 @@ class PriemEnroll {
 				return response.json();
 			})
 			.then(data => {
+				if (data.error) {
+					return Promise.reject({ message: data.error.string, type: data.error.id });
+				}
 				return Promise.resolve(data);
 			});
 	};

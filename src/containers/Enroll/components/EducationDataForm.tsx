@@ -99,7 +99,7 @@ class EducationDataForm extends React.PureComponent<IProps> {
 								labelPlacement="start"
 							/>
 							<div style={GlobalStyles.buttonNext}>
-								<Button variant="contained" color="primary" disabled={validateDataForm(rest)} onClick={this.submit}>
+								<Button variant="contained" color="primary" disabled={!validateDataForm(rest)} onClick={this.submit}>
 									{'Далее'}
 								</Button>
 							</div>

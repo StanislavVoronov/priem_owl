@@ -1,4 +1,5 @@
-import { ISelectItem, IServerError } from '../../common';
+import { ISelectItem } from '../../common';
+import { IServerError } from './ServerModels';
 
 export interface PersonInfo {
 	lastName: string;
@@ -60,13 +61,17 @@ export interface IContactDataForm {
 
 export interface IEnrollReducer {
 	checkPersonExistsFetching: boolean;
-	npId: string;
+	npId: number;
 	email: string;
 	checkPersonExistsError: IServerError | null;
 	checkPersonLoginFetching: boolean;
-	personLoginExists: boolean;
 	checkPersonLoginError: IServerError | null;
 	registerNewPersonFetching: boolean;
 	registerNewPersonError: IServerError | null;
 	registerPersonData: IRegisterFormData | null;
+	confirmationCodeAvailable: boolean;
+	verifyPersonFetching: boolean;
+	verifyPersonError: IServerError | null;
+	confirmRegisterCodeFetching: boolean;
+	confirmRegisterCodeError: IServerError | null;
 }

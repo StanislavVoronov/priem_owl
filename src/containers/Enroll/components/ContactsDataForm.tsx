@@ -218,15 +218,17 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								<Button
 									variant="contained"
 									color="primary"
-									disabled={validateDataForm({
-										regIndex: this.state.regIndex,
-										regRegion: this.state.regRegion,
-										regLocality: this.state.regLocality,
-										regStreet: this.state.regStreet,
-										regHome: this.state.regHome,
-										docFile: this.state.regDocFile,
-										mobPhone: this.state.mobPhone.length > 16,
-									})}
+									disabled={
+										!validateDataForm({
+											regIndex: this.state.regIndex,
+											regRegion: this.state.regRegion,
+											regLocality: this.state.regLocality,
+											regStreet: this.state.regStreet,
+											regHome: this.state.regHome,
+											docFile: this.state.regDocFile,
+											mobPhone: this.state.mobPhone.length > 16,
+										})
+									}
 									onClick={this.submit}>
 									{'Далее'}
 								</Button>
