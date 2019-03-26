@@ -1,6 +1,6 @@
-import { IRegisterFormData, PersonInfo } from './models';
+import { IPerson, PersonInfo } from './models';
 
-import { IRootState, IServerResponseResult } from '../../common';
+import { IRootState } from '../../common';
 import PriemApi from '../../modules/PriemApi';
 import {
 	checkPersonExistFailure,
@@ -12,14 +12,13 @@ import {
 	registerNewPersonFetching,
 	registerNewPersonFailure,
 	registerNewPersonSuccess,
-	enrollPersonData,
-	verifyPersonFetching,
-	verifyPersonSuccess,
-	verifyPersonFailure,
+	sendVerificationCodeFetching,
+	sendVerificationCodeSuccess,
+	sendVerificationCodeFailure,
 	confirmRegisterCodeFetching,
 	confirmRegisterCodeFailure,
 	confirmRegisterCodeSuccess,
-} from './actions';
+} from './actionsFetching';
 import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import {
@@ -28,7 +27,6 @@ import {
 	ICheckPersonLoginRequest,
 	ICheckPersonLoginResponse,
 	IConfirmRegisterCodeRequest,
-	IPriemApiServerResponse,
 	IRegisterNewPersonRequest,
 	IRegisterNewPersonResponse,
 	IVerifyPersonRequest,
@@ -36,7 +34,7 @@ import {
 } from './ServerModels';
 import { EnrollApiName, PriemApiName } from './apiNames';
 import PriemEnroll from '../../modules/PriemEnroll';
-import { enrollStateSelector } from './selectors';
+import moment from 'moment';
 
 export const registerNewPerson = (
 	login: string,
@@ -93,44 +91,58 @@ export const checkPersonLogin = (login: string): ThunkAction<void, IRootState, v
 		});
 };
 
-export const verifyPerson = (email: string): ThunkAction<void, IRootState, void, Action> => dispatch => {
-	const payload = { email, not_use_phone: 1, mobile_phone: '+79778202545' };
+export const sendVerificationCode = (
+	email: string,
+	phoneNumber: string,
+): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
+	const payload = { email, not_use_phone: 1, mobile_phone: phoneNumber };
 
-	dispatch(verifyPersonFetching());
+	dispatch(sendVerificationCodeFetching());
 
 	return PriemEnroll.post<IVerifyPersonRequest, IVerifyPersonResponse>(EnrollApiName.VerNewNp, payload)
 		.then(response => {
 			console.log(response);
-			dispatch(verifyPersonSuccess());
+			dispatch(sendVerificationCodeSuccess());
 		})
 		.catch(error => {
 			console.log('error', error);
-			dispatch(verifyPersonFailure(error));
+			dispatch(sendVerificationCodeFailure(error));
 		});
 };
 
-export const confirmRegisterCode = (registerCode: string): ThunkAction<Promise<void>, IRootState, void, Action> => (
-	dispatch,
-	getState,
-) => {
-	dispatch(confirmRegisterCodeFetching());
+export const createPerson = (
+	confirmCode: string,
+	data: IPerson,
+): ThunkAction<void, IRootState, void, Action> => dispatch => {
+	if (data.contactsData && data.registerData && data.personData && data.educationData) {
+		dispatch(confirmRegisterCodeFetching());
+		const payload = {
+			email_code: confirmCode,
+			phone_code: '000000',
+			email: data.contactsData.email,
+			lname: data.registerData.lastName,
+			fname: data.registerData.firstName,
+			mname: data.registerData.middleName,
+			birthdate: moment(data.registerData.birthday).format('DD-MM-YYYY'),
+			birthplace: data.personData.birthPlace,
+			need_hostel: data.contactsData.needDormitory ? 1 : 0,
+			sex: parseInt(data.registerData.gender),
+			hight_first: data.educationData.firstHighEducation ? 1 : 0,
+			best_prev_edu: data.educationData.prevEducation,
+			cheat_type: 0,
+		};
 
-	const state = getState();
-	const npId = enrollStateSelector(state).npId;
-
-	const payload = {
-		np_uid: npId,
-		code: registerCode,
-	};
-	console.log('payload', payload);
-	return PriemEnroll.post<IConfirmRegisterCodeRequest, any>(EnrollApiName.SetNp, payload)
-		.then(response => {
-			dispatch(confirmRegisterCodeSuccess());
-			return Promise.resolve();
-		})
-		.catch(error => {
-			console.log('error', error);
-			dispatch(confirmRegisterCodeFailure(error));
-			return Promise.reject();
-		});
+		PriemEnroll.post<any, any>(EnrollApiName.SetNewNp, payload)
+			.then((response: any) => {
+				//{"np_uid":39257}
+				console.log(response);
+				dispatch(confirmRegisterCodeSuccess());
+				return Promise.resolve();
+			})
+			.catch((error: any) => {
+				console.log('error', error);
+				dispatch(confirmRegisterCodeFailure(error));
+				return Promise.reject();
+			});
+	}
 };

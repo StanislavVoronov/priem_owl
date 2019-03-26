@@ -1,5 +1,6 @@
 import { ISelectItem } from '../../common';
 import { IServerError } from './ServerModels';
+import { IDocDataItem } from './components/DocumentsDataForm';
 
 export interface PersonInfo {
 	lastName: string;
@@ -9,7 +10,6 @@ export interface PersonInfo {
 }
 export interface IRegisterFormData extends PersonInfo {
 	gender: string;
-	email: string;
 	login: string;
 	password: string;
 }
@@ -27,12 +27,13 @@ export interface IDocDataForm {
 export interface IPersonDataForm extends IDocDataForm {
 	codeDepartment: string;
 	government: ISelectItem | null;
+	birthPlace: string;
 }
 
 export interface IEducationDataForm extends IDocDataForm {
 	firstHighEducation: boolean;
 	coolnessTypes: ISelectItem[];
-	prevEducation: ISelectItem | null;
+	prevEducation: number;
 	hasEge: boolean;
 }
 
@@ -57,9 +58,10 @@ export interface IContactDataForm {
 	regDocFile: File | null;
 	isRegAddressEqualLive: boolean;
 	phoneCode: string;
+	email: string;
 }
 
-export interface IEnrollReducer {
+export interface IEnrollFetchingDataReducer {
 	checkPersonExistsFetching: boolean;
 	npId: number;
 	email: string;
@@ -74,4 +76,12 @@ export interface IEnrollReducer {
 	verifyPersonError: IServerError | null;
 	confirmRegisterCodeFetching: boolean;
 	confirmRegisterCodeError: IServerError | null;
+}
+
+export interface IPerson {
+	registerData?: IRegisterFormData;
+	personData?: IPersonDataForm;
+	contactsData?: IContactDataForm;
+	educationData?: IEducationDataForm;
+	documents?: IDocDataItem[];
 }

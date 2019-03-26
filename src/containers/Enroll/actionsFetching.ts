@@ -19,7 +19,7 @@ export const confirmRegisterCodeFetching = createAction('confirmRegisterCodeFetc
 export const confirmRegisterCodeSuccess = createAction('confirmRegisterCodeSuccess', () => void 0);
 export const confirmRegisterCodeFailure = createAction('confirmRegisterCodeFailure', (error: IServerError) => error);
 
-export const verifyPersonFetching = createAction('verifyPersonFetching', () => void 0);
-export const verifyPersonSuccess = createAction('verifyPersonSuccess', () => void 0);
-export const verifyPersonFailure = createAction('verifyPersonFailure', (error: IServerError) => error);
+export const sendVerificationCodeFetching = createAction('sendVerificationCodeFetching', () => void 0);
+export const sendVerificationCodeSuccess = createAction('sendVerificationCodeSuccess', () => void 0);
+export const sendVerificationCodeFailure = createAction('sendVerificationCodeFailure', (error: IServerError) => error);
 export const enrollPersonData = createAction('enrollPersonData', (data: IRegisterFormData) => data);

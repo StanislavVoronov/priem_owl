@@ -31,7 +31,8 @@
     "react-avatar-editor": "latest",
     "cyrillic-to-translit-js": "^2.1.0",
     "reselect": "^4.0.0",
-    "react-dropzone": "latest"
+    "react-dropzone": "latest",
+    "moment": "latest"
   },
   "homepage": "https://monitoring.mgutm.ru/dev/priem/unstable/dictionary",
   "devDependencies": {

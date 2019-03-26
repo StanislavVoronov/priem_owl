@@ -5,17 +5,19 @@ import { IDictionaryStore, reducerDictionaries } from '@mgutm-fcu/dictionary';
 import { Provider } from 'react-redux';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import App from './App';
+import App from './containers/Enroll/App';
 import Auth from '@mgutm-fcu/auth/Auth';
 import Dictionary from '@mgutm-fcu/dictionary/Dictionary';
 import { EDictionaryNameList, IDictionaryScanableFilter, IDictionaryTypeFilter } from './common/';
-import { enrollReducer } from './containers/Enroll/reducers';
-interface PriemOwlState extends IUserStore, IDictionaryStore {}
+import { enrollFetchingReducer, IEnrollFetchingDataReducer } from './containers/Enroll';
+interface PriemOwlState extends IUserStore, IDictionaryStore {
+	enrollFetching: IEnrollFetchingDataReducer;
+}
 
 const state = combineReducers<PriemOwlState>({
 	...currentUser,
 	...reducerDictionaries,
-	...enrollReducer,
+	...enrollFetchingReducer,
 });
 const store = createStore(state, { ...currentUserInitialState, dictionaries: {} }, applyMiddleware(thunk));
 

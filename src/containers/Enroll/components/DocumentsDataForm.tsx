@@ -2,8 +2,8 @@ import React from 'react';
 import { IDocDataForm } from '../models';
 import Button from '@material-ui/core/Button';
 import DocDataForm from '../../../platform/DocDataForm';
-import { AppContext } from '../../../App';
-import { composeStyles, EDictionaryNameList, GlobalStyles, ISelectItem, validateDataForm } from '../../../common';
+import { AppContext } from '../App';
+import { composeStyles, EDictionaryNameList, GlobalStyles, ISelectItem, inValidateDataForm } from '../../../common';
 import TextInput from '../../../platform/TextInput';
 
 export interface IDocDataItem extends IDocDataForm {
@@ -90,8 +90,8 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 						? this.state.documents
 								.map((item: IDocDataItem) => {
 									const { hideDataFields, ...data } = item;
-									console.log(item, validateDataForm(data));
-									return validateDataForm(data);
+									console.log(item, inValidateDataForm(data));
+									return inValidateDataForm(data);
 								})
 								.includes(false)
 						: false;
@@ -109,7 +109,7 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 											: docType === 2
 											? context[EDictionaryNameList.EducationDocTypes].values
 											: undefined;
-									console.log('dictionarySubDocTypes', dictionarySubDocTypes);
+
 									return (
 										<div style={composeStyles(GlobalStyles.flexColumn, styles.border)}>
 											<DocDataForm

@@ -6,9 +6,9 @@ import {
 	GlobalStyles,
 	ISelectItem,
 	makeVerticalSpace,
-	validateDataForm,
+	inValidateDataForm,
 } from '../../../common';
-import { AppContext } from '../../../App';
+import { AppContext } from '../App';
 import { IContactDataForm } from '../models';
 import Button from '@material-ui/core/Button';
 const styles = {
@@ -21,7 +21,7 @@ interface IOwnProps {
 type IProps = IOwnProps;
 interface IState extends IContactDataForm {}
 class ContactsDataForm extends React.PureComponent<IProps, IState> {
-	state = {
+	state: IState = {
 		isRegAddressEqualLive: true,
 		needDormitory: false,
 		regIndex: '',
@@ -41,6 +41,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 		homePhone: '',
 		phoneCode: '7',
 		mobPhone: '+7',
+		email: '',
 		regDocFile: null,
 	};
 	onChangeTextField = (name: string) => (value: string) => {
@@ -90,6 +91,14 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 
 	render() {
 		const { needDormitory, isRegAddressEqualLive } = this.state;
+		console.log('contactData', {
+			regIndex: this.state.regIndex,
+			regRegion: this.state.regRegion,
+			regLocality: this.state.regLocality,
+			regHome: this.state.regHome,
+			docFile: this.state.regDocFile,
+			mobPhone: this.state.mobPhone.length > 16,
+		});
 		return (
 			<AppContext.Consumer>
 				{context => {
@@ -153,7 +162,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								label="Фактический адрес проживания	совпадает с адресом регистрации"
 								labelPlacement="start"
 							/>
-							{!this.state.isRegAddressEqualLive && (
+							{!isRegAddressEqualLive && (
 								<div style={composeStyles(GlobalStyles.flexColumn, makeVerticalSpace('small'))}>
 									<H2>Адрес проживания</H2>
 									<TextInput
@@ -196,6 +205,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								label="Нуждаюсь в предоставлении общежития"
 								labelPlacement="start"
 							/>
+							<TextInput label={'Электронная почта'} required onBlur={this.onChangeTextField('email')} />
 							{defaultGovernmentValue && (
 								<DropdownSelect
 									isClearable={false}
@@ -213,21 +223,22 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								required={true}
 								onChange={this.onChangeMobPhone}
 							/>
-							<TextInput label={'Домашний телефон'} onBlur={this.onChangeTextField('mobPhone')} />
+							<TextInput label={'Домашний телефон'} onBlur={this.onChangeTextField('homePhone')} />
 							<div style={GlobalStyles.buttonNext}>
 								<Button
 									variant="contained"
 									color="primary"
 									disabled={
-										!validateDataForm({
+										inValidateDataForm({
 											regIndex: this.state.regIndex,
 											regRegion: this.state.regRegion,
 											regLocality: this.state.regLocality,
-											regStreet: this.state.regStreet,
 											regHome: this.state.regHome,
 											docFile: this.state.regDocFile,
-											mobPhone: this.state.mobPhone.length > 16,
-										})
+											mobPhone: this.state.mobPhone,
+										}) ||
+										this.state.mobPhone.length <= 16 ||
+										!this.state.email.includes('@')
 									}
 									onClick={this.submit}>
 									{'Далее'}

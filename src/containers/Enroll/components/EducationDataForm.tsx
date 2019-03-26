@@ -1,9 +1,9 @@
-import { composeStyles, EDictionaryNameList, ISelectItem, GlobalStyles, validateDataForm } from '../../../common';
+import { composeStyles, EDictionaryNameList, ISelectItem, GlobalStyles, inValidateDataForm } from '../../../common';
 import React from 'react';
 import { DocDataForm, DropdownSelect } from '../../../platform';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { AppContext } from '../../../App';
+import { AppContext } from '../App';
 import { IEducationDataForm } from '../models';
 import Button from '@material-ui/core/Button';
 
@@ -19,7 +19,9 @@ class EducationDataForm extends React.PureComponent<IProps> {
 	state = {
 		firstHighEducation: true,
 		coolnessTypes: [],
-		prevEducation: null,
+		prevEducation: 0,
+		docSubType: null,
+		docType: { id: 2 },
 		hasEge: false,
 		docFile: null,
 		docNumber: '',
@@ -33,9 +35,7 @@ class EducationDataForm extends React.PureComponent<IProps> {
 	toggleHasEgeStatus = () => {
 		this.setState({ hasEge: !this.state.hasEge });
 	};
-	onChangePreviousEducation = (item: ISelectItem) => {
-		this.setState({ prevEducation: item });
-	};
+
 	onChangePersonCoolnessTypes = (items: ISelectItem[]) => {
 		this.setState({ coolnessTypes: items });
 	};
@@ -48,8 +48,12 @@ class EducationDataForm extends React.PureComponent<IProps> {
 	submit = () => {
 		this.props.submit(this.state);
 	};
-
+	selectTypeEducation = (item: ISelectItem) => {
+		console.log('item', item);
+		this.setState({ docSubType: item, prevEducation: Number(item.id) });
+	};
 	render() {
+		console.log('EducationState', this.state);
 		return (
 			<AppContext.Consumer>
 				{context => {
@@ -61,17 +65,11 @@ class EducationDataForm extends React.PureComponent<IProps> {
 						<div style={composeStyles(GlobalStyles.flexColumn)}>
 							<FormControlLabel
 								style={styles.checkFormControlLabel}
-								control={<Checkbox color="primary" onChange={this.toggleFirstHighEducationStatus} />}
+								control={
+									<Checkbox value={firstHighEducation} color="primary" onChange={this.toggleFirstHighEducationStatus} />
+								}
 								label="Получение высшего образования впервые"
 								labelPlacement="start"
-							/>
-							<DropdownSelect
-								verticalSpace={'minor'}
-								required
-								placeholder={'Выберите предыдущее образование'}
-								onChangeSelect={this.onChangePreviousEducation}
-								options={previousEducationDictionary && previousEducationDictionary.values}
-								title={'Предыдущее образование'}
 							/>
 							<DropdownSelect
 								placeholder={'Выберите достижения'}
@@ -81,15 +79,17 @@ class EducationDataForm extends React.PureComponent<IProps> {
 								title={'Индивидуальные достижения'}
 							/>
 							<DocDataForm
-								file={this.state.docFile}
-								docTitle="Файл документа о предыдущем образовании"
+								title={'Предыдущее образование'}
 								required
+								docTitle={'Документ о предыдущем образовании'}
+								file={this.state.docFile}
+								selectDocType={this.selectTypeEducation}
 								onDownloadFile={this.downloadFile}
 								onChangeSeries={this.onChangeTextField('docSeries')}
 								onChangeNumber={this.onChangeTextField('docNumber')}
 								onChangeIssieBy={this.onChangeTextField('docIssieBy')}
 								onChangeDate={this.onChangeTextField('docDate')}
-								dictionarySubTypes={educationTypeDictionary && educationTypeDictionary.values}
+								dictionaryTypes={educationTypeDictionary && educationTypeDictionary.values}
 								subTitle={'Тип документа о предыдущем образовании'}
 							/>
 							<FormControlLabel
@@ -99,7 +99,7 @@ class EducationDataForm extends React.PureComponent<IProps> {
 								labelPlacement="start"
 							/>
 							<div style={GlobalStyles.buttonNext}>
-								<Button variant="contained" color="primary" disabled={!validateDataForm(rest)} onClick={this.submit}>
+								<Button variant="contained" color="primary" disabled={!inValidateDataForm(rest)} onClick={this.submit}>
 									{'Далее'}
 								</Button>
 							</div>

@@ -11,7 +11,7 @@ export const GlobalStyles: any = {
 		alignItems: 'center',
 	},
 	buttonNext: {
-		marginTop: 15,
+		marginTop: 25,
 		marginBottom: 5,
 	},
 };

@@ -7,4 +7,5 @@ export enum PriemApiName {
 export enum EnrollApiName {
 	VerNewNp = 'vernewnp',
 	SetNp = 'setnp',
+	SetNewNp = 'setnewnp',
 }

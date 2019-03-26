@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DropdownSelect, Button, DocDataForm, TextInput } from '../../../platform';
-import { AppContext } from '../../../App';
-import { composeStyles, EDictionaryNameList, ISelectItem, validateDataForm, GlobalStyles } from '../../../common';
+import { AppContext } from '../App';
+import { composeStyles, EDictionaryNameList, ISelectItem, inValidateDataForm, GlobalStyles } from '../../../common';
 
 import { IPersonDataForm } from '../models';
 
@@ -22,6 +22,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 		docFile: null,
 		government: null,
 		subType: null,
+		birthPlace: '',
 	};
 	public onChangeTextField = (name: string) => (value: string) => {
 		this.setState(state => ({
@@ -44,10 +45,11 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 	selectSubType = (subType: ISelectItem) => {
 		this.setState({ subType });
 	};
-	public submit = () => {
+	submit = () => {
 		this.props.submit(this.state);
 	};
 	public render() {
+		console.log('personData', this.state);
 		return (
 			<AppContext.Consumer>
 				{context => {
@@ -62,7 +64,11 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 								onChangeSelect={this.onChangeSelectField('government')}
 								title="Гражданство"
 							/>
-
+							<TextInput
+								label="Место рождения"
+								placeholder={'Введите место рождения'}
+								onBlur={this.onChangeTextField('birthPlace')}
+							/>
 							<DocDataForm
 								docTitle="Файл документа, удостоверяющего личность"
 								file={this.state.docFile}
@@ -89,7 +95,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 								<Button
 									variant="contained"
 									color="primary"
-									disabled={validateDataForm(this.state)}
+									disabled={inValidateDataForm(this.state)}
 									onClick={this.submit}>
 									{'Далее'}
 								</Button>

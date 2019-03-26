@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect';
 import { IRootState } from '../../common';
-import { IEnrollReducer } from './models';
+import { IEnrollFetchingDataReducer } from './models';
 
-const enrollCreateSelector = (state: IRootState) => state.enroll;
+const enrollCreateSelector = (state: IRootState) => state.enrollFetching;
 
 export const enrollStateSelector = createSelector(
 	enrollCreateSelector,
-	(enroll): IEnrollReducer => enroll,
+	(enroll): IEnrollFetchingDataReducer => enroll,
 );

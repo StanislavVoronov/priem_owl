@@ -1,11 +1,11 @@
 import { Style } from 'jss/css';
 import { IDictionary } from '@mgutm-fcu/dictionary';
-import { IEnrollReducer } from '../containers/Enroll';
+import { IEnrollFetchingDataReducer } from '../containers/Enroll';
 
 export interface IRootState {
 	user: any;
 	dictionaries: Record<string, IDictionary>;
-	enroll: IEnrollReducer;
+	enrollFetching: IEnrollFetchingDataReducer;
 }
 
 export interface ITextFieldChangeEvent {

@@ -3,20 +3,22 @@ import { connect } from 'react-redux';
 
 import * as React from 'react';
 
-import { Stepper, StepContent, StepLabel, Step } from './platform/';
-import { IEducationDataForm, IPersonDataForm, IRegisterFormData, RegisterDataForm } from './containers/Enroll';
-import { IRootState, dictionariesStateSelector } from './common';
+import { Stepper, StepContent, StepLabel, Step } from '../../platform';
+import { IContactDataForm, IEducationDataForm, IPerson, IPersonDataForm, IRegisterFormData, RegisterDataForm } from '.';
+import { IRootState, dictionariesStateSelector } from '../../common';
 
-import { ContactsDataForm, EducationDataForm, PersonDataForm } from './containers';
-import DocumentsDataForm, { IDocDataItem } from './containers/Enroll/components/DocumentsDataForm';
-
-class IContactsDataForm {}
+import { ContactsDataForm, EducationDataForm, PersonDataForm } from '..';
+import DocumentsDataForm, { IDocDataItem } from './components/DocumentsDataForm';
+import { registerNewPerson, createPerson, sendVerificationCode } from './operations';
+import Button from '@material-ui/core/Button';
+import TextInput from '../../platform/TextInput';
 
 interface IAppState {
 	activeStep: number;
+	confirmCode: string;
 	registerData?: IRegisterFormData;
 	personData?: IPersonDataForm;
-	contactsData?: IContactsDataForm;
+	contactsData?: IContactDataForm;
 	educationData?: IEducationDataForm;
 	documents?: IDocDataItem[];
 }
@@ -27,11 +29,16 @@ export const AppContext = React.createContext<Record<string, any>>([]);
 interface IStateToProps {
 	dictionaries: Record<string, IDictionary>;
 }
-interface IDispatchProps {}
+interface IDispatchProps {
+	createPerson(confirmCode: string, data: IPerson): void;
+	sendVerificationCode(email: string, mobPhone: string): Promise<void>;
+	registerNewPerson(login: string, password: string): Promise<number>;
+}
 type IProps = IStateToProps & IDispatchProps;
 export class App extends React.PureComponent<IProps, IAppState> {
 	state = {
-		activeStep: 4,
+		activeStep: 0,
+		confirmCode: '',
 	};
 
 	public componentDidCatch(error: any, info: any) {
@@ -45,7 +52,7 @@ export class App extends React.PureComponent<IProps, IAppState> {
 	};
 	submitRegisterDataForm = (registerData: IRegisterFormData) => {
 		this.setState({ registerData });
-		this.handleNext();
+		this.props.registerNewPerson(registerData.login, registerData.password).then(this.handleNext);
 	};
 	submitAddDocumentsDataForm = (documents: IDocDataItem[]) => {
 		this.setState({ documents });
@@ -55,15 +62,23 @@ export class App extends React.PureComponent<IProps, IAppState> {
 		this.setState({ personData });
 		this.handleNext();
 	};
-	submitContactsDataForm = (contactsData: IContactsDataForm) => {
+	submitContactsDataForm = (contactsData: IContactDataForm) => {
 		this.setState({ contactsData });
-		this.handleNext();
+		this.props.sendVerificationCode(contactsData.email, contactsData.mobPhone).then(this.handleNext);
 	};
 	submitEducationDataForm = (educationData: IEducationDataForm) => {
 		this.setState({ educationData });
 		this.handleNext();
 	};
+	register = () => {
+		const { activeStep, confirmCode, ...rest } = this.state;
+		this.props.createPerson(confirmCode, rest);
+	};
+	onChangeTextField = (value: string) => {
+		this.setState({ confirmCode: value });
+	};
 	public render() {
+		console.log('APP', this.state);
 		return (
 			<React.Fragment>
 				<AppContext.Provider value={this.props.dictionaries}>
@@ -82,6 +97,10 @@ export class App extends React.PureComponent<IProps, IAppState> {
 							</Step>
 						))}
 					</Stepper>
+					<TextInput label="Код подтверждения" type="number" onChange={this.onChangeTextField} />
+					<Button variant="contained" color="primary" onClick={this.register}>
+						{'Далее'}
+					</Button>
 				</AppContext.Provider>
 			</React.Fragment>
 		);
@@ -94,4 +113,7 @@ const mapStateToProps = (state: IRootState) => {
 	};
 };
 
-export default connect(mapStateToProps)(App);
+export default connect(
+	mapStateToProps,
+	{ registerNewPerson, createPerson, sendVerificationCode },
+)(App);

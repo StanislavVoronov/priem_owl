@@ -15,7 +15,7 @@ import { FormLabel } from '@material-ui/core';
 export interface IInputProps extends ISpacable, IStylable, IHasError, IHelperText, IExtensible, IDisabled {
 	onChange?: (text: string) => void;
 	placeholder?: string;
-	type?: 'date' | 'number' | 'text';
+	type?: 'date' | 'number' | 'text' | 'password';
 	onBlur?: (text: string) => void;
 	isTopLabel?: boolean;
 	defaultValue?: string;

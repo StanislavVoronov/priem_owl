@@ -13,15 +13,15 @@ import {
 	confirmRegisterCodeFetching,
 	confirmRegisterCodeFailure,
 	confirmRegisterCodeSuccess,
-	verifyPersonFailure,
-	verifyPersonSuccess,
-	verifyPersonFetching,
-} from './actions';
+	sendVerificationCodeFailure,
+	sendVerificationCodeSuccess,
+	sendVerificationCodeFetching,
+} from './actionsFetching';
 import { Action, handleActions } from 'redux-actions';
-import { IEnrollReducer } from './models';
+import { IEnrollFetchingDataReducer } from './models';
 import { IServerError } from './ServerModels';
 
-const defaultState: IEnrollReducer = {
+const defaultState: IEnrollFetchingDataReducer = {
 	checkPersonExistsFetching: false,
 	npId: 0,
 	email: '',
@@ -38,83 +38,83 @@ const defaultState: IEnrollReducer = {
 	confirmRegisterCodeError: null,
 };
 
-const enrollNewPersonReducer = handleActions(
+const enrollFetchingReducer = handleActions(
 	{
-		[checkPersonExistRequest.toString()]: (state: IEnrollReducer) => {
+		[checkPersonExistRequest.toString()]: (state: IEnrollFetchingDataReducer) => {
 			return {
 				...state,
 				checkExistPersonFetching: true,
 				npId: 0,
 			};
 		},
-		[checkPersonExistSuccess.toString()]: (state: IEnrollReducer, action: Action<any>) =>
+		[checkPersonExistSuccess.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
 			checkPayload(action, (npId: string) => {
 				return { ...state, checkExistPersonFetching: false, npId };
 			}),
-		[checkPersonExistFailure.toString()]: (state: IEnrollReducer, action: Action<any>) =>
+		[checkPersonExistFailure.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
 			checkPayload(action, (data: IServerError) => {
 				return { ...state, checkExistPersonFetching: false, checkExistPersonError: data };
 			}),
 
-		[checkPersonLoginRequest.toString()]: (state: IEnrollReducer) => {
+		[checkPersonLoginRequest.toString()]: (state: IEnrollFetchingDataReducer) => {
 			return {
 				...state,
 				checkPersonLoginFetching: true,
 				checkPersonLoginError: null,
 			};
 		},
-		[checkPersonLoginSuccess.toString()]: (state: IEnrollReducer, action: Action<any>) =>
+		[checkPersonLoginSuccess.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
 			checkPayload(action, () => {
 				return { ...state, checkPersonLoginFetching: false };
 			}),
-		[checkPersonLoginFailure.toString()]: (state: IEnrollReducer, action: Action<any>) =>
+		[checkPersonLoginFailure.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
 			checkPayload(action, (data: IServerError) => {
 				return { ...state, checkPersonLoginFetching: false, checkPersonLoginError: data };
 			}),
 
-		[registerNewPersonFetching.toString()]: (state: IEnrollReducer) => {
+		[registerNewPersonFetching.toString()]: (state: IEnrollFetchingDataReducer) => {
 			return {
 				...state,
 				registerNewPersonFetching: true,
 			};
 		},
-		[registerNewPersonSuccess.toString()]: (state: IEnrollReducer, action: Action<any>) =>
+		[registerNewPersonSuccess.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
 			checkPayload(action, (npId: number) => {
 				return { ...state, registerNewPersonFetching: false, npId };
 			}),
-		[registerNewPersonFailure.toString()]: (state: IEnrollReducer, action: Action<any>) =>
+		[registerNewPersonFailure.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
 			checkPayload(action, (data: IServerError) => {
 				return { ...state, registerNewPersonFetching: false, registerNewPersonError: data };
 			}),
 
-		[verifyPersonFetching.toString()]: (state: IEnrollReducer) => {
+		[sendVerificationCodeFetching.toString()]: (state: IEnrollFetchingDataReducer) => {
 			return {
 				...state,
 				verifyPersonFetching: true,
 				verifyPersonError: null,
 			};
 		},
-		[verifyPersonSuccess.toString()]: (state: IEnrollReducer, action: Action<any>) =>
+		[sendVerificationCodeSuccess.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
 			checkPayload(action, () => {
 				return { ...state, verifyPersonFetching: false, confirmationCodeAvailable: true };
 			}),
-		[verifyPersonFailure.toString()]: (state: IEnrollReducer, action: Action<any>) =>
+		[sendVerificationCodeFailure.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
 			checkPayload(action, (data: IServerError) => {
 				return { ...state, verifyPersonFetching: false, verifyPersonError: data };
 			}),
 
-		[confirmRegisterCodeFetching.toString()]: (state: IEnrollReducer) => {
+		[confirmRegisterCodeFetching.toString()]: (state: IEnrollFetchingDataReducer) => {
 			return {
 				...state,
 				confirmRegisterCodeFetching: true,
 				confirmRegisterCodeError: null,
 			};
 		},
-		[confirmRegisterCodeSuccess.toString()]: (state: IEnrollReducer, action: Action<any>) =>
+		[confirmRegisterCodeSuccess.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
 			checkPayload(action, () => {
 				return { ...state, confirmRegisterCodeFetching: false, personVerified: true };
 			}),
-		[confirmRegisterCodeFailure.toString()]: (state: IEnrollReducer, action: Action<any>) =>
+		[confirmRegisterCodeFailure.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
 			checkPayload(action, (data: IServerError) => {
 				return { ...state, confirmRegisterCodeFetching: false, confirmRegisterCodeError: data };
 			}),
@@ -123,6 +123,4 @@ const enrollNewPersonReducer = handleActions(
 	defaultState,
 );
 
-export const enrollReducer = {
-	enroll: enrollNewPersonReducer,
-};
+export default { enrollFetching: enrollFetchingReducer };
