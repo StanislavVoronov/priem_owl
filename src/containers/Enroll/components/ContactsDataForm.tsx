@@ -7,6 +7,7 @@ import {
 	ISelectItem,
 	makeVerticalSpace,
 	inValidateDataForm,
+	IGovernmentSelectItem,
 } from '../../../common';
 import { AppContext } from '../App';
 import { IContactDataForm } from '../models';
@@ -19,7 +20,9 @@ interface IOwnProps {
 	submit(data: any): void;
 }
 type IProps = IOwnProps;
-interface IState extends IContactDataForm {}
+interface IState extends IContactDataForm {
+	phoneGovernment: IGovernmentSelectItem;
+}
 class ContactsDataForm extends React.PureComponent<IProps, IState> {
 	state: IState = {
 		isRegAddressEqualLive: true,
@@ -39,10 +42,11 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 		liveHome: '',
 		liveFlat: '',
 		homePhone: '',
-		phoneCode: '7',
+		phoneGovernment: { id: 1, name: 'Россия', phone_code: '7' },
 		mobPhone: '+7',
 		email: '',
-		regDocFile: null,
+		docFile: null,
+		docType: { id: 3, name: '' },
 	};
 	onChangeTextField = (name: string) => (value: string) => {
 		this.setState(state => ({ ...state, [name]: value }));
@@ -53,17 +57,17 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 	toggleNeedDormitoryStatus = () => {
 		this.setState(state => ({ ...state, needDormitory: !state.needDormitory }));
 	};
-	onChangeSelectItem = (item: ISelectItem) => {
-		const phoneNumber = this.state.mobPhone.substr(this.state.phoneCode.length + 1);
+	onChangeSelectItem = (item: IGovernmentSelectItem) => {
+		const phoneNumber = this.state.mobPhone.substr(this.state.phoneGovernment.phone_code.length + 1);
 		const maskedMobPhone = `+${item.phone_code}${phoneNumber}`;
-		this.setState({ mobPhone: maskedMobPhone, phoneCode: item.phone_code });
+		this.setState({ mobPhone: maskedMobPhone, phoneGovernment: item });
 	};
 	onChangeMobPhone = (value: string) => {
 		const mobPhoneValue: string[] | null = value
 			.replace(/\D/g, '')
-			.substring(`${this.state.phoneCode}`.length)
+			.substring(`${this.state.phoneGovernment.phone_code}`.length)
 			.match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-		const phoneCode = `+${this.state.phoneCode}`;
+		const phoneCode = `+${this.state.phoneGovernment.phone_code}`;
 		const maskMobPhone =
 			phoneCode +
 			(mobPhoneValue
@@ -91,14 +95,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 
 	render() {
 		const { needDormitory, isRegAddressEqualLive } = this.state;
-		console.log('contactData', {
-			regIndex: this.state.regIndex,
-			regRegion: this.state.regRegion,
-			regLocality: this.state.regLocality,
-			regHome: this.state.regHome,
-			docFile: this.state.regDocFile,
-			mobPhone: this.state.mobPhone.length > 16,
-		});
+
 		return (
 			<AppContext.Consumer>
 				{context => {
@@ -113,7 +110,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								<DocDataForm
 									hideDataFields
 									docTitle="Файл  регистрации места жительства"
-									file={this.state.regDocFile}
+									file={this.state.docFile}
 									onDownloadFile={this.onDownloadFile}
 								/>
 								<TextInput
@@ -234,7 +231,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 											regRegion: this.state.regRegion,
 											regLocality: this.state.regLocality,
 											regHome: this.state.regHome,
-											docFile: this.state.regDocFile,
+											docFile: this.state.docFile,
 											mobPhone: this.state.mobPhone,
 										}) ||
 										this.state.mobPhone.length <= 16 ||

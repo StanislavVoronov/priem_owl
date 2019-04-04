@@ -5,10 +5,11 @@ import { Autocomplete, RadioGroupButton } from '../../../platform';
 import {
 	composeStyles,
 	EDictionaryNameList,
-	IRootState,
-	makeVerticalSpace,
+	Gender,
 	GlobalStyles,
 	inValidateDataForm,
+	IRootState,
+	makeVerticalSpace,
 } from '../../../common';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import { IRegisterFormData, PersonInfo } from '../models';
@@ -16,7 +17,7 @@ import { connect, MapStateToProps } from 'react-redux';
 import { checkPersonExist, checkPersonLogin } from '../operations';
 import { enrollStateSelector } from '../selectors';
 import Button from '@material-ui/core/Button';
-import { IServerError } from '../ServerModels';
+import { IServerError } from '../serverModels';
 
 const prepareDictionarySuggestions = (dictionary: IDictionary) => {
 	if (!dictionary || !Array.isArray(dictionary.values)) {
@@ -44,7 +45,7 @@ interface IState extends IRegisterFormData {
 }
 class RegisterDataForm extends React.PureComponent<IProps, IState> {
 	public state: IState = {
-		gender: '1',
+		gender: Gender.None,
 		lastName: 'test',
 		firstName: 'test',
 		middleName: 'test',
@@ -102,7 +103,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 		this.setState(
 			state => ({
 				...state,
-				gender,
+				gender: gender === '1' ? Gender.Male : Gender.Female,
 			}),
 			this.checkPersonExist,
 		);
@@ -164,7 +165,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 							<RadioGroupButton
 								title="Пол"
 								required={true}
-								currentValue={this.state.gender}
+								currentValue={String(this.state.gender)}
 								values={GENDERS}
 								onChange={this.onChangeGender}
 							/>

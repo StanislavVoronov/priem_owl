@@ -17,3 +17,14 @@ export enum EDictionaryNameList {
 	PriemPaySources = 'directory_financial_sources',
 	PriemSpecialCategories = 'directory_cheat_types',
 }
+
+export enum ServerBoolean {
+	False = 0,
+	True = 1,
+}
+
+export enum Gender {
+	Male = 1,
+	Female = 2,
+	None = 0,
+}

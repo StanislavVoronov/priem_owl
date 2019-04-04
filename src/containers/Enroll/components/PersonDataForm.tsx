@@ -14,6 +14,7 @@ type IProps = IOwnProps;
 
 class PersonDataForm extends React.PureComponent<IProps, IState> {
 	public state: IState = {
+		docType: { id: 1, name: '' },
 		docSeries: '',
 		docNumber: '',
 		docIssieBy: '',
@@ -21,7 +22,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 		docDate: '',
 		docFile: null,
 		government: null,
-		subType: null,
+		docSubType: null,
 		birthPlace: '',
 	};
 	public onChangeTextField = (name: string) => (value: string) => {
@@ -43,7 +44,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 		}));
 	};
 	selectSubType = (subType: ISelectItem) => {
-		this.setState({ subType });
+		this.setState({ docSubType: subType });
 	};
 	submit = () => {
 		this.props.submit(this.state);
@@ -81,7 +82,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 								dictionarySubTypes={dictionaryPersonDocTypes && dictionaryPersonDocTypes.values}
 								subTitle={'Тип документа удостоверяющего личность'}
 								extraFields={
-									this.state.subType && parseInt(this.state.subType.id) === 1 ? (
+									this.state.docSubType && this.state.docSubType.id === 1 ? (
 										<TextInput
 											label="Код подразделения"
 											type="number"

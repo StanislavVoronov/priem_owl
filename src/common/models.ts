@@ -5,7 +5,7 @@ import { IEnrollFetchingDataReducer } from '../containers/Enroll';
 export interface IRootState {
 	user: any;
 	dictionaries: Record<string, IDictionary>;
-	enrollFetching: IEnrollFetchingDataReducer;
+	enroll: IEnrollFetchingDataReducer;
 }
 
 export interface ITextFieldChangeEvent {
@@ -68,8 +68,19 @@ export interface IDisabled {
 
 export interface ISelectItem {
 	name: string;
-	id: string;
-	[key: string]: string;
+	id: number;
+}
+
+export interface IDocSelectItem extends ISelectItem {
+	name: string;
+	id: number;
+	need_info: number;
+}
+
+export interface IGovernmentSelectItem extends ISelectItem {
+	name: string;
+	id: number;
+	phone_code: string;
 }
 
 export interface IStylable {

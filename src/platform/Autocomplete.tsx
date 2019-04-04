@@ -91,7 +91,7 @@ const styles = {
 	suggestionsList: {
 		margin: 0,
 		padding: 0,
-		listStyleType: 'none',
+		listStyleType: 'None',
 	},
 };
 

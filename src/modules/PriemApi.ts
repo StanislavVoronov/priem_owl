@@ -1,5 +1,5 @@
 import { IServerResponseResult } from '../common';
-import { IPriemApiServerResponse } from '../containers/Enroll/ServerModels';
+import { IPriemApiServerResponse } from '../containers/Enroll/serverModels';
 import { PriemApiName } from '../containers/Enroll/apiNames';
 
 class PriemApi {
@@ -18,7 +18,10 @@ class PriemApi {
 				return response.json();
 			})
 			.then(data => {
-				return Promise.resolve(data.result[0]);
+				if (data.error) {
+					return Promise.reject({ message: data.error.string, type: data.error.id });
+				}
+				return Promise.resolve(data);
 			});
 	};
 	public static post = <Request, Response>(api: PriemApiName, payload: Request): Promise<Response> => {

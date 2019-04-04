@@ -1,24 +1,25 @@
 import { IPerson, PersonInfo } from './models';
 
-import { IRootState } from '../../common';
+import { IRootState, ServerBoolean } from '../../common';
 import PriemApi from '../../modules/PriemApi';
 import {
 	checkPersonExistFailure,
 	checkPersonExistRequest,
 	checkPersonExistSuccess,
+	checkPersonLoginFailure,
 	checkPersonLoginRequest,
 	checkPersonLoginSuccess,
-	checkPersonLoginFailure,
-	registerNewPersonFetching,
+	createPersonFailure,
+	createPersonFetching,
+	createPersonSuccess,
 	registerNewPersonFailure,
+	registerNewPersonFetching,
 	registerNewPersonSuccess,
+	sendVerificationCodeFailure,
 	sendVerificationCodeFetching,
 	sendVerificationCodeSuccess,
-	sendVerificationCodeFailure,
-	confirmRegisterCodeFetching,
-	confirmRegisterCodeFailure,
-	confirmRegisterCodeSuccess,
-} from './actionsFetching';
+	uploadDocsFetching,
+} from './actions';
 import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import {
@@ -26,16 +27,19 @@ import {
 	ICheckPersonExistResponse,
 	ICheckPersonLoginRequest,
 	ICheckPersonLoginResponse,
-	IConfirmRegisterCodeRequest,
+	INewPersonDataRequest,
+	INewPersonDataResponse,
 	IRegisterNewPersonRequest,
 	IRegisterNewPersonResponse,
+	IUploadDocPayload,
 	IVerifyPersonRequest,
 	IVerifyPersonResponse,
-} from './ServerModels';
+} from './serverModels';
 import { EnrollApiName, PriemApiName } from './apiNames';
 import PriemEnroll from '../../modules/PriemEnroll';
 import moment from 'moment';
-
+import { IDocDataItem } from './components/DocumentsDataForm';
+import { omitBy } from 'lodash';
 export const registerNewPerson = (
 	login: string,
 	password: string,
@@ -111,11 +115,37 @@ export const sendVerificationCode = (
 };
 
 export const createPerson = (
-	confirmCode: string,
+	confirmCode: number,
 	data: IPerson,
-): ThunkAction<void, IRootState, void, Action> => dispatch => {
+): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	if (data.contactsData && data.registerData && data.personData && data.educationData) {
-		dispatch(confirmRegisterCodeFetching());
+		dispatch(createPersonFetching());
+
+		const passport: IDocDataItem = {
+			docNumber: data.personData.docNumber,
+			docSeries: data.personData.docSeries,
+			docDate: data.personData.docDate,
+			docIssieBy: data.personData.docIssieBy,
+			docFile: data.personData.docFile,
+			docType: data.personData.docType,
+			docSubType: data.personData.docSubType,
+		};
+
+		const education: IDocDataItem = {
+			docNumber: data.educationData.docNumber,
+			docSeries: data.educationData.docSeries,
+			docDate: data.educationData.docDate,
+			docIssieBy: data.educationData.docIssieBy,
+			docFile: data.educationData.docFile,
+			docType: data.educationData.docType,
+			docSubType: data.educationData.docSubType,
+		};
+		const registration: IDocDataItem = {
+			docFile: data.contactsData.docFile,
+			docType: data.contactsData.docType,
+			docSubType: data.contactsData.docSubType,
+		};
+
 		const payload = {
 			email_code: confirmCode,
 			phone_code: '000000',
@@ -125,24 +155,46 @@ export const createPerson = (
 			mname: data.registerData.middleName,
 			birthdate: moment(data.registerData.birthday).format('DD-MM-YYYY'),
 			birthplace: data.personData.birthPlace,
-			need_hostel: data.contactsData.needDormitory ? 1 : 0,
-			sex: parseInt(data.registerData.gender),
-			hight_first: data.educationData.firstHighEducation ? 1 : 0,
+			need_hostel: data.contactsData.needDormitory ? ServerBoolean.True : ServerBoolean.False,
+			sex: data.registerData.gender,
+			hight_first: data.educationData.firstHighEducation ? ServerBoolean.True : ServerBoolean.False,
 			best_prev_edu: data.educationData.prevEducation,
 			cheat_type: 0,
 		};
 
-		PriemEnroll.post<any, any>(EnrollApiName.SetNewNp, payload)
-			.then((response: any) => {
-				//{"np_uid":39257}
-				console.log(response);
-				dispatch(confirmRegisterCodeSuccess());
-				return Promise.resolve();
+		PriemEnroll.post<INewPersonDataRequest, INewPersonDataResponse>(EnrollApiName.SetNewNp, payload)
+			.then(response => {
+				dispatch(createPersonSuccess(response.np_uid));
+				if (data.documents) {
+					dispatch(uploadDocList([passport, education, registration, ...data.documents]));
+				}
 			})
 			.catch((error: any) => {
 				console.log('error', error);
-				dispatch(confirmRegisterCodeFailure(error));
+				dispatch(createPersonFailure(error));
 				return Promise.reject();
 			});
 	}
+	return Promise.reject();
+};
+
+const uploadDocList = (docList: IDocDataItem[]): ThunkAction<void, IRootState, void, Action> => dispatch => {
+	dispatch(uploadDocsFetching());
+
+	const documents = docList.map((item: IDocDataItem) => {
+		const document: IUploadDocPayload = {
+			mime: item.docFile ? item.docFile.type : '',
+			page: '',
+			type: item.docType ? item.docType.id : 0,
+			stype: item.docSubType ? item.docSubType.id : null,
+			seria: item.docSeries || '',
+			num: item.docNumber || '',
+			iss_org: item.docNumber || '',
+			iss_date: item.docDate || moment(item.docDate).format('DD-MM-YYYY'),
+			iss_gov: item.docGovernment ? item.docGovernment.id : null,
+		};
+		return omitBy(document, null);
+	});
+
+	PriemApi.post(PriemApiName.AddDocuments, { documents });
 };

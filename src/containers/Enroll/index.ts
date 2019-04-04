@@ -1,8 +1,8 @@
 import RegisterDataForm from './components/RegisterDataForm';
 import PersonDataForm from './components/PersonDataForm';
-import enrollFetchingReducer from './reducersFetchingData';
+import enrollReducer from './reducers';
 export * from './operations';
 export * from './models';
 export * from './selectors';
 
-export { RegisterDataForm, PersonDataForm, enrollFetchingReducer };
+export { RegisterDataForm, PersonDataForm, enrollReducer };

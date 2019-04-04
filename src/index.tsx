@@ -9,15 +9,15 @@ import App from './containers/Enroll/App';
 import Auth from '@mgutm-fcu/auth/Auth';
 import Dictionary from '@mgutm-fcu/dictionary/Dictionary';
 import { EDictionaryNameList, IDictionaryScanableFilter, IDictionaryTypeFilter } from './common/';
-import { enrollFetchingReducer, IEnrollFetchingDataReducer } from './containers/Enroll';
+import { enrollReducer, IEnrollFetchingDataReducer } from './containers/Enroll';
 interface PriemOwlState extends IUserStore, IDictionaryStore {
-	enrollFetching: IEnrollFetchingDataReducer;
+	enroll: IEnrollFetchingDataReducer;
 }
 
 const state = combineReducers<PriemOwlState>({
 	...currentUser,
 	...reducerDictionaries,
-	...enrollFetchingReducer,
+	...enrollReducer,
 });
 const store = createStore(state, { ...currentUserInitialState, dictionaries: {} }, applyMiddleware(thunk));
 

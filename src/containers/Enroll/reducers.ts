@@ -10,16 +10,19 @@ import {
 	registerNewPersonSuccess,
 	registerNewPersonFailure,
 	registerNewPersonFetching,
-	confirmRegisterCodeFetching,
-	confirmRegisterCodeFailure,
-	confirmRegisterCodeSuccess,
+	createPersonFetching,
+	createPersonFailure,
+	createPersonSuccess,
 	sendVerificationCodeFailure,
 	sendVerificationCodeSuccess,
 	sendVerificationCodeFetching,
-} from './actionsFetching';
+	uploadDocsFetching,
+	uploadDocsSuccess,
+	uploadDocsFailure,
+} from './actions';
 import { Action, handleActions } from 'redux-actions';
 import { IEnrollFetchingDataReducer } from './models';
-import { IServerError } from './ServerModels';
+import { INewPersonDataResponse, IServerError } from './serverModels';
 
 const defaultState: IEnrollFetchingDataReducer = {
 	checkPersonExistsFetching: false,
@@ -34,11 +37,13 @@ const defaultState: IEnrollFetchingDataReducer = {
 	registerPersonData: null,
 	verifyPersonFetching: false,
 	verifyPersonError: null,
-	confirmRegisterCodeFetching: false,
-	confirmRegisterCodeError: null,
+	createPersonFetching: false,
+	createPersonError: null,
+	uploadDocsError: null,
+	uploadDocsFetching: false,
 };
 
-const enrollFetchingReducer = handleActions(
+const enrollReducer = handleActions(
 	{
 		[checkPersonExistRequest.toString()]: (state: IEnrollFetchingDataReducer) => {
 			return {
@@ -103,24 +108,36 @@ const enrollFetchingReducer = handleActions(
 				return { ...state, verifyPersonFetching: false, verifyPersonError: data };
 			}),
 
-		[confirmRegisterCodeFetching.toString()]: (state: IEnrollFetchingDataReducer) => {
+		[createPersonFetching.toString()]: (state: IEnrollFetchingDataReducer) => {
 			return {
 				...state,
-				confirmRegisterCodeFetching: true,
-				confirmRegisterCodeError: null,
+				createPersonFetching: true,
+				createPersonError: null,
 			};
 		},
-		[confirmRegisterCodeSuccess.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
-			checkPayload(action, () => {
-				return { ...state, confirmRegisterCodeFetching: false, personVerified: true };
+		[createPersonSuccess.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
+			checkPayload(action, (data: INewPersonDataResponse) => {
+				return { ...state, createPersonFetching: false, personVerified: true, npId: data.np_uid };
 			}),
-		[confirmRegisterCodeFailure.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
+		[createPersonFailure.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
 			checkPayload(action, (data: IServerError) => {
-				return { ...state, confirmRegisterCodeFetching: false, confirmRegisterCodeError: data };
+				return { ...state, createPersonFetching: false, createPersonError: data };
+			}),
+		[uploadDocsFetching.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) => ({
+			...state,
+			uploadDocsFetching: true,
+		}),
+		[uploadDocsSuccess.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) => ({
+			...state,
+			uploadDocsFetching: false,
+		}),
+		[uploadDocsFailure.toString()]: (state: IEnrollFetchingDataReducer, action: Action<any>) =>
+			checkPayload(action, (data: IServerError) => {
+				return { ...state, uploadDocsFetching: false, uploadDocsError: data };
 			}),
 	},
 
 	defaultState,
 );
 
-export default { enrollFetching: enrollFetchingReducer };
+export default { enroll: enrollReducer };

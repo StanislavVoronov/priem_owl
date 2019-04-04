@@ -21,7 +21,7 @@ class EducationDataForm extends React.PureComponent<IProps> {
 		coolnessTypes: [],
 		prevEducation: 0,
 		docSubType: null,
-		docType: { id: 2 },
+		docType: { id: 2, name: '' },
 		hasEge: false,
 		docFile: null,
 		docNumber: '',

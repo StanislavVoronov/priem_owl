@@ -1,26 +1,35 @@
 import React from 'react';
-import { IDocDataForm } from '../models';
+import { IDocData } from '../models';
 import Button from '@material-ui/core/Button';
 import DocDataForm from '../../../platform/DocDataForm';
 import { AppContext } from '../App';
-import { composeStyles, EDictionaryNameList, GlobalStyles, ISelectItem, inValidateDataForm } from '../../../common';
+import {
+	composeStyles,
+	EDictionaryNameList,
+	GlobalStyles,
+	ISelectItem,
+	inValidateDataForm,
+	IDocSelectItem,
+} from '../../../common';
 import TextInput from '../../../platform/TextInput';
 
-export interface IDocDataItem extends IDocDataForm {
+export interface IDocDataItem extends IDocData {
 	codeDepartment?: string;
 }
 
 interface IOwnProps {
 	submit(data: IDocDataItem[]): void;
 }
-
+interface IDocDataForm extends IDocData {
+	hideDataFields: boolean;
+}
 interface IState {
 	documents: IDocDataForm[];
 }
 const defaultDocFile = {
 	docFile: null,
 	hideDataFields: true,
-	type: null,
+	docType: null,
 };
 type IProps = IOwnProps;
 const styles = {
@@ -47,30 +56,30 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 		documents[index][name] = value;
 		this.setState({ documents });
 	};
-	selectDocType = (index: number) => (type: ISelectItem) => {
+	selectDocType = (index: number) => (type: IDocSelectItem) => {
 		const documents: IDocDataForm[] = [...this.state.documents];
 
-		documents[index].hideDataFields = parseInt(type.need_info) !== 1;
+		documents[index].hideDataFields = type.need_info !== 1;
 
-		if (parseInt(type.id) !== 1 || parseInt(type.id) !== 2) {
+		if (type.id > 2) {
 			documents[index] = {
 				...documents[index],
-				type,
-				subType: null,
+				docType: type,
+				docSubType: null,
 				docIssieBy: '',
 				docDate: '',
 				docSeries: '',
 				docNumber: '',
 			};
 		} else {
-			documents[index].type = type;
+			documents[index].docType = type;
 		}
 
 		this.setState({ documents });
 	};
 	selectDocSubType = (index: number) => (type: ISelectItem) => {
 		const documents: IDocDataForm[] = [...this.state.documents];
-		documents[index].subType = type;
+		documents[index].docSubType = type;
 		this.setState({ documents });
 	};
 	deleteDoc = (index: number) => () => {
@@ -86,23 +95,15 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 			<AppContext.Consumer>
 				{context => {
 					const dictionaryDocTypes = context[EDictionaryNameList.DocTypes];
-					const isDisabledAddButton = this.state.documents.length
-						? this.state.documents
-								.map((item: IDocDataItem) => {
-									const { hideDataFields, ...data } = item;
-									console.log(item, inValidateDataForm(data));
-									return inValidateDataForm(data);
-								})
-								.includes(false)
-						: false;
+					const isDisabledAddButton = this.state.documents.map(inValidateDataForm).includes(false);
 					console.log('disable', isDisabledAddButton);
 					return (
 						<div style={GlobalStyles.flexColumn}>
 							<div>
 								{this.state.documents.map((item: IDocDataForm, index) => {
 									console.log('item', item);
-									const docType = item.type && parseInt(item.type.id);
-									console.log('docType', docType);
+									const docType = item.docType && item.docType.id;
+
 									const dictionarySubDocTypes =
 										docType === 1
 											? context[EDictionaryNameList.PersonDocTypes].values
@@ -128,10 +129,7 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 												subTitle={'Название документа'}
 												dictionarySubTypes={docType && dictionarySubDocTypes}
 												extraFields={
-													item.type &&
-													parseInt(item.type.id) === 1 &&
-													item.subType &&
-													parseInt(item.subType.id) === 1 ? (
+													item.docType && item.docType.id === 1 && item.docSubType && item.docSubType.id === 1 ? (
 														<TextInput
 															label="Код подразделения"
 															type="number"

@@ -1,5 +1,5 @@
-import { ISelectItem } from '../../common';
-import { IServerError } from './ServerModels';
+import { Gender, IGovernmentSelectItem, ISelectItem } from '../../common';
+import { IServerError } from './serverModels';
 import { IDocDataItem } from './components/DocumentsDataForm';
 
 export interface PersonInfo {
@@ -9,14 +9,14 @@ export interface PersonInfo {
 	birthday: string;
 }
 export interface IRegisterFormData extends PersonInfo {
-	gender: string;
+	gender: Gender;
 	login: string;
 	password: string;
 }
-export interface IDocDataForm {
-	hideDataFields?: boolean;
-	type?: ISelectItem | null;
-	subType?: ISelectItem | null;
+export interface IDocData {
+	docType: ISelectItem | null;
+	docSubType?: ISelectItem | null;
+	docGovernment?: ISelectItem | null;
 	docSeries?: string;
 	docNumber?: string;
 	docIssieBy?: string;
@@ -24,20 +24,20 @@ export interface IDocDataForm {
 	docFile: File | null;
 }
 
-export interface IPersonDataForm extends IDocDataForm {
+export interface IPersonDataForm extends IDocData {
 	codeDepartment: string;
 	government: ISelectItem | null;
 	birthPlace: string;
 }
 
-export interface IEducationDataForm extends IDocDataForm {
+export interface IEducationDataForm extends IDocData {
 	firstHighEducation: boolean;
 	coolnessTypes: ISelectItem[];
 	prevEducation: number;
 	hasEge: boolean;
 }
 
-export interface IContactDataForm {
+export interface IContactDataForm extends IDocData {
 	needDormitory: boolean;
 	regIndex: string;
 	regRegion: string;
@@ -55,9 +55,8 @@ export interface IContactDataForm {
 	liveFlat: string;
 	homePhone: string;
 	mobPhone: string;
-	regDocFile: File | null;
 	isRegAddressEqualLive: boolean;
-	phoneCode: string;
+	phoneGovernment: IGovernmentSelectItem;
 	email: string;
 }
 
@@ -74,8 +73,10 @@ export interface IEnrollFetchingDataReducer {
 	confirmationCodeAvailable: boolean;
 	verifyPersonFetching: boolean;
 	verifyPersonError: IServerError | null;
-	confirmRegisterCodeFetching: boolean;
-	confirmRegisterCodeError: IServerError | null;
+	createPersonFetching: boolean;
+	createPersonError: IServerError | null;
+	uploadDocsError: IServerError | null;
+	uploadDocsFetching: boolean;
 }
 
 export interface IPerson {

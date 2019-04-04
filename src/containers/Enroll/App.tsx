@@ -15,7 +15,7 @@ import TextInput from '../../platform/TextInput';
 
 interface IAppState {
 	activeStep: number;
-	confirmCode: string;
+	confirmCode: number;
 	registerData?: IRegisterFormData;
 	personData?: IPersonDataForm;
 	contactsData?: IContactDataForm;
@@ -30,15 +30,15 @@ interface IStateToProps {
 	dictionaries: Record<string, IDictionary>;
 }
 interface IDispatchProps {
-	createPerson(confirmCode: string, data: IPerson): void;
+	createPerson(confirmCode: number, data: IPerson): void;
 	sendVerificationCode(email: string, mobPhone: string): Promise<void>;
 	registerNewPerson(login: string, password: string): Promise<number>;
 }
 type IProps = IStateToProps & IDispatchProps;
 export class App extends React.PureComponent<IProps, IAppState> {
 	state = {
-		activeStep: 0,
-		confirmCode: '',
+		activeStep: 1,
+		confirmCode: 0,
 	};
 
 	public componentDidCatch(error: any, info: any) {
@@ -74,7 +74,7 @@ export class App extends React.PureComponent<IProps, IAppState> {
 		const { activeStep, confirmCode, ...rest } = this.state;
 		this.props.createPerson(confirmCode, rest);
 	};
-	onChangeTextField = (value: string) => {
+	onChangeTextField = (value: any) => {
 		this.setState({ confirmCode: value });
 	};
 	public render() {
