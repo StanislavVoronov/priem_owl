@@ -129,6 +129,7 @@ export const createPerson = (
 			docFile: data.personData.docFile,
 			docType: data.personData.docType,
 			docSubType: data.personData.docSubType,
+			docGovernment: data.personData.docGovernment,
 		};
 
 		const education: IDocDataItem = {
@@ -180,11 +181,10 @@ export const createPerson = (
 
 const uploadDocList = (docList: IDocDataItem[]): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	dispatch(uploadDocsFetching());
-
 	const documents = docList.map((item: IDocDataItem) => {
 		const document: IUploadDocPayload = {
-			mime: item.docFile ? item.docFile.type : '',
-			page: '',
+			mime: item.docFile ? item.docFile.source.type : '',
+			page: item.docFile ? item.docFile.blob : null,
 			type: item.docType ? item.docType.id : 0,
 			stype: item.docSubType ? item.docSubType.id : null,
 			seria: item.docSeries || '',
@@ -196,5 +196,11 @@ const uploadDocList = (docList: IDocDataItem[]): ThunkAction<void, IRootState, v
 		return omitBy(document, null);
 	});
 
-	PriemApi.post(PriemApiName.AddDocuments, { documents });
+	PriemApi.post(PriemApiName.AddDocuments, { documents })
+		.then(response => {
+			console.log('successDocuments', response);
+		})
+		.catch(error => {
+			console.log('errorDocuments', error);
+		});
 };

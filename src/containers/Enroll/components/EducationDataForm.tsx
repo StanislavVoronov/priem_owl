@@ -4,7 +4,7 @@ import { DocDataForm, DropdownSelect } from '../../../platform';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { AppContext } from '../App';
-import { IEducationDataForm } from '../models';
+import { IDocFile, IEducationDataForm } from '../models';
 import Button from '@material-ui/core/Button';
 
 interface IOwnProps {
@@ -39,7 +39,7 @@ class EducationDataForm extends React.PureComponent<IProps> {
 	onChangePersonCoolnessTypes = (items: ISelectItem[]) => {
 		this.setState({ coolnessTypes: items });
 	};
-	downloadFile = (file: File | null) => {
+	downloadFile = (file: IDocFile | null) => {
 		this.setState({ docFile: file });
 	};
 	onChangeTextField = (name: string) => (value: string) => {

@@ -37,7 +37,7 @@ interface IDispatchProps {
 type IProps = IStateToProps & IDispatchProps;
 export class App extends React.PureComponent<IProps, IAppState> {
 	state = {
-		activeStep: 1,
+		activeStep: 0,
 		confirmCode: 0,
 	};
 
@@ -85,7 +85,7 @@ export class App extends React.PureComponent<IProps, IAppState> {
 					<Stepper activeStep={this.state.activeStep} orientation={'vertical'}>
 						{steps.map((label, index) => (
 							<Step key={label}>
-								<StepLabel>{label}</StepLabel>
+								<StepLabel style={{ fontSize: '1rem' }}>{label}</StepLabel>
 								<StepContent>
 									{index === 0 && <RegisterDataForm submit={this.submitRegisterDataForm} />}
 									{index === 1 && <PersonDataForm submit={this.submitPersonDataForm} />}

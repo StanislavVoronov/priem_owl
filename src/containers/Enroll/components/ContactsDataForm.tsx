@@ -10,7 +10,7 @@ import {
 	IGovernmentSelectItem,
 } from '../../../common';
 import { AppContext } from '../App';
-import { IContactDataForm } from '../models';
+import { IContactDataForm, IDocFile } from '../models';
 import Button from '@material-ui/core/Button';
 const styles = {
 	checkFormControlLabel: { justifyContent: 'flex-end', marginLeft: 0 },
@@ -80,14 +80,12 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 					  (mobPhoneValue[3] ? `-${mobPhoneValue[3]}` : '') +
 					  (mobPhoneValue[4] ? +`-${mobPhoneValue[4]}` : '')
 				: '');
-		console.log('value', value);
 		this.setState(state => ({ ...state, mobPhone: maskMobPhone }));
 	};
-	onDownloadFile = (doc: File) => {
-		this.setState(state => ({
-			...state,
-			regDocFile: doc,
-		}));
+	onDownloadFile = (doc: IDocFile) => {
+		this.setState({
+			docFile: doc,
+		});
 	};
 	submit = () => {
 		this.props.submit(this.state);

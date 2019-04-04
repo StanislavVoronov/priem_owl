@@ -6,6 +6,7 @@ import Dropzone, { DropzoneRenderArgs } from 'react-dropzone';
 import Image from './ImageEditor';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import FormLabel from '@material-ui/core/FormLabel';
+import { IDocFile } from '../containers/Enroll';
 
 interface IUploadFile {
 	lastModified: Date;
@@ -36,7 +37,7 @@ interface IDocDataProps {
 	title?: string;
 	subTitle?: string;
 	docTitle?: string;
-	file: string | File | null;
+	file: IDocFile | null;
 	extraFields?: ReactElement<any> | null;
 	defaultType?: ISelectItem;
 	defaultSubType?: ISelectItem;
@@ -45,7 +46,7 @@ interface IDocDataProps {
 	onChangeNumber?: (value: string) => void;
 	onChangeSeries?: (value: string) => void;
 	onChangeIssieBy?: (value: string) => void;
-	onDownloadFile: (file: string | File | null) => void;
+	onDownloadFile: (file: IDocFile | null) => void;
 	onChangeDate?: (date: string) => void;
 }
 
@@ -76,67 +77,76 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 		selectDocSubType: (data: ISelectItem) => void 0,
 	};
 
-	public renderDocImage = (data: DropzoneRenderArgs) => {
-		const file = data.draggedFiles[0];
-		return <Image source={file} />;
-	};
 	public removeImage = () => {
 		this.props.onDownloadFile(null);
 	};
 	public render() {
+		const isDataVisible = !!(
+			(this.props.dictionaryTypes && this.props.title) ||
+			(this.props.dictionarySubTypes && this.props.subTitle) ||
+			!this.props.hideDataFields
+		);
 		return (
 			<FormControl>
 				<div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-					<div style={{ display: 'flex', paddingRight: 20, flex: 1, flexDirection: 'column' }}>
-						{this.props.dictionaryTypes && this.props.title && (
-							<DropdownSelect
-								required={true}
-								defaultValue={this.props.defaultType}
-								options={this.props.dictionaryTypes}
-								placeholder={`Выберите ${this.props.title.toLowerCase()}`}
-								onChangeSelect={this.props.selectDocType!}
-								title={this.props.title}
-							/>
-						)}
-						{this.props.dictionarySubTypes && this.props.subTitle && (
-							<DropdownSelect
-								required={true}
-								defaultValue={this.props.defaultSubType}
-								options={this.props.dictionarySubTypes}
-								placeholder={`Выберите ${this.props.subTitle.toLowerCase()}`}
-								onChangeSelect={this.props.selectDocSubType!}
-								title={this.props.subTitle}
-							/>
-						)}
-						{!this.props.hideDataFields && (
-							<React.Fragment>
-								<TextInput placeholder="Введите серию документа" label="Серия" onBlur={this.props.onChangeSeries} />
-								<TextInput
+					{isDataVisible && (
+						<div style={{ display: 'flex', paddingRight: 40, width: '50%', flexDirection: 'column' }}>
+							{this.props.dictionaryTypes && this.props.title && (
+								<DropdownSelect
 									required={true}
-									placeholder="Введите номер документа"
-									label="Номер"
-									type="number"
-									onBlur={this.props.onChangeNumber}
+									defaultValue={this.props.defaultType}
+									options={this.props.dictionaryTypes}
+									placeholder={`Выберите ${this.props.title.toLowerCase()}`}
+									onChangeSelect={this.props.selectDocType!}
+									title={this.props.title}
 								/>
-								<TextInput required={true} type="date" label="Дата выдачи документа" onBlur={this.props.onChangeDate} />
-								<TextInput
+							)}
+							{this.props.dictionarySubTypes && this.props.subTitle && (
+								<DropdownSelect
 									required={true}
-									placeholder="Введите кем выдан документ"
-									label="Кем выдан документ"
-									multiline={true}
-									onBlur={this.props.onChangeIssieBy}
+									defaultValue={this.props.defaultSubType}
+									options={this.props.dictionarySubTypes}
+									placeholder={`Выберите ${this.props.subTitle.toLowerCase()}`}
+									onChangeSelect={this.props.selectDocSubType!}
+									title={this.props.subTitle}
 								/>
-							</React.Fragment>
-						)}
-						{this.props.extraFields}
-					</div>
-					<div style={{ display: 'flex', flex: 1, paddingLeft: 20, flexDirection: 'column' }}>
+							)}
+							{!this.props.hideDataFields && (
+								<React.Fragment>
+									<TextInput placeholder="Введите серию документа" label="Серия" onBlur={this.props.onChangeSeries} />
+									<TextInput
+										required={true}
+										placeholder="Введите номер документа"
+										label="Номер"
+										type="number"
+										onBlur={this.props.onChangeNumber}
+									/>
+									<TextInput
+										required={true}
+										type="date"
+										label="Дата выдачи документа"
+										onBlur={this.props.onChangeDate}
+									/>
+									<TextInput
+										required={true}
+										placeholder="Введите кем выдан документ"
+										label="Кем выдан документ"
+										multiline={true}
+										onBlur={this.props.onChangeIssieBy}
+									/>
+								</React.Fragment>
+							)}
+							{this.props.extraFields}
+						</div>
+					)}
+					<div style={{ display: 'flex', width: '40%', flexDirection: 'column' }}>
 						<Dropzone
 							onDrop={acceptedFiles => {
 								acceptedFiles.forEach(file => {
 									const reader = new FileReader();
+
 									reader.onload = () => {
-										this.props.onDownloadFile(file);
+										this.props.onDownloadFile({ source: file, blob: reader.result });
 									};
 									reader.onabort = () => console.log('file reading was aborted');
 									reader.onerror = () => console.log('file reading has failed');
@@ -144,7 +154,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 									reader.readAsBinaryString(file);
 								});
 							}}>
-							{({ getRootProps, getInputProps, isDragActive }) => {
+							{({ getRootProps, getInputProps }) => {
 								return (
 									<div
 										{...getRootProps()}
@@ -163,7 +173,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 										)}
 										{this.props.file ? (
 											<React.Fragment>
-												<Image source={this.props.file} removeImage={this.removeImage} />
+												<Image file={this.props.file} removeImage={this.removeImage} />
 											</React.Fragment>
 										) : (
 											<React.Fragment>

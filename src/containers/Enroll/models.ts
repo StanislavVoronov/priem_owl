@@ -21,12 +21,11 @@ export interface IDocData {
 	docNumber?: string;
 	docIssieBy?: string;
 	docDate?: string;
-	docFile: File | null;
+	docFile: IDocFile | null;
 }
 
 export interface IPersonDataForm extends IDocData {
 	codeDepartment: string;
-	government: ISelectItem | null;
 	birthPlace: string;
 }
 
@@ -35,6 +34,10 @@ export interface IEducationDataForm extends IDocData {
 	coolnessTypes: ISelectItem[];
 	prevEducation: number;
 	hasEge: boolean;
+}
+export interface IDocFile {
+	source: File;
+	blob: ArrayBuffer | string | null;
 }
 
 export interface IContactDataForm extends IDocData {

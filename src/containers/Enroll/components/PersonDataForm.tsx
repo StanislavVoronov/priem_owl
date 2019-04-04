@@ -3,7 +3,7 @@ import { DropdownSelect, Button, DocDataForm, TextInput } from '../../../platfor
 import { AppContext } from '../App';
 import { composeStyles, EDictionaryNameList, ISelectItem, inValidateDataForm, GlobalStyles } from '../../../common';
 
-import { IPersonDataForm } from '../models';
+import { IDocFile, IPersonDataForm } from '../models';
 
 interface IOwnProps {
 	submit: (data: IPersonDataForm) => void;
@@ -21,8 +21,8 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 		codeDepartment: '',
 		docDate: '',
 		docFile: null,
-		government: null,
 		docSubType: null,
+		docGovernment: null,
 		birthPlace: '',
 	};
 	public onChangeTextField = (name: string) => (value: string) => {
@@ -37,11 +37,10 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 			[name]: value,
 		}));
 	};
-	public onDownloadFile = (doc: File) => {
-		this.setState(state => ({
-			...state,
+	public onDownloadFile = (doc: IDocFile) => {
+		this.setState({
 			docFile: doc,
-		}));
+		});
 	};
 	selectSubType = (subType: ISelectItem) => {
 		this.setState({ docSubType: subType });
@@ -62,7 +61,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 								required={true}
 								options={dictionaryGovernments && dictionaryGovernments.values}
 								placeholder="Выберите гражданство"
-								onChangeSelect={this.onChangeSelectField('government')}
+								onChangeSelect={this.onChangeSelectField('docGovernment')}
 								title="Гражданство"
 							/>
 							<TextInput

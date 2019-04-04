@@ -7,8 +7,9 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Visibility from '@material-ui/icons/Visibility';
 import RotateRight from '@material-ui/icons/RotateRight';
 import { composeStyles, GlobalStyles, makeHorizontalSpace, makeVerticalSpace } from '../common';
+import { IDocFile } from '../containers/Enroll';
 interface IProps {
-	source: string | File;
+	file: IDocFile;
 	removeImage?: () => void;
 }
 interface IState {
@@ -65,11 +66,11 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 	public render() {
 		return (
 			<div style={composeStyles({ width: this.state.width }, styles.main)}>
-				<div style={styles.fileName}>{this.props.source && this.props.source['name']}</div>
+				<div style={styles.fileName}>{this.props.file && this.props.file.source && this.props.file.source['name']}</div>
 				{!this.state.hidden && (
 					<React.Fragment>
 						<AvatarEditor
-							image={this.props.source}
+							image={this.props.file.source}
 							width={this.state.width}
 							height={this.state.height}
 							color={[255, 255, 255, 0]} // RGBA

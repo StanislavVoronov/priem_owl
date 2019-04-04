@@ -21,7 +21,7 @@ class PriemApi {
 				if (data.error) {
 					return Promise.reject({ message: data.error.string, type: data.error.id });
 				}
-				return Promise.resolve(data);
+				return Promise.resolve(data.result[0]);
 			});
 	};
 	public static post = <Request, Response>(api: PriemApiName, payload: Request): Promise<Response> => {

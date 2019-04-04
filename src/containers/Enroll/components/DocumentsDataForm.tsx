@@ -1,5 +1,5 @@
 import React from 'react';
-import { IDocData } from '../models';
+import { IDocData, IDocFile } from '../models';
 import Button from '@material-ui/core/Button';
 import DocDataForm from '../../../platform/DocDataForm';
 import { AppContext } from '../App';
@@ -45,7 +45,7 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 	addDoc = () => {
 		this.setState({ documents: [...this.state.documents, { ...defaultDocFile }] });
 	};
-	onDownloadFile = (index: number) => (file: File | null) => {
+	onDownloadFile = (index: number) => (file: IDocFile | null) => {
 		const documents: IDocDataForm[] = [...this.state.documents];
 		documents[index].docFile = file;
 
