@@ -1,24 +1,15 @@
-import TextInput from '../../../platform/TextInput';
+import TextInput from '../../../platform/Input/TextInput';
 import React from 'react';
 import { AppContext } from '../App';
-import { Autocomplete, RadioGroupButton } from '../../../platform';
-import {
-	composeStyles,
-	EDictionaryNameList,
-	Gender,
-	GlobalStyles,
-	inValidateDataForm,
-	IRootState,
-	makeVerticalSpace,
-} from '../../../common';
+import { Autocomplete, Button, RadioGroup } from '../../../platform';
+import { EDictionaryNameList, Gender, inValidateDataForm, IRootState, makeVerticalSpace } from '../../../common';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import { IRegisterFormData, PersonInfo } from '../models';
 import { connect, MapStateToProps } from 'react-redux';
 import { checkPersonExist, checkPersonLogin } from '../operations';
 import { enrollStateSelector } from '../selectors';
-import Button from '@material-ui/core/Button';
 import { IServerError } from '../serverModels';
-
+import '../styles/common.css';
 const prepareDictionarySuggestions = (dictionary: IDictionary) => {
 	if (!dictionary || !Array.isArray(dictionary.values)) {
 		return [];
@@ -120,7 +111,6 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 		this.props.submit(rest);
 	};
 	public render() {
-		console.log('state', this.state);
 		return (
 			<AppContext.Consumer>
 				{context => {
@@ -138,7 +128,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 						inValidateDataForm(rest) || inValidRepeatPassword || inValidPassword || !!this.props.checkPersonLoginError;
 
 					return (
-						<div style={composeStyles(GlobalStyles.flexColumn)}>
+						<div className="flexColumn">
 							<TextInput
 								required={true}
 								placeholder={'Введите фамилию'}
@@ -162,7 +152,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 								suggestions={prepareDictionarySuggestions(filteredDictionaryMiddleName)}
 							/>
 
-							<RadioGroupButton
+							<RadioGroup
 								title="Пол"
 								required={true}
 								currentValue={String(this.state.gender)}
@@ -207,7 +197,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 									helperText={inValidRepeatPassword ? 'Пароли не совпадают' : ''}
 								/>
 							</React.Fragment>
-							<div style={GlobalStyles.buttonNext}>
+							<div className="nextButtonContainer">
 								<Button variant="contained" color="primary" disabled={isValidForm} onClick={this.submit}>
 									{'Далее'}
 								</Button>

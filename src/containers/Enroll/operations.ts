@@ -1,4 +1,4 @@
-import { IPerson, PersonInfo } from './models';
+import { IDocDataItem, IPerson, PersonInfo } from './models';
 
 import { IRootState, ServerBoolean } from '../../common';
 import PriemApi from '../../modules/PriemApi';
@@ -38,8 +38,7 @@ import {
 import { EnrollApiName, PriemApiName } from './apiNames';
 import PriemEnroll from '../../modules/PriemEnroll';
 import moment from 'moment';
-import { IDocDataItem } from './components/DocumentsDataForm';
-import { omitBy } from 'lodash';
+import { omitBy, isNull } from 'lodash';
 export const registerNewPerson = (
 	login: string,
 	password: string,
@@ -62,7 +61,12 @@ export const registerNewPerson = (
 export const checkPersonExist = (data: PersonInfo): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	const { firstName, birthday, lastName, middleName = '' } = data;
 
-	const payload = { fname: firstName, lname: lastName, mname: middleName, birthdate: birthday };
+	const payload = {
+		fname: firstName,
+		lname: lastName,
+		mname: middleName,
+		birthdate: moment(birthday).format('YYYY-MM-DD'),
+	};
 
 	dispatch(checkPersonExistRequest());
 
@@ -166,9 +170,8 @@ export const createPerson = (
 		PriemEnroll.post<INewPersonDataRequest, INewPersonDataResponse>(EnrollApiName.SetNewNp, payload)
 			.then(response => {
 				dispatch(createPersonSuccess(response.np_uid));
-				if (data.documents) {
-					dispatch(uploadDocList([passport, education, registration, ...data.documents]));
-				}
+
+				dispatch(uploadDocList([passport, education, registration, ...(data.documents || [])]));
 			})
 			.catch((error: any) => {
 				console.log('error', error);
@@ -181,26 +184,27 @@ export const createPerson = (
 
 const uploadDocList = (docList: IDocDataItem[]): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	dispatch(uploadDocsFetching());
-	const documents = docList.map((item: IDocDataItem) => {
+	console.log('documents', docList);
+	docList.forEach((item: IDocDataItem) => {
 		const document: IUploadDocPayload = {
-			mime: item.docFile ? item.docFile.source.type : '',
-			page: item.docFile ? item.docFile.blob : null,
+			mime: item.docFile ? item.docFile.type : '-',
 			type: item.docType ? item.docType.id : 0,
 			stype: item.docSubType ? item.docSubType.id : null,
-			seria: item.docSeries || '',
-			num: item.docNumber || '',
-			iss_org: item.docNumber || '',
-			iss_date: item.docDate || moment(item.docDate).format('DD-MM-YYYY'),
+			seria: item.docSeries || '-',
+			num: item.docNumber || '-',
+			iss_org: item.docNumber || '-',
+			iss_date: item.docDate ? moment(item.docDate).format('DD-MM-YYYY') : '01-01-1970',
 			iss_gov: item.docGovernment ? item.docGovernment.id : null,
 		};
-		return omitBy(document, null);
-	});
 
-	PriemApi.post(PriemApiName.AddDocuments, { documents })
-		.then(response => {
-			console.log('successDocuments', response);
+		PriemApi.post(PriemApiName.AddDocuments, omitBy(document, isNull), {
+			page: { value: item.docFile, name: item.docFile ? item.docFile.name : '-' },
 		})
-		.catch(error => {
-			console.log('errorDocuments', error);
-		});
+			.then(response => {
+				console.log('successDocuments', response);
+			})
+			.catch(error => {
+				console.log('errorDocuments', error);
+			});
+	});
 };

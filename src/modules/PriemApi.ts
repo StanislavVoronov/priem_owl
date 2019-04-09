@@ -24,10 +24,19 @@ class PriemApi {
 				return Promise.resolve(data.result[0]);
 			});
 	};
-	public static post = <Request, Response>(api: PriemApiName, payload: Request): Promise<Response> => {
+	public static post = <Request, Response>(
+		api: PriemApiName,
+		payload: Request,
+		extraData: object = {},
+	): Promise<Response> => {
 		const body = new FormData();
 		body.append('api', api);
 		body.append('values', JSON.stringify(payload));
+		Object.keys(extraData).forEach((key: string) => {
+			console.log('key', extraData);
+			body.append(key, extraData[key].value, extraData[key].name);
+		});
+
 		return fetch(`${PriemApi.host}${PriemApi.path}`, {
 			method: 'POST',
 			credentials: 'include',

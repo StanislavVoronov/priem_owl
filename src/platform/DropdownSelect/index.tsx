@@ -1,8 +1,15 @@
-import { FormControl, FormLabel } from '../platform/';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import React from 'react';
 import Select from 'react-select';
-import { composeStyles, IHasError, IHelperText, ISpacable, IStylable, makeVerticalSpace } from '../common';
-interface ISelectProps extends IStylable, ISpacable, IHasError, IHelperText {
+import { IHasError, IHelperText, IStylable } from '../../common';
+
+export interface ISelectItem {
+	name: string;
+	id: number;
+}
+
+interface ISelectProps extends IStylable, IHasError, IHelperText {
 	placeholder?: string;
 	onChangeSelect: (data: any) => void;
 	options: any[];
@@ -15,26 +22,19 @@ interface ISelectProps extends IStylable, ISpacable, IHasError, IHelperText {
 	isMulti?: boolean;
 	required?: boolean;
 }
-const styles = {
-	label: {
-		fontSize: '0.75em',
-		marginBottom: 5,
-	},
-};
+
 class DropdownSelect extends React.PureComponent<ISelectProps> {
 	public static defaultProps = {
 		isSearchable: true,
 		isClearable: true,
-		verticalSpace: 'normal',
 		value: 'id',
 		label: 'name',
 		options: [],
 	};
 	public render() {
-		console.log('default', this.props.defaultValue);
 		return (
-			<FormControl style={composeStyles(makeVerticalSpace(this.props.verticalSpace), this.props.style)}>
-				<FormLabel style={styles.label}>
+			<FormControl margin="normal">
+				<FormLabel classes={{ root: 'label' }}>
 					{this.props.title}
 					{this.props.required ? ' *' : ''}
 				</FormLabel>
@@ -51,7 +51,7 @@ class DropdownSelect extends React.PureComponent<ISelectProps> {
 					getOptionValue={(item: any) => item[this.props.value!]}
 					options={this.props.options}
 				/>
-				{this.props.hasError && <FormLabel style={composeStyles({ color: 'red' })}>{this.props.helperText}</FormLabel>}
+				{this.props.hasError && <FormLabel classes={{ root: 'requiredLabel' }}>{this.props.helperText}</FormLabel>}
 			</FormControl>
 		);
 	}

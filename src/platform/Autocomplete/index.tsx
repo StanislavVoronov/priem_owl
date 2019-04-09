@@ -1,14 +1,14 @@
 import React from 'react';
 import deburr from 'lodash/deburr';
-import Autosuggest, { BlurEvent, InputProps, SuggestionSelectedEventData } from 'react-autosuggest';
+import Autosuggest, { SuggestionSelectedEventData } from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
-import { IHasError, IHelperText, ISpacable } from '../common/';
-
-interface IInputProps extends ISpacable {
+import { IHasError, IHelperText } from '../../common/';
+import './styles.css';
+interface IInputProps {
 	label?: string;
 	placeholder?: string;
 	onChange: (data: string, index?: number) => void;
@@ -69,31 +69,6 @@ function getSuggestions(value: string, suggestions: string[]) {
 function getSuggestionValue(suggestion: string) {
 	return suggestion;
 }
-
-const styles = {
-	root: {
-		display: 'flex',
-		flexDirection: 'row',
-		flexGrow: 1,
-	},
-	container: {
-		position: 'relative',
-	},
-	suggestionsContainerOpen: {
-		position: 'absolute',
-		zIndex: 1,
-		left: 0,
-		right: 0,
-	},
-	suggestion: {
-		display: 'block',
-	},
-	suggestionsList: {
-		margin: 0,
-		padding: 0,
-		listStyleType: 'None',
-	},
-};
 
 interface IAutoCompleteProps extends IInputProps, IHasError, IHelperText {
 	suggestions: string[];
@@ -172,10 +147,10 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 					}}
 					// @ts-ignore
 					theme={{
-						container: styles.container,
-						suggestionsContainerOpen: styles.suggestionsContainerOpen,
-						suggestionsList: styles.suggestionsList,
-						suggestion: styles.suggestion,
+						container: 'container',
+						suggestionsContainerOpen: 'suggestionsContainerOpen',
+						suggestionsList: 'suggestionsList',
+						suggestion: 'suggestion',
 					}}
 					focusInputOnSuggestionClick={false}
 					renderSuggestionsContainer={renderSuggestionsContainer}

@@ -1,6 +1,7 @@
-import { Gender, IGovernmentSelectItem, ISelectItem } from '../../common';
+import { Gender, IGovernmentSelectItem } from '../../common';
 import { IServerError } from './serverModels';
-import { IDocDataItem } from './components/DocumentsDataForm';
+import { IDocDataItem } from './models';
+import { ISelectItem } from '../../platform';
 
 export interface PersonInfo {
 	lastName: string;
@@ -13,6 +14,11 @@ export interface IRegisterFormData extends PersonInfo {
 	login: string;
 	password: string;
 }
+
+export interface IDocDataItem extends IDocData {
+	codeDepartment?: string;
+}
+
 export interface IDocData {
 	docType: ISelectItem | null;
 	docSubType?: ISelectItem | null;
@@ -21,7 +27,7 @@ export interface IDocData {
 	docNumber?: string;
 	docIssieBy?: string;
 	docDate?: string;
-	docFile: IDocFile | null;
+	docFile: File | null;
 }
 
 export interface IPersonDataForm extends IDocData {
@@ -34,10 +40,6 @@ export interface IEducationDataForm extends IDocData {
 	coolnessTypes: ISelectItem[];
 	prevEducation: number;
 	hasEge: boolean;
-}
-export interface IDocFile {
-	source: File;
-	blob: ArrayBuffer | string | null;
 }
 
 export interface IContactDataForm extends IDocData {

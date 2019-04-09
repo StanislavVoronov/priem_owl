@@ -1,15 +1,16 @@
 import React from 'react';
 import AvatarEditor from 'react-avatar-editor';
-import { Slider, Fab } from './';
+import Slider from '@material-ui/lab/Slider';
+import Fab from '@material-ui/core/Fab';
 import RotateLeft from '@material-ui/icons/RotateLeft';
 import Delete from '@material-ui/icons/Delete';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Visibility from '@material-ui/icons/Visibility';
 import RotateRight from '@material-ui/icons/RotateRight';
-import { composeStyles, GlobalStyles, makeHorizontalSpace, makeVerticalSpace } from '../common';
-import { IDocFile } from '../containers/Enroll';
+import './styles.css';
+
 interface IProps {
-	file: IDocFile;
+	file: File;
 	removeImage?: () => void;
 }
 interface IState {
@@ -19,22 +20,7 @@ interface IState {
 	height: number;
 	hidden: boolean;
 }
-const styles = {
-	main: { justifyContent: 'center', display: 'flex', flexDirection: 'column' },
-	deleteButton: {
-		backgroundColor: 'red',
-	},
-	buttonContainer: { marginLeft: 20, marginRight: 20 },
-	actionButtonContainer: {
-		display: 'flex',
-		paddingLeft: 20,
-		paddingRight: 20,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-	},
-	slider: { marginLeft: 30, marginRight: 30 },
-	fileName: { marginTop: 10, marginBottom: 12 },
-};
+
 class ImageEditor extends React.PureComponent<IProps, IState> {
 	public static defaultProps = {
 		removeImage: () => void 0,
@@ -65,39 +51,41 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 
 	public render() {
 		return (
-			<div style={composeStyles({ width: this.state.width }, styles.main)}>
-				<div style={styles.fileName}>{this.props.file && this.props.file.source && this.props.file.source['name']}</div>
+			<div className="container">
+				<div className="fileName">{this.props.file && this.props.file['name']}</div>
 				{!this.state.hidden && (
 					<React.Fragment>
 						<AvatarEditor
-							image={this.props.file.source}
+							image={this.props.file}
 							width={this.state.width}
 							height={this.state.height}
 							color={[255, 255, 255, 0]} // RGBA
 							scale={this.state.scale}
 							rotate={this.state.rotate}
 						/>
-						<p
-							style={{
-								height: 10,
-							}}>
-							<Slider style={styles.slider} value={this.state.scale} aria-labelledby="label" onChange={this.setScale} />
+						<p className="sliderContainer">
+							<Slider
+								classes={{ root: 'slider' }}
+								value={this.state.scale}
+								aria-labelledby="label"
+								onChange={this.setScale}
+							/>
 						</p>
 					</React.Fragment>
 				)}
-				<div style={composeStyles(makeVerticalSpace('small'), styles.actionButtonContainer)}>
+				<div className="actionContainer">
 					{!this.state.hidden && (
 						<Fab variant="extended" color="primary" onClick={this.setRotateLeft} size="medium">
 							<RotateLeft />
 						</Fab>
 					)}
-					<div style={GlobalStyles.flexRow}>
+					<div className="buttonContainer">
 						<Fab variant="extended" onClick={this.toggleImage} size="small">
 							{this.state.hidden ? <Visibility /> : <VisibilityOff />}
 						</Fab>
-						<div style={styles.buttonContainer} />
-						<Fab style={styles.deleteButton} variant="extended" onClick={this.removeImage} size="small">
-							<Delete style={{ color: 'white' }} titleAccess="Удалить изображение" />
+						<div />
+						<Fab classes={{ root: 'deleteButton' }} variant="extended" onClick={this.removeImage} size="small">
+							<Delete classes={{ colorAction: 'deleteIcon' }} titleAccess="Удалить изображение" />
 						</Fab>
 					</div>
 					{!this.state.hidden && (

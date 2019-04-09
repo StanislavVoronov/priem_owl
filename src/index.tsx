@@ -30,15 +30,6 @@ ReactDOM.render(
 			<Dictionary
 				url={'/dev-bin/priem_dictionary.fcgi?dict=raw'}
 				list={[
-					{ table: EDictionaryNameList.PriemDepartments, columns: ['id', 'name'] },
-					{ table: EDictionaryNameList.PriemLevelEducation, columns: ['id', 'name'] },
-					{ table: EDictionaryNameList.PriemFilials, columns: ['id', 'name'] },
-					{ table: EDictionaryNameList.PriemUniversities, columns: ['id', 'name'] },
-					{ table: EDictionaryNameList.PriemDirections, columns: ['id', 'name'] },
-					{ table: EDictionaryNameList.PriemProfiles, columns: ['id', 'name'] },
-					{ table: EDictionaryNameList.PriemFormEducation, columns: ['id', 'name'] },
-					{ table: EDictionaryNameList.PriemPaySources, columns: ['id', 'name'] },
-
 					{ table: EDictionaryNameList.CoolnessTypes, columns: ['id', 'name', 'hidden'], filter: item => item !== 1 },
 					{ table: EDictionaryNameList.Governments, columns: ['id', 'name', 'phone_code'] },
 					{
@@ -72,14 +63,6 @@ ReactDOM.render(
 					},
 					{
 						table: EDictionaryNameList.PreviousEducation,
-						columns: ['id', 'name'],
-					},
-					{
-						table: EDictionaryNameList.PriemDepartments,
-						columns: ['id', 'name'],
-					},
-					{
-						table: EDictionaryNameList.PriemSpecialCategories,
 						columns: ['id', 'name'],
 					},
 				]}>

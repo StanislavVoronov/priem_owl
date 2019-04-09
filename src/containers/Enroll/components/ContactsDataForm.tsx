@@ -1,20 +1,10 @@
 import React from 'react';
 import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocDataForm } from '../../../platform';
-import {
-	composeStyles,
-	EDictionaryNameList,
-	GlobalStyles,
-	ISelectItem,
-	makeVerticalSpace,
-	inValidateDataForm,
-	IGovernmentSelectItem,
-} from '../../../common';
+import { EDictionaryNameList, makeVerticalSpace, inValidateDataForm, IGovernmentSelectItem } from '../../../common';
 import { AppContext } from '../App';
-import { IContactDataForm, IDocFile } from '../models';
+import { IContactDataForm } from '../models';
 import Button from '@material-ui/core/Button';
-const styles = {
-	checkFormControlLabel: { justifyContent: 'flex-end', marginLeft: 0 },
-};
+import '../styles/common.css';
 
 interface IOwnProps {
 	submit(data: any): void;
@@ -82,7 +72,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 				: '');
 		this.setState(state => ({ ...state, mobPhone: maskMobPhone }));
 	};
-	onDownloadFile = (doc: IDocFile) => {
+	onDownloadFile = (doc: File) => {
 		this.setState({
 			docFile: doc,
 		});
@@ -102,51 +92,53 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 					const defaultGovernmentValue =
 						governmentDictionary && governmentDictionary.values && governmentDictionary.values[0];
 					return (
-						<div style={composeStyles(GlobalStyles.flexColumn)}>
-							<div style={composeStyles(GlobalStyles.flexColumn, makeVerticalSpace('small'))}>
-								<H2>Адрес регистрации</H2>
-								<DocDataForm
-									hideDataFields
-									docTitle="Файл  регистрации места жительства"
-									file={this.state.docFile}
-									onDownloadFile={this.onDownloadFile}
-								/>
-								<TextInput
-									label={'Индекс'}
-									type="number"
-									placeholder={'Введите индекс'}
-									required={true}
-									onBlur={this.onChangeTextField('regIndex')}
-								/>
-								<TextInput
-									label={'Область'}
-									placeholder={'Введите область'}
-									required={true}
-									onBlur={this.onChangeTextField('regRegion')}
-								/>
-								<TextInput
-									label={'Населенный пункт'}
-									placeholder={'Введите населенный пункт'}
-									required={true}
-									onBlur={this.onChangeTextField('regLocality')}
-								/>
-								<TextInput
-									label={'Улица'}
-									placeholder={'Введите улицу'}
-									required={true}
-									onBlur={this.onChangeTextField('regStreet')}
-								/>
-								<TextInput
-									label={'Дом'}
-									placeholder={'Введите дом'}
-									required={true}
-									onBlur={this.onChangeTextField('regHome')}
-								/>
-								<TextInput label={'Корпус'} onBlur={this.onChangeTextField('regBlock')} />
-								<TextInput label={'Квартира'} onBlur={this.onChangeTextField('regFlat')} />
-							</div>
+						<div className="flexColumn">
+							<H2>Адрес регистрации</H2>
+							<DocDataForm
+								hideDataFields
+								docTitle="Файл  регистрации места жительства"
+								file={this.state.docFile}
+								onDownloadFile={this.onDownloadFile}
+								extraFields={
+									<React.Fragment>
+										<TextInput
+											label={'Индекс'}
+											type="number"
+											placeholder={'Введите индекс'}
+											required={true}
+											onBlur={this.onChangeTextField('regIndex')}
+										/>
+										<TextInput
+											label={'Область'}
+											placeholder={'Введите область'}
+											required={true}
+											onBlur={this.onChangeTextField('regRegion')}
+										/>
+										<TextInput
+											label={'Населенный пункт'}
+											placeholder={'Введите населенный пункт'}
+											required={true}
+											onBlur={this.onChangeTextField('regLocality')}
+										/>
+										<TextInput
+											label={'Улица'}
+											placeholder={'Введите улицу'}
+											required={true}
+											onBlur={this.onChangeTextField('regStreet')}
+										/>
+										<TextInput
+											label={'Дом'}
+											placeholder={'Введите дом'}
+											required={true}
+											onBlur={this.onChangeTextField('regHome')}
+										/>
+										<TextInput label={'Корпус'} onBlur={this.onChangeTextField('regBlock')} />
+										<TextInput label={'Квартира'} onBlur={this.onChangeTextField('regFlat')} />
+									</React.Fragment>
+								}
+							/>
 							<FormControlLabel
-								style={styles.checkFormControlLabel}
+								classes={{ root: 'checkFormControlLabel' }}
 								control={
 									<Checkbox
 										color="primary"
@@ -158,7 +150,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								labelPlacement="start"
 							/>
 							{!isRegAddressEqualLive && (
-								<div style={composeStyles(GlobalStyles.flexColumn, makeVerticalSpace('small'))}>
+								<div className="flexColumn" style={makeVerticalSpace('normal')}>
 									<H2>Адрес проживания</H2>
 									<TextInput
 										label={'Индекс'}
@@ -195,7 +187,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								</div>
 							)}
 							<FormControlLabel
-								style={styles.checkFormControlLabel}
+								classes={{ root: 'checkFormControlLabel' }}
 								control={<Checkbox color="primary" checked={needDormitory} onChange={this.toggleNeedDormitoryStatus} />}
 								label="Нуждаюсь в предоставлении общежития"
 								labelPlacement="start"
@@ -219,7 +211,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								onChange={this.onChangeMobPhone}
 							/>
 							<TextInput label={'Домашний телефон'} onBlur={this.onChangeTextField('homePhone')} />
-							<div style={GlobalStyles.buttonNext}>
+							<div className="nextButtonContainer">
 								<Button
 									variant="contained"
 									color="primary"

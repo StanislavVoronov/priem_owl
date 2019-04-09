@@ -26,11 +26,17 @@ module.exports = {
 					outputPath: 'static',
 				},
 			},
+			{
+				test: /\.css$/,
+				use: ['style-loader', 'css-loader'],
+			},
 		],
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
 			hash: true,
+			title: "МГУТУ им. К.Г. Разумовского (ПКУ)",
+			favicon: "favicon.ico",
 			filename: './index.html', //relative to root of the application
 		}),
 		new HtmlWebpackRootPlugin(),

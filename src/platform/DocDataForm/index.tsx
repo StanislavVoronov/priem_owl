@@ -1,12 +1,12 @@
 import React, { ReactElement } from 'react';
-import { TextInput, FormControl } from './';
-import { composeStyles, GlobalStyles, ISelectItem } from '../common';
-import DropdownSelect from './DropdownSelect';
-import Dropzone, { DropzoneRenderArgs } from 'react-dropzone';
-import Image from './ImageEditor';
+import { TextInput, FormControl } from '../';
+import DropdownSelect from '../DropdownSelect';
+import Dropzone from 'react-dropzone';
+import Image from '../ImageEditor/';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import FormLabel from '@material-ui/core/FormLabel';
-import { IDocFile } from '../containers/Enroll';
+import './styles.css';
+import { ISelectItem } from '../DropdownSelect';
 
 interface IUploadFile {
 	lastModified: Date;
@@ -37,7 +37,7 @@ interface IDocDataProps {
 	title?: string;
 	subTitle?: string;
 	docTitle?: string;
-	file: IDocFile | null;
+	file: File | null;
 	extraFields?: ReactElement<any> | null;
 	defaultType?: ISelectItem;
 	defaultSubType?: ISelectItem;
@@ -46,30 +46,10 @@ interface IDocDataProps {
 	onChangeNumber?: (value: string) => void;
 	onChangeSeries?: (value: string) => void;
 	onChangeIssieBy?: (value: string) => void;
-	onDownloadFile: (file: IDocFile | null) => void;
+	onDownloadFile: (file: File | null) => void;
 	onChangeDate?: (date: string) => void;
 }
 
-const styles = {
-	dropZone: {
-		padding: 20,
-		display: 'flex',
-		height: '100%',
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginTop: 10,
-		borderColor: '#388e3c',
-		borderStyle: 'solid',
-		borderWidth: 3,
-		flexWrap: 'wrap',
-	},
-	activeDropZone: { borderColor: 'red' },
-	fileInDropZone: { borderColor: '#3f51b5', fontWeight: 'bold' },
-	label: {
-		fontSize: '0.75em',
-	},
-};
 class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: boolean }> {
 	public static defaultProps = {
 		hideDataFields: false,
@@ -84,13 +64,14 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 		const isDataVisible = !!(
 			(this.props.dictionaryTypes && this.props.title) ||
 			(this.props.dictionarySubTypes && this.props.subTitle) ||
-			!this.props.hideDataFields
+			!this.props.hideDataFields ||
+			this.props.extraFields
 		);
 		return (
 			<FormControl>
-				<div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+				<div className="docDataForm">
 					{isDataVisible && (
-						<div style={{ display: 'flex', paddingRight: 40, width: '50%', flexDirection: 'column' }}>
+						<div className="dataContainer">
 							{this.props.dictionaryTypes && this.props.title && (
 								<DropdownSelect
 									required={true}
@@ -139,14 +120,16 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 							{this.props.extraFields}
 						</div>
 					)}
-					<div style={{ display: 'flex', width: '40%', flexDirection: 'column' }}>
+					<div className="documentContainer">
 						<Dropzone
 							onDrop={acceptedFiles => {
 								acceptedFiles.forEach(file => {
 									const reader = new FileReader();
 
-									reader.onload = () => {
-										this.props.onDownloadFile({ source: file, blob: reader.result });
+									reader.onload = e => {
+										console.log(e.target);
+										// @ts-ignore
+										this.props.onDownloadFile(file);
 									};
 									reader.onabort = () => console.log('file reading was aborted');
 									reader.onerror = () => console.log('file reading has failed');
@@ -156,17 +139,9 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 							}}>
 							{({ getRootProps, getInputProps }) => {
 								return (
-									<div
-										{...getRootProps()}
-										style={{
-											display: 'flex',
-											flexDirection: 'column',
-											marginTop: 12,
-											height: '100%',
-											marginBottom: 10,
-										}}>
+									<div {...getRootProps()} className="fileContainer">
 										{this.props.docTitle && (
-											<FormLabel style={{ fontSize: '0.75em' }}>
+											<FormLabel classes={{ root: 'formLabel' }}>
 												{this.props.docTitle}
 												{' *'}
 											</FormLabel>
@@ -178,7 +153,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 										) : (
 											<React.Fragment>
 												<input {...getInputProps()} />
-												<div style={composeStyles(styles.dropZone)}>
+												<div className="dropZone">
 													Нажмите, чтобы добавить файл или перетащите файл в отмеченную область
 												</div>
 											</React.Fragment>

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { DropdownSelect, Button, DocDataForm, TextInput } from '../../../platform';
+import React from 'react';
+import { DropdownSelect, Button, DocDataForm, TextInput, ISelectItem } from '../../../platform';
 import { AppContext } from '../App';
-import { composeStyles, EDictionaryNameList, ISelectItem, inValidateDataForm, GlobalStyles } from '../../../common';
+import { EDictionaryNameList, inValidateDataForm } from '../../../common';
 
-import { IDocFile, IPersonDataForm } from '../models';
+import { IPersonDataForm } from '../models';
 
 interface IOwnProps {
 	submit: (data: IPersonDataForm) => void;
@@ -37,7 +37,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 			[name]: value,
 		}));
 	};
-	public onDownloadFile = (doc: IDocFile) => {
+	public onDownloadFile = (doc: File) => {
 		this.setState({
 			docFile: doc,
 		});
@@ -49,14 +49,14 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 		this.props.submit(this.state);
 	};
 	public render() {
-		console.log('personData', this.state);
+		console.log(this.state.docFile ? new Blob([this.state.docFile], { type: this.state.docFile.type }) : null);
 		return (
 			<AppContext.Consumer>
 				{context => {
 					const dictionaryGovernments = context[EDictionaryNameList.Governments];
 					const dictionaryPersonDocTypes = context[EDictionaryNameList.PersonDocTypes];
 					return (
-						<div style={composeStyles(GlobalStyles.flexColumn)}>
+						<div className="flexColumn">
 							<DropdownSelect
 								required={true}
 								options={dictionaryGovernments && dictionaryGovernments.values}
@@ -91,7 +91,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 									) : null
 								}
 							/>
-							<div style={GlobalStyles.buttonNext}>
+							<div className="nextButtonContainer">
 								<Button
 									variant="contained"
 									color="primary"

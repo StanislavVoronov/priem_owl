@@ -4,14 +4,22 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import { Stepper, StepContent, StepLabel, Step } from '../../platform';
-import { IContactDataForm, IEducationDataForm, IPerson, IPersonDataForm, IRegisterFormData, RegisterDataForm } from '.';
+import {
+	IContactDataForm,
+	IDocDataItem,
+	IEducationDataForm,
+	IPerson,
+	IPersonDataForm,
+	IRegisterFormData,
+	RegisterDataForm,
+} from '.';
 import { IRootState, dictionariesStateSelector } from '../../common';
 
 import { ContactsDataForm, EducationDataForm, PersonDataForm } from '..';
-import DocumentsDataForm, { IDocDataItem } from './components/DocumentsDataForm';
+import DocumentsDataForm from './components/DocumentsDataForm';
 import { registerNewPerson, createPerson, sendVerificationCode } from './operations';
 import Button from '@material-ui/core/Button';
-import TextInput from '../../platform/TextInput';
+import TextInput from '../../platform/Input/TextInput';
 
 interface IAppState {
 	activeStep: number;
@@ -85,7 +93,7 @@ export class App extends React.PureComponent<IProps, IAppState> {
 					<Stepper activeStep={this.state.activeStep} orientation={'vertical'}>
 						{steps.map((label, index) => (
 							<Step key={label}>
-								<StepLabel style={{ fontSize: '1rem' }}>{label}</StepLabel>
+								<StepLabel classes={{ label: 'stepLabel' }}>{label}</StepLabel>
 								<StepContent>
 									{index === 0 && <RegisterDataForm submit={this.submitRegisterDataForm} />}
 									{index === 1 && <PersonDataForm submit={this.submitPersonDataForm} />}

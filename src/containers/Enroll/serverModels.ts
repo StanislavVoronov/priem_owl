@@ -77,7 +77,6 @@ export interface IPriemApiServerResponse {
 
 export interface IUploadDocPayload {
 	mime: string;
-	page: ArrayBuffer | string | null;
 	type: number;
 	stype: number | null;
 	seria: string;

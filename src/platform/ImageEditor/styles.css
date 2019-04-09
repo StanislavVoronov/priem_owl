@@ -1,0 +1,42 @@
+.container {
+	justify-content: center;
+	display: flex;
+	flex-direction: column;
+}
+
+.fileName {
+	margin-top: 10px;
+	margin-bottom: 12px;
+}
+
+.sliderContainer {
+	height: 10px;
+}
+
+.slider {
+	margin-left: 30px;
+	margin-right: 30px;
+}
+
+.buttonContainer {
+	display: flex;
+	flex-direction: row;
+}
+
+.deleteButton {
+	background-color: red;
+}
+
+.deleteIcon {
+	color: white;
+}
+
+.actionContainer {
+    margin-top: 12px;
+    margin-bottom: 6px;
+	display: flex;
+	padding-left: 20px;
+	padding-right: 20px;
+	flex-direction: row;
+	justify-content: space-between;
+}

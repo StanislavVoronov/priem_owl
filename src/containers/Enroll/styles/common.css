@@ -1,0 +1,39 @@
+.flexRow {
+	display: flex;
+	flex-direction: row;
+}
+
+.flexColumn {
+	display: flex;
+	flex-direction: column;
+}
+.nextButtonContainer {
+	margin-top: 25px;
+	margin-bottom: 5px;
+}
+.formDocBorder {
+	borderbottom: '2px solid #3f51b5';
+}
+.deleteDocButton {
+	background-color: red;
+	color: white;
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+.addDocButton {
+	background-color: #4caf50;
+	color: white;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+.addButtonSpace {
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+.stepLabel {
+	font-size: 14em;
+}
+.checkFormControlLabel {
+	justify-content: flex-end;
+	margin-left: 0;
+}

@@ -53,6 +53,7 @@ export const inValidateDataForm = (data: Record<string, any>): boolean => {
 			return invalidData;
 		}
 		const value = data[key];
+
 		switch (typeof value) {
 			case 'string': {
 				invalidData = value.trim().length === 0;

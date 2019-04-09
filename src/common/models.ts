@@ -1,6 +1,7 @@
 import { Style } from 'jss/css';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import { IEnrollFetchingDataReducer } from '../containers/Enroll';
+import { ISelectItem } from '../platform/DropdownSelect';
 
 export interface IRootState {
 	user: any;
@@ -12,22 +13,6 @@ export interface ITextFieldChangeEvent {
 	target: {
 		value: string;
 	};
-}
-
-export interface IAutocompleteChanged {
-	onChangeAutocompleteTextField: (field: string) => (value: string, data?: any) => void;
-}
-
-export interface ITextFieldChanged {
-	onChangeTextField: (field: string) => (text: string) => void;
-}
-
-export interface IDataChanged {
-	onChangeData: (field: string) => (item: any) => void;
-}
-
-export interface ISelectChanged {
-	onChangeSelect: (field: string) => (value: ISelectItem) => void;
 }
 
 export interface IDictionaryTypeFilter {
@@ -57,20 +42,10 @@ export type Space =
 	| 'h-large';
 
 export type TypeSpace = 'none' | 'minor' | 'small' | 'normal' | 'large';
-export interface ISpacable {
-	verticalSpace?: TypeSpace;
-	horizontalSpace?: TypeSpace;
-}
 
 export interface IDisabled {
 	disabled?: boolean;
 }
-
-export interface ISelectItem {
-	name: string;
-	id: number;
-}
-
 export interface IDocSelectItem extends ISelectItem {
 	name: string;
 	id: number;
@@ -95,9 +70,6 @@ export interface IHelperText {
 
 export interface IHasError {
 	hasError?: boolean;
-}
-export interface IDictionaries {
-	dictionaries: IDictionary[];
 }
 
 export interface IServerResponseResult<T> {

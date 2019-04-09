@@ -1,22 +1,10 @@
 import React from 'react';
-import { IDocData, IDocFile } from '../models';
+import { IDocData, IDocDataItem } from '../models';
 import Button from '@material-ui/core/Button';
-import DocDataForm from '../../../platform/DocDataForm';
+import { DocDataForm, ISelectItem, TextInput } from '../../../platform';
 import { AppContext } from '../App';
-import {
-	composeStyles,
-	EDictionaryNameList,
-	GlobalStyles,
-	ISelectItem,
-	inValidateDataForm,
-	IDocSelectItem,
-} from '../../../common';
-import TextInput from '../../../platform/TextInput';
-
-export interface IDocDataItem extends IDocData {
-	codeDepartment?: string;
-}
-
+import { EDictionaryNameList, inValidateDataForm, IDocSelectItem } from '../../../common';
+import '../styles/common.css';
 interface IOwnProps {
 	submit(data: IDocDataItem[]): void;
 }
@@ -32,12 +20,7 @@ const defaultDocFile = {
 	docType: null,
 };
 type IProps = IOwnProps;
-const styles = {
-	addDocButton: { backgroundColor: '#4caf50', color: 'white', marginTop: 40, marginBottom: 40 },
-	spaceAddButton: { marginTop: 40, marginBottom: 40 },
-	deleteDocButton: { backgroundColor: 'red', color: 'white', marginTop: 15, marginBottom: 10 },
-	border: { borderBottom: '2px solid #3f51b5' },
-};
+
 class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 	state = {
 		documents: [],
@@ -45,7 +28,7 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 	addDoc = () => {
 		this.setState({ documents: [...this.state.documents, { ...defaultDocFile }] });
 	};
-	onDownloadFile = (index: number) => (file: IDocFile | null) => {
+	onDownloadFile = (index: number) => (file: File | null) => {
 		const documents: IDocDataForm[] = [...this.state.documents];
 		documents[index].docFile = file;
 
@@ -65,7 +48,6 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 			documents[index] = {
 				...documents[index],
 				docType: type,
-				docSubType: null,
 				docIssieBy: '',
 				docDate: '',
 				docSeries: '',
@@ -95,10 +77,10 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 			<AppContext.Consumer>
 				{context => {
 					const dictionaryDocTypes = context[EDictionaryNameList.DocTypes];
-					const isDisabledAddButton = this.state.documents.map(inValidateDataForm).includes(false);
+					const isDisabledAddButton = this.state.documents.map(inValidateDataForm).includes(true);
 					console.log('disable', isDisabledAddButton);
 					return (
-						<div style={GlobalStyles.flexColumn}>
+						<div className="flexColumn">
 							<div>
 								{this.state.documents.map((item: IDocDataForm, index) => {
 									console.log('item', item);
@@ -112,7 +94,7 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 											: undefined;
 
 									return (
-										<div style={composeStyles(GlobalStyles.flexColumn, styles.border)}>
+										<div className="flexColumn formDocBorder">
 											<DocDataForm
 												hideDataFields={item.hideDataFields}
 												docTitle="Файл документа"
@@ -140,7 +122,10 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 												}
 											/>
 											<div>
-												<Button variant="contained" style={styles.deleteDocButton} onClick={this.deleteDoc(index)}>
+												<Button
+													variant="contained"
+													classes={{ root: 'deleteDocButton' }}
+													onClick={this.deleteDoc(index)}>
 													{'Удалить документ'}
 												</Button>
 											</div>
@@ -152,12 +137,12 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 								<Button
 									disabled={isDisabledAddButton}
 									variant="contained"
-									style={!isDisabledAddButton ? styles.addDocButton : styles.spaceAddButton}
+									classes={{ contained: isDisabledAddButton ? 'addButtonSpace' : 'addDocButton' }}
 									onClick={this.addDoc}>
 									{'Добавить новый документ'}
 								</Button>
 							</div>
-							<div style={GlobalStyles.buttonNext}>
+							<div className="nextButtonContainer">
 								<Button variant="contained" color="primary" disabled={isDisabledAddButton} onClick={this.submit}>
 									{'Далее'}
 								</Button>

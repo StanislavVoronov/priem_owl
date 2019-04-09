@@ -1,8 +1,13 @@
 import React from 'react';
-
-import { FormControlLabel, Radio, RadioGroup, FormControl, FormLabel } from './';
-import { composeStyles, IHasError, IHelperText, makeVerticalSpace } from '../common';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import { IHasError, IHelperText } from '../../common';
 import { FormHelperText } from '@material-ui/core';
+import './styles.css';
+
 interface IRadioButton {
 	label: string;
 	value: string | number;
@@ -17,21 +22,23 @@ interface IRadioGroupButton extends IHelperText, IHasError {
 	onChange: (event: any, value: string) => void;
 }
 
-const RadionGroupButton = (props: IRadioGroupButton) => {
+const Index = (props: IRadioGroupButton) => {
 	return (
-		<FormControl style={{ display: 'flex', flexDirection: 'column', marginTop: 15, marginBottom: 15 }}>
+		<FormControl margin="normal">
 			<FormLabel style={{ color: props.hasError ? 'red' : 'black' }}>
 				{props.title}
 				{props.required && '*'}
 			</FormLabel>
 			<RadioGroup
-				style={{ display: 'flex', flexDirection: 'row', marginLeft: 20 }}
+				style={{ flexDirection: 'row' }}
 				aria-label="Gender"
 				name="gender"
+				className="radioGroup"
 				value={props.currentValue}
 				onChange={props.onChange}>
 				{props.values.map((item, index) => (
 					<FormControlLabel
+						className="controlLabel"
 						key={`${item.value}-${index}`}
 						value={item.value.toString()}
 						control={<Radio color={item.color} />}
@@ -40,7 +47,7 @@ const RadionGroupButton = (props: IRadioGroupButton) => {
 				))}
 			</RadioGroup>
 			{props.helperText && (
-				<FormHelperText style={{ marginTop: 0, color: props.hasError ? 'red' : 'black' }}>
+				<FormHelperText classes={{ root: 'helperText' }} style={{ color: props.hasError ? 'red' : 'black' }}>
 					{props.helperText}
 				</FormHelperText>
 			)}
@@ -48,4 +55,4 @@ const RadionGroupButton = (props: IRadioGroupButton) => {
 	);
 };
 
-export default RadionGroupButton;
+export default Index;
