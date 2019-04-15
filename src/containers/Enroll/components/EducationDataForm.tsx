@@ -2,11 +2,12 @@ import { EDictionaryNameList, inValidateDataForm } from '../../../common';
 import React from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { AppContext } from '../App';
+import { AppContext } from '../EnrollPage';
 import { IEducationDataForm } from '../models';
 import Button from '@material-ui/core/Button';
-import '../styles/common.css';
+import styles from '../styles/common.css';
 import { ISelectItem, DocDataForm, DropdownSelect } from '../../../platform';
+import { defaultEducationDataForm } from '../defaults';
 
 interface IOwnProps {
 	submit(data: IState): void;
@@ -14,20 +15,8 @@ interface IOwnProps {
 type IProps = IOwnProps;
 
 interface IState extends IEducationDataForm {}
-class EducationDataForm extends React.PureComponent<IProps> {
-	state = {
-		firstHighEducation: true,
-		coolnessTypes: [],
-		prevEducation: 0,
-		docSubType: null,
-		docType: { id: 2, name: '' },
-		hasEge: false,
-		docFile: null,
-		docNumber: '',
-		docSeries: '',
-		docIssieBy: '',
-		docDate: '',
-	};
+class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> {
+	state = defaultEducationDataForm;
 	toggleFirstHighEducationStatus = () => {
 		this.setState({ firstHighEducation: !this.state.firstHighEducation });
 	};
@@ -58,7 +47,7 @@ class EducationDataForm extends React.PureComponent<IProps> {
 					const educationTypeDictionary = context[EDictionaryNameList.EducationDocTypes];
 					const { firstHighEducation, coolnessTypes, ...rest } = this.state;
 					return (
-						<div className="flexColumn">
+						<div className={styles.flexColumn}>
 							<FormControlLabel
 								classes={{ root: 'checkFormControlLabel' }}
 								control={
@@ -89,14 +78,14 @@ class EducationDataForm extends React.PureComponent<IProps> {
 								subTitle={'Тип документа о предыдущем образовании'}
 								extraFields={
 									<FormControlLabel
-										classes={{ root: 'checkFormControlLabel' }}
+										classes={{ root: styles.checkFormControlLabel }}
 										control={<Checkbox color="primary" onChange={this.toggleHasEgeStatus} />}
 										label="Имею результаты ЕГЭ"
 										labelPlacement="start"
 									/>
 								}
 							/>
-							<div className="nextButtonContainer">
+							<div className={styles.nextButtonContainer}>
 								<Button variant="contained" color="primary" disabled={inValidateDataForm(rest)} onClick={this.submit}>
 									{'Далее'}
 								</Button>

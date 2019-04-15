@@ -2,14 +2,15 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import React from 'react';
 import Select from 'react-select';
-import { IHasError, IHelperText, IStylable } from '../../common';
+import styles from './styles.css';
+import { IHasError, IHelperText } from '../models';
 
 export interface ISelectItem {
 	name: string;
 	id: number;
 }
 
-interface ISelectProps extends IStylable, IHasError, IHelperText {
+interface ISelectProps extends IHasError, IHelperText {
 	placeholder?: string;
 	onChangeSelect: (data: any) => void;
 	options: any[];
@@ -34,7 +35,7 @@ class DropdownSelect extends React.PureComponent<ISelectProps> {
 	public render() {
 		return (
 			<FormControl margin="normal">
-				<FormLabel classes={{ root: 'label' }}>
+				<FormLabel className={styles.label} style={{ fontSize: '0.75rem' }}>
 					{this.props.title}
 					{this.props.required ? ' *' : ''}
 				</FormLabel>

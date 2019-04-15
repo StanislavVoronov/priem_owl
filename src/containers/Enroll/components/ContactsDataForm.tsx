@@ -1,10 +1,11 @@
 import React from 'react';
 import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocDataForm } from '../../../platform';
 import { EDictionaryNameList, makeVerticalSpace, inValidateDataForm, IGovernmentSelectItem } from '../../../common';
-import { AppContext } from '../App';
+import { AppContext } from '../EnrollPage';
 import { IContactDataForm } from '../models';
 import Button from '@material-ui/core/Button';
-import '../styles/common.css';
+import styles from '../styles/common.css';
+import { defaultContactsDataForm } from '../defaults';
 
 interface IOwnProps {
 	submit(data: any): void;
@@ -14,30 +15,8 @@ interface IState extends IContactDataForm {
 	phoneGovernment: IGovernmentSelectItem;
 }
 class ContactsDataForm extends React.PureComponent<IProps, IState> {
-	state: IState = {
-		isRegAddressEqualLive: true,
-		needDormitory: false,
-		regIndex: '',
-		regRegion: '',
-		regLocality: '',
-		regStreet: '',
-		regHome: '',
-		regBlock: '',
-		regFlat: '',
-		liveIndex: '',
-		liveLocality: '',
-		liveRegion: '',
-		liveStreet: '',
-		liveBlock: '',
-		liveHome: '',
-		liveFlat: '',
-		homePhone: '',
-		phoneGovernment: { id: 1, name: 'Россия', phone_code: '7' },
-		mobPhone: '+7',
-		email: '',
-		docFile: null,
-		docType: { id: 3, name: '' },
-	};
+	state: IState = defaultContactsDataForm;
+
 	onChangeTextField = (name: string) => (value: string) => {
 		this.setState(state => ({ ...state, [name]: value }));
 	};
@@ -92,7 +71,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 					const defaultGovernmentValue =
 						governmentDictionary && governmentDictionary.values && governmentDictionary.values[0];
 					return (
-						<div className="flexColumn">
+						<div className={styles.flexColumn}>
 							<H2>Адрес регистрации</H2>
 							<DocDataForm
 								hideDataFields
@@ -138,7 +117,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								}
 							/>
 							<FormControlLabel
-								classes={{ root: 'checkFormControlLabel' }}
+								classes={{ root: styles.checkFormControlLabel }}
 								control={
 									<Checkbox
 										color="primary"
@@ -187,7 +166,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								</div>
 							)}
 							<FormControlLabel
-								classes={{ root: 'checkFormControlLabel' }}
+								classes={{ root: styles.checkFormControlLabel }}
 								control={<Checkbox color="primary" checked={needDormitory} onChange={this.toggleNeedDormitoryStatus} />}
 								label="Нуждаюсь в предоставлении общежития"
 								labelPlacement="start"
@@ -211,7 +190,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								onChange={this.onChangeMobPhone}
 							/>
 							<TextInput label={'Домашний телефон'} onBlur={this.onChangeTextField('homePhone')} />
-							<div className="nextButtonContainer">
+							<div className={styles.nextButtonContainer}>
 								<Button
 									variant="contained"
 									color="primary"

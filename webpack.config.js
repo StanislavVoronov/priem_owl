@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackRootPlugin = require('html-webpack-root-plugin');
 
 module.exports = {
-	entry: './src/index.tsx',
+	entry: './src/App.tsx',
 	mode: 'production',
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js'],
@@ -28,15 +28,25 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
-				use: ['style-loader', 'css-loader'],
+				include: path.join(__dirname, 'src'),
+				use: [
+					'style-loader',
+					{
+						loader: 'typings-for-css-modules-loader',
+						options: {
+							modules: true,
+							namedExport: true,
+						},
+					},
+				],
 			},
 		],
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
 			hash: true,
-			title: "МГУТУ им. К.Г. Разумовского (ПКУ)",
-			favicon: "favicon.ico",
+			title: 'МГУТУ им. К.Г. Разумовского (ПКУ)',
+			favicon: 'favicon.ico',
 			filename: './index.html', //relative to root of the application
 		}),
 		new HtmlWebpackRootPlugin(),

@@ -4,10 +4,12 @@ import Slider from '@material-ui/lab/Slider';
 import Fab from '@material-ui/core/Fab';
 import RotateLeft from '@material-ui/icons/RotateLeft';
 import Delete from '@material-ui/icons/Delete';
+import classNames from 'classnames';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Visibility from '@material-ui/icons/Visibility';
 import RotateRight from '@material-ui/icons/RotateRight';
-import './styles.css';
+import styles from './styles.css';
+import { red } from '@material-ui/core/colors';
 
 interface IProps {
 	file: File;
@@ -51,8 +53,8 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 
 	public render() {
 		return (
-			<div className="container">
-				<div className="fileName">{this.props.file && this.props.file['name']}</div>
+			<div className={styles.container}>
+				<div className={styles.fileName}>{this.props.file && this.props.file['name']}</div>
 				{!this.state.hidden && (
 					<React.Fragment>
 						<AvatarEditor
@@ -63,9 +65,9 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 							scale={this.state.scale}
 							rotate={this.state.rotate}
 						/>
-						<p className="sliderContainer">
+						<p className={styles.sliderContainer}>
 							<Slider
-								classes={{ root: 'slider' }}
+								classes={{ root: styles.slider }}
 								value={this.state.scale}
 								aria-labelledby="label"
 								onChange={this.setScale}
@@ -73,19 +75,19 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 						</p>
 					</React.Fragment>
 				)}
-				<div className="actionContainer">
+				<div className={styles.actionContainer}>
 					{!this.state.hidden && (
 						<Fab variant="extended" color="primary" onClick={this.setRotateLeft} size="medium">
 							<RotateLeft />
 						</Fab>
 					)}
-					<div className="buttonContainer">
+					<div className={styles.buttonContainer}>
 						<Fab variant="extended" onClick={this.toggleImage} size="small">
 							{this.state.hidden ? <Visibility /> : <VisibilityOff />}
 						</Fab>
-						<div />
-						<Fab classes={{ root: 'deleteButton' }} variant="extended" onClick={this.removeImage} size="small">
-							<Delete classes={{ colorAction: 'deleteIcon' }} titleAccess="Удалить изображение" />
+						<div className={styles.space} />
+						<Fab variant="extended" onClick={this.removeImage} size="small" style={{ backgroundColor: 'red' }}>
+							<Delete className={classNames(styles.deleteIcon)} titleAccess="Удалить изображение" />
 						</Fab>
 					</div>
 					{!this.state.hidden && (

@@ -9,10 +9,11 @@ export interface PersonInfo {
 	middleName: string;
 	birthday: string;
 }
-export interface IRegisterFormData extends PersonInfo {
+export interface IRegisterDataForm extends PersonInfo {
 	gender: Gender;
 	login: string;
 	password: string;
+	repeatPassword: string;
 }
 
 export interface IDocDataItem extends IDocData {
@@ -31,7 +32,7 @@ export interface IDocData {
 }
 
 export interface IPersonDataForm extends IDocData {
-	codeDepartment: string;
+	codeDepartment?: string;
 	birthPlace: string;
 }
 
@@ -47,18 +48,18 @@ export interface IContactDataForm extends IDocData {
 	regIndex: string;
 	regRegion: string;
 	regLocality: string;
-	regStreet: string;
+	regStreet?: string;
 	regHome: string;
-	regBlock: string;
-	regFlat: string;
-	liveIndex: string;
-	liveRegion: string;
-	liveLocality: string;
-	liveStreet: string;
-	liveHome: string;
-	liveBlock: string;
-	liveFlat: string;
-	homePhone: string;
+	regBlock?: string;
+	regFlat?: string;
+	liveIndex?: string;
+	liveRegion?: string;
+	liveLocality?: string;
+	liveStreet?: string;
+	liveHome?: string;
+	liveBlock?: string;
+	liveFlat?: string;
+	homePhone?: string;
 	mobPhone: string;
 	isRegAddressEqualLive: boolean;
 	phoneGovernment: IGovernmentSelectItem;
@@ -74,7 +75,7 @@ export interface IEnrollFetchingDataReducer {
 	checkPersonLoginError: IServerError | null;
 	registerNewPersonFetching: boolean;
 	registerNewPersonError: IServerError | null;
-	registerPersonData: IRegisterFormData | null;
+	registerPersonData: IRegisterDataForm | null;
 	confirmationCodeAvailable: boolean;
 	verifyPersonFetching: boolean;
 	verifyPersonError: IServerError | null;
@@ -85,9 +86,9 @@ export interface IEnrollFetchingDataReducer {
 }
 
 export interface IPerson {
-	registerData?: IRegisterFormData;
-	personData?: IPersonDataForm;
-	contactsData?: IContactDataForm;
-	educationData?: IEducationDataForm;
-	documents?: IDocDataItem[];
+	registerData: IRegisterDataForm | null;
+	personData: IPersonDataForm | null;
+	contactsData: IContactDataForm | null;
+	educationData: IEducationDataForm | null;
+	documents: IDocDataItem[];
 }

@@ -10,25 +10,36 @@ import {
 	IEducationDataForm,
 	IPerson,
 	IPersonDataForm,
-	IRegisterFormData,
-	RegisterDataForm,
-} from '.';
+	IRegisterDataForm,
+} from './models';
 import { IRootState, dictionariesStateSelector } from '../../common';
 
-import { ContactsDataForm, EducationDataForm, PersonDataForm } from '..';
+import ContactsDataForm from './components/ContactsDataForm';
+import RegisterDataForm from './components/RegisterDataForm';
+import PersonDataForm from './components/PersonDataForm';
+import EducationDataForm from './components/EducationDataForm';
 import DocumentsDataForm from './components/DocumentsDataForm';
+
 import { registerNewPerson, createPerson, sendVerificationCode } from './operations';
-import Button from '@material-ui/core/Button';
-import TextInput from '../../platform/Input/TextInput';
+
+import { TextInput, Button, StepButton } from '../../platform';
+import styles from './styles/common.css';
+import {
+	defaultContactsDataForm,
+	defaultEducationDataForm,
+	defaultPersonDataForm,
+	defaultRegisterDataForm,
+} from './defaults';
 
 interface IAppState {
 	activeStep: number;
 	confirmCode: number;
-	registerData?: IRegisterFormData;
-	personData?: IPersonDataForm;
-	contactsData?: IContactDataForm;
-	educationData?: IEducationDataForm;
-	documents?: IDocDataItem[];
+	registerData: IRegisterDataForm;
+	personData: IPersonDataForm;
+	contactsData: IContactDataForm;
+	educationData: IEducationDataForm;
+	documents: IDocDataItem[];
+	passedStep: number;
 }
 
 const steps = ['Регистрация', 'Персональные данные', 'Контактные данные', 'Образование', 'Документы', 'Заявления'];
@@ -43,22 +54,29 @@ interface IDispatchProps {
 	registerNewPerson(login: string, password: string): Promise<number>;
 }
 type IProps = IStateToProps & IDispatchProps;
-export class App extends React.PureComponent<IProps, IAppState> {
+export class EnrollPage extends React.PureComponent<IProps, IAppState> {
 	state = {
-		activeStep: 0,
+		passedStep: 5,
+		activeStep: 1,
 		confirmCode: 0,
+		registerData: defaultRegisterDataForm,
+		personData: defaultPersonDataForm,
+		contactsData: defaultContactsDataForm,
+		educationData: defaultEducationDataForm,
+		documents: [],
 	};
 
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
 	}
 	public handleNext = () => {
-		this.setState(state => ({ activeStep: state.activeStep + 1 }));
+		const nextStep = this.state.activeStep + 1;
+		this.setState({ activeStep: nextStep, passedStep: nextStep });
 	};
 	public handleBack = () => {
 		this.setState(state => ({ activeStep: state.activeStep - 1 }));
 	};
-	submitRegisterDataForm = (registerData: IRegisterFormData) => {
+	submitRegisterDataForm = (registerData: IRegisterDataForm) => {
 		this.setState({ registerData });
 		this.props.registerNewPerson(registerData.login, registerData.password).then(this.handleNext);
 	};
@@ -82,6 +100,13 @@ export class App extends React.PureComponent<IProps, IAppState> {
 		const { activeStep, confirmCode, ...rest } = this.state;
 		this.props.createPerson(confirmCode, rest);
 	};
+	handleStep = (step: number) => () => {
+		if (step < this.state.passedStep) {
+			this.setState({
+				activeStep: step,
+			});
+		}
+	};
 	onChangeTextField = (value: any) => {
 		this.setState({ confirmCode: value });
 	};
@@ -93,22 +118,36 @@ export class App extends React.PureComponent<IProps, IAppState> {
 					<Stepper activeStep={this.state.activeStep} orientation={'vertical'}>
 						{steps.map((label, index) => (
 							<Step key={label}>
-								<StepLabel classes={{ label: 'stepLabel' }}>{label}</StepLabel>
+								<StepButton
+									disabled={index > this.state.passedStep}
+									onClick={this.handleStep(index)}
+									className={styles.stepLabel}>
+									{label}
+								</StepButton>
+
 								<StepContent>
 									{index === 0 && <RegisterDataForm submit={this.submitRegisterDataForm} />}
 									{index === 1 && <PersonDataForm submit={this.submitPersonDataForm} />}
 									{index === 2 && <ContactsDataForm submit={this.submitContactsDataForm} />}
 									{index === 3 && <EducationDataForm submit={this.submitEducationDataForm} />}
 									{index === 4 && <DocumentsDataForm submit={this.submitAddDocumentsDataForm} />}
-									{/*)}*/}
 								</StepContent>
 							</Step>
 						))}
 					</Stepper>
-					<TextInput label="Код подтверждения" type="number" onChange={this.onChangeTextField} />
-					<Button variant="contained" color="primary" onClick={this.register}>
-						{'Далее'}
-					</Button>
+					{this.state.activeStep === 5 && this.state.contactsData.email ? (
+						<div>
+							<TextInput
+								label="Код подтверждения"
+								type="number"
+								onChange={this.onChangeTextField}
+								helperText={`Введите код, отправленный на электронную почту ${this.state.contactsData.email}`}
+							/>
+							<Button variant="contained" color="primary" onClick={this.register}>
+								{'Далее'}
+							</Button>
+						</div>
+					) : null}
 				</AppContext.Provider>
 			</React.Fragment>
 		);
@@ -124,4 +163,4 @@ const mapStateToProps = (state: IRootState) => {
 export default connect(
 	mapStateToProps,
 	{ registerNewPerson, createPerson, sendVerificationCode },
-)(App);
+)(EnrollPage);

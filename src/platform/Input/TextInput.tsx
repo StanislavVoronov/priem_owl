@@ -1,4 +1,4 @@
-import { IDisabled, IHasError, IHelperText } from '../../common';
+import { IDisabled, IHasError, IHelperText } from '../models';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
 import { FormLabel } from '@material-ui/core';

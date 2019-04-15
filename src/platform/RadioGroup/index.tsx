@@ -4,7 +4,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import { IHasError, IHelperText } from '../../common';
+import { IHasError, IHelperText } from '../models';
 import { FormHelperText } from '@material-ui/core';
 import './styles.css';
 

@@ -76,14 +76,14 @@ export interface IPriemApiServerResponse {
 }
 
 export interface IUploadDocPayload {
-	mime: string;
+	mime: string | null;
 	type: number;
 	stype: number | null;
 	seria: string;
 	num: string;
 	iss_org: string;
 	iss_date: string;
-	iss_gov: number | null;
+	iss_gov: number; //default 1 - Russia
 }
 // //
 // [

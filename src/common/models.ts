@@ -64,13 +64,6 @@ export interface IStylable {
 export interface IExtensible {
 	fullWidth?: boolean;
 }
-export interface IHelperText {
-	helperText?: string;
-}
-
-export interface IHasError {
-	hasError?: boolean;
-}
 
 export interface IServerResponseResult<T> {
 	result: T[];

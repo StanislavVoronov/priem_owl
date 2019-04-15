@@ -1,30 +1,19 @@
 import React from 'react';
 import { DropdownSelect, Button, DocDataForm, TextInput, ISelectItem } from '../../../platform';
-import { AppContext } from '../App';
+import { AppContext } from '../EnrollPage';
 import { EDictionaryNameList, inValidateDataForm } from '../../../common';
 
 import { IPersonDataForm } from '../models';
-
+import { defaultPersonDataForm } from '../defaults';
+import Styles from '../styles/common.css';
 interface IOwnProps {
 	submit: (data: IPersonDataForm) => void;
 }
 
-interface IState extends IPersonDataForm {}
 type IProps = IOwnProps;
 
-class PersonDataForm extends React.PureComponent<IProps, IState> {
-	public state: IState = {
-		docType: { id: 1, name: '' },
-		docSeries: '',
-		docNumber: '',
-		docIssieBy: '',
-		codeDepartment: '',
-		docDate: '',
-		docFile: null,
-		docSubType: null,
-		docGovernment: null,
-		birthPlace: '',
-	};
+class PersonDataForm extends React.PureComponent<IProps, IPersonDataForm> {
+	public state = defaultPersonDataForm;
 	public onChangeTextField = (name: string) => (value: string) => {
 		this.setState(state => ({
 			...state,
@@ -56,7 +45,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 					const dictionaryGovernments = context[EDictionaryNameList.Governments];
 					const dictionaryPersonDocTypes = context[EDictionaryNameList.PersonDocTypes];
 					return (
-						<div className="flexColumn">
+						<div className={Styles.flexColumn}>
 							<DropdownSelect
 								required={true}
 								options={dictionaryGovernments && dictionaryGovernments.values}
@@ -91,7 +80,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 									) : null
 								}
 							/>
-							<div className="nextButtonContainer">
+							<div className={Styles.nextButtonContainer}>
 								<Button
 									variant="contained"
 									color="primary"

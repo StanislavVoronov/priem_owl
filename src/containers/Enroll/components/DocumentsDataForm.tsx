@@ -1,12 +1,17 @@
 import React from 'react';
 import { IDocData, IDocDataItem } from '../models';
 import Button from '@material-ui/core/Button';
+import classNames from 'classnames';
 import { DocDataForm, ISelectItem, TextInput } from '../../../platform';
-import { AppContext } from '../App';
+import { AppContext } from '../EnrollPage';
 import { EDictionaryNameList, inValidateDataForm, IDocSelectItem } from '../../../common';
-import '../styles/common.css';
+import styles from '../styles/common.css';
+import withStyles from '@material-ui/core/styles/withStyles';
+import { CSSProperties } from 'jss/css';
+
 interface IOwnProps {
 	submit(data: IDocDataItem[]): void;
+	classes: Record<string, string>;
 }
 interface IDocDataForm extends IDocData {
 	hideDataFields: boolean;
@@ -16,12 +21,37 @@ interface IState {
 }
 const defaultDocFile = {
 	docFile: null,
-	hideDataFields: true,
+	hideDataFields: false,
 	docType: null,
 };
 type IProps = IOwnProps;
 
+const localStyles = () => ({
+	addDocButton: {
+		color: 'white',
+		backgroundColor: 'green',
+	},
+	deleteDocButton: {
+		color: 'white',
+		backgroundColor: 'red',
+		marginVertical: 20,
+	},
+	addDocButtonContainer: {
+		marginTop: 20,
+		marginBottom: 30,
+	},
+	deleteDocButtonContainer: {
+		marginVertical: 20,
+	},
+	formContainer: {
+		borderBottom: '2px solid #3f51b5',
+	},
+});
+
 class DocumentsDataForm extends React.PureComponent<IProps, IState> {
+	static defaultProps = {
+		classes: {},
+	};
 	state = {
 		documents: [],
 	};
@@ -73,17 +103,17 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 		this.props.submit(this.state.documents);
 	};
 	render() {
+		console.log('styles', this.props.classes);
 		return (
 			<AppContext.Consumer>
 				{context => {
 					const dictionaryDocTypes = context[EDictionaryNameList.DocTypes];
 					const isDisabledAddButton = this.state.documents.map(inValidateDataForm).includes(true);
-					console.log('disable', isDisabledAddButton);
+
 					return (
-						<div className="flexColumn">
+						<div className={styles.flexColumn}>
 							<div>
 								{this.state.documents.map((item: IDocDataForm, index) => {
-									console.log('item', item);
 									const docType = item.docType && item.docType.id;
 
 									const dictionarySubDocTypes =
@@ -94,7 +124,7 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 											: undefined;
 
 									return (
-										<div className="flexColumn formDocBorder">
+										<div className={classNames(styles.flexColumn, this.props.classes.formContainer)}>
 											<DocDataForm
 												hideDataFields={item.hideDataFields}
 												docTitle="Файл документа"
@@ -121,10 +151,10 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 													) : null
 												}
 											/>
-											<div>
+											<div className={this.props.classes.deleteDocButtonContainer}>
 												<Button
+													className={this.props.classes.deleteDocButton}
 													variant="contained"
-													classes={{ root: 'deleteDocButton' }}
 													onClick={this.deleteDoc(index)}>
 													{'Удалить документ'}
 												</Button>
@@ -133,16 +163,16 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 									);
 								})}
 							</div>
-							<div>
+							<div className={this.props.classes.addDocButtonContainer}>
 								<Button
 									disabled={isDisabledAddButton}
+									className={this.props.classes.addDocButton}
 									variant="contained"
-									classes={{ contained: isDisabledAddButton ? 'addButtonSpace' : 'addDocButton' }}
 									onClick={this.addDoc}>
 									{'Добавить новый документ'}
 								</Button>
 							</div>
-							<div className="nextButtonContainer">
+							<div className={styles.nextButtonContainer}>
 								<Button variant="contained" color="primary" disabled={isDisabledAddButton} onClick={this.submit}>
 									{'Далее'}
 								</Button>
@@ -155,4 +185,4 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 	}
 }
 
-export default DocumentsDataForm;
+export default withStyles(localStyles)(DocumentsDataForm);

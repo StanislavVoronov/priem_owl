@@ -1,7 +1,7 @@
 import { IDocDataItem, IPerson, PersonInfo } from './models';
 
 import { IRootState, ServerBoolean } from '../../common';
-import PriemApi from '../../modules/PriemApi';
+import PriemApi from '../../services/PriemApi';
 import {
 	checkPersonExistFailure,
 	checkPersonExistRequest,
@@ -36,7 +36,7 @@ import {
 	IVerifyPersonResponse,
 } from './serverModels';
 import { EnrollApiName, PriemApiName } from './apiNames';
-import PriemEnroll from '../../modules/PriemEnroll';
+import PriemEnroll from '../../services/PriemEnroll';
 import moment from 'moment';
 import { omitBy, isNull } from 'lodash';
 export const registerNewPerson = (
@@ -187,14 +187,14 @@ const uploadDocList = (docList: IDocDataItem[]): ThunkAction<void, IRootState, v
 	console.log('documents', docList);
 	docList.forEach((item: IDocDataItem) => {
 		const document: IUploadDocPayload = {
-			mime: item.docFile ? item.docFile.type : '-',
+			mime: item.docFile ? item.docFile.type : null,
 			type: item.docType ? item.docType.id : 0,
 			stype: item.docSubType ? item.docSubType.id : null,
 			seria: item.docSeries || '-',
 			num: item.docNumber || '-',
-			iss_org: item.docNumber || '-',
+			iss_org: item.docIssieBy ? `${item.docIssieBy}${' ' + item.codeDepartment}` : '-',
 			iss_date: item.docDate ? moment(item.docDate).format('DD-MM-YYYY') : '01-01-1970',
-			iss_gov: item.docGovernment ? item.docGovernment.id : null,
+			iss_gov: item.docGovernment ? item.docGovernment.id : 1,
 		};
 
 		PriemApi.post(PriemApiName.AddDocuments, omitBy(document, isNull), {

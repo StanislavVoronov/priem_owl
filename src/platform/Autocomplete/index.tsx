@@ -6,8 +6,7 @@ import parse from 'autosuggest-highlight/parse';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
-import { IHasError, IHelperText } from '../../common/';
-import './styles.css';
+import { IHasError, IHelperText } from '../models';
 interface IInputProps {
 	label?: string;
 	placeholder?: string;

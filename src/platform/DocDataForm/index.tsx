@@ -5,17 +5,8 @@ import Dropzone from 'react-dropzone';
 import Image from '../ImageEditor/';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import FormLabel from '@material-ui/core/FormLabel';
-import './styles.css';
+import styles from './styles.css';
 import { ISelectItem } from '../DropdownSelect';
-
-interface IUploadFile {
-	lastModified: Date;
-	lastModifiedDate: Date;
-	name: string;
-	size: number;
-	type: string;
-	binary: string;
-}
 
 export interface IDocDataForm {
 	docType?: ISelectItem | null;
@@ -24,8 +15,7 @@ export interface IDocDataForm {
 	docSeries?: string;
 	docIssued?: string;
 	docDate?: string;
-	docFile: IUploadFile | null;
-	hideDataFields?: boolean;
+	docFile: File | null;
 }
 
 interface IDocDataProps {
@@ -69,9 +59,9 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 		);
 		return (
 			<FormControl>
-				<div className="docDataForm">
+				<div className={styles.docDataForm}>
 					{isDataVisible && (
-						<div className="dataContainer">
+						<div className={styles.dataContainer}>
 							{this.props.dictionaryTypes && this.props.title && (
 								<DropdownSelect
 									required={true}
@@ -120,7 +110,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 							{this.props.extraFields}
 						</div>
 					)}
-					<div className="documentContainer">
+					<div className={styles.documentContainer}>
 						<Dropzone
 							onDrop={acceptedFiles => {
 								acceptedFiles.forEach(file => {
@@ -139,9 +129,9 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 							}}>
 							{({ getRootProps, getInputProps }) => {
 								return (
-									<div {...getRootProps()} className="fileContainer">
+									<div {...getRootProps()} className={styles.fileContainer}>
 										{this.props.docTitle && (
-											<FormLabel classes={{ root: 'formLabel' }}>
+											<FormLabel style={{ fontSize: '.85rem' }}>
 												{this.props.docTitle}
 												{' *'}
 											</FormLabel>
@@ -153,7 +143,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 										) : (
 											<React.Fragment>
 												<input {...getInputProps()} />
-												<div className="dropZone">
+												<div className={styles.dropZone}>
 													Нажмите, чтобы добавить файл или перетащите файл в отмеченную область
 												</div>
 											</React.Fragment>

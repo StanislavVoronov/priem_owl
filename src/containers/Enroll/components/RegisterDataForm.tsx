@@ -1,15 +1,18 @@
 import TextInput from '../../../platform/Input/TextInput';
 import React from 'react';
-import { AppContext } from '../App';
+import { AppContext } from '../EnrollPage';
 import { Autocomplete, Button, RadioGroup } from '../../../platform';
 import { EDictionaryNameList, Gender, inValidateDataForm, IRootState, makeVerticalSpace } from '../../../common';
 import { IDictionary } from '@mgutm-fcu/dictionary';
-import { IRegisterFormData, PersonInfo } from '../models';
+import { IRegisterDataForm, PersonInfo } from '../models';
 import { connect, MapStateToProps } from 'react-redux';
 import { checkPersonExist, checkPersonLogin } from '../operations';
 import { enrollStateSelector } from '../selectors';
 import { IServerError } from '../serverModels';
-import '../styles/common.css';
+import styles from '../styles/common.css';
+
+import { defaultRegisterDataForm } from '../defaults';
+
 const prepareDictionarySuggestions = (dictionary: IDictionary) => {
 	if (!dictionary || !Array.isArray(dictionary.values)) {
 		return [];
@@ -17,7 +20,7 @@ const prepareDictionarySuggestions = (dictionary: IDictionary) => {
 	return dictionary.values.map((item: any) => item.name);
 };
 interface IOwnProps {
-	submit(data: IRegisterFormData): void;
+	submit(data: IRegisterDataForm): void;
 }
 interface IDispatchProps {
 	checkPersonExist(data: PersonInfo): void;
@@ -31,20 +34,9 @@ type IProps = IOwnProps & IStateProps & IDispatchProps;
 
 const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { value: 2, label: 'Жен.' }];
 
-interface IState extends IRegisterFormData {
-	repeatPassword: string;
-}
+interface IState extends IRegisterDataForm {}
 class RegisterDataForm extends React.PureComponent<IProps, IState> {
-	public state: IState = {
-		gender: Gender.None,
-		lastName: 'test',
-		firstName: 'test',
-		middleName: 'test',
-		birthday: new Date().toISOString(),
-		login: 'test123456',
-		password: 'test1234',
-		repeatPassword: 'test1234',
-	};
+	public state = defaultRegisterDataForm;
 	public onChangeTextField = (name: string) => (value: string) => {
 		this.setState(
 			state => ({
@@ -107,8 +99,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 		}
 	};
 	submit = () => {
-		const { repeatPassword, ...rest } = this.state;
-		this.props.submit(rest);
+		this.props.submit(this.state);
 	};
 	public render() {
 		return (
@@ -119,7 +110,9 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 
 					const inValidPassword = this.state.password.length > 0 && this.state.password.length < 7;
 					const inValidRepeatPassword =
-						this.state.password && this.state.repeatPassword ? this.state.repeatPassword != this.state.password : false;
+						this.state.password.length && this.state.repeatPassword.length
+							? this.state.repeatPassword != this.state.password
+							: false;
 					const filteredDictionaryMiddleName = this.state.gender
 						? { values: dictionaryMiddleNames.values.filter((item: any) => item.sex == this.state.gender) }
 						: dictionaryMiddleNames;
@@ -128,7 +121,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 						inValidateDataForm(rest) || inValidRepeatPassword || inValidPassword || !!this.props.checkPersonLoginError;
 
 					return (
-						<div className="flexColumn">
+						<div className={styles.flexColumn}>
 							<TextInput
 								required={true}
 								placeholder={'Введите фамилию'}
