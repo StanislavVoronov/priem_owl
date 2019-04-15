@@ -4,7 +4,7 @@ import enrollReducer from './reducers';
 export * from './operations';
 export * from './models';
 export * from './selectors';
-import EnrollView from './EnrollPage';
+import EnrollContainer from './EnrollContainer';
 export { RegisterDataForm, enrollReducer };
 
-export default EnrollView;
+export default EnrollContainer;

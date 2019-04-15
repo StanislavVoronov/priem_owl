@@ -2,14 +2,16 @@ import { EDictionaryNameList, inValidateDataForm } from '../../../common';
 import React from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { AppContext } from '../EnrollPage';
+import { AppContext } from '../EnrollView';
 import { IEducationDataForm } from '../models';
 import Button from '@material-ui/core/Button';
 import styles from '../styles/common.css';
 import { ISelectItem, DocDataForm, DropdownSelect } from '../../../platform';
 import { defaultEducationDataForm } from '../defaults';
+import { IDictionary } from '@mgutm-fcu/dictionary';
 
 interface IOwnProps {
+	dictionaries: Record<string, IDictionary>;
 	submit(data: IState): void;
 }
 type IProps = IOwnProps;
@@ -40,60 +42,54 @@ class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> 
 		this.setState({ docSubType: item, prevEducation: Number(item.id) });
 	};
 	render() {
+		const coolnessTypeDictionary = this.props.dictionaries[EDictionaryNameList.CoolnessTypes];
+		const educationTypeDictionary = this.props.dictionaries[EDictionaryNameList.EducationDocTypes];
+		const { firstHighEducation, ...rest } = this.state;
 		return (
-			<AppContext.Consumer>
-				{context => {
-					const coolnessTypeDictionary = context[EDictionaryNameList.CoolnessTypes];
-					const educationTypeDictionary = context[EDictionaryNameList.EducationDocTypes];
-					const { firstHighEducation, coolnessTypes, ...rest } = this.state;
-					return (
-						<div className={styles.flexColumn}>
-							<FormControlLabel
-								classes={{ root: 'checkFormControlLabel' }}
-								control={
-									<Checkbox value={firstHighEducation} color="primary" onChange={this.toggleFirstHighEducationStatus} />
-								}
-								label="Получение высшего образования впервые"
-								labelPlacement="start"
-							/>
-							<DropdownSelect
-								placeholder={'Выберите достижения'}
-								onChangeSelect={this.onChangePersonCoolnessTypes}
-								options={coolnessTypeDictionary && coolnessTypeDictionary.values}
-								isMulti={true}
-								title={'Индивидуальные достижения'}
-							/>
-							<DocDataForm
-								title={'Предыдущее образование'}
-								required
-								docTitle={'Документ о предыдущем образовании'}
-								file={this.state.docFile}
-								selectDocType={this.selectTypeEducation}
-								onDownloadFile={this.downloadFile}
-								onChangeSeries={this.onChangeTextField('docSeries')}
-								onChangeNumber={this.onChangeTextField('docNumber')}
-								onChangeIssieBy={this.onChangeTextField('docIssieBy')}
-								onChangeDate={this.onChangeTextField('docDate')}
-								dictionaryTypes={educationTypeDictionary && educationTypeDictionary.values}
-								subTitle={'Тип документа о предыдущем образовании'}
-								extraFields={
-									<FormControlLabel
-										classes={{ root: styles.checkFormControlLabel }}
-										control={<Checkbox color="primary" onChange={this.toggleHasEgeStatus} />}
-										label="Имею результаты ЕГЭ"
-										labelPlacement="start"
-									/>
-								}
-							/>
-							<div className={styles.nextButtonContainer}>
-								<Button variant="contained" color="primary" disabled={inValidateDataForm(rest)} onClick={this.submit}>
-									{'Далее'}
-								</Button>
-							</div>
-						</div>
-					);
-				}}
-			</AppContext.Consumer>
+			<div className={styles.flexColumn}>
+				<FormControlLabel
+					classes={{ root: 'checkFormControlLabel' }}
+					control={
+						<Checkbox value={firstHighEducation} color="primary" onChange={this.toggleFirstHighEducationStatus} />
+					}
+					label="Получение высшего образования впервые"
+					labelPlacement="start"
+				/>
+				<DropdownSelect
+					placeholder={'Выберите достижения'}
+					onChangeSelect={this.onChangePersonCoolnessTypes}
+					options={coolnessTypeDictionary && coolnessTypeDictionary.values}
+					isMulti={true}
+					title={'Индивидуальные достижения'}
+				/>
+				<DocDataForm
+					title={'Предыдущее образование'}
+					required
+					docTitle={'Документ о предыдущем образовании'}
+					file={this.state.docFile}
+					selectDocType={this.selectTypeEducation}
+					onDownloadFile={this.downloadFile}
+					onChangeSeries={this.onChangeTextField('docSeries')}
+					onChangeNumber={this.onChangeTextField('docNumber')}
+					onChangeIssieBy={this.onChangeTextField('docIssieBy')}
+					onChangeDate={this.onChangeTextField('docDate')}
+					dictionaryTypes={educationTypeDictionary && educationTypeDictionary.values}
+					subTitle={'Тип документа о предыдущем образовании'}
+					extraFields={
+						<FormControlLabel
+							classes={{ root: styles.checkFormControlLabel }}
+							control={<Checkbox color="primary" onChange={this.toggleHasEgeStatus} />}
+							label="Имею результаты ЕГЭ"
+							labelPlacement="start"
+						/>
+					}
+				/>
+				<div className={styles.nextButtonContainer}>
+					<Button variant="contained" color="primary" disabled={inValidateDataForm(rest)} onClick={this.submit}>
+						{'Далее'}
+					</Button>
+				</div>
+			</div>
 		);
 	}
 }

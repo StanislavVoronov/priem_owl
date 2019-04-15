@@ -68,3 +68,7 @@ export interface IExtensible {
 export interface IServerResponseResult<T> {
 	result: T[];
 }
+
+export interface IClasses {
+	classes: any;
+}

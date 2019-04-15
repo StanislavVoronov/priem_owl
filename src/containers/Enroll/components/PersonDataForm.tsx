@@ -1,12 +1,14 @@
 import React from 'react';
 import { DropdownSelect, Button, DocDataForm, TextInput, ISelectItem } from '../../../platform';
-import { AppContext } from '../EnrollPage';
+import { AppContext } from '../EnrollView';
 import { EDictionaryNameList, inValidateDataForm } from '../../../common';
 
 import { IPersonDataForm } from '../models';
 import { defaultPersonDataForm } from '../defaults';
 import Styles from '../styles/common.css';
+import { IDictionary } from '@mgutm-fcu/dictionary';
 interface IOwnProps {
+	dictionaries: Record<string, IDictionary>;
 	submit: (data: IPersonDataForm) => void;
 }
 

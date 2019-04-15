@@ -58,7 +58,9 @@ export const registerNewPerson = (
 			return Promise.reject();
 		});
 };
-export const checkPersonExist = (data: PersonInfo): ThunkAction<void, IRootState, void, Action> => dispatch => {
+export const checkPersonExist = (
+	data: PersonInfo,
+): ThunkAction<Promise<boolean>, IRootState, void, Action> => dispatch => {
 	const { firstName, birthday, lastName, middleName = '' } = data;
 
 	const payload = {
@@ -70,15 +72,20 @@ export const checkPersonExist = (data: PersonInfo): ThunkAction<void, IRootState
 
 	dispatch(checkPersonExistRequest());
 
-	PriemApi.checkData<ICheckPersonExistRequest, ICheckPersonExistResponse>(PriemApiName.FindNpId, payload)
+	return PriemApi.checkData<ICheckPersonExistRequest, ICheckPersonExistResponse>(PriemApiName.FindNpId, payload)
 		.then(data => {
 			if (data) {
 				dispatch(checkPersonExistSuccess(data.ID));
+				return Promise.resolve(true);
 			} else {
 				dispatch(checkPersonExistSuccess(0));
+				return Promise.resolve(false);
 			}
 		})
-		.catch(error => dispatch(checkPersonExistFailure(error)));
+		.catch(error => {
+			dispatch(checkPersonExistFailure(error));
+			return Promise.reject(error);
+		});
 };
 
 export const checkPersonLogin = (login: string): ThunkAction<void, IRootState, void, Action> => dispatch => {
