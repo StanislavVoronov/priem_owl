@@ -7,9 +7,9 @@ import { EDictionaryNameList, inValidateDataForm, IDocSelectItem } from '../../.
 import styles from '../styles/common.css';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { IDictionary } from '@mgutm-fcu/dictionary';
+import { DictionaryContext } from '../EnrollContainer';
 
 interface IOwnProps {
-	dictionaries: Record<string, IDictionary>;
 	submit(data: IDocDataItem[]): void;
 	classes: Record<string, string>;
 }
@@ -103,77 +103,83 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 		this.props.submit(this.state.documents);
 	};
 	render() {
-		const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
-		const isDisabledAddButton = this.state.documents.map(inValidateDataForm).includes(true);
-
 		return (
-			<div className={styles.flexColumn}>
-				<div>
-					{this.state.documents.map((item: IDocDataForm, index) => {
-						const docType = item.docType && item.docType.id;
+			<DictionaryContext.Consumer>
+				{dictionaries => {
+					const dictionaryDocTypes = dictionaries[EDictionaryNameList.DocTypes];
+					const isDisabledAddButton = this.state.documents.map(inValidateDataForm).includes(true);
 
-						const dictionarySubDocTypes =
-							docType === 1
-								? this.props.dictionaries[EDictionaryNameList.PersonDocTypes].values
-								: docType === 2
-								? this.props.dictionaries[EDictionaryNameList.EducationDocTypes].values
-								: undefined;
+					return (
+						<div className={styles.flexColumn}>
+							<div>
+								{this.state.documents.map((item: IDocDataForm, index) => {
+									const docType = item.docType && item.docType.id;
 
-						return (
-							<div className={classNames(styles.flexColumn, this.props.classes.formContainer)}>
-								<DocDataForm
-									hideDataFields={item.hideDataFields}
-									docTitle="Файл документа"
-									file={item.docFile}
-									title="Тип документа"
-									selectDocSubType={this.selectDocSubType(index)}
-									selectDocType={this.selectDocType(index)}
-									dictionaryTypes={dictionaryDocTypes && dictionaryDocTypes.values}
-									onDownloadFile={this.onDownloadFile(index)}
-									onChangeSeries={this.onChangeTextField(index, 'docSeries')}
-									onChangeNumber={this.onChangeTextField(index, 'docNumber')}
-									onChangeIssieBy={this.onChangeTextField(index, 'docIssieBy')}
-									onChangeDate={this.onChangeTextField(index, 'docDate')}
-									subTitle={'Название документа'}
-									dictionarySubTypes={docType && dictionarySubDocTypes}
-									extraFields={
-										item.docType && item.docType.id === 1 && item.docSubType && item.docSubType.id === 1 ? (
-											<TextInput
-												label="Код подразделения"
-												type="number"
-												placeholder={'Введите код подразделения'}
-												onChange={this.onChangeTextField(index, 'codeDepartment')}
+									const dictionarySubDocTypes =
+										docType === 1
+											? dictionaries[EDictionaryNameList.PersonDocTypes].values
+											: docType === 2
+											? dictionaries[EDictionaryNameList.EducationDocTypes].values
+											: undefined;
+
+									return (
+										<div className={classNames(styles.flexColumn, this.props.classes.formContainer)}>
+											<DocDataForm
+												hideDataFields={item.hideDataFields}
+												docTitle="Файл документа"
+												file={item.docFile}
+												title="Тип документа"
+												selectDocSubType={this.selectDocSubType(index)}
+												selectDocType={this.selectDocType(index)}
+												dictionaryTypes={dictionaryDocTypes && dictionaryDocTypes.values}
+												onDownloadFile={this.onDownloadFile(index)}
+												onChangeSeries={this.onChangeTextField(index, 'docSeries')}
+												onChangeNumber={this.onChangeTextField(index, 'docNumber')}
+												onChangeIssieBy={this.onChangeTextField(index, 'docIssieBy')}
+												onChangeDate={this.onChangeTextField(index, 'docDate')}
+												subTitle={'Название документа'}
+												dictionarySubTypes={docType && dictionarySubDocTypes}
+												extraFields={
+													item.docType && item.docType.id === 1 && item.docSubType && item.docSubType.id === 1 ? (
+														<TextInput
+															label="Код подразделения"
+															type="number"
+															placeholder={'Введите код подразделения'}
+															onChange={this.onChangeTextField(index, 'codeDepartment')}
+														/>
+													) : null
+												}
 											/>
-										) : null
-									}
-								/>
-								<div className={this.props.classes.deleteDocButtonContainer}>
-									<Button
-										className={this.props.classes.deleteDocButton}
-										variant="contained"
-										onClick={this.deleteDoc(index)}>
-										{'Удалить документ'}
-									</Button>
-								</div>
+											<div className={this.props.classes.deleteDocButtonContainer}>
+												<Button
+													className={this.props.classes.deleteDocButton}
+													variant="contained"
+													onClick={this.deleteDoc(index)}>
+													{'Удалить документ'}
+												</Button>
+											</div>
+										</div>
+									);
+								})}
 							</div>
-						);
-					})}
-				</div>
-				<div className={this.props.classes.addDocButtonContainer}>
-					<Button
-						disabled={isDisabledAddButton}
-						className={this.props.classes.addDocButton}
-						variant="contained"
-						onClick={this.addDoc}>
-						{'Добавить новый документ'}
-					</Button>
-				</div>
-				<div className={styles.nextButtonContainer}>
-					<Button variant="contained" color="primary" disabled={isDisabledAddButton} onClick={this.submit}>
-						{'Далее'}
-					</Button>
-				</div>
-			</div>
+							<div className={this.props.classes.addDocButtonContainer}>
+								<Button
+									disabled={isDisabledAddButton}
+									className={this.props.classes.addDocButton}
+									variant="contained"
+									onClick={this.addDoc}>
+									{'Добавить новый документ'}
+								</Button>
+							</div>
+							<div className={styles.nextButtonContainer}>
+								<Button variant="contained" color="primary" disabled={isDisabledAddButton} onClick={this.submit}>
+									{'Далее'}
+								</Button>
+							</div>
+						</div>
+					);
+				}}
+			</DictionaryContext.Consumer>
 		);
 	}
 }

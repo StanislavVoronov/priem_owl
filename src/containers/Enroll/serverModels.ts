@@ -5,7 +5,7 @@ export interface ICheckPersonExistResponse {
 	ID: number;
 }
 
-export interface ICheckPersonLoginResponse {
+export interface ICheckLoginResponse {
 	COUNT: number;
 }
 
@@ -19,7 +19,7 @@ export interface IVerifyPersonResponse {
 	count: number;
 }
 
-export interface ICheckPersonLoginRequest {
+export interface ICheckLoginRequest {
 	login: string;
 }
 

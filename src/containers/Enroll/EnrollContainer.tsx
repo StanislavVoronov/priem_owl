@@ -2,42 +2,156 @@ import { EDictionaryNameList, IDictionaryScanableFilter, IDictionaryTypeFilter, 
 import EnrollView from './EnrollView';
 import Dictionary from '@mgutm-fcu/dictionary/Dictionary';
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { enrollStateSelector } from './selectors';
-import { fullDictionaryList, shortDictionaryList } from './defaults';
+import {
+	defaultContactsDataForm,
+	defaultEducationDataForm,
+	defaultPersonDataForm,
+	defaultRegisterDataForm,
+} from './defaults';
 import { IDictionary } from '@mgutm-fcu/dictionary';
-import { checkPersonExist, checkPersonLogin, registerNewPerson } from './operations';
-import { PersonInfo } from './models';
-interface IProps {
-	npId: number;
-	dictionaries: Record<string, IDictionary>;
-	checkPersonExist(data: PersonInfo): Promise<boolean>;
-	registerNewPerson(login: string, password: string): Promise<number>;
-	checkPersonLogin(login: string): void;
-}
+import { checkPerson, checkLogin, registerNewPerson, createPerson, sendVerificationCode } from './operations';
+import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
+import {
+	IContactDataForm,
+	IDocDataItem,
+	IEducationDataForm,
+	IPerson,
+	IPersonDataForm,
+	IRegisterDataForm,
+	PersonInfo,
+} from './models';
+import { IServerError } from './serverModels';
+import { IDocDataForm } from '../../platform/DocDataForm';
 
-class EnrollContainer extends React.Component<IProps> {
+interface IDispatchToProps {
+	checkLogin(login: string): void;
+	registerNewPerson: (login: string, password: string) => Promise<number>;
+	sendVerificationCode(email: string, mobPhone: string): Promise<void>;
+	createPerson(confirmCode: number, data: IPerson): void;
+	checkPerson(data: PersonInfo): Promise<boolean>;
+}
+interface IStateToProps {
+	npId: number;
+	checkPersonError: IServerError | null;
+	checkLoginError: IServerError | null;
+	dictionaries: Record<string, IDictionary>;
+}
+type IProps = IDispatchToProps & IStateToProps;
+
+interface IState {
+	passedStep: number;
+	activeStep: number;
+	confirmCode: string;
+	registerData: IRegisterDataForm;
+	personData: IPersonDataForm;
+	contactsData: IContactDataForm;
+	educationData: IEducationDataForm;
+	documents: IDocDataForm[];
+}
+export const DictionaryContext = React.createContext({});
+class EnrollContainer extends React.Component<IProps, IState> {
+	state = {
+		passedStep: 0,
+		activeStep: 0,
+		confirmCode: '',
+		registerData: defaultRegisterDataForm,
+		personData: defaultPersonDataForm,
+		contactsData: defaultContactsDataForm,
+		educationData: defaultEducationDataForm,
+		documents: [],
+	};
+	public componentDidCatch(error: any, info: any) {
+		// You can also log the error to an error reporting service
+	}
+	public handleNext = () => {
+		const nextStep = this.state.activeStep + 1;
+		this.setState({ activeStep: nextStep, passedStep: nextStep });
+	};
+	handleStep = (step: number) => () => {
+		if (step < this.state.passedStep) {
+			this.setState({
+				activeStep: step,
+			});
+		}
+	};
+	onCheckPerson = () => {
+		const { lastName, middleName, birthday, firstName } = this.state.registerData;
+		this.props.checkPerson({ firstName, lastName, birthday, middleName }).then(this.handleNext);
+	};
+	submitRegisterDataForm = (registerData: IRegisterDataForm) => {
+		this.setState({ registerData });
+		this.props.registerNewPerson(registerData.login, registerData.password).then(this.onCheckPerson);
+	};
+	submitAddDocumentsDataForm = (documents: IDocDataItem[]) => {
+		this.setState({ documents });
+		this.handleNext();
+	};
+	submitPersonDataForm = (personData: IPersonDataForm) => {
+		this.setState({ personData });
+		this.handleNext();
+	};
+	submitContactsDataForm = (contactsData: IContactDataForm) => {
+		this.setState({ contactsData });
+		this.props.sendVerificationCode(contactsData.email, contactsData.mobPhone).then(this.handleNext);
+	};
+	submitEducationDataForm = (educationData: IEducationDataForm) => {
+		this.setState({ educationData });
+		this.handleNext();
+	};
+	onChangeConfirmationCode = (confirmCode: string) => {
+		this.setState({ confirmCode });
+	};
+	onCheckLogin = (login: string) => {
+		this.props.checkLogin(login);
+	};
 	render() {
 		return (
 			<Dictionary
 				version={2}
 				url={'/dev-bin/priem_api.fcgi'}
-				list={this.props.npId ? fullDictionaryList : shortDictionaryList}>
-				<EnrollView />
+				list={this.props.npId ? FULL_DICTIONARY_LIST : SHORT_DICTIONARY_LIST}>
+				<DictionaryContext.Provider value={this.props.dictionaries}>
+					<EnrollView
+						activeStep={this.state.activeStep}
+						passedStep={this.state.passedStep}
+						handleStep={this.handleStep}
+						personExists={false}
+						onCheckLogin={this.onCheckLogin}
+						checkLoginError={this.props.checkLoginError}
+						checkPersonError={this.props.checkPersonError}
+						onChangeConfirmationCode={this.onChangeConfirmationCode}
+						submitPersonDataForm={this.submitPersonDataForm}
+						submitRegisterDataForm={this.submitRegisterDataForm}
+						submitContactsDataForm={this.submitContactsDataForm}
+						submitAddDocumentsDataForm={this.submitAddDocumentsDataForm}
+						submitEducationDataForm={this.submitEducationDataForm}
+						steps={NEW_PERSON_STEPS}
+					/>
+				</DictionaryContext.Provider>
 			</Dictionary>
 		);
 	}
 }
 
-const mapStateToProps = (state: IRootState) => {
-	const { npId } = enrollStateSelector(state);
+const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
+	const { npId, checkPersonError, checkLoginError } = enrollStateSelector(state);
 	return {
 		npId,
+		checkPersonError,
+		checkLoginError,
 		dictionaries: state.dictionaries,
 	};
 };
 
-const mapDispatchToProps = () => ({ registerNewPerson, checkPersonExist, checkPersonLogin });
+const mapDispatchToProps = {
+	registerNewPerson,
+	checkLogin,
+	createPerson,
+	sendVerificationCode,
+	checkPerson,
+};
 
 export default connect(
 	mapStateToProps,

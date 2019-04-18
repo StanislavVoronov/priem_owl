@@ -6,9 +6,9 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import Auth from '@mgutm-fcu/auth/Auth';
-import EnrollContainer, { enrollReducer, IEnrollFetchingDataReducer } from './containers/Enroll';
+import EnrollContainer, { enrollReducer, IEnrollState } from './containers/Enroll';
 interface PriemOwnState extends IUserStore, IDictionaryStore {
-	enroll: IEnrollFetchingDataReducer;
+	enroll: IEnrollState;
 }
 
 const state = combineReducers<PriemOwnState>({
@@ -20,12 +20,7 @@ const store = createStore(state, { ...currentUserInitialState, dictionaries: {} 
 
 ReactDOM.render(
 	<Provider store={store}>
-		<Auth
-			auth={{ url: '/dev-bin/priem_login' }}
-			title="Приемная кампания"
-			user={{ url: '/dev-bin/priem_api.fcgi', api: 'user' }}>
-			<EnrollContainer />
-		</Auth>
+		<EnrollContainer />
 	</Provider>,
 	document.getElementById('root') as HTMLElement,
 );

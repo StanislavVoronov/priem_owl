@@ -4,14 +4,14 @@ import { IRegisterDataForm } from './models';
 import { IServerError } from './serverModels';
 
 export const checkPersonExistRequest = createAction('checkPersonExistRequest', () => {});
-export const checkPersonExistSuccess = createAction('checkPersonExistSuccess', (npId: number) => npId);
-export const checkPersonExistFailure = createAction('checkPersonExistFailure', (error: IServerError) => error);
+export const checkPersonSuccess = createAction('checkPersonSuccess', (npId: number) => npId);
+export const checkPersonFailure = createAction('checkPersonFailure', (error: IServerError) => error);
 
-export const checkPersonLoginRequest = createAction('checkPersonLoginRequest', () => void 0);
-export const checkPersonLoginSuccess = createAction('checkPersonLoginSuccess', () => void 0);
-export const checkPersonLoginFailure = createAction('checkPersonLoginFailure', (error: IServerError) => error);
+export const checkLoginRequest = createAction('checkLoginRequest', () => void 0);
+export const checkLoginSuccess = createAction('checkLoginSuccess', () => void 0);
+export const checkLoginFailure = createAction('checkLoginFailure', (error: IServerError) => error);
 
-export const registerNewPersonFetching = createAction('registerNewPersonFetching', () => void 0);
+export const registerPersonFetching = createAction('registerPersonFetching', () => void 0);
 export const registerNewPersonSuccess = createAction('registerNewPersonSuccess', (npId: number) => npId);
 export const registerNewPersonFailure = createAction('registerNewPersonFailure', (error: IServerError) => error);
 

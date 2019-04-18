@@ -1,12 +1,12 @@
 import { Style } from 'jss/css';
 import { IDictionary } from '@mgutm-fcu/dictionary';
-import { IEnrollFetchingDataReducer } from '../containers/Enroll';
+import { IEnrollState } from '../containers/Enroll';
 import { ISelectItem } from '../platform/DropdownSelect';
 
 export interface IRootState {
 	user: any;
 	dictionaries: Record<string, IDictionary>;
-	enroll: IEnrollFetchingDataReducer;
+	enroll: IEnrollState;
 }
 
 export interface ITextFieldChangeEvent {

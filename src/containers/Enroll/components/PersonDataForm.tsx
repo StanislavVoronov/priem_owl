@@ -1,14 +1,14 @@
 import React from 'react';
 import { DropdownSelect, Button, DocDataForm, TextInput, ISelectItem } from '../../../platform';
-import { AppContext } from '../EnrollView';
+
 import { EDictionaryNameList, inValidateDataForm } from '../../../common';
 
 import { IPersonDataForm } from '../models';
 import { defaultPersonDataForm } from '../defaults';
 import Styles from '../styles/common.css';
 import { IDictionary } from '@mgutm-fcu/dictionary';
+import { DictionaryContext } from '../EnrollContainer';
 interface IOwnProps {
-	dictionaries: Record<string, IDictionary>;
 	submit: (data: IPersonDataForm) => void;
 }
 
@@ -40,12 +40,11 @@ class PersonDataForm extends React.PureComponent<IProps, IPersonDataForm> {
 		this.props.submit(this.state);
 	};
 	public render() {
-		console.log(this.state.docFile ? new Blob([this.state.docFile], { type: this.state.docFile.type }) : null);
 		return (
-			<AppContext.Consumer>
-				{context => {
-					const dictionaryGovernments = context[EDictionaryNameList.Governments];
-					const dictionaryPersonDocTypes = context[EDictionaryNameList.PersonDocTypes];
+			<DictionaryContext.Consumer>
+				{dictionaries => {
+					const dictionaryGovernments = dictionaries[EDictionaryNameList.Governments];
+					const dictionaryPersonDocTypes = dictionaries[EDictionaryNameList.PersonDocTypes];
 					return (
 						<div className={Styles.flexColumn}>
 							<DropdownSelect
@@ -94,7 +93,7 @@ class PersonDataForm extends React.PureComponent<IProps, IPersonDataForm> {
 						</div>
 					);
 				}}
-			</AppContext.Consumer>
+			</DictionaryContext.Consumer>
 		);
 	}
 }

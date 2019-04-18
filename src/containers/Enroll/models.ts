@@ -66,16 +66,15 @@ export interface IContactDataForm extends IDocData {
 	email: string;
 }
 
-export interface IEnrollFetchingDataReducer {
-	checkPersonExistsFetching: boolean;
+export interface IEnrollState {
+	checkPersonFetching: boolean;
 	npId: number;
 	email: string;
-	checkPersonExistsError: IServerError | null;
-	checkPersonLoginFetching: boolean;
-	checkPersonLoginError: IServerError | null;
-	registerNewPersonFetching: boolean;
-	registerNewPersonError: IServerError | null;
-	registerPersonData: IRegisterDataForm | null;
+	checkPersonError: IServerError | null;
+	checkLoginFetching: boolean;
+	checkLoginError: IServerError | null;
+	registerPersonFetching: boolean;
+	registerPersonError: IServerError | null;
 	confirmationCodeAvailable: boolean;
 	verifyPersonFetching: boolean;
 	verifyPersonError: IServerError | null;

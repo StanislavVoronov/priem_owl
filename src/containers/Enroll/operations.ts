@@ -3,17 +3,17 @@ import { IDocDataItem, IPerson, PersonInfo } from './models';
 import { IRootState, ServerBoolean } from '../../common';
 import PriemApi from '../../services/PriemApi';
 import {
-	checkPersonExistFailure,
+	checkPersonFailure,
 	checkPersonExistRequest,
-	checkPersonExistSuccess,
-	checkPersonLoginFailure,
-	checkPersonLoginRequest,
-	checkPersonLoginSuccess,
+	checkPersonSuccess,
+	checkLoginFailure,
+	checkLoginRequest,
+	checkLoginSuccess,
 	createPersonFailure,
 	createPersonFetching,
 	createPersonSuccess,
 	registerNewPersonFailure,
-	registerNewPersonFetching,
+	registerPersonFetching,
 	registerNewPersonSuccess,
 	sendVerificationCodeFailure,
 	sendVerificationCodeFetching,
@@ -25,8 +25,8 @@ import { ThunkAction } from 'redux-thunk';
 import {
 	ICheckPersonExistRequest,
 	ICheckPersonExistResponse,
-	ICheckPersonLoginRequest,
-	ICheckPersonLoginResponse,
+	ICheckLoginRequest,
+	ICheckLoginResponse,
 	INewPersonDataRequest,
 	INewPersonDataResponse,
 	IRegisterNewPersonRequest,
@@ -45,7 +45,7 @@ export const registerNewPerson = (
 ): ThunkAction<Promise<number>, IRootState, void, Action> => dispatch => {
 	const payload = { login, password };
 
-	dispatch(registerNewPersonFetching());
+	dispatch(registerPersonFetching());
 
 	return PriemApi.post<IRegisterNewPersonRequest, IRegisterNewPersonResponse>(PriemApiName.AddEnroll, payload)
 		.then(response => {
@@ -58,9 +58,7 @@ export const registerNewPerson = (
 			return Promise.reject();
 		});
 };
-export const checkPersonExist = (
-	data: PersonInfo,
-): ThunkAction<Promise<boolean>, IRootState, void, Action> => dispatch => {
+export const checkPerson = (data: PersonInfo): ThunkAction<Promise<boolean>, IRootState, void, Action> => dispatch => {
 	const { firstName, birthday, lastName, middleName = '' } = data;
 
 	const payload = {
@@ -75,34 +73,33 @@ export const checkPersonExist = (
 	return PriemApi.checkData<ICheckPersonExistRequest, ICheckPersonExistResponse>(PriemApiName.FindNpId, payload)
 		.then(data => {
 			if (data) {
-				dispatch(checkPersonExistSuccess(data.ID));
+				dispatch(checkPersonSuccess(data.ID));
 				return Promise.resolve(true);
-			} else {
-				dispatch(checkPersonExistSuccess(0));
-				return Promise.resolve(false);
 			}
+			dispatch(checkPersonSuccess(0));
+			return Promise.reject('Пользователь уже зарегистрирован');
 		})
 		.catch(error => {
-			dispatch(checkPersonExistFailure(error));
+			dispatch(checkPersonFailure(error));
 			return Promise.reject(error);
 		});
 };
 
-export const checkPersonLogin = (login: string): ThunkAction<void, IRootState, void, Action> => dispatch => {
+export const checkLogin = (login: string): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	const payload = { login };
 
-	dispatch(checkPersonLoginRequest());
+	dispatch(checkLoginRequest());
 
-	PriemApi.checkData<ICheckPersonLoginRequest, ICheckPersonLoginResponse>(PriemApiName.TestUniqueEnroll, payload)
+	PriemApi.checkData<ICheckLoginRequest, ICheckLoginResponse>(PriemApiName.TestUniqueEnroll, payload)
 		.then(data => {
 			if (data.COUNT === 0) {
-				dispatch(checkPersonLoginSuccess());
+				dispatch(checkLoginSuccess());
 			} else {
-				dispatch(checkPersonLoginFailure({ message: 'Логин уже занят' }));
+				dispatch(checkLoginFailure({ message: 'Логин уже занят' }));
 			}
 		})
 		.catch(error => {
-			dispatch(checkPersonLoginFailure(error));
+			dispatch(checkLoginFailure(error));
 		});
 };
 
@@ -118,10 +115,12 @@ export const sendVerificationCode = (
 		.then(response => {
 			console.log(response);
 			dispatch(sendVerificationCodeSuccess());
+			return Promise.resolve();
 		})
 		.catch(error => {
 			console.log('error', error);
 			dispatch(sendVerificationCodeFailure(error));
+			return Promise.reject();
 		});
 };
 
