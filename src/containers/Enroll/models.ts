@@ -69,7 +69,6 @@ export interface IContactDataForm extends IDocData {
 export interface IEnrollState {
 	checkPersonFetching: boolean;
 	npId: number;
-	email: string;
 	checkPersonError: IServerError | null;
 	checkLoginFetching: boolean;
 	checkLoginError: IServerError | null;

@@ -1,6 +1,6 @@
 import { IContactDataForm, IEducationDataForm, IPersonDataForm, IRegisterDataForm } from './models';
 import { defaultDocDataForm } from '../../platform';
-import { EDictionaryNameList, Gender, IDictionaryScanableFilter, IDictionaryTypeFilter } from '../../common';
+import { Gender } from '../../common';
 
 export const defaultContactsDataForm: IContactDataForm = {
 	needDormitory: false,

@@ -4,9 +4,9 @@ import Button from '@material-ui/core/Button';
 import classNames from 'classnames';
 import { DocDataForm, ISelectItem, TextInput } from '../../../platform';
 import { EDictionaryNameList, inValidateDataForm, IDocSelectItem } from '../../../common';
-import styles from '../styles/common.css';
+
 import withStyles from '@material-ui/core/styles/withStyles';
-import { IDictionary } from '@mgutm-fcu/dictionary';
+import styles from './styles.css';
 import { DictionaryContext } from '../EnrollContainer';
 
 interface IOwnProps {
@@ -25,28 +25,6 @@ const defaultDocFile = {
 	docType: null,
 };
 type IProps = IOwnProps;
-
-const localStyles = () => ({
-	addDocButton: {
-		color: 'white',
-		backgroundColor: 'green',
-	},
-	deleteDocButton: {
-		color: 'white',
-		backgroundColor: 'red',
-		marginVertical: 20,
-	},
-	addDocButtonContainer: {
-		marginTop: 20,
-		marginBottom: 30,
-	},
-	deleteDocButtonContainer: {
-		marginVertical: 20,
-	},
-	formContainer: {
-		borderBottom: '2px solid #3f51b5',
-	},
-});
 
 class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 	static defaultProps = {
@@ -123,7 +101,7 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 											: undefined;
 
 									return (
-										<div className={classNames(styles.flexColumn, this.props.classes.formContainer)}>
+										<div className={classNames(styles.flexColumn, styles.docFormContainer)}>
 											<DocDataForm
 												hideDataFields={item.hideDataFields}
 												docTitle="Файл документа"
@@ -150,11 +128,8 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 													) : null
 												}
 											/>
-											<div className={this.props.classes.deleteDocButtonContainer}>
-												<Button
-													className={this.props.classes.deleteDocButton}
-													variant="contained"
-													onClick={this.deleteDoc(index)}>
+											<div className={styles.deleteDocButtonContainer}>
+												<Button className={styles.deleteDocButton} variant="contained" onClick={this.deleteDoc(index)}>
 													{'Удалить документ'}
 												</Button>
 											</div>
@@ -162,12 +137,8 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 									);
 								})}
 							</div>
-							<div className={this.props.classes.addDocButtonContainer}>
-								<Button
-									disabled={isDisabledAddButton}
-									className={this.props.classes.addDocButton}
-									variant="contained"
-									onClick={this.addDoc}>
+							<div className={styles.addDocButtonContainer}>
+								<Button className={styles.addDocButton} variant="contained" onClick={this.addDoc}>
 									{'Добавить новый документ'}
 								</Button>
 							</div>
@@ -184,4 +155,4 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 	}
 }
 
-export default withStyles(localStyles)(DocumentsDataForm);
+export default DocumentsDataForm;

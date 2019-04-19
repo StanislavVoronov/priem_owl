@@ -1,10 +1,10 @@
 import React from 'react';
-import { Autocomplete, Button, H2, TextInput, RadioGroup } from '../../../platform';
+import { Autocomplete, Button, H2, TextInput, RadioButtonGroup } from '../../../platform';
 import { EDictionaryNameList, Gender, inValidateDataForm, makeVerticalSpace } from '../../../common';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import { IRegisterDataForm } from '../models';
 
-import styles from '../styles/common.css';
+import styles from './styles.css';
 
 import { defaultRegisterDataForm } from '../defaults';
 import { IServerError } from '../serverModels';
@@ -89,7 +89,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 						: [];
 
 					const { middleName, ...rest } = this.state;
-					const isValidForm =
+					const isInvalidForm =
 						inValidateDataForm(rest) || inValidRepeatPassword || inValidPassword || !!this.props.checkLoginError;
 
 					return (
@@ -105,7 +105,6 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 								required={true}
 								onChange={this.onChangeFirstName(dictionaryFirstNames)}
 								placeholder={'Введите имя'}
-								style={makeVerticalSpace('small')}
 								suggestions={prepareDictionarySuggestions(dictionaryFirstNames)}
 							/>
 
@@ -113,11 +112,10 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 								label={'Отчество'}
 								placeholder={'Введите отчество'}
 								onChange={this.onChangeTextField('middleName')}
-								style={makeVerticalSpace('small')}
 								suggestions={prepareDictionarySuggestions(filteredDictionaryMiddleName)}
 							/>
 
-							<RadioGroup
+							<RadioButtonGroup
 								title="Пол"
 								required={true}
 								currentValue={String(this.state.gender)}
@@ -162,11 +160,11 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 									helperText={inValidRepeatPassword ? 'Пароли не совпадают' : ''}
 								/>
 							</React.Fragment>
-							<div className="nextButtonContainer">
-								{this.props.personExists ? (
-									<H2 color="red">Абитуриент уже зарегистрирован в системе</H2>
+							<div className={styles.nextButtonContainer}>
+								{this.props.checkPersonError ? (
+									<H2 color="red">{this.props.checkPersonError}</H2>
 								) : (
-									<Button variant="contained" color="primary" disabled={isValidForm} onClick={this.submit}>
+									<Button variant="contained" color="primary" disabled={isInvalidForm} onClick={this.submit}>
 										{'Далее'}
 									</Button>
 								)}

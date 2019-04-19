@@ -27,7 +27,6 @@ import { INewPersonDataResponse, IServerError } from './serverModels';
 const defaultState: IEnrollState = {
 	checkPersonFetching: false,
 	npId: 0,
-	email: '',
 	confirmationCodeAvailable: false,
 	checkPersonError: null,
 	checkLoginFetching: false,

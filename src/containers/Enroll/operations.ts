@@ -58,7 +58,7 @@ export const registerNewPerson = (
 			return Promise.reject();
 		});
 };
-export const checkPerson = (data: PersonInfo): ThunkAction<Promise<boolean>, IRootState, void, Action> => dispatch => {
+export const checkPerson = (data: PersonInfo): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	const { firstName, birthday, lastName, middleName = '' } = data;
 
 	const payload = {
@@ -74,10 +74,10 @@ export const checkPerson = (data: PersonInfo): ThunkAction<Promise<boolean>, IRo
 		.then(data => {
 			if (data) {
 				dispatch(checkPersonSuccess(data.ID));
-				return Promise.resolve(true);
+				return Promise.reject('Пользователь уже зарегистрирован в системе');
 			}
 			dispatch(checkPersonSuccess(0));
-			return Promise.reject('Пользователь уже зарегистрирован');
+			return Promise.resolve();
 		})
 		.catch(error => {
 			dispatch(checkPersonFailure(error));
@@ -87,7 +87,9 @@ export const checkPerson = (data: PersonInfo): ThunkAction<Promise<boolean>, IRo
 
 export const checkLogin = (login: string): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	const payload = { login };
-
+	if (login.length < 5) {
+		return;
+	}
 	dispatch(checkLoginRequest());
 
 	PriemApi.checkData<ICheckLoginRequest, ICheckLoginResponse>(PriemApiName.TestUniqueEnroll, payload)
@@ -125,7 +127,7 @@ export const sendVerificationCode = (
 };
 
 export const createPerson = (
-	confirmCode: number,
+	confirmCode: string,
 	data: IPerson,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	if (data.contactsData && data.registerData && data.personData && data.educationData) {
@@ -158,7 +160,7 @@ export const createPerson = (
 		};
 
 		const payload = {
-			email_code: confirmCode,
+			email_code: parseInt(confirmCode) || 0,
 			phone_code: '000000',
 			email: data.contactsData.email,
 			lname: data.registerData.lastName,

@@ -84,7 +84,12 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 							)}
 							{!this.props.hideDataFields && (
 								<React.Fragment>
-									<TextInput placeholder="Введите серию документа" label="Серия" onBlur={this.props.onChangeSeries} />
+									<TextInput
+										required={true}
+										placeholder="Введите серию документа"
+										label="Серия"
+										onBlur={this.props.onChangeSeries}
+									/>
 									<TextInput
 										required={true}
 										placeholder="Введите номер документа"
@@ -131,10 +136,10 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 								return (
 									<div {...getRootProps()} className={styles.fileContainer}>
 										{this.props.docTitle && (
-											<FormLabel style={{ fontSize: '.85rem' }}>
-												{this.props.docTitle}
-												{' *'}
-											</FormLabel>
+											<React.Fragment>
+												<FormLabel style={{ fontSize: '.875rem' }}>{this.props.docTitle}</FormLabel>
+												<FormLabel style={{ color: 'red' }}>{' *'}</FormLabel>
+											</React.Fragment>
 										)}
 										{this.props.file ? (
 											<React.Fragment>

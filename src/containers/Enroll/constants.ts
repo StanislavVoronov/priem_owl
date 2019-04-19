@@ -49,7 +49,7 @@ export const FULL_DICTIONARY_LIST = [
 ];
 
 export const NEW_PERSON_STEPS = [
-	'Регистрация',
+	'Регистрация абитуриента',
 	'Персональные данные',
 	'Контактные данные',
 	'Образование',

@@ -10,7 +10,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 import DocDataForm from './DocDataForm/';
 import DropdownSelect, { ISelectItem } from './DropdownSelect/';
-import RadioGroup from './RadioGroup/';
+import RadioButtonGroup from './RadioButtonGroup/';
 import { H2 } from './Typography/Headers';
 import Checkbox from '@material-ui/core/Checkbox';
 export * from './defaults';
@@ -23,7 +23,7 @@ export {
 	StepContent,
 	StepLabel,
 	Button,
-	RadioGroup,
+	RadioButtonGroup,
 	FormControl,
 	FormLabel,
 	FormControlLabel,

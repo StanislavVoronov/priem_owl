@@ -1,12 +1,12 @@
 import { IDisabled, IHasError, IHelperText } from '../models';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
-import { FormLabel } from '@material-ui/core';
+import { FormLabel, withStyles } from '@material-ui/core';
 
 export interface IInputProps extends IHasError, IHelperText, IDisabled {
 	onChange?: (text: string) => void;
 	placeholder?: string;
-	type?: 'date' | 'number' | 'text' | 'password';
+	type: string;
 	onBlur?: (text: string) => void;
 	isTopLabel?: boolean;
 	defaultValue?: string;
@@ -17,7 +17,13 @@ export interface IInputProps extends IHasError, IHelperText, IDisabled {
 	prefix?: string | number;
 	postfix?: string | number;
 	regExp?: string;
+	classes: any;
 }
+const localStyles = {
+	asterisk: {
+		color: 'red',
+	},
+};
 
 class TextInput extends React.PureComponent<IInputProps, { value: string }> {
 	state = {
@@ -29,7 +35,7 @@ class TextInput extends React.PureComponent<IInputProps, { value: string }> {
 		type: 'text',
 		required: false,
 		isTopLabel: true,
-		style: {},
+		classes: {},
 	};
 	public onChange = (event: any) => {
 		if (event.target.value.length && this.props.regExp && !new RegExp(this.props.regExp).test(event.target.value)) {
@@ -65,6 +71,7 @@ class TextInput extends React.PureComponent<IInputProps, { value: string }> {
 					onChange={this.onChange}
 					defaultValue={this.props.defaultValue}
 					InputLabelProps={{
+						FormLabelClasses: { asterisk: this.props.classes.asterisk },
 						shrink: this.props.isTopLabel,
 					}}
 				/>
@@ -73,4 +80,4 @@ class TextInput extends React.PureComponent<IInputProps, { value: string }> {
 	}
 }
 
-export default TextInput;
+export default withStyles(localStyles)(TextInput);

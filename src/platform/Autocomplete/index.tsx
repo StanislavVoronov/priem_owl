@@ -7,18 +7,21 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { IHasError, IHelperText } from '../models';
+import { withStyles } from '@material-ui/core';
 interface IInputProps {
 	label?: string;
 	placeholder?: string;
 	onChange: (data: string, index?: number) => void;
-	style?: any;
+	classes: any;
 }
 function renderInputComponent(inputProps: any) {
 	return (
 		<TextField
 			InputLabelProps={{
+				FormLabelClasses: { ...inputProps.styles },
 				shrink: true,
 			}}
+			margin="normal"
 			fullWidth={true}
 			{...inputProps}
 		/>
@@ -86,9 +89,15 @@ const renderSuggestionsContainer = (options: any) => {
 		</Paper>
 	);
 };
+const localStyles = {
+	asterisk: {
+		color: 'red',
+	},
+};
 class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoCompleteState> {
 	public defaultProps = {
 		suggestions: [],
+		classes: {},
 	};
 	public state = {
 		value: '',
@@ -136,7 +145,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 					{...autosuggestProps}
 					inputProps={{
 						required: inputProps.required,
-						style: inputProps.style,
+						styles: this.props.classes,
 						label: inputProps.label,
 						placeholder: inputProps.placeholder,
 						value: this.state.value,
@@ -160,4 +169,4 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 	}
 }
 
-export default Autocomplete;
+export default withStyles(localStyles)(Autocomplete);

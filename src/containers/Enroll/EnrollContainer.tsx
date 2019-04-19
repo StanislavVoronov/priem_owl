@@ -1,4 +1,4 @@
-import { EDictionaryNameList, IDictionaryScanableFilter, IDictionaryTypeFilter, IRootState } from '../../common';
+import { IRootState } from '../../common';
 import EnrollView from './EnrollView';
 import Dictionary from '@mgutm-fcu/dictionary/Dictionary';
 import * as React from 'react';
@@ -29,8 +29,8 @@ interface IDispatchToProps {
 	checkLogin(login: string): void;
 	registerNewPerson: (login: string, password: string) => Promise<number>;
 	sendVerificationCode(email: string, mobPhone: string): Promise<void>;
-	createPerson(confirmCode: number, data: IPerson): void;
-	checkPerson(data: PersonInfo): Promise<boolean>;
+	createPerson(confirmCode: string, data: IPerson): void;
+	checkPerson(data: PersonInfo): Promise<void>;
 }
 interface IStateToProps {
 	npId: number;
@@ -70,11 +70,9 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		this.setState({ activeStep: nextStep, passedStep: nextStep });
 	};
 	handleStep = (step: number) => () => {
-		if (step < this.state.passedStep) {
-			this.setState({
-				activeStep: step,
-			});
-		}
+		this.setState({
+			activeStep: step,
+		});
 	};
 	onCheckPerson = () => {
 		const { lastName, middleName, birthday, firstName } = this.state.registerData;
@@ -106,6 +104,15 @@ class EnrollContainer extends React.Component<IProps, IState> {
 	onCheckLogin = (login: string) => {
 		this.props.checkLogin(login);
 	};
+	onConfirmCode = () => {
+		this.props.createPerson(this.state.confirmCode, {
+			registerData: this.state.registerData,
+			contactsData: this.state.contactsData,
+			personData: this.state.personData,
+			documents: this.state.documents,
+			educationData: this.state.educationData,
+		});
+	};
 	render() {
 		return (
 			<Dictionary
@@ -128,6 +135,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 						submitAddDocumentsDataForm={this.submitAddDocumentsDataForm}
 						submitEducationDataForm={this.submitEducationDataForm}
 						steps={NEW_PERSON_STEPS}
+						onConfirmCode={this.onConfirmCode}
 					/>
 				</DictionaryContext.Provider>
 			</Dictionary>

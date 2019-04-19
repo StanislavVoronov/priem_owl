@@ -1,27 +1,25 @@
-import { IDictionary } from '@mgutm-fcu/dictionary';
-import { connect } from 'react-redux';
-
 import * as React from 'react';
 
 import { Stepper, StepContent, Step, TextInput, Button, StepButton } from '../../platform';
-import { IContactDataForm, IDocDataItem, IEducationDataForm, IPersonDataForm, IRegisterDataForm } from './models';
+import { IContactDataForm, IEducationDataForm, IPersonDataForm, IRegisterDataForm } from './models';
 import styles from './styles/common.css';
 import ContactsDataForm from './components/ContactsDataForm';
 import RegisterDataForm from './components/RegisterDataForm';
 import PersonDataForm from './components/PersonDataForm';
 import EducationDataForm from './components/EducationDataForm';
 import DocumentsDataForm from './components/DocumentsDataForm';
-
-import { withStyles } from '@material-ui/core';
+import { CardMedia, withStyles } from '@material-ui/core';
 import { IServerError } from './serverModels';
+import Logo from '../../static/logo.png';
 import { IDocDataForm } from '../../platform/DocDataForm';
 const localStyles = {
 	currentStepLabel: {
-		fontSize: '1rem',
+		fontSize: '1.2rem',
 	},
 	stepLabel: {
-		fontSize: '0.875rem',
+		fontSize: '1rem',
 	},
+	logo: { height: window.innerHeight, width: window.innerWidth },
 };
 
 interface IProps {
@@ -40,6 +38,7 @@ interface IProps {
 	handleStep: (step: number) => any;
 	personExists: boolean;
 	classes: Record<string, string>;
+	onConfirmCode: () => void;
 }
 
 export class EnrollView extends React.PureComponent<IProps> {
@@ -48,52 +47,63 @@ export class EnrollView extends React.PureComponent<IProps> {
 	};
 
 	public render() {
-		console.log('props', this.props);
 		return (
 			<React.Fragment>
-				<Stepper activeStep={this.props.activeStep} orientation={'vertical'}>
-					{this.props.steps.map((label, index) => (
-						<Step key={label}>
-							<StepButton onClick={this.props.handleStep(index)}>
-								<span
-									className={
-										index === this.props.activeStep ? this.props.classes.currentStepLabel : this.props.classes.stepLabel
-									}>
-									{label}
-								</span>
-							</StepButton>
+				<CardMedia className={this.props.classes.logo} image={Logo}>
+					<Stepper
+						style={{ backgroundColor: 'transparent', marginRight: 50, paddingTop: 180, marginLeft: 50 }}
+						activeStep={this.props.activeStep}
+						orientation={'vertical'}>
+						{this.props.steps.map((label, index) => (
+							<Step key={label}>
+								<StepButton style={{ marginLeft: 6 }} onClick={this.props.handleStep(index)} disabled={false}>
+									<span
+										className={
+											index === this.props.activeStep
+												? this.props.classes.currentStepLabel
+												: this.props.classes.stepLabel
+										}>
+										{label}
+									</span>
+								</StepButton>
 
-							<StepContent>
-								{index === 0 && (
-									<RegisterDataForm
-										personExists={this.props.personExists}
-										checkLoginError={this.props.checkLoginError}
-										checkPersonError={this.props.checkPersonError}
-										onCheckLogin={this.props.onCheckLogin}
-										submit={this.props.submitRegisterDataForm}
-									/>
-								)}
-								{index === 1 && <PersonDataForm submit={this.props.submitPersonDataForm} />}
-								{index === 2 && <ContactsDataForm submit={this.props.submitContactsDataForm} />}
-								{index === 3 && <EducationDataForm submit={this.props.submitEducationDataForm} />}
-								{index === 4 && <DocumentsDataForm submit={this.props.submitAddDocumentsDataForm} />}
-							</StepContent>
-						</Step>
-					))}
-				</Stepper>
-				{this.props.activeStep === 5 ? (
-					<div className={styles.flexColumn}>
-						<TextInput
-							label="Код подтверждения"
-							type="number"
-							onBlur={this.props.onChangeConfirmationCode}
-							helperText={`Введите код, отправленный на указанную в контактах электронную почту`}
-						/>
-						{/*<Button variant="contained" color="primary" onClick={this}>*/}
-						{/*{'Далее'}*/}
-						{/*</Button>*/}
-					</div>
-				) : null}
+								<StepContent
+									style={{
+										backgroundColor: '#FFFDEF',
+										borderRadius: 10,
+										boxShadow: this.props.activeStep === index ? '0px 0px 0px 1px rgba(0,0,0,0.3)' : '',
+									}}>
+									{index === 0 && (
+										<RegisterDataForm
+											personExists={this.props.personExists}
+											checkLoginError={this.props.checkLoginError}
+											checkPersonError={this.props.checkPersonError}
+											onCheckLogin={this.props.onCheckLogin}
+											submit={this.props.submitRegisterDataForm}
+										/>
+									)}
+									{index === 1 && <PersonDataForm submit={this.props.submitPersonDataForm} />}
+									{index === 2 && <ContactsDataForm submit={this.props.submitContactsDataForm} />}
+									{index === 3 && <EducationDataForm submit={this.props.submitEducationDataForm} />}
+									{index === 4 && <DocumentsDataForm submit={this.props.submitAddDocumentsDataForm} />}
+								</StepContent>
+							</Step>
+						))}
+					</Stepper>
+					{this.props.activeStep === 5 ? (
+						<div className={styles.flexColumn}>
+							<TextInput
+								label="Код подтверждения"
+								type="number"
+								onBlur={this.props.onChangeConfirmationCode}
+								helperText={`Введите код, отправленный на указанную в контактах электронную почту`}
+							/>
+							<Button variant="contained" color="primary" onClick={this.props.onConfirmCode}>
+								{'Подать документы на поступление в Университет'}
+							</Button>
+						</div>
+					) : null}
+				</CardMedia>
 			</React.Fragment>
 		);
 	}
