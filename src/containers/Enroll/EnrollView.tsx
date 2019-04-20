@@ -46,7 +46,7 @@ const localStyles = {
 		backgroundColor: '#24529D',
 		color: 'white',
 		paddingBottom: 15,
-		marginBottom: 30,
+		marginBottom: 20,
 	},
 };
 
