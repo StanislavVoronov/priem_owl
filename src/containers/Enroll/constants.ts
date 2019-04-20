@@ -4,6 +4,12 @@ export const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { valu
 
 export const SHORT_DICTIONARY_LIST = [
 	{
+		name: EDictionaryNameList.FirstNames,
+		dictionary: 'directory_names',
+		columns: ['id', 'name', 'type', 'sex'],
+		filter: (item: IDictionaryTypeFilter) => item.type === 0,
+	},
+	{
 		name: EDictionaryNameList.MiddleNames,
 		dictionary: 'directory_names',
 		columns: ['id', 'name', 'type', 'sex'],

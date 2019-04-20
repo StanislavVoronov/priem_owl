@@ -136,10 +136,10 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 								return (
 									<div {...getRootProps()} className={styles.fileContainer}>
 										{this.props.docTitle && (
-											<React.Fragment>
+											<div style={{ display: 'flex', flexDirection: 'row' }}>
 												<FormLabel style={{ fontSize: '.875rem' }}>{this.props.docTitle}</FormLabel>
 												<FormLabel style={{ color: 'red' }}>{' *'}</FormLabel>
-											</React.Fragment>
+											</div>
 										)}
 										{this.props.file ? (
 											<React.Fragment>

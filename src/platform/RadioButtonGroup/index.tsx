@@ -29,7 +29,7 @@ const localStyles = {
 		fontSize: '0.775rem',
 	},
 	label: {
-		marginRight: 2,
+		marginRight: 3,
 		fontSize: '0.775rem',
 	},
 	flexRow: {
@@ -40,6 +40,9 @@ const localStyles = {
 		color: 'red',
 		fontSize: '0.875rem',
 	},
+	space: {
+		marginTop: 16,
+	},
 };
 class RadioButtonGroup extends React.PureComponent<IRadioGroupButton> {
 	static defaultProps = {
@@ -48,7 +51,7 @@ class RadioButtonGroup extends React.PureComponent<IRadioGroupButton> {
 
 	render() {
 		return (
-			<FormControl margin="normal">
+			<FormControl className={this.props.classes.space}>
 				<div className={this.props.classes.flexRow}>
 					<FormLabel className={this.props.classes.label}>{this.props.title}</FormLabel>
 					<FormLabel className={this.props.classes.asterisk}>{this.props.required && '*'}</FormLabel>

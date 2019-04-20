@@ -19,7 +19,35 @@ const localStyles = {
 	stepLabel: {
 		fontSize: '1rem',
 	},
-	logo: { height: window.innerHeight, width: window.innerWidth },
+	logo: { height: window.innerHeight },
+	head: {
+		textAlign: 'center' as any,
+		justifyContent: 'center' as any,
+		display: 'flex',
+		fontSize: '1.7em',
+		margin: 0,
+		paddingTop: 15,
+		paddingLeft: 10,
+		paddingRight: 10,
+		paddingBottom: 10,
+		flexWrap: 'wrap' as any,
+		backgroundColor: '#24529D',
+		color: 'white',
+	},
+	subHead: {
+		textAlign: 'center' as any,
+		justifyContent: 'center' as any,
+		display: 'flex',
+		fontSize: '1.5em',
+		margin: 0,
+		paddingLeft: 10,
+		paddingRight: 10,
+		flexWrap: 'wrap' as any,
+		backgroundColor: '#24529D',
+		color: 'white',
+		paddingBottom: 15,
+		marginBottom: 30,
+	},
 };
 
 interface IProps {
@@ -49,14 +77,27 @@ export class EnrollView extends React.PureComponent<IProps> {
 	public render() {
 		return (
 			<React.Fragment>
+				<h2 className={this.props.classes.head}>
+					Московский государвственый университет технологии и управлении им. К.Г. Разумовского (ПКУ)
+				</h2>
+				<h2 className={this.props.classes.subHead}>Приемная компания {new Date().getFullYear()}</h2>
 				<CardMedia className={this.props.classes.logo} image={Logo}>
 					<Stepper
-						style={{ backgroundColor: 'transparent', marginRight: 50, paddingTop: 180, marginLeft: 50 }}
+						style={{
+							marginRight: 100,
+							marginLeft: 100,
+							backgroundColor: '#FBFDF0',
+							borderRadius: 10,
+							boxShadow: '0px 0px 0px 1px rgba(0,0,0,0.3)',
+						}}
 						activeStep={this.props.activeStep}
 						orientation={'vertical'}>
 						{this.props.steps.map((label, index) => (
 							<Step key={label}>
-								<StepButton style={{ marginLeft: 6 }} onClick={this.props.handleStep(index)} disabled={false}>
+								<StepButton
+									style={{ display: 'flex', alignItems: 'center' }}
+									onClick={this.props.handleStep(index)}
+									disabled={false}>
 									<span
 										className={
 											index === this.props.activeStep
@@ -67,12 +108,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 									</span>
 								</StepButton>
 
-								<StepContent
-									style={{
-										backgroundColor: '#FFFDEF',
-										borderRadius: 10,
-										boxShadow: this.props.activeStep === index ? '0px 0px 0px 1px rgba(0,0,0,0.3)' : '',
-									}}>
+								<StepContent>
 									{index === 0 && (
 										<RegisterDataForm
 											personExists={this.props.personExists}

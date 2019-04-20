@@ -84,11 +84,15 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 							: false;
 					const filteredDictionaryMiddleName = dictionaryMiddleNames
 						? this.state.gender
-							? dictionaryMiddleNames.values.filter((item: { sex: Gender }) => item.sex == this.state.gender)
-							: dictionaryMiddleNames.values
+							? {
+									values: dictionaryMiddleNames.values.filter((item: { sex: Gender }) => item.sex == this.state.gender),
+							  }
+							: dictionaryMiddleNames
 						: [];
 
 					const { middleName, ...rest } = this.state;
+					console.log('1', dictionaryFirstNames);
+					console.log('2', dictionaryMiddleNames);
 					const isInvalidForm =
 						inValidateDataForm(rest) || inValidRepeatPassword || inValidPassword || !!this.props.checkLoginError;
 
@@ -165,7 +169,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 									<H2 color="red">{this.props.checkPersonError}</H2>
 								) : (
 									<Button variant="contained" color="primary" disabled={isInvalidForm} onClick={this.submit}>
-										{'Далее'}
+										{'Зарегистрироваться'}
 									</Button>
 								)}
 							</div>

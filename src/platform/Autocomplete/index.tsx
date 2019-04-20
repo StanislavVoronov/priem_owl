@@ -18,7 +18,7 @@ function renderInputComponent(inputProps: any) {
 	return (
 		<TextField
 			InputLabelProps={{
-				FormLabelClasses: { ...inputProps.styles },
+				FormLabelClasses: inputProps.styles,
 				shrink: true,
 			}}
 			margin="normal"
@@ -93,7 +93,25 @@ const localStyles = {
 	asterisk: {
 		color: 'red',
 	},
+	container: {
+		position: 'relative' as any,
+	},
+	suggestionsContainerOpen: {
+		position: 'absolute' as any,
+		zIndex: 1,
+		left: 0,
+		right: 0,
+	},
+	suggestion: {
+		display: 'block',
+	},
+	suggestionsList: {
+		margin: 0,
+		padding: 0,
+		listStyleType: 'None',
+	},
 };
+
 class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoCompleteState> {
 	public defaultProps = {
 		suggestions: [],
@@ -155,10 +173,10 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 					}}
 					// @ts-ignore
 					theme={{
-						container: 'container',
-						suggestionsContainerOpen: 'suggestionsContainerOpen',
-						suggestionsList: 'suggestionsList',
-						suggestion: 'suggestion',
+						container: this.props.classes.container,
+						suggestionsContainerOpen: this.props.classes.suggestionsContainerOpen,
+						suggestionsList: this.props.classes.suggestionsList,
+						suggestion: this.props.classes.suggestion,
 					}}
 					focusInputOnSuggestionClick={false}
 					renderSuggestionsContainer={renderSuggestionsContainer}
