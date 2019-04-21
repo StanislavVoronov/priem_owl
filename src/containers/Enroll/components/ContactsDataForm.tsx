@@ -3,7 +3,7 @@ import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocDataForm 
 import { EDictionaryNameList, makeVerticalSpace, inValidateDataForm, IGovernmentSelectItem } from '../../../common';
 import { IContactDataForm } from '../models';
 import Button from '@material-ui/core/Button';
-import styles from '../styles/common.css';
+import styles from './styles.css';
 import { defaultContactsDataForm } from '../defaults';
 import { DictionaryContext } from '../EnrollContainer';
 
@@ -117,7 +117,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								}
 							/>
 							<FormControlLabel
-								classes={{ root: styles.checkFormControlLabel }}
+								className={styles.checkFormControlLabel}
 								control={
 									<Checkbox
 										color="primary"
@@ -166,7 +166,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								</div>
 							)}
 							<FormControlLabel
-								classes={{ root: styles.checkFormControlLabel }}
+								className={styles.checkFormControlLabel}
 								control={<Checkbox color="primary" checked={needDormitory} onChange={this.toggleNeedDormitoryStatus} />}
 								label="Нуждаюсь в предоставлении общежития"
 								labelPlacement="start"

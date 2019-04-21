@@ -2,11 +2,8 @@
 	justify-content: center;
 	display: flex;
 	flex-direction: column;
-}
-
-.fileName {
-	margin-top: 10px;
-	margin-bottom: 12px;
+	margin-top: 16px;
+	margin-bottom: 8px;
 }
 
 .sliderContainer {

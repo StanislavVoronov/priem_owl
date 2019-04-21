@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { IHasError, IHelperText } from '../models';
-import { withStyles } from '@material-ui/core';
+import { withStyles, createStyles } from '@material-ui/core';
 interface IInputProps {
 	label?: string;
 	placeholder?: string;
@@ -93,6 +93,7 @@ const localStyles = {
 	asterisk: {
 		color: 'red',
 	},
+
 	container: {
 		position: 'relative' as any,
 	},

@@ -25,7 +25,7 @@
 }
 .documentContainer {
 	display: flex;
-	width: 50%;
+	width: 40%;
 	align-items: center;
 	flex-direction: column;
 }

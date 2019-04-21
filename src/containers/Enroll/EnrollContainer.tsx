@@ -2,7 +2,7 @@ import { IRootState } from '../../common';
 import EnrollView from './EnrollView';
 import Dictionary from '@mgutm-fcu/dictionary/Dictionary';
 import * as React from 'react';
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { connect, MapStateToProps } from 'react-redux';
 import { enrollStateSelector } from './selectors';
 import {
 	defaultContactsDataForm,
@@ -24,6 +24,7 @@ import {
 } from './models';
 import { IServerError } from './serverModels';
 import { IDocDataForm } from '../../platform/DocDataForm';
+import { WebPhoto } from '../../platform';
 
 interface IDispatchToProps {
 	checkLogin(login: string): void;
@@ -54,7 +55,7 @@ export const DictionaryContext = React.createContext({});
 class EnrollContainer extends React.Component<IProps, IState> {
 	state = {
 		passedStep: 0,
-		activeStep: 0,
+		activeStep: 1,
 		confirmCode: '',
 		registerData: defaultRegisterDataForm,
 		personData: defaultPersonDataForm,

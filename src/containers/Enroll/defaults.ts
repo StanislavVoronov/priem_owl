@@ -30,6 +30,7 @@ export const defaultRegisterDataForm: IRegisterDataForm = {
 export const defaultPersonDataForm: IPersonDataForm = {
 	...defaultDocDataForm,
 	docType: { id: 1, name: 'Документ удостоверяющий личность' },
+	photo: { docType: { id: 14, name: 'Фотография' }, docFile: null },
 	docFile: null,
 	birthPlace: '',
 };

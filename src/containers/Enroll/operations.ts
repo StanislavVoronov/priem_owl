@@ -159,6 +159,10 @@ export const createPerson = (
 			docSubType: data.contactsData.docSubType,
 		};
 
+		const photo: IDocDataItem = {
+			docFile: data.personData.photo.docFile,
+			docType: data.personData.photo.docType,
+		};
 		const payload = {
 			email_code: parseInt(confirmCode) || 0,
 			phone_code: '000000',
@@ -179,7 +183,7 @@ export const createPerson = (
 			.then(response => {
 				dispatch(createPersonSuccess(response.np_uid));
 
-				dispatch(uploadDocList([passport, education, registration, ...(data.documents || [])]));
+				dispatch(uploadDocList([passport, photo, education, registration, ...(data.documents || [])]));
 			})
 			.catch((error: any) => {
 				console.log('error', error);

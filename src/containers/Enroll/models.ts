@@ -33,6 +33,7 @@ export interface IDocData {
 
 export interface IPersonDataForm extends IDocData {
 	codeDepartment?: string;
+	photo: IDocData;
 	birthPlace: string;
 }
 
