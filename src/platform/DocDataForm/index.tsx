@@ -137,13 +137,13 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 									<div {...getRootProps()} className={styles.fileContainer}>
 										{this.props.docTitle && (
 											<div style={{ display: 'flex', flexDirection: 'row' }}>
-												<FormLabel style={{ fontSize: '.875rem' }}>{this.props.docTitle}</FormLabel>
-												<FormLabel style={{ color: 'red' }}>{' *'}</FormLabel>
+												<FormLabel style={{ fontSize: '.875rem', marginRight: 2 }}>{this.props.docTitle}</FormLabel>
+												<FormLabel style={{ color: 'red' }}>{'*'}</FormLabel>
 											</div>
 										)}
 										{this.props.file ? (
 											<React.Fragment>
-												<Image file={this.props.file} removeImage={this.removeImage} />
+												<Image title={this.props.file.name} file={this.props.file} removeImage={this.removeImage} />
 											</React.Fragment>
 										) : (
 											<React.Fragment>

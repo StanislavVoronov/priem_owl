@@ -4,7 +4,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { IEducationDataForm } from '../models';
 import Button from '@material-ui/core/Button';
-import styles from '../styles/common.css';
+import styles from './styles.css';
 import { ISelectItem, DocDataForm, DropdownSelect } from '../../../platform';
 import { defaultEducationDataForm } from '../defaults';
 import { DictionaryContext } from '../EnrollContainer';
@@ -78,7 +78,7 @@ class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> 
 								subTitle={'Тип документа о предыдущем образовании'}
 								extraFields={
 									<FormControlLabel
-										classes={{ root: styles.checkFormControlLabel }}
+										className={styles.checkFormControlLabel}
 										control={<Checkbox color="primary" onChange={this.toggleHasEgeStatus} />}
 										label="Имею результаты ЕГЭ"
 										labelPlacement="start"

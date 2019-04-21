@@ -13,6 +13,8 @@ import { red } from '@material-ui/core/colors';
 
 interface IProps {
 	file: File;
+	title: string;
+	hidden: boolean;
 	removeImage?: () => void;
 }
 interface IState {
@@ -26,12 +28,13 @@ interface IState {
 class ImageEditor extends React.PureComponent<IProps, IState> {
 	public static defaultProps = {
 		removeImage: () => void 0,
+		hidden: false,
 	};
 	public state = {
 		file: null,
 		scale: 0.5,
 		rotate: 0,
-		hidden: false,
+		hidden: this.props.hidden,
 		width: window.innerWidth / 2.5,
 		height: window.innerHeight / 2.5,
 	};
@@ -54,7 +57,7 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 	public render() {
 		return (
 			<div className={styles.container}>
-				<div className={styles.fileName}>{this.props.file && this.props.file['name']}</div>
+				<div style={{ marginBottom: 5 }}>{this.props.title}</div>
 				{!this.state.hidden && (
 					<React.Fragment>
 						<AvatarEditor

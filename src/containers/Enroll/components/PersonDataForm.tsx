@@ -3,19 +3,29 @@ import { DropdownSelect, Button, DocDataForm, TextInput, ISelectItem } from '../
 
 import { EDictionaryNameList, inValidateDataForm } from '../../../common';
 
-import { IPersonDataForm } from '../models';
+import { IDocDataItem, IPersonDataForm } from '../models';
 import { defaultPersonDataForm } from '../defaults';
 import Styles from '../styles/common.css';
-import { IDictionary } from '@mgutm-fcu/dictionary';
 import { DictionaryContext } from '../EnrollContainer';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import WebPhoto from '../../../platform/WebPhoto';
+import styles from './styles.css';
 interface IOwnProps {
 	submit: (data: IPersonDataForm) => void;
 }
 
 type IProps = IOwnProps;
+interface IState extends IPersonDataForm {
+	isApplyPersonData: boolean;
+	photo: IDocDataItem;
+}
 
-class PersonDataForm extends React.PureComponent<IProps, IPersonDataForm> {
-	public state = defaultPersonDataForm;
+class PersonDataForm extends React.PureComponent<IProps, IState> {
+	public state = {
+		...defaultPersonDataForm,
+		isApplyPersonData: false,
+	};
 	public onChangeTextField = (name: string) => (value: string) => {
 		this.setState(state => ({
 			...state,
@@ -36,6 +46,15 @@ class PersonDataForm extends React.PureComponent<IProps, IPersonDataForm> {
 	selectSubType = (subType: ISelectItem) => {
 		this.setState({ docSubType: subType });
 	};
+	toggleAgreePersonData = () => {
+		this.setState({ isApplyPersonData: !this.state.isApplyPersonData });
+	};
+	addPhoto = (docFile: File) => {
+		this.setState({ photo: { ...this.state.photo, docFile } });
+	};
+	removePhoto = () => {
+		this.setState({ photo: { ...this.state.photo, docFile: null } });
+	};
 	submit = () => {
 		this.props.submit(this.state);
 	};
@@ -47,6 +66,8 @@ class PersonDataForm extends React.PureComponent<IProps, IPersonDataForm> {
 					const dictionaryPersonDocTypes = dictionaries[EDictionaryNameList.PersonDocTypes];
 					return (
 						<div className={Styles.flexColumn}>
+							<WebPhoto downloadPhoto={this.addPhoto} removePhoto={this.removePhoto} />
+
 							<DropdownSelect
 								required={true}
 								options={dictionaryGovernments && dictionaryGovernments.values}
@@ -81,11 +102,24 @@ class PersonDataForm extends React.PureComponent<IProps, IPersonDataForm> {
 									) : null
 								}
 							/>
+							<FormControlLabel
+								classes={{ root: styles.checkFormControl, label: styles.checkFormControlLabel }}
+								control={
+									<Checkbox
+										color="primary"
+										checked={this.state.isApplyPersonData}
+										onChange={this.toggleAgreePersonData}
+									/>
+								}
+								label="Согласие на обработку персональных данных"
+							/>
 							<div className={Styles.nextButtonContainer}>
 								<Button
 									variant="contained"
 									color="primary"
-									disabled={inValidateDataForm(this.state)}
+									disabled={
+										inValidateDataForm(this.state) || !this.state.isApplyPersonData || !this.state.photo.docFile
+									}
 									onClick={this.submit}>
 									{'Далее'}
 								</Button>
