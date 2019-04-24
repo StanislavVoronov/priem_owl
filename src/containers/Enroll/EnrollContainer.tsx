@@ -24,7 +24,6 @@ import {
 } from './models';
 import { IServerError } from './serverModels';
 import { IDocDataForm } from '../../platform/DocDataForm';
-import { WebPhoto } from '../../platform';
 
 interface IDispatchToProps {
 	checkLogin(login: string): void;
@@ -37,6 +36,7 @@ interface IStateToProps {
 	npId: number;
 	checkPersonError: IServerError | null;
 	checkLoginError: IServerError | null;
+	verifyPersonError: IServerError | null;
 	dictionaries: Record<string, IDictionary>;
 }
 type IProps = IDispatchToProps & IStateToProps;
@@ -55,7 +55,7 @@ export const DictionaryContext = React.createContext({});
 class EnrollContainer extends React.Component<IProps, IState> {
 	state = {
 		passedStep: 0,
-		activeStep: 1,
+		activeStep: 0,
 		confirmCode: '',
 		registerData: defaultRegisterDataForm,
 		personData: defaultPersonDataForm,
@@ -125,7 +125,6 @@ class EnrollContainer extends React.Component<IProps, IState> {
 						activeStep={this.state.activeStep}
 						passedStep={this.state.passedStep}
 						handleStep={this.handleStep}
-						personExists={false}
 						onCheckLogin={this.onCheckLogin}
 						checkLoginError={this.props.checkLoginError}
 						checkPersonError={this.props.checkPersonError}
@@ -137,6 +136,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 						submitEducationDataForm={this.submitEducationDataForm}
 						steps={NEW_PERSON_STEPS}
 						onConfirmCode={this.onConfirmCode}
+						verifyPersonError={this.props.verifyPersonError}
 					/>
 				</DictionaryContext.Provider>
 			</Dictionary>
@@ -145,11 +145,12 @@ class EnrollContainer extends React.Component<IProps, IState> {
 }
 
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
-	const { npId, checkPersonError, checkLoginError } = enrollStateSelector(state);
+	const { npId, checkPersonError, checkLoginError, verifyPersonError } = enrollStateSelector(state);
 	return {
 		npId,
 		checkPersonError,
 		checkLoginError,
+		verifyPersonError,
 		dictionaries: state.dictionaries,
 	};
 };

@@ -21,7 +21,6 @@ interface IProps {
 	onCheckLogin(login: string): void;
 	checkLoginError: IServerError | null;
 	checkPersonError: IServerError | null;
-	personExists: boolean;
 }
 
 interface IState extends IRegisterDataForm {}
@@ -76,12 +75,10 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 				{dictionaries => {
 					const dictionaryFirstNames = dictionaries[EDictionaryNameList.FirstNames];
 					const dictionaryMiddleNames = dictionaries[EDictionaryNameList.MiddleNames];
-
+					const inValidLogin = this.state.login.length > 0 && this.state.login.length < 5;
 					const inValidPassword = this.state.password.length > 0 && this.state.password.length < 7;
 					const inValidRepeatPassword =
-						this.state.password.length && this.state.repeatPassword.length
-							? this.state.repeatPassword != this.state.password
-							: false;
+						inValidLogin && this.state.repeatPassword.length ? this.state.repeatPassword != this.state.password : false;
 					const filteredDictionaryMiddleName = dictionaryMiddleNames
 						? this.state.gender
 							? {
@@ -91,10 +88,12 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 						: [];
 
 					const { middleName, ...rest } = this.state;
-					console.log('1', dictionaryFirstNames);
-					console.log('2', dictionaryMiddleNames);
 					const isInvalidForm =
-						inValidateDataForm(rest) || inValidRepeatPassword || inValidPassword || !!this.props.checkLoginError;
+						inValidateDataForm(rest) ||
+						inValidRepeatPassword ||
+						inValidPassword ||
+						!!this.props.checkLoginError ||
+						inValidLogin;
 
 					return (
 						<div className={styles.flexColumn}>
@@ -139,7 +138,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 									regExp={'[a-zA-z0-9]'}
 									label="Логин"
 									onChange={this.onChangeLoginField}
-									hasError={!!this.props.checkLoginError}
+									hasError={!!this.props.checkLoginError || inValidLogin}
 									helperText={
 										this.props.checkLoginError
 											? this.props.checkLoginError.message
@@ -164,14 +163,11 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 									helperText={inValidRepeatPassword ? 'Пароли не совпадают' : ''}
 								/>
 							</React.Fragment>
+							{this.props.checkPersonError && <H2 color="red">{this.props.checkPersonError.message}</H2>}
 							<div className={styles.nextButtonContainer}>
-								{this.props.checkPersonError ? (
-									<H2 color="red">{this.props.checkPersonError}</H2>
-								) : (
-									<Button variant="contained" color="primary" disabled={isInvalidForm} onClick={this.submit}>
-										{'Зарегистрироваться'}
-									</Button>
-								)}
+								<Button variant="contained" color="primary" disabled={isInvalidForm} onClick={this.submit}>
+									{'Зарегистрироваться'}
+								</Button>
 							</div>
 						</div>
 					);

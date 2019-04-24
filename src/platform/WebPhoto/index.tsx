@@ -55,10 +55,17 @@ class WebPhoto extends React.Component<IProps, IState> {
 		return (
 			<div style={{ width: '50%' }}>
 				{!this.state.photo && (
-					<div style={{ marginTop: 24, width: '50%', marginBottom: 8 }}>
-						<Button variant="contained" color="primary" onClick={this.toggleDialog}>
-							Добавить фотографию
-						</Button>
+					<div style={{ marginTop: 24, display: 'flex', flex: 0, flexDirection: 'column', marginBottom: 8 }}>
+						<div>
+							<Button variant="contained" color="primary" onClick={this.toggleDialog}>
+								Добавить фотографию
+							</Button>
+						</div>
+						<div style={{ marginTop: 10 }}>
+							<label style={{ textAlign: 'center' }}>
+								Необходимо для пропуска в Университет, в случае поступления.
+							</label>
+						</div>
 					</div>
 				)}
 				<Dialog maxWidth="lg" open={this.state.open} onBackdropClick={this.toggleDialog}>

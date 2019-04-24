@@ -55,6 +55,7 @@ interface IProps {
 	activeStep: number;
 	checkLoginError: IServerError | null;
 	checkPersonError: IServerError | null;
+	verifyPersonError: IServerError | null;
 	onCheckLogin: (login: string) => void;
 	passedStep: number;
 	submitEducationDataForm: (educationData: IEducationDataForm) => void;
@@ -64,7 +65,6 @@ interface IProps {
 	submitAddDocumentsDataForm: (documentsData: IDocDataForm[]) => void;
 	onChangeConfirmationCode: (value: string) => void;
 	handleStep: (step: number) => any;
-	personExists: boolean;
 	classes: Record<string, string>;
 	onConfirmCode: () => void;
 }
@@ -97,7 +97,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 								<StepButton
 									style={{ display: 'flex', alignItems: 'center' }}
 									onClick={this.props.handleStep(index)}
-									disabled={false}>
+									disabled={index > this.props.passedStep}>
 									<span
 										className={
 											index === this.props.activeStep
@@ -111,7 +111,6 @@ export class EnrollView extends React.PureComponent<IProps> {
 								<StepContent>
 									{index === 0 && (
 										<RegisterDataForm
-											personExists={this.props.personExists}
 											checkLoginError={this.props.checkLoginError}
 											checkPersonError={this.props.checkPersonError}
 											onCheckLogin={this.props.onCheckLogin}
@@ -126,7 +125,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 							</Step>
 						))}
 					</Stepper>
-					{this.props.activeStep === 5 ? (
+					{this.props.activeStep >= this.props.steps.length ? (
 						<div className={styles.flexColumn}>
 							<TextInput
 								label="Код подтверждения"
@@ -135,7 +134,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 								helperText={`Введите код, отправленный на указанную в контактах электронную почту`}
 							/>
 							<Button variant="contained" color="primary" onClick={this.props.onConfirmCode}>
-								{'Подать документы на поступление в Университет'}
+								{'Подтвердить'}
 							</Button>
 						</div>
 					) : null}

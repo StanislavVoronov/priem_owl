@@ -4,7 +4,7 @@ import { IRegisterDataForm } from './models';
 import { IServerError } from './serverModels';
 
 export const checkPersonExistRequest = createAction('checkPersonExistRequest', () => {});
-export const checkPersonSuccess = createAction('checkPersonSuccess', (npId: number) => npId);
+export const checkPersonSuccess = createAction('checkPersonSuccess', () => void 0);
 export const checkPersonFailure = createAction('checkPersonFailure', (error: IServerError) => error);
 
 export const checkLoginRequest = createAction('checkLoginRequest', () => void 0);

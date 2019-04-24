@@ -49,7 +49,6 @@ export const registerNewPerson = (
 
 	return PriemApi.post<IRegisterNewPersonRequest, IRegisterNewPersonResponse>(PriemApiName.AddEnroll, payload)
 		.then(response => {
-			console.log(response);
 			dispatch(registerNewPersonSuccess(response.id));
 			return response.id;
 		})
@@ -73,10 +72,10 @@ export const checkPerson = (data: PersonInfo): ThunkAction<Promise<void>, IRootS
 	return PriemApi.checkData<ICheckPersonExistRequest, ICheckPersonExistResponse>(PriemApiName.FindNpId, payload)
 		.then(data => {
 			if (data) {
-				dispatch(checkPersonSuccess(data.ID));
-				return Promise.reject('Пользователь уже зарегистрирован в системе');
+				dispatch(checkPersonFailure({ message: 'Пользователь уже зарегистрирован в системе' }));
+				return Promise.reject();
 			}
-			dispatch(checkPersonSuccess(0));
+			dispatch(checkPersonSuccess());
 			return Promise.resolve();
 		})
 		.catch(error => {
