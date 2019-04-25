@@ -11,12 +11,13 @@ export interface ISelectItem {
 }
 
 interface ISelectProps extends IHasError, IHelperText {
+	value: Record<string, any> | null;
 	placeholder?: string;
 	onChange: (data: any) => void;
 	options: any[];
 	title: string;
-	value?: string;
-	label?: string;
+	optionValue: string;
+	optionLabel: string;
 	isSearchable?: boolean;
 	isClearable?: boolean;
 	defaultValue?: any;
@@ -24,17 +25,24 @@ interface ISelectProps extends IHasError, IHelperText {
 	required?: boolean;
 }
 
-class DropdownSelect extends React.PureComponent<ISelectProps, { value: string }> {
+class DropdownSelect extends React.PureComponent<ISelectProps, { value: any; isControlled: boolean }> {
 	public static defaultProps = {
 		isSearchable: true,
 		isClearable: true,
-		value: 'id',
-		label: 'name',
+		optionValue: 'id',
+		optionLabel: 'name',
 		options: [],
+		value: null,
 	};
-	onChange = (item: any) => {
-		this.setState({ value: item });
-		this.props.onChange(item);
+	state = {
+		value: this.props.value,
+		isControlled: !!this.props.value,
+	};
+	onChange = (value: any) => {
+		if (!this.state.isControlled) {
+			this.setState({ value });
+		}
+		this.props.onChange(value);
 	};
 	public render() {
 		return (
@@ -45,7 +53,11 @@ class DropdownSelect extends React.PureComponent<ISelectProps, { value: string }
 				</FormLabel>
 				<Select
 					className="basic-single"
-					value={this.props.value || this.state.value}
+					value={
+						this.state.isControlled
+							? this.props.value![this.props.optionValue]
+							: this.state.value![this.props.optionValue]
+					}
 					isMulti={this.props.isMulti}
 					defaultValue={this.props.defaultValue}
 					classNamePrefix="select"
@@ -53,8 +65,8 @@ class DropdownSelect extends React.PureComponent<ISelectProps, { value: string }
 					onChange={this.onChange}
 					isClearable={this.props.isClearable}
 					isSearchable={this.props.isSearchable}
-					getOptionLabel={(item: any) => item[this.props.label!]}
-					getOptionValue={(item: any) => item[this.props.value!]}
+					getOptionLabel={(item: any) => item[this.props.optionLabel]}
+					getOptionValue={(item: any) => item[this.props.optionValue]}
 					options={this.props.options}
 				/>
 				{this.props.hasError && <FormLabel classes={{ root: 'requiredLabel' }}>{this.props.helperText}</FormLabel>}
