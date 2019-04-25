@@ -2,13 +2,14 @@ import { IDisabled, IHasError, IHelperText } from '../models';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
 import { FormLabel, withStyles } from '@material-ui/core';
+import { noop } from 'lodash';
 
 export interface IInputProps extends IHasError, IHelperText, IDisabled {
-	onChange?: (text: string) => void;
+	onChange: (text: string) => void;
 	placeholder?: string;
 	type: string;
-	onBlur?: (text: string) => void;
-	isTopLabel?: boolean;
+	onBlur: (text: string) => void;
+	isTopLabel: boolean;
 	defaultValue?: string;
 	label?: string;
 	required?: boolean;
@@ -24,34 +25,37 @@ const localStyles = {
 		color: 'red',
 	},
 };
-
-class TextInput extends React.PureComponent<IInputProps, { value: string }> {
-	state = {
-		value: this.props.value || '',
-	};
-	public static defaultProps = {
-		horizontalSpace: 'small',
-		verticalSpace: 'small',
+interface IState {
+	value?: string;
+	isControlled: boolean;
+}
+class TextInput extends React.PureComponent<IInputProps, IState> {
+	static defaultProps = {
+		onBlur: noop,
+		onChange: noop,
 		type: 'text',
 		required: false,
 		isTopLabel: true,
 		classes: {},
 	};
+
+	state = {
+		value: this.props.value,
+		isControlled: !!this.props.value,
+	};
+
 	public onChange = (event: any) => {
 		if (event.target.value.length && this.props.regExp && !new RegExp(this.props.regExp).test(event.target.value)) {
 			return;
 		}
-		if (this.props.value === undefined) {
+		if (!this.state.isControlled) {
 			this.setState({ value: event.target.value });
 		}
-		if (this.props.onChange) {
-			this.props.onChange(event.target.value);
-		}
+
+		this.props.onChange(event.target.value);
 	};
 	public onBlur = (event: any) => {
-		if (this.props.onBlur) {
-			this.props.onBlur(event.target.value);
-		}
+		this.props.onBlur(event.target.value);
 	};
 	public render() {
 		return (
@@ -59,7 +63,7 @@ class TextInput extends React.PureComponent<IInputProps, { value: string }> {
 				{this.props.prefix && <FormLabel>{this.props.prefix}</FormLabel>}
 				<TextField
 					margin="normal"
-					value={this.props.value !== undefined ? this.props.value : this.state.value}
+					value={this.state.isControlled ? this.props.value : this.state.value}
 					error={this.props.hasError}
 					helperText={this.props.helperText}
 					required={this.props.required}

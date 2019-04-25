@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Stepper, StepContent, Step, TextInput, Button, StepButton } from '../../platform';
-import { IContactDataForm, IEducationDataForm, IPersonDataForm, IRegisterDataForm } from './models';
+import { IContactDataForm, IDocument, IEducationDataForm, IPersonDataForm, IRegisterDataForm } from './models';
 import styles from './styles/common.css';
 import ContactsDataForm from './components/ContactsDataForm';
 import RegisterDataForm from './components/RegisterDataForm';
@@ -11,7 +11,7 @@ import DocumentsDataForm from './components/DocumentsDataForm';
 import { CardMedia, withStyles } from '@material-ui/core';
 import { IServerError } from './serverModels';
 import Logo from '../../static/logo.png';
-import { IDocDataForm } from '../../platform/DocDataForm';
+
 const localStyles = {
 	currentStepLabel: {
 		fontSize: '1.2rem',
@@ -51,6 +51,11 @@ const localStyles = {
 };
 
 interface IProps {
+	defaultRegisterData: IRegisterDataForm;
+	defaultPersonData: IPersonDataForm;
+	defaultEducationData: IEducationDataForm;
+	defaultContactsData: IContactDataForm;
+	defaultDocumentsData: IDocument[];
 	steps: string[];
 	activeStep: number;
 	checkLoginError: IServerError | null;
@@ -62,7 +67,7 @@ interface IProps {
 	submitContactsDataForm: (contactsData: IContactDataForm) => void;
 	submitPersonDataForm: (personData: IPersonDataForm) => void;
 	submitRegisterDataForm: (registerData: IRegisterDataForm) => void;
-	submitAddDocumentsDataForm: (documentsData: IDocDataForm[]) => void;
+	submitAddDocumentsDataForm: (documentsData: IDocument[]) => void;
 	onChangeConfirmationCode: (value: string) => void;
 	handleStep: (step: number) => any;
 	classes: Record<string, string>;
@@ -97,7 +102,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 								<StepButton
 									style={{ display: 'flex', alignItems: 'center' }}
 									onClick={this.props.handleStep(index)}
-									disabled={index > this.props.passedStep}>
+									disabled={index >= this.props.passedStep}>
 									<span
 										className={
 											index === this.props.activeStep
@@ -111,16 +116,37 @@ export class EnrollView extends React.PureComponent<IProps> {
 								<StepContent>
 									{index === 0 && (
 										<RegisterDataForm
+											defaultData={this.props.defaultRegisterData}
 											checkLoginError={this.props.checkLoginError}
 											checkPersonError={this.props.checkPersonError}
 											onCheckLogin={this.props.onCheckLogin}
 											submit={this.props.submitRegisterDataForm}
 										/>
 									)}
-									{index === 1 && <PersonDataForm submit={this.props.submitPersonDataForm} />}
-									{index === 2 && <ContactsDataForm submit={this.props.submitContactsDataForm} />}
-									{index === 3 && <EducationDataForm submit={this.props.submitEducationDataForm} />}
-									{index === 4 && <DocumentsDataForm submit={this.props.submitAddDocumentsDataForm} />}
+									{index === 1 && (
+										<PersonDataForm
+											defaultData={this.props.defaultPersonData}
+											submit={this.props.submitPersonDataForm}
+										/>
+									)}
+									{index === 2 && (
+										<ContactsDataForm
+											defaultData={this.props.defaultContactsData}
+											submit={this.props.submitContactsDataForm}
+										/>
+									)}
+									{index === 3 && (
+										<EducationDataForm
+											defaultData={this.props.defaultEducationData}
+											submit={this.props.submitEducationDataForm}
+										/>
+									)}
+									{index === 4 && (
+										<DocumentsDataForm
+											defaultData={this.props.defaultDocumentsData}
+											submit={this.props.submitAddDocumentsDataForm}
+										/>
+									)}
 								</StepContent>
 							</Step>
 						))}

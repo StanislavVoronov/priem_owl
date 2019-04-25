@@ -11,28 +11,26 @@ export interface ISelectItem {
 }
 
 interface ISelectProps extends IHasError, IHelperText {
-	value: Record<string, any> | null;
+	value?: Record<string, any> | null;
 	placeholder?: string;
 	onChange: (data: any) => void;
 	options: any[];
 	title: string;
-	optionValue: string;
-	optionLabel: string;
 	isSearchable?: boolean;
 	isClearable?: boolean;
 	defaultValue?: any;
 	isMulti?: boolean;
 	required?: boolean;
 }
-
-class DropdownSelect extends React.PureComponent<ISelectProps, { value: any; isControlled: boolean }> {
+interface IState {
+	value?: Record<string, any> | null;
+	isControlled: boolean;
+}
+class DropdownSelect extends React.PureComponent<ISelectProps, IState> {
 	public static defaultProps = {
 		isSearchable: true,
-		isClearable: true,
-		optionValue: 'id',
-		optionLabel: 'name',
+		isClearable: false,
 		options: [],
-		value: null,
 	};
 	state = {
 		value: this.props.value,
@@ -53,11 +51,7 @@ class DropdownSelect extends React.PureComponent<ISelectProps, { value: any; isC
 				</FormLabel>
 				<Select
 					className="basic-single"
-					value={
-						this.state.isControlled
-							? this.props.value![this.props.optionValue]
-							: this.state.value![this.props.optionValue]
-					}
+					value={this.state.isControlled ? this.props.value : this.state.value}
 					isMulti={this.props.isMulti}
 					defaultValue={this.props.defaultValue}
 					classNamePrefix="select"
@@ -65,8 +59,8 @@ class DropdownSelect extends React.PureComponent<ISelectProps, { value: any; isC
 					onChange={this.onChange}
 					isClearable={this.props.isClearable}
 					isSearchable={this.props.isSearchable}
-					getOptionLabel={(item: any) => item[this.props.optionLabel]}
-					getOptionValue={(item: any) => item[this.props.optionValue]}
+					getOptionLabel={(item: any) => item.name}
+					getOptionValue={(item: any) => item.id}
 					options={this.props.options}
 				/>
 				{this.props.hasError && <FormLabel classes={{ root: 'requiredLabel' }}>{this.props.helperText}</FormLabel>}

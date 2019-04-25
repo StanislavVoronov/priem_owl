@@ -82,7 +82,6 @@ const enrollReducer = handleActions(
 		},
 		[registerNewPersonSuccess.toString()]: (state: IEnrollState, action: Action<any>) =>
 			checkPayload(action, (npId: number) => {
-				console.log('registerNewPersonSuccess', npId);
 				return { ...state, registerPersonFetching: false, npId };
 			}),
 		[registerNewPersonFailure.toString()]: (state: IEnrollState, action: Action<any>) =>

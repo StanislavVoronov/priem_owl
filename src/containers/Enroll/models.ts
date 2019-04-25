@@ -1,6 +1,6 @@
 import { Gender, IDocType, IGovernmentSelectItem } from '../../common';
 import { IServerError } from './serverModels';
-import { IDocDataItem } from './models';
+import { IDocWithDepartment } from './models';
 import { ISelectItem } from '../../platform';
 
 export interface PersonInfo {
@@ -16,14 +16,14 @@ export interface IRegisterDataForm extends PersonInfo {
 	repeatPassword: string;
 }
 
-export interface IDocDataItem extends IDocData {
+export interface IDocWithDepartment extends IDocument {
 	codeDepartment?: string;
 }
 
-export interface IDocData {
+export interface IDocument {
 	docType: IDocType | null;
 	docSubType?: IDocType | null;
-	docGovernment?: ISelectItem | null;
+	docGovernment: ISelectItem | null;
 	docSeries?: string;
 	docNumber?: string;
 	docIssieBy?: string;
@@ -31,20 +31,20 @@ export interface IDocData {
 	docFile: File | null;
 }
 
-export interface IPersonDataForm extends IDocData {
+export interface IPersonDataForm extends IDocument {
 	codeDepartment?: string;
-	photo: IDocData;
+	photo: IDocument;
 	birthPlace: string;
 }
 
-export interface IEducationDataForm extends IDocData {
+export interface IEducationDataForm extends IDocument {
 	firstHighEducation: boolean;
 	coolnessTypes: ISelectItem[];
 	prevEducation: number;
 	hasEge: boolean;
 }
 
-export interface IContactDataForm extends IDocData {
+export interface IContactDataForm extends IDocument {
 	needDormitory: boolean;
 	regIndex: string;
 	regRegion: string;
@@ -89,5 +89,5 @@ export interface IPerson {
 	personData: IPersonDataForm | null;
 	contactsData: IContactDataForm | null;
 	educationData: IEducationDataForm | null;
-	documents: IDocDataItem[];
+	documents: IDocWithDepartment[];
 }

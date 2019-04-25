@@ -1,10 +1,14 @@
-import { IContactDataForm, IEducationDataForm, IPersonDataForm, IRegisterDataForm } from './models';
-import { defaultDocDataForm } from '../../platform';
+import { IContactDataForm, IDocument, IEducationDataForm, IPersonDataForm, IRegisterDataForm } from './models';
 import { Gender } from '../../common';
+export const defaultDocument: IDocument = {
+	docType: null,
+	docFile: null,
+	docGovernment: { id: 1, name: 'Россия' },
+};
 
 export const defaultContactsDataForm: IContactDataForm = {
+	...defaultDocument,
 	needDormitory: false,
-	docFile: null,
 	regLocality: '',
 	docType: { id: 3, name: 'Регистрация места жительства', needInfo: false, hasNumber: false },
 	phoneGovernment: { id: 1, name: 'Россия', phone_code: '7' },
@@ -28,18 +32,16 @@ export const defaultRegisterDataForm: IRegisterDataForm = {
 };
 
 export const defaultPersonDataForm: IPersonDataForm = {
-	...defaultDocDataForm,
+	...defaultDocument,
 	docSubType: { id: 1, name: 'Паспорт гражданина РФ', needInfo: true, hasNumber: true },
 	docType: { id: 1, name: 'Документ удостоверяющий личность', hasNumber: true, needInfo: true },
-	photo: { docType: { id: 14, name: 'Фотография', hasNumber: false, needInfo: false }, docFile: null },
-	docFile: null,
+	photo: { ...defaultDocument, docType: { id: 14, name: 'Фотография', hasNumber: false, needInfo: false } },
 	birthPlace: '',
 };
 
 export const defaultEducationDataForm: IEducationDataForm = {
-	...defaultDocDataForm,
+	...defaultDocument,
 	docType: { id: 2, name: 'Документ об предыдущем образовании', hasNumber: true, needInfo: true },
-	docSubType: { id: 3, name: 'Аттестат о среднем (полном) общем образовании' },
 	firstHighEducation: true,
 	coolnessTypes: [],
 	prevEducation: 3,

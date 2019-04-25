@@ -17,6 +17,7 @@ const prepareDictionarySuggestions = (dictionary: { values: any[] }) => {
 	return dictionary.values.map((item: any) => item.name);
 };
 interface IProps {
+	defaultData: IRegisterDataForm;
 	submit(data: IRegisterDataForm): void;
 	onCheckLogin(login: string): void;
 	checkLoginError: IServerError | null;
@@ -25,7 +26,7 @@ interface IProps {
 
 interface IState extends IRegisterDataForm {}
 class RegisterDataForm extends React.PureComponent<IProps, IState> {
-	public state = { ...defaultRegisterDataForm };
+	public state = { ...this.props.defaultData };
 	public onChangeTextField = (name: string) => (value: string) => {
 		this.setState(state => ({
 			...state,
@@ -78,7 +79,10 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 					const inValidLogin = this.state.login.length > 0 && this.state.login.length < 5;
 					const inValidPassword = this.state.password.length > 0 && this.state.password.length < 7;
 					const inValidRepeatPassword =
-						inValidLogin && this.state.repeatPassword.length ? this.state.repeatPassword != this.state.password : false;
+						!inValidLogin && this.state.repeatPassword.length
+							? this.state.repeatPassword != this.state.password
+							: false;
+					console.log('inValidRepeatPassword', inValidRepeatPassword);
 					const filteredDictionaryMiddleName = dictionaryMiddleNames
 						? this.state.gender
 							? {
@@ -99,12 +103,14 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 						<div className={styles.flexColumn}>
 							<TextInput
 								required={true}
+								defaultValue={this.props.defaultData.lastName}
 								placeholder={'Введите фамилию'}
 								label="Фамилия"
 								onBlur={this.onChangeTextField('lastName')}
 							/>
 							<Autocomplete
 								label={'Имя'}
+								defaultValue={this.props.defaultData.firstName}
 								required={true}
 								onChange={this.onChangeFirstName(dictionaryFirstNames)}
 								placeholder={'Введите имя'}
@@ -114,6 +120,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 							<Autocomplete
 								label={'Отчество'}
 								placeholder={'Введите отчество'}
+								defaultValue={this.props.defaultData.middleName}
 								onChange={this.onChangeTextField('middleName')}
 								suggestions={prepareDictionarySuggestions(filteredDictionaryMiddleName)}
 							/>
@@ -128,6 +135,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 							<TextInput
 								required={true}
 								label="Дата рождения"
+								defaultValue={this.props.defaultData.birthday}
 								type="date"
 								onBlur={this.onChangeTextField('birthday')}
 							/>
@@ -136,6 +144,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 								<TextInput
 									required={true}
 									regExp={'[a-zA-z0-9]'}
+									defaultValue={this.props.defaultData.login}
 									label="Логин"
 									onChange={this.onChangeLoginField}
 									hasError={!!this.props.checkLoginError || inValidLogin}
@@ -150,6 +159,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 									required={true}
 									label="Пароль"
 									type="password"
+									defaultValue={this.props.defaultData.password}
 									onBlur={this.onChangePasswordField}
 									hasError={inValidPassword}
 									helperText={'Пароль должен быть не менее 7 символов'}
@@ -158,6 +168,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 									required={true}
 									type="password"
 									label="Подтвердить пароль"
+									defaultValue={this.props.defaultData.repeatPassword}
 									onBlur={this.onChangeRepeatPasswordField}
 									hasError={inValidRepeatPassword}
 									helperText={inValidRepeatPassword ? 'Пароли не совпадают' : ''}

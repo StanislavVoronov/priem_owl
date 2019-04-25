@@ -13,9 +13,9 @@ import DropdownSelect, { ISelectItem } from './DropdownSelect/';
 import RadioButtonGroup from './RadioButtonGroup/';
 import { H2 } from './Typography/Headers';
 import Checkbox from '@material-ui/core/Checkbox';
-export * from './defaults';
 import StepButton from '@material-ui/core/StepButton';
 import WebPhoto from './WebPhoto';
+
 export {
 	Autocomplete,
 	Stepper,

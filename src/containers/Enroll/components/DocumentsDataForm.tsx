@@ -1,18 +1,20 @@
 import React from 'react';
-import { IDocData, IDocDataItem } from '../models';
+import { IDocument, IDocWithDepartment } from '../models';
 import Button from '@material-ui/core/Button';
 import classNames from 'classnames';
-import { defaultDocDataForm, DocDataForm, ISelectItem, TextInput } from '../../../platform';
+import { DocDataForm, TextInput } from '../../../platform';
 import { EDictionaryNameList, inValidateDataForm, IDocType } from '../../../common';
 
 import styles from './styles.css';
 import { DictionaryContext } from '../EnrollContainer';
+import { defaultDocument } from '../defaults';
 
 interface IOwnProps {
-	submit(data: IDocDataItem[]): void;
+	defaultData: IDocDataForm[];
+	submit(data: IDocWithDepartment[]): void;
 	classes: Record<string, string>;
 }
-interface IDocDataForm extends IDocData {}
+interface IDocDataForm extends IDocument {}
 
 interface IState {
 	documents: IDocDataForm[];
@@ -25,10 +27,10 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 		classes: {},
 	};
 	state = {
-		documents: [],
+		documents: this.props.defaultData,
 	};
 	addDoc = () => {
-		this.setState({ documents: [...this.state.documents, { ...defaultDocDataForm }] });
+		this.setState({ documents: [...this.state.documents, { ...defaultDocument }] });
 	};
 	onDownloadFile = (index: number) => (file: File | null) => {
 		const documents: IDocDataForm[] = [...this.state.documents];
@@ -47,7 +49,7 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 
 			if (type.id > 2) {
 				documents[index] = {
-					...defaultDocDataForm,
+					...defaultDocument,
 					...documents[index],
 					docType: type,
 				};
@@ -94,11 +96,17 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 									return (
 										<div className={classNames(styles.flexColumn, styles.docFormContainer)}>
 											<DocDataForm
+												defaultSubType={item.docSubType}
+												defaultType={item.docType}
 												needInfo={item.docType ? item.docType.needInfo : false}
 												hasNumber={item.docType ? item.docType.hasNumber : false}
 												docTitle="Файл документа"
 												file={item.docFile}
 												title="Тип документа"
+												defaultDate={item.docDate}
+												defaultIssieBy={item.docIssieBy}
+												defaultNumber={item.docNumber}
+												defaultSeries={item.docSeries}
 												selectDocSubType={this.selectDocSubType(index)}
 												selectDocType={this.selectDocType(index)}
 												dictionaryTypes={dictionaryDocTypes && dictionaryDocTypes.values}

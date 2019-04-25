@@ -8,6 +8,7 @@ import { defaultContactsDataForm } from '../defaults';
 import { DictionaryContext } from '../EnrollContainer';
 
 interface IOwnProps {
+	defaultData: IContactDataForm;
 	submit(data: any): void;
 }
 type IProps = IOwnProps;
@@ -15,7 +16,7 @@ interface IState extends IContactDataForm {
 	phoneGovernment: IGovernmentSelectItem;
 }
 class ContactsDataForm extends React.PureComponent<IProps, IState> {
-	state: IState = defaultContactsDataForm;
+	state: IState = this.props.defaultData;
 
 	onChangeTextField = (name: string) => (value: string) => {
 		this.setState(state => ({ ...state, [name]: value }));
@@ -118,7 +119,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								}
 							/>
 							<FormControlLabel
-								className={styles.checkFormControlLabel}
+								classes={{ root: styles.checkFormControl, label: styles.checkFormControlLabel }}
 								control={
 									<Checkbox
 										color="primary"
@@ -167,7 +168,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								</div>
 							)}
 							<FormControlLabel
-								className={styles.checkFormControlLabel}
+								classes={{ root: styles.checkFormControl, label: styles.checkFormControlLabel }}
 								control={<Checkbox color="primary" checked={needDormitory} onChange={this.toggleNeedDormitoryStatus} />}
 								label="Нуждаюсь в предоставлении общежития"
 								labelPlacement="start"

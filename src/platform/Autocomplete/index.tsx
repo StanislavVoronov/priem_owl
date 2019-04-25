@@ -17,13 +17,13 @@ interface IInputProps {
 function renderInputComponent(inputProps: any) {
 	return (
 		<TextField
+			{...inputProps}
 			InputLabelProps={{
 				FormLabelClasses: inputProps.styles,
 				shrink: true,
 			}}
 			margin="normal"
 			fullWidth={true}
-			{...inputProps}
 		/>
 	);
 }
@@ -75,6 +75,7 @@ function getSuggestionValue(suggestion: string) {
 interface IAutoCompleteProps extends IInputProps, IHasError, IHelperText {
 	suggestions: string[];
 	required?: boolean;
+	defaultValue: string;
 }
 
 interface IAutoCompleteState {
@@ -117,9 +118,10 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 	public defaultProps = {
 		suggestions: [],
 		classes: {},
+		defaultValue: '',
 	};
 	public state = {
-		value: '',
+		value: this.props.defaultValue,
 		suggestions: [],
 	};
 
@@ -140,6 +142,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 		});
 		this.props.onChange(newValue);
 	};
+
 	public onSelectSuggestion = (event: any, data: SuggestionSelectedEventData<string>) => {
 		const index = this.props.suggestions.findIndex(item => item == data.suggestion) || 0;
 		this.setState(state => {

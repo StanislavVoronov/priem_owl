@@ -8,17 +8,6 @@ import FormLabel from '@material-ui/core/FormLabel';
 import styles from './styles.css';
 import { IDocType } from '../../common';
 
-export interface IDocDataForm {
-	docType: IDocType | null;
-	docSubType?: IDocType | null;
-	docGovernment?: ISelectItem | null;
-	docNumber?: string;
-	docSeries?: string;
-	docIssued?: string;
-	docDate?: string;
-	docFile: File | null;
-}
-
 interface IDocDataProps {
 	needInfo: boolean;
 	hasNumber: boolean;
@@ -40,6 +29,10 @@ interface IDocDataProps {
 	onChangeIssieBy?: (value: string) => void;
 	onDownloadFile: (file: File | null) => void;
 	onChangeDate?: (date: string) => void;
+	defaultSeries: string;
+	defaultNumber: string;
+	defaultIssieBy: string;
+	defaultDate: string;
 }
 
 class DocDataForm extends React.PureComponent<IDocDataProps> {
@@ -48,6 +41,10 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 		selectDocSubType: (data: ISelectItem) => void 0,
 		needInfo: true,
 		hasNumber: true,
+		defaultSeries: '',
+		defaultNumber: '',
+		defaultIssieBy: '',
+		defaultDate: '',
 	};
 
 	public removeImage = () => {
@@ -88,6 +85,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 							{this.props.needInfo && (
 								<TextInput
 									required={true}
+									defaultValue={this.props.defaultSeries}
 									placeholder="Введите серию документа"
 									label="Серия"
 									onBlur={this.props.onChangeSeries}
@@ -95,6 +93,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 							)}
 							{this.props.hasNumber && (
 								<TextInput
+									defaultValue={this.props.defaultNumber}
 									required={true}
 									placeholder="Введите номер документа"
 									label="Номер"
@@ -107,11 +106,13 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 									<TextInput
 										required={true}
 										type="date"
+										defaultValue={this.props.defaultDate}
 										label="Дата выдачи документа"
 										onBlur={this.props.onChangeDate}
 									/>
 									<TextInput
 										required={true}
+										defaultValue={this.props.defaultIssieBy}
 										placeholder="Введите кем выдан документ"
 										label="Кем выдан документ"
 										multiline={true}
@@ -130,7 +131,6 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 									const reader = new FileReader();
 
 									reader.onload = e => {
-										console.log(e.target);
 										// @ts-ignore
 										this.props.onDownloadFile(file);
 									};

@@ -1,4 +1,4 @@
-import { IDocDataItem, IPerson, PersonInfo } from './models';
+import { IDocWithDepartment, IPerson, PersonInfo } from './models';
 
 import { IRootState, ServerBoolean } from '../../common';
 import PriemApi from '../../services/PriemApi';
@@ -132,36 +132,14 @@ export const createPerson = (
 	if (data.contactsData && data.registerData && data.personData && data.educationData) {
 		dispatch(createPersonFetching());
 
-		const passport: IDocDataItem = {
-			docNumber: data.personData.docNumber,
-			docSeries: data.personData.docSeries,
-			docDate: data.personData.docDate,
-			docIssieBy: data.personData.docIssieBy,
-			docFile: data.personData.docFile,
-			docType: data.personData.docType,
-			docSubType: data.personData.docSubType,
-			docGovernment: data.personData.docGovernment,
-		};
+		const passport: IDocWithDepartment = { ...data.personData, docGovernment: data.personData.docGovernment };
 
-		const education: IDocDataItem = {
-			docNumber: data.educationData.docNumber,
-			docSeries: data.educationData.docSeries,
-			docDate: data.educationData.docDate,
-			docIssieBy: data.educationData.docIssieBy,
-			docFile: data.educationData.docFile,
-			docType: data.educationData.docType,
-			docSubType: data.educationData.docSubType,
-		};
-		const registration: IDocDataItem = {
-			docFile: data.contactsData.docFile,
-			docType: data.contactsData.docType,
-			docSubType: data.contactsData.docSubType,
-		};
+		const education: IDocWithDepartment = data.educationData;
 
-		const photo: IDocDataItem = {
-			docFile: data.personData.photo.docFile,
-			docType: data.personData.photo.docType,
-		};
+		const registration: IDocWithDepartment = data.contactsData;
+
+		const photo: IDocWithDepartment = data.personData.photo;
+
 		const payload = {
 			email_code: parseInt(confirmCode) || 0,
 			phone_code: '000000',
@@ -193,10 +171,10 @@ export const createPerson = (
 	return Promise.reject();
 };
 
-const uploadDocList = (docList: IDocDataItem[]): ThunkAction<void, IRootState, void, Action> => dispatch => {
+const uploadDocList = (docList: IDocWithDepartment[]): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	dispatch(uploadDocsFetching());
 	console.log('documents', docList);
-	docList.forEach((item: IDocDataItem) => {
+	docList.forEach((item: IDocWithDepartment) => {
 		const document: IUploadDocPayload = {
 			mime: item.docFile ? item.docFile.type : null,
 			type: item.docType ? item.docType.id : 0,

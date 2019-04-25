@@ -15,7 +15,8 @@ import { checkPerson, checkLogin, registerNewPerson, createPerson, sendVerificat
 import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
 import {
 	IContactDataForm,
-	IDocDataItem,
+	IDocument,
+	IDocWithDepartment,
 	IEducationDataForm,
 	IPerson,
 	IPersonDataForm,
@@ -23,7 +24,6 @@ import {
 	PersonInfo,
 } from './models';
 import { IServerError } from './serverModels';
-import { IDocDataForm } from '../../platform/DocDataForm';
 
 interface IDispatchToProps {
 	checkLogin(login: string): void;
@@ -49,7 +49,7 @@ interface IState {
 	personData: IPersonDataForm;
 	contactsData: IContactDataForm;
 	educationData: IEducationDataForm;
-	documents: IDocDataForm[];
+	documents: IDocument[];
 }
 export const DictionaryContext = React.createContext({});
 class EnrollContainer extends React.Component<IProps, IState> {
@@ -83,7 +83,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		this.setState({ registerData });
 		this.props.registerNewPerson(registerData.login, registerData.password).then(this.onCheckPerson);
 	};
-	submitAddDocumentsDataForm = (documents: IDocDataItem[]) => {
+	submitAddDocumentsDataForm = (documents: IDocWithDepartment[]) => {
 		this.setState({ documents });
 		this.handleNext();
 	};
@@ -122,6 +122,11 @@ class EnrollContainer extends React.Component<IProps, IState> {
 				list={this.props.npId ? FULL_DICTIONARY_LIST : SHORT_DICTIONARY_LIST}>
 				<DictionaryContext.Provider value={this.props.dictionaries}>
 					<EnrollView
+						defaultRegisterData={this.state.registerData}
+						defaultPersonData={this.state.personData}
+						defaultEducationData={this.state.educationData}
+						defaultContactsData={this.state.contactsData}
+						defaultDocumentsData={this.state.documents}
 						activeStep={this.state.activeStep}
 						passedStep={this.state.passedStep}
 						handleStep={this.handleStep}

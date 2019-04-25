@@ -3,8 +3,7 @@ import { DropdownSelect, Button, DocDataForm, TextInput, ISelectItem } from '../
 
 import { EDictionaryNameList, IDocType, inValidateDataForm } from '../../../common';
 
-import { IDocDataItem, IPersonDataForm } from '../models';
-import { defaultPersonDataForm } from '../defaults';
+import { IDocWithDepartment, IPersonDataForm } from '../models';
 import Styles from '../styles/common.css';
 import { DictionaryContext } from '../EnrollContainer';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -12,18 +11,19 @@ import Checkbox from '@material-ui/core/Checkbox';
 import WebPhoto from '../../../platform/WebPhoto';
 import styles from './styles.css';
 interface IOwnProps {
+	defaultData: IPersonDataForm;
 	submit: (data: IPersonDataForm) => void;
 }
 
 type IProps = IOwnProps;
 interface IState extends IPersonDataForm {
 	isApplyPersonData: boolean;
-	photo: IDocDataItem;
+	photo: IDocWithDepartment;
 }
 
 class PersonDataForm extends React.PureComponent<IProps, IState> {
 	public state = {
-		...defaultPersonDataForm,
+		...this.props.defaultData,
 		isApplyPersonData: false,
 	};
 	public onChangeTextField = (name: string) => (value: string) => {
@@ -76,12 +76,17 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 							<WebPhoto downloadPhoto={this.addPhoto} removePhoto={this.removePhoto} />
 							<TextInput
 								label="Место рождения"
+								defaultValue={this.props.defaultData.birthPlace}
 								placeholder={'Введите место рождения'}
 								onBlur={this.onChangeTextField('birthPlace')}
 							/>
 							<DocDataForm
 								docTitle="Файл документа, удостоверяющего личность"
 								file={this.state.docFile}
+								defaultDate={this.state.docDate}
+								defaultIssieBy={this.state.docIssieBy}
+								defaultNumber={this.state.docNumber}
+								defaultSeries={this.state.docSeries}
 								selectDocSubType={this.selectSubType}
 								defaultSubType={this.state.docSubType}
 								onDownloadFile={this.onDownloadFile}
@@ -96,6 +101,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 										<TextInput
 											label="Код подразделения"
 											type="number"
+											defaultValue={this.props.defaultData.codeDepartment}
 											placeholder={'Введите код подразделения'}
 											onChange={this.onChangeTextField('codeDepartment')}
 										/>
@@ -104,8 +110,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 							/>
 
 							<DropdownSelect
-								value={`${this.state.docGovernment ? this.state.docGovernment.id : ''}`}
-								defaultValue={this.state.docGovernment}
+								value={this.state.docGovernment}
 								required={true}
 								options={dictionaryGovernments && dictionaryGovernments.values}
 								placeholder="Выберите гражданство"

@@ -6,17 +6,17 @@ import { IEducationDataForm } from '../models';
 import Button from '@material-ui/core/Button';
 import styles from './styles.css';
 import { ISelectItem, DocDataForm, DropdownSelect } from '../../../platform';
-import { defaultEducationDataForm } from '../defaults';
 import { DictionaryContext } from '../EnrollContainer';
 
 interface IOwnProps {
+	defaultData: IEducationDataForm;
 	submit(data: IState): void;
 }
 type IProps = IOwnProps;
 
 interface IState extends IEducationDataForm {}
 class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> {
-	state = defaultEducationDataForm;
+	state = this.props.defaultData;
 	toggleFirstHighEducationStatus = () => {
 		this.setState({ firstHighEducation: !this.state.firstHighEducation });
 	};
@@ -49,7 +49,7 @@ class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> 
 					return (
 						<div className={styles.flexColumn}>
 							<FormControlLabel
-								classes={{ root: 'checkFormControlLabel' }}
+								classes={{ root: styles.checkFormControl, label: styles.checkFormControlLabel }}
 								control={
 									<Checkbox value={firstHighEducation} color="primary" onChange={this.toggleFirstHighEducationStatus} />
 								}
@@ -67,9 +67,13 @@ class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> 
 								title={'Предыдущее образование'}
 								required
 								docTitle={'Документ о предыдущем образовании'}
+								defaultSubType={this.state.docSubType}
+								defaultDate={this.state.docDate}
+								defaultIssieBy={this.state.docIssieBy}
+								defaultNumber={this.state.docNumber}
+								defaultSeries={this.state.docSeries}
 								file={this.state.docFile}
 								selectDocType={this.selectTypeEducation}
-								defaultSubType={this.state.docSubType}
 								onDownloadFile={this.downloadFile}
 								onChangeSeries={this.onChangeTextField('docSeries')}
 								onChangeNumber={this.onChangeTextField('docNumber')}
@@ -79,7 +83,7 @@ class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> 
 								subTitle={'Тип документа о предыдущем образовании'}
 								extraFields={
 									<FormControlLabel
-										className={styles.checkFormControlLabel}
+										classes={{ root: styles.checkFormControl, label: styles.checkFormControlLabel }}
 										control={<Checkbox color="primary" onChange={this.toggleHasEgeStatus} />}
 										label="Имею результаты ЕГЭ"
 										labelPlacement="start"
