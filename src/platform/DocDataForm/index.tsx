@@ -1,16 +1,17 @@
 import React, { ReactElement } from 'react';
-import { TextInput, FormControl } from '../';
+import { TextInput, FormControl, ISelectItem } from '../';
 import DropdownSelect from '../DropdownSelect';
 import Dropzone from 'react-dropzone';
 import Image from '../ImageEditor/';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import FormLabel from '@material-ui/core/FormLabel';
 import styles from './styles.css';
-import { ISelectItem } from '../DropdownSelect';
+import { IDocType } from '../../common';
 
 export interface IDocDataForm {
-	docType?: ISelectItem | null;
-	docSubType?: ISelectItem | null;
+	docType: IDocType | null;
+	docSubType?: IDocType | null;
+	docGovernment?: ISelectItem | null;
 	docNumber?: string;
 	docSeries?: string;
 	docIssued?: string;
@@ -19,8 +20,9 @@ export interface IDocDataForm {
 }
 
 interface IDocDataProps {
+	needInfo: boolean;
+	hasNumber: boolean;
 	requireSeries?: boolean;
-	hideDataFields?: boolean;
 	required?: boolean;
 	dictionaryTypes?: IDictionary[];
 	dictionarySubTypes?: IDictionary[];
@@ -29,10 +31,10 @@ interface IDocDataProps {
 	docTitle?: string;
 	file: File | null;
 	extraFields?: ReactElement<any> | null;
-	defaultType?: ISelectItem;
-	defaultSubType?: ISelectItem;
-	selectDocType?: (type: ISelectItem) => void;
-	selectDocSubType?: (subType: ISelectItem) => void;
+	defaultType?: IDocType | null;
+	defaultSubType?: IDocType | null;
+	selectDocType?: (type: IDocType) => void;
+	selectDocSubType?: (subType: IDocType) => void;
 	onChangeNumber?: (value: string) => void;
 	onChangeSeries?: (value: string) => void;
 	onChangeIssieBy?: (value: string) => void;
@@ -40,11 +42,12 @@ interface IDocDataProps {
 	onChangeDate?: (date: string) => void;
 }
 
-class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: boolean }> {
+class DocDataForm extends React.PureComponent<IDocDataProps> {
 	public static defaultProps = {
-		hideDataFields: false,
 		selectDocType: (data: ISelectItem) => void 0,
 		selectDocSubType: (data: ISelectItem) => void 0,
+		needInfo: true,
+		hasNumber: true,
 	};
 
 	public removeImage = () => {
@@ -54,7 +57,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 		const isDataVisible = !!(
 			(this.props.dictionaryTypes && this.props.title) ||
 			(this.props.dictionarySubTypes && this.props.subTitle) ||
-			!this.props.hideDataFields ||
+			!this.props.needInfo ||
 			this.props.extraFields
 		);
 		return (
@@ -68,7 +71,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 									defaultValue={this.props.defaultType}
 									options={this.props.dictionaryTypes}
 									placeholder={`Выберите ${this.props.title.toLowerCase()}`}
-									onChangeSelect={this.props.selectDocType!}
+									onChange={this.props.selectDocType!}
 									title={this.props.title}
 								/>
 							)}
@@ -78,25 +81,29 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 									defaultValue={this.props.defaultSubType}
 									options={this.props.dictionarySubTypes}
 									placeholder={`Выберите ${this.props.subTitle.toLowerCase()}`}
-									onChangeSelect={this.props.selectDocSubType!}
+									onChange={this.props.selectDocSubType!}
 									title={this.props.subTitle}
 								/>
 							)}
-							{!this.props.hideDataFields && (
+							{this.props.needInfo && (
+								<TextInput
+									required={true}
+									placeholder="Введите серию документа"
+									label="Серия"
+									onBlur={this.props.onChangeSeries}
+								/>
+							)}
+							{this.props.hasNumber && (
+								<TextInput
+									required={true}
+									placeholder="Введите номер документа"
+									label="Номер"
+									type="number"
+									onBlur={this.props.onChangeNumber}
+								/>
+							)}
+							{this.props.needInfo && (
 								<React.Fragment>
-									<TextInput
-										required={true}
-										placeholder="Введите серию документа"
-										label="Серия"
-										onBlur={this.props.onChangeSeries}
-									/>
-									<TextInput
-										required={true}
-										placeholder="Введите номер документа"
-										label="Номер"
-										type="number"
-										onBlur={this.props.onChangeNumber}
-									/>
 									<TextInput
 										required={true}
 										type="date"
@@ -112,6 +119,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps & { hideDataFields: 
 									/>
 								</React.Fragment>
 							)}
+
 							{this.props.extraFields}
 						</div>
 					)}

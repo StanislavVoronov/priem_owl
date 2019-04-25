@@ -46,10 +46,10 @@ export type TypeSpace = 'none' | 'minor' | 'small' | 'normal' | 'large';
 export interface IDisabled {
 	disabled?: boolean;
 }
-export interface IDocSelectItem extends ISelectItem {
-	name: string;
-	id: number;
-	need_info: number;
+
+export interface IDocType extends ISelectItem {
+	needInfo?: boolean;
+	hasNumber?: boolean;
 }
 
 export interface IGovernmentSelectItem extends ISelectItem {

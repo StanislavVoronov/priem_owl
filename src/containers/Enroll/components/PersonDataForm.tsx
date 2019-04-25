@@ -1,7 +1,7 @@
 import React from 'react';
 import { DropdownSelect, Button, DocDataForm, TextInput, ISelectItem } from '../../../platform';
 
-import { EDictionaryNameList, inValidateDataForm } from '../../../common';
+import { EDictionaryNameList, IDocType, inValidateDataForm } from '../../../common';
 
 import { IDocDataItem, IPersonDataForm } from '../models';
 import { defaultPersonDataForm } from '../defaults';
@@ -43,8 +43,12 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 			docFile: doc,
 		});
 	};
-	selectSubType = (subType: ISelectItem) => {
-		this.setState({ docSubType: subType });
+	selectSubType = (docSubType: IDocType) => {
+		let docGovernment = null;
+		if (docSubType.id === 1) {
+			docGovernment = { id: 1, name: 'Россия' };
+		}
+		this.setState({ docSubType, docGovernment });
 	};
 	toggleAgreePersonData = () => {
 		this.setState({ isApplyPersonData: !this.state.isApplyPersonData });
@@ -54,6 +58,9 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 	};
 	removePhoto = () => {
 		this.setState({ photo: { ...this.state.photo, docFile: null } });
+	};
+	onChangeGovernment = (docGovernment: ISelectItem) => {
+		this.setState({ docGovernment });
 	};
 	submit = () => {
 		this.props.submit(this.state);
@@ -67,14 +74,6 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 					return (
 						<div className={Styles.flexColumn}>
 							<WebPhoto downloadPhoto={this.addPhoto} removePhoto={this.removePhoto} />
-
-							<DropdownSelect
-								required={true}
-								options={dictionaryGovernments && dictionaryGovernments.values}
-								placeholder="Выберите гражданство"
-								onChangeSelect={this.onChangeSelectField('docGovernment')}
-								title="Гражданство"
-							/>
 							<TextInput
 								label="Место рождения"
 								placeholder={'Введите место рождения'}
@@ -84,6 +83,7 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 								docTitle="Файл документа, удостоверяющего личность"
 								file={this.state.docFile}
 								selectDocSubType={this.selectSubType}
+								defaultSubType={this.state.docSubType}
 								onDownloadFile={this.onDownloadFile}
 								onChangeSeries={this.onChangeTextField('docSeries')}
 								onChangeNumber={this.onChangeTextField('docNumber')}
@@ -102,6 +102,17 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 									) : null
 								}
 							/>
+
+							<DropdownSelect
+								value={`${this.state.docGovernment ? this.state.docGovernment.id : ''}`}
+								defaultValue={this.state.docGovernment}
+								required={true}
+								options={dictionaryGovernments && dictionaryGovernments.values}
+								placeholder="Выберите гражданство"
+								onChange={this.onChangeGovernment}
+								title="Гражданство"
+							/>
+
 							<FormControlLabel
 								classes={{ root: styles.checkFormControl, label: styles.checkFormControlLabel }}
 								control={

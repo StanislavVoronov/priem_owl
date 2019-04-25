@@ -1,4 +1,4 @@
-import { Gender, IGovernmentSelectItem } from '../../common';
+import { Gender, IDocType, IGovernmentSelectItem } from '../../common';
 import { IServerError } from './serverModels';
 import { IDocDataItem } from './models';
 import { ISelectItem } from '../../platform';
@@ -21,8 +21,8 @@ export interface IDocDataItem extends IDocData {
 }
 
 export interface IDocData {
-	docType: ISelectItem | null;
-	docSubType?: ISelectItem | null;
+	docType: IDocType | null;
+	docSubType?: IDocType | null;
 	docGovernment?: ISelectItem | null;
 	docSeries?: string;
 	docNumber?: string;

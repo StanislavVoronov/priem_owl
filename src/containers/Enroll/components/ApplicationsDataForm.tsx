@@ -10,7 +10,7 @@ export const ApplicationsDataForm = (props: ApplicationsDataFormProps) => {
 	return (
 		<div>
 			<DropdownSelect
-				onChangeSelect={() => void 0}
+				onChange={() => void 0}
 				defaultValue={{ id: 0, name: 'Нет преимуществ' }}
 				title={'Особая категория поступления'}
 				options={props.dictionaries[EDictionaryNameList.PriemSpecialCategories].values}

@@ -2,10 +2,9 @@ import React from 'react';
 import { IDocData, IDocDataItem } from '../models';
 import Button from '@material-ui/core/Button';
 import classNames from 'classnames';
-import { DocDataForm, ISelectItem, TextInput } from '../../../platform';
-import { EDictionaryNameList, inValidateDataForm, IDocSelectItem } from '../../../common';
+import { defaultDocDataForm, DocDataForm, ISelectItem, TextInput } from '../../../platform';
+import { EDictionaryNameList, inValidateDataForm, IDocType } from '../../../common';
 
-import withStyles from '@material-ui/core/styles/withStyles';
 import styles from './styles.css';
 import { DictionaryContext } from '../EnrollContainer';
 
@@ -13,17 +12,12 @@ interface IOwnProps {
 	submit(data: IDocDataItem[]): void;
 	classes: Record<string, string>;
 }
-interface IDocDataForm extends IDocData {
-	hideDataFields: boolean;
-}
+interface IDocDataForm extends IDocData {}
+
 interface IState {
 	documents: IDocDataForm[];
 }
-const defaultDocFile = {
-	docFile: null,
-	hideDataFields: false,
-	docType: null,
-};
+
 type IProps = IOwnProps;
 
 class DocumentsDataForm extends React.PureComponent<IProps, IState> {
@@ -34,7 +28,7 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 		documents: [],
 	};
 	addDoc = () => {
-		this.setState({ documents: [...this.state.documents, { ...defaultDocFile }] });
+		this.setState({ documents: [...this.state.documents, { ...defaultDocDataForm }] });
 	};
 	onDownloadFile = (index: number) => (file: File | null) => {
 		const documents: IDocDataForm[] = [...this.state.documents];
@@ -47,27 +41,24 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 		documents[index][name] = value;
 		this.setState({ documents });
 	};
-	selectDocType = (index: number) => (type: IDocSelectItem) => {
-		const documents: IDocDataForm[] = [...this.state.documents];
+	selectDocType = (index: number) => {
+		return (type: IDocType) => {
+			const documents: IDocDataForm[] = [...this.state.documents];
 
-		documents[index].hideDataFields = type.need_info !== 1;
+			if (type.id > 2) {
+				documents[index] = {
+					...defaultDocDataForm,
+					...documents[index],
+					docType: type,
+				};
+			} else {
+				documents[index].docType = type;
+			}
 
-		if (type.id > 2) {
-			documents[index] = {
-				...documents[index],
-				docType: type,
-				docIssieBy: '',
-				docDate: '',
-				docSeries: '',
-				docNumber: '',
-			};
-		} else {
-			documents[index].docType = type;
-		}
-
-		this.setState({ documents });
+			this.setState({ documents });
+		};
 	};
-	selectDocSubType = (index: number) => (type: ISelectItem) => {
+	selectDocSubType = (index: number) => (type: IDocType) => {
 		const documents: IDocDataForm[] = [...this.state.documents];
 		documents[index].docSubType = type;
 		this.setState({ documents });
@@ -103,7 +94,8 @@ class DocumentsDataForm extends React.PureComponent<IProps, IState> {
 									return (
 										<div className={classNames(styles.flexColumn, styles.docFormContainer)}>
 											<DocDataForm
-												hideDataFields={item.hideDataFields}
+												needInfo={item.docType ? item.docType.needInfo : false}
+												hasNumber={item.docType ? item.docType.hasNumber : false}
 												docTitle="Файл документа"
 												file={item.docFile}
 												title="Тип документа"

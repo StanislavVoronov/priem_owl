@@ -1,4 +1,4 @@
-import { EDictionaryNameList, inValidateDataForm } from '../../../common';
+import { EDictionaryNameList, IDocType, inValidateDataForm } from '../../../common';
 import React from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -36,7 +36,7 @@ class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> 
 	submit = () => {
 		this.props.submit(this.state);
 	};
-	selectTypeEducation = (item: ISelectItem) => {
+	selectTypeEducation = (item: IDocType) => {
 		this.setState({ docSubType: item, prevEducation: Number(item.id) });
 	};
 	render() {
@@ -58,7 +58,7 @@ class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> 
 							/>
 							<DropdownSelect
 								placeholder={'Выберите достижения'}
-								onChangeSelect={this.onChangePersonCoolnessTypes}
+								onChange={this.onChangePersonCoolnessTypes}
 								options={coolnessTypeDictionary && coolnessTypeDictionary.values}
 								isMulti={true}
 								title={'Индивидуальные достижения'}
@@ -69,6 +69,7 @@ class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> 
 								docTitle={'Документ о предыдущем образовании'}
 								file={this.state.docFile}
 								selectDocType={this.selectTypeEducation}
+								defaultSubType={this.state.docSubType}
 								onDownloadFile={this.downloadFile}
 								onChangeSeries={this.onChangeTextField('docSeries')}
 								onChangeNumber={this.onChangeTextField('docNumber')}

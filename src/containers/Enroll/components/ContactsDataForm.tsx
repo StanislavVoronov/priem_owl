@@ -74,7 +74,8 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 						<div className={styles.flexColumn}>
 							<H2>Адрес регистрации</H2>
 							<DocDataForm
-								hideDataFields
+								hasNumber={false}
+								needInfo={false}
 								docTitle="Файл  регистрации места жительства"
 								file={this.state.docFile}
 								onDownloadFile={this.onDownloadFile}
@@ -176,7 +177,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								<DropdownSelect
 									isClearable={false}
 									defaultValue={defaultGovernmentValue}
-									onChangeSelect={this.onChangeSelectItem}
+									onChange={this.onChangeSelectItem}
 									title={'Страна оператора сотовой связи'}
 									options={governmentDictionary.values}
 								/>

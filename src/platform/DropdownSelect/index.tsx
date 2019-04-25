@@ -12,7 +12,7 @@ export interface ISelectItem {
 
 interface ISelectProps extends IHasError, IHelperText {
 	placeholder?: string;
-	onChangeSelect: (data: any) => void;
+	onChange: (data: any) => void;
 	options: any[];
 	title: string;
 	value?: string;
@@ -24,13 +24,17 @@ interface ISelectProps extends IHasError, IHelperText {
 	required?: boolean;
 }
 
-class DropdownSelect extends React.PureComponent<ISelectProps> {
+class DropdownSelect extends React.PureComponent<ISelectProps, { value: string }> {
 	public static defaultProps = {
 		isSearchable: true,
 		isClearable: true,
 		value: 'id',
 		label: 'name',
 		options: [],
+	};
+	onChange = (item: any) => {
+		this.setState({ value: item });
+		this.props.onChange(item);
 	};
 	public render() {
 		return (
@@ -41,11 +45,12 @@ class DropdownSelect extends React.PureComponent<ISelectProps> {
 				</FormLabel>
 				<Select
 					className="basic-single"
+					value={this.props.value || this.state.value}
 					isMulti={this.props.isMulti}
 					defaultValue={this.props.defaultValue}
 					classNamePrefix="select"
 					placeholder={this.props.placeholder}
-					onChange={this.props.onChangeSelect}
+					onChange={this.onChange}
 					isClearable={this.props.isClearable}
 					isSearchable={this.props.isSearchable}
 					getOptionLabel={(item: any) => item[this.props.label!]}

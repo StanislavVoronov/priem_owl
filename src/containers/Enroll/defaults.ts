@@ -6,7 +6,7 @@ export const defaultContactsDataForm: IContactDataForm = {
 	needDormitory: false,
 	docFile: null,
 	regLocality: '',
-	docType: { id: 3, name: 'Регистрация места жительства' },
+	docType: { id: 3, name: 'Регистрация места жительства', needInfo: false, hasNumber: false },
 	phoneGovernment: { id: 1, name: 'Россия', phone_code: '7' },
 	regIndex: '',
 	regHome: '',
@@ -29,15 +29,17 @@ export const defaultRegisterDataForm: IRegisterDataForm = {
 
 export const defaultPersonDataForm: IPersonDataForm = {
 	...defaultDocDataForm,
-	docType: { id: 1, name: 'Документ удостоверяющий личность' },
-	photo: { docType: { id: 14, name: 'Фотография' }, docFile: null },
+	docSubType: { id: 1, name: 'Паспорт гражданина РФ', needInfo: true, hasNumber: true },
+	docType: { id: 1, name: 'Документ удостоверяющий личность', hasNumber: true, needInfo: true },
+	photo: { docType: { id: 14, name: 'Фотография', hasNumber: false, needInfo: false }, docFile: null },
 	docFile: null,
 	birthPlace: '',
 };
 
 export const defaultEducationDataForm: IEducationDataForm = {
 	...defaultDocDataForm,
-	docType: { id: 2, name: 'Документ об предыдущем образовании' },
+	docType: { id: 2, name: 'Документ об предыдущем образовании', hasNumber: true, needInfo: true },
+	docSubType: { id: 3, name: 'Аттестат о среднем (полном) общем образовании' },
 	firstHighEducation: true,
 	coolnessTypes: [],
 	prevEducation: 3,
