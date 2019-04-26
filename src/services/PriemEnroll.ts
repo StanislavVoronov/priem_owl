@@ -8,6 +8,7 @@ class PriemEnroll {
 		const body = new FormData();
 		body.append('api', api);
 		body.append('values', JSON.stringify(payload));
+
 		return fetch(`${PriemEnroll.host}${PriemEnroll.path}`, {
 			method: 'POST',
 			credentials: 'include',
@@ -20,6 +21,7 @@ class PriemEnroll {
 				if (data.error) {
 					return Promise.reject({ message: data.error.string, type: data.error.id });
 				}
+
 				return Promise.resolve(data);
 			});
 	};

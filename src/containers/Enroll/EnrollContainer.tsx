@@ -1,4 +1,4 @@
-import { IRootState } from '../../common';
+import { IRootState, IDocument, inputValueAsNumber } from '$common';
 import EnrollView from './EnrollView';
 import Dictionary from '@mgutm-fcu/dictionary/Dictionary';
 import * as React from 'react';
@@ -15,22 +15,23 @@ import { checkPerson, checkLogin, registerNewPerson, createPerson, sendVerificat
 import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
 import {
 	IContactDataForm,
-	IDocument,
-	IDocWithDepartment,
+	IDocumentWithDepartment,
 	IEducationDataForm,
-	IPerson,
+	IEnrollForm,
 	IPersonDataForm,
 	IRegisterDataForm,
-	PersonInfo,
+	IPerson,
 } from './models';
 import { IServerError } from './serverModels';
+import { ReactText } from 'react';
+import { ChangeEvent } from 'react';
 
 interface IDispatchToProps {
-	checkLogin(login: string): void;
-	registerNewPerson: (login: string, password: string) => Promise<number>;
-	sendVerificationCode(email: string, mobPhone: string): Promise<void>;
-	createPerson(confirmCode: string, data: IPerson): void;
-	checkPerson(data: PersonInfo): Promise<void>;
+	registerNewPerson: (login: ReactText, password: ReactText) => Promise<number>;
+	checkLogin(login: ReactText): void;
+	sendVerificationCode(email: ReactText, mobPhone: ReactText): Promise<void>;
+	createPerson(confirmCode: number, data: IEnrollForm): void;
+	checkPerson(data: IPerson): Promise<void>;
 }
 interface IStateToProps {
 	npId: number;
@@ -44,7 +45,7 @@ type IProps = IDispatchToProps & IStateToProps;
 interface IState {
 	passedStep: number;
 	activeStep: number;
-	confirmCode: string;
+	confirmCode: ReactText;
 	registerData: IRegisterDataForm;
 	personData: IPersonDataForm;
 	contactsData: IContactDataForm;
@@ -56,7 +57,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 	state = {
 		passedStep: 0,
 		activeStep: 0,
-		confirmCode: '',
+		confirmCode: 0,
 		registerData: defaultRegisterDataForm,
 		personData: defaultPersonDataForm,
 		contactsData: defaultContactsDataForm,
@@ -76,14 +77,14 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		});
 	};
 	onCheckPerson = () => {
-		const { lastName, middleName, birthday, firstName } = this.state.registerData;
-		this.props.checkPerson({ firstName, lastName, birthday, middleName }).then(this.handleNext);
+		const { lastName, middleName, birthday, firstName, gender } = this.state.registerData;
+		this.props.checkPerson({ firstName, lastName, birthday, middleName, gender }).then(this.handleNext);
 	};
 	submitRegisterDataForm = (registerData: IRegisterDataForm) => {
 		this.setState({ registerData });
 		this.props.registerNewPerson(registerData.login, registerData.password).then(this.onCheckPerson);
 	};
-	submitAddDocumentsDataForm = (documents: IDocWithDepartment[]) => {
+	submitAddDocumentsDataForm = (documents: IDocumentWithDepartment[]) => {
 		this.setState({ documents });
 		this.handleNext();
 	};
@@ -99,8 +100,8 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		this.setState({ educationData });
 		this.handleNext();
 	};
-	onChangeConfirmationCode = (confirmCode: string) => {
-		this.setState({ confirmCode });
+	onChangeConfirmationCode = (event: ChangeEvent<HTMLInputElement>) => {
+		this.setState({ confirmCode: inputValueAsNumber(event) });
 	};
 	onCheckLogin = (login: string) => {
 		this.props.checkLogin(login);
@@ -151,6 +152,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
 	const { npId, checkPersonError, checkLoginError, verifyPersonError } = enrollStateSelector(state);
+
 	return {
 		npId,
 		checkPersonError,

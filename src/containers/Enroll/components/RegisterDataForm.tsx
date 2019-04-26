@@ -1,39 +1,43 @@
-import React from 'react';
-import { Autocomplete, Button, H2, TextInput, RadioButtonGroup } from '../../../platform';
-import { EDictionaryNameList, Gender, inValidateDataForm, makeVerticalSpace } from '../../../common';
+import React, { ReactText } from 'react';
+import { Autocomplete, Button, H2, TextInput, RadioButtonGroup } from '$components';
+import {
+	EDictionaryNameList,
+	Gender,
+	inValidateDataForm,
+	prepareDictionarySuggestions,
+	inputValueAsString,
+} from '$common';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import { IRegisterDataForm } from '../models';
 
-import styles from './styles.css';
-
-import { defaultRegisterDataForm } from '../defaults';
+import styles from './styles.module.css';
 import { IServerError } from '../serverModels';
 import { GENDERS } from '../constants';
 import { DictionaryContext } from '../EnrollContainer';
-const prepareDictionarySuggestions = (dictionary: { values: any[] }) => {
-	if (!dictionary || !Array.isArray(dictionary.values)) {
-		return [];
-	}
-	return dictionary.values.map((item: any) => item.name);
-};
+import { string } from 'prop-types';
+
 interface IProps {
 	defaultData: IRegisterDataForm;
-	submit(data: IRegisterDataForm): void;
-	onCheckLogin(login: string): void;
 	checkLoginError: IServerError | null;
 	checkPersonError: IServerError | null;
+	submit(data: IRegisterDataForm): void;
+	onCheckLogin(login: ReactText): void;
+}
+function test<T>(value: T): T {
+	return value;
 }
 
-interface IState extends IRegisterDataForm {}
-class RegisterDataForm extends React.PureComponent<IProps, IState> {
+class RegisterDataForm extends React.PureComponent<IProps, IRegisterDataForm> {
 	public state = { ...this.props.defaultData };
-	public onChangeTextField = (name: string) => (value: string) => {
+	onChangeBirthday: React.ChangeEventHandler<HTMLInputElement> = event => {
 		this.setState(state => ({
 			...state,
-			[name]: value,
+			birthday: inputValueAsString(event),
 		}));
 	};
-	onChangeLoginField = (value: string) => {
+
+	onChangeLoginField: React.ChangeEventHandler<HTMLInputElement> = event => {
+		const value = inputValueAsString(event);
 		this.setState(state => ({
 			...state,
 			login: value,
@@ -41,19 +45,33 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 
 		this.props.onCheckLogin(value);
 	};
-	onChangePasswordField = (value: string) => {
+
+	onChangePasswordField: React.ChangeEventHandler<HTMLInputElement> = event => {
 		this.setState(state => ({
 			...state,
-			password: value,
+			password: inputValueAsString(event),
 		}));
 	};
-	onChangeRepeatPasswordField = (value: string) => {
+	onChangeRepeatPasswordField: React.ChangeEventHandler<HTMLInputElement> = event => {
 		this.setState(state => ({
 			...state,
-			repeatPassword: value,
+			repeatPassword: inputValueAsString(event),
 		}));
 	};
-	public onChangeFirstName = (dictionaryFirstNames: IDictionary) => (value: string, index?: number) => {
+	onChangeMiddleName = (middleName: string) => {
+		this.setState(state => ({
+			...state,
+			middleName,
+		}));
+	};
+
+	onChangeLastName: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState(state => ({
+			...state,
+			lastName: inputValueAsString(event),
+		}));
+	};
+	onChangeFirstName = (dictionaryFirstNames: IDictionary) => (value: string, index?: number) => {
 		this.setState(state => ({
 			...state,
 			firstName: value,
@@ -80,13 +98,15 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 					const inValidPassword = this.state.password.length > 0 && this.state.password.length < 7;
 					const inValidRepeatPassword =
 						!inValidLogin && this.state.repeatPassword.length
-							? this.state.repeatPassword != this.state.password
+							? this.state.repeatPassword !== this.state.password
 							: false;
 					console.log('inValidRepeatPassword', inValidRepeatPassword);
 					const filteredDictionaryMiddleName = dictionaryMiddleNames
 						? this.state.gender
 							? {
-									values: dictionaryMiddleNames.values.filter((item: { sex: Gender }) => item.sex == this.state.gender),
+									values: dictionaryMiddleNames.values.filter(
+										(item: { sex: Gender }) => item.sex === this.state.gender,
+									),
 							  }
 							: dictionaryMiddleNames
 						: [];
@@ -102,11 +122,11 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 					return (
 						<div className={styles.flexColumn}>
 							<TextInput
-								required={true}
+								required
 								defaultValue={this.props.defaultData.lastName}
 								placeholder={'Введите фамилию'}
 								label="Фамилия"
-								onBlur={this.onChangeTextField('lastName')}
+								onBlur={this.onChangeLastName}
 							/>
 							<Autocomplete
 								label={'Имя'}
@@ -121,7 +141,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 								label={'Отчество'}
 								placeholder={'Введите отчество'}
 								defaultValue={this.props.defaultData.middleName}
-								onChange={this.onChangeTextField('middleName')}
+								onChange={this.onChangeMiddleName}
 								suggestions={prepareDictionarySuggestions(filteredDictionaryMiddleName)}
 							/>
 
@@ -137,7 +157,7 @@ class RegisterDataForm extends React.PureComponent<IProps, IState> {
 								label="Дата рождения"
 								defaultValue={this.props.defaultData.birthday}
 								type="date"
-								onBlur={this.onChangeTextField('birthday')}
+								onBlur={this.onChangeBirthday}
 							/>
 
 							<React.Fragment>

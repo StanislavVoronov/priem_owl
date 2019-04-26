@@ -41,7 +41,7 @@ const defaultState: IEnrollState = {
 	uploadDocsFetching: false,
 };
 
-const enrollReducer = handleActions(
+const enrollReducer = handleActions<IEnrollState>(
 	{
 		[checkPersonExistRequest.toString()]: (state: IEnrollState) => {
 			return {

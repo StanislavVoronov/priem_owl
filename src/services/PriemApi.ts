@@ -9,6 +9,7 @@ class PriemApi {
 		const body = new FormData();
 		body.append('api', api);
 		body.append('values', JSON.stringify(payload));
+
 		return fetch(`${PriemApi.host}${PriemApi.path}`, {
 			method: 'POST',
 			credentials: 'include',
@@ -21,6 +22,7 @@ class PriemApi {
 				if (data.error) {
 					return Promise.reject({ message: data.error.string, type: data.error.id });
 				}
+
 				return Promise.resolve(data.result[0]);
 			});
 	};
@@ -49,6 +51,7 @@ class PriemApi {
 				if (data.error) {
 					return Promise.reject({ message: data.error.string, type: data.error.id });
 				}
+
 				return Promise.resolve(data);
 			});
 	};

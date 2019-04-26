@@ -1,50 +1,40 @@
-import { Gender, IDocType, IGovernmentSelectItem } from '../../common';
+import { Gender, IDocType, IDocument, IGovernmentSelectItem, ISelectItem } from '$common';
 import { IServerError } from './serverModels';
-import { IDocWithDepartment } from './models';
-import { ISelectItem } from '../../platform';
+import { IDocumentWithDepartment } from './models';
 
-export interface PersonInfo {
+export interface IPerson {
 	lastName: string;
 	firstName: string;
 	middleName: string;
 	birthday: string;
-}
-export interface IRegisterDataForm extends PersonInfo {
 	gender: Gender;
+}
+export interface IRegisterDataForm extends IPerson {
 	login: string;
 	password: string;
 	repeatPassword: string;
 }
 
-export interface IDocWithDepartment extends IDocument {
+export interface IDocumentWithDepartment extends IDocument {
 	codeDepartment?: string;
 }
 
-export interface IDocument {
-	docType: IDocType | null;
-	docSubType?: IDocType | null;
-	docGovernment: ISelectItem | null;
-	docSeries?: string;
-	docNumber?: string;
-	docIssieBy?: string;
-	docDate?: string;
-	docFile: File | null;
-}
-
-export interface IPersonDataForm extends IDocument {
+export interface IPersonDataForm {
 	codeDepartment?: string;
 	photo: IDocument;
 	birthPlace: string;
+	document: IDocumentWithDepartment;
 }
 
-export interface IEducationDataForm extends IDocument {
+export interface IEducationDataForm {
 	firstHighEducation: boolean;
 	coolnessTypes: ISelectItem[];
 	prevEducation: number;
 	hasEge: boolean;
+	document: IDocument;
 }
 
-export interface IContactDataForm extends IDocument {
+export interface IContactDataForm {
 	needDormitory: boolean;
 	regIndex: string;
 	regRegion: string;
@@ -65,6 +55,7 @@ export interface IContactDataForm extends IDocument {
 	isRegAddressEqualLive: boolean;
 	phoneGovernment: IGovernmentSelectItem;
 	email: string;
+	document: IDocument;
 }
 
 export interface IEnrollState {
@@ -84,10 +75,10 @@ export interface IEnrollState {
 	uploadDocsFetching: boolean;
 }
 
-export interface IPerson {
+export interface IEnrollForm {
 	registerData: IRegisterDataForm | null;
 	personData: IPersonDataForm | null;
 	contactsData: IContactDataForm | null;
 	educationData: IEducationDataForm | null;
-	documents: IDocWithDepartment[];
+	documents: IDocumentWithDepartment[];
 }

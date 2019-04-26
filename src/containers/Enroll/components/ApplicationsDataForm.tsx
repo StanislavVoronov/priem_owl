@@ -1,20 +1,18 @@
-import { composeStyles, EDictionaryNameList } from '../../../common';
+import { EDictionaryNameList } from '$common';
 import React from 'react';
 import { IDictionary } from '@mgutm-fcu/dictionary';
-import DropdownSelect from '../../../platform/DropdownSelect';
+import { DropdownSelect } from '$components';
 
-interface ApplicationsDataFormProps {
+interface IApplicationsDataFormProps {
 	dictionaries: IDictionary[];
 }
-export const ApplicationsDataForm = (props: ApplicationsDataFormProps) => {
-	return (
-		<div>
-			<DropdownSelect
-				onChange={() => void 0}
-				defaultValue={{ id: 0, name: 'Нет преимуществ' }}
-				title={'Особая категория поступления'}
-				options={props.dictionaries[EDictionaryNameList.PriemSpecialCategories].values}
-			/>
-		</div>
-	);
-};
+class ApplicationsDataForm extends React.Component<IApplicationsDataFormProps> {
+	onChange = () => {
+		return void 0;
+	};
+	render() {
+		return <div />;
+	}
+}
+
+export default ApplicationsDataForm;

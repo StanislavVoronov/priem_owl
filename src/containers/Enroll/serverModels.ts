@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { Gender, ServerBoolean } from '../../common';
+import { ReactText } from 'react';
 
 export interface ICheckPersonExistResponse {
 	ID: number;
@@ -20,19 +21,19 @@ export interface IVerifyPersonResponse {
 }
 
 export interface ICheckLoginRequest {
-	login: string;
+	login: ReactText;
 }
 
 export interface ICheckPersonExistRequest {
-	fname: string;
-	lname: string;
-	mname: string;
-	birthdate: string;
+	fname: ReactText;
+	lname: ReactText;
+	mname: ReactText;
+	birthdate: ReactText;
 }
 
 export interface IRegisterNewPersonRequest {
-	login: string;
-	password: string;
+	login: ReactText;
+	password: ReactText;
 }
 
 export interface IVerifyPersonRequest {
@@ -42,14 +43,14 @@ export interface IVerifyPersonRequest {
 }
 
 export interface INewPersonDataRequest {
-	email_code: number;
-	phone_code: string;
-	email: string;
-	lname: string;
-	fname: string;
-	mname: string;
-	birthdate: string;
-	birthplace: string;
+	email_code: ReactText;
+	phone_code: ReactText;
+	email: ReactText;
+	lname: ReactText;
+	fname: ReactText;
+	mname: ReactText;
+	birthdate: ReactText;
+	birthplace: ReactText;
 	need_hostel: ServerBoolean;
 	sex: Gender;
 	hight_first: ServerBoolean;
@@ -58,7 +59,7 @@ export interface INewPersonDataRequest {
 }
 
 export interface INewPersonDataResponse {
-	np_uid: string;
+	np_uid: number;
 }
 
 export interface IServerError {
@@ -83,18 +84,5 @@ export interface IUploadDocPayload {
 	num: string;
 	iss_org: string;
 	iss_date: string;
-	iss_gov: number; //default 1 - Russia
+	iss_gov: number;
 }
-// //
-// [
-// 	{ a: 0, d: 'in', n: 'mime', t: 'string' },
-// 	{ a: 0, d: 'in', n: 'page', t: 'blob' },
-// 	{ a: 0, d: 'in', n: 'docType', t: 'int' },
-// 	{ a: 0, d: 'in', n: 'stype', t: 'int' },
-// 	{ a: 0, d: 'in', n: 'seria', t: 'string' },
-// 	{ a: 0, d: 'in', n: 'num', t: 'string' },
-// 	{ a: 0, d: 'in', n: 'iss_date', t: 'string' },
-// 	{ a: 0, d: 'in', n: 'iss_org', t: 'string' },
-// 	{ a: 0, d: 'in', n: 'iss_gov', t: 'int' },
-// 	{ a: 0, d: 'out', n: 'id', t: 'int' },
-// ];

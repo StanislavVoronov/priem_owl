@@ -1,62 +1,85 @@
 import React, { ReactElement } from 'react';
-import { TextInput, FormControl, ISelectItem } from '../';
+import { TextInput, FormControl } from '../';
 import DropdownSelect from '../DropdownSelect';
 import Dropzone from 'react-dropzone';
 import Image from '../ImageEditor/';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import FormLabel from '@material-ui/core/FormLabel';
-import styles from './styles.css';
-import { IDocType } from '../../common';
+import styles from './styles.module.css';
+import { IDocType, inputValueAsString, noop, IDocument } from '$common';
 
 interface IDocDataProps {
-	needInfo: boolean;
-	hasNumber: boolean;
-	requireSeries?: boolean;
-	required?: boolean;
+	document: IDocument;
 	dictionaryTypes?: IDictionary[];
 	dictionarySubTypes?: IDictionary[];
 	title?: string;
 	subTitle?: string;
 	docTitle?: string;
-	file: File | null;
 	extraFields?: ReactElement<any> | null;
-	defaultType?: IDocType | null;
-	defaultSubType?: IDocType | null;
-	selectDocType?: (type: IDocType) => void;
-	selectDocSubType?: (subType: IDocType) => void;
-	onChangeNumber?: (value: string) => void;
-	onChangeSeries?: (value: string) => void;
-	onChangeIssieBy?: (value: string) => void;
-	onDownloadFile: (file: File | null) => void;
-	onChangeDate?: (date: string) => void;
-	defaultSeries: string;
-	defaultNumber: string;
-	defaultIssieBy: string;
-	defaultDate: string;
+	updateDocument: (document: IDocument) => void;
 }
 
 class DocDataForm extends React.PureComponent<IDocDataProps> {
 	public static defaultProps = {
-		selectDocType: (data: ISelectItem) => void 0,
-		selectDocSubType: (data: ISelectItem) => void 0,
-		needInfo: true,
-		hasNumber: true,
-		defaultSeries: '',
-		defaultNumber: '',
-		defaultIssieBy: '',
-		defaultDate: '',
+		onChangeSeries: noop,
+		onChangeNumber: noop,
+		onChangeDate: noop,
+		onChangeIssieBy: noop,
+		selectDocType: noop,
+		selectDocSubType: noop,
 	};
+	selectDocType = (docType: IDocType) => {
+		const document = { ...this.props.document, docType };
+		this.props.updateDocument(document);
+	};
+	selectDocSubType = (docSubType: IDocType) => {
+		const document = { ...this.props.document, docSubType };
+		this.props.updateDocument(document);
+	};
+	onChangeIssieBy: React.ChangeEventHandler<HTMLInputElement> = event => {
+		const document = { ...this.props.document, docIssieBy: inputValueAsString(event) };
+		this.props.updateDocument(document);
+	};
+	onChangeDate: React.ChangeEventHandler<HTMLInputElement> = event => {
+		const document = { ...this.props.document, docDate: inputValueAsString(event) };
+		this.props.updateDocument(document);
+	};
+	onChangeSeries: React.ChangeEventHandler<HTMLInputElement> = event => {
+		const document = { ...this.props.document, docSeries: inputValueAsString(event) };
+		this.props.updateDocument(document);
+	};
+	onChangeNumber: React.ChangeEventHandler<HTMLInputElement> = event => {
+		const document = { ...this.props.document, docNumber: inputValueAsString(event) };
+		this.props.updateDocument(document);
+	};
+	onDownload = (acceptedFiles: File[]) => {
+		acceptedFiles.forEach(file => {
+			const reader = new FileReader();
 
-	public removeImage = () => {
-		this.props.onDownloadFile(null);
+			reader.onload = e => {
+				const document = { ...this.props.document, docFile: file };
+				this.props.updateDocument(document);
+			};
+			reader.onabort = () => console.log('file reading was aborted');
+			reader.onerror = () => console.log('file reading has failed');
+
+			reader.readAsBinaryString(file);
+		});
+	};
+	deleteDocument = () => {
+		const document = { ...this.props.document, docFile: null };
+		this.props.updateDocument(document);
 	};
 	public render() {
 		const isDataVisible = !!(
 			(this.props.dictionaryTypes && this.props.title) ||
 			(this.props.dictionarySubTypes && this.props.subTitle) ||
-			!this.props.needInfo ||
+			(this.props.document.docType && this.props.document.docType.needInfo) ||
 			this.props.extraFields
 		);
+		const needInfo = this.props.document.docType && this.props.document.docType.needInfo;
+		const hasNumber = this.props.document.docType && this.props.document.docType.hasNumber;
+
 		return (
 			<FormControl>
 				<div className={styles.docDataForm}>
@@ -65,58 +88,58 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 							{this.props.dictionaryTypes && this.props.title && (
 								<DropdownSelect
 									required={true}
-									defaultValue={this.props.defaultType}
+									defaultValue={this.props.document.docType}
 									options={this.props.dictionaryTypes}
 									placeholder={`Выберите ${this.props.title.toLowerCase()}`}
-									onChange={this.props.selectDocType!}
+									onChange={this.selectDocType!}
 									title={this.props.title}
 								/>
 							)}
 							{this.props.dictionarySubTypes && this.props.subTitle && (
 								<DropdownSelect
 									required={true}
-									defaultValue={this.props.defaultSubType}
+									defaultValue={this.props.document.docSubType}
 									options={this.props.dictionarySubTypes}
 									placeholder={`Выберите ${this.props.subTitle.toLowerCase()}`}
-									onChange={this.props.selectDocSubType!}
+									onChange={this.selectDocSubType!}
 									title={this.props.subTitle}
 								/>
 							)}
-							{this.props.needInfo && (
+							{needInfo && (
 								<TextInput
 									required={true}
-									defaultValue={this.props.defaultSeries}
+									defaultValue={this.props.document.docSeries}
 									placeholder="Введите серию документа"
 									label="Серия"
-									onBlur={this.props.onChangeSeries}
+									onBlur={this.onChangeSeries}
 								/>
 							)}
-							{this.props.hasNumber && (
+							{hasNumber && (
 								<TextInput
-									defaultValue={this.props.defaultNumber}
+									defaultValue={this.props.document.docNumber}
 									required={true}
 									placeholder="Введите номер документа"
 									label="Номер"
 									type="number"
-									onBlur={this.props.onChangeNumber}
+									onBlur={this.onChangeNumber}
 								/>
 							)}
-							{this.props.needInfo && (
+							{needInfo && (
 								<React.Fragment>
 									<TextInput
 										required={true}
 										type="date"
-										defaultValue={this.props.defaultDate}
+										defaultValue={this.props.document.docDate}
 										label="Дата выдачи документа"
-										onBlur={this.props.onChangeDate}
+										onBlur={this.onChangeDate}
 									/>
 									<TextInput
 										required={true}
-										defaultValue={this.props.defaultIssieBy}
+										defaultValue={this.props.document.docIssieBy}
 										placeholder="Введите кем выдан документ"
 										label="Кем выдан документ"
 										multiline={true}
-										onBlur={this.props.onChangeIssieBy}
+										onBlur={this.onChangeIssieBy}
 									/>
 								</React.Fragment>
 							)}
@@ -125,21 +148,7 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 						</div>
 					)}
 					<div className={styles.documentContainer}>
-						<Dropzone
-							onDrop={acceptedFiles => {
-								acceptedFiles.forEach(file => {
-									const reader = new FileReader();
-
-									reader.onload = e => {
-										// @ts-ignore
-										this.props.onDownloadFile(file);
-									};
-									reader.onabort = () => console.log('file reading was aborted');
-									reader.onerror = () => console.log('file reading has failed');
-
-									reader.readAsBinaryString(file);
-								});
-							}}>
+						<Dropzone onDrop={this.onDownload}>
 							{({ getRootProps, getInputProps }) => {
 								return (
 									<div {...getRootProps()} className={styles.fileContainer}>
@@ -149,9 +158,13 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 												<FormLabel style={{ color: 'red' }}>{'*'}</FormLabel>
 											</div>
 										)}
-										{this.props.file ? (
+										{this.props.document.docFile ? (
 											<React.Fragment>
-												<Image title={this.props.file.name} file={this.props.file} removeImage={this.removeImage} />
+												<Image
+													title={this.props.document.docFile.name}
+													file={this.props.document.docFile}
+													removeImage={this.deleteDocument}
+												/>
 											</React.Fragment>
 										) : (
 											<React.Fragment>
