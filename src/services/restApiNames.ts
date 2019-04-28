@@ -1,11 +1,11 @@
-export enum PriemApiName {
+export enum PriemRestApi {
 	FindNpId = 'findNPUID',
 	TestUniqueEnroll = 'testUniqueEnroll',
 	AddEnroll = 'addEnroll',
 	AddDocuments = 'iDATA_DOCUMENTS',
 }
 
-export enum EnrollApiName {
+export enum EnrollRestApi {
 	VerNewNp = 'vernewnp',
 	SetNp = 'setnp',
 	SetNewNp = 'setnewnp',

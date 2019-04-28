@@ -1,59 +1,32 @@
 import { IServerResponseResult } from '../common';
 import { IPriemApiServerResponse } from '../containers/Enroll/serverModels';
-import { PriemApiName } from '../containers/Enroll/apiNames';
+import { PriemRestApi } from './restApiNames';
+import { JsonRequest } from './JsonRequest';
 
+interface IPriemApiResponse {
+	result: any[];
+	error: any;
+}
 class PriemApi {
-	public static host = 'https://monitoring.mgutm.ru/dev-bin';
-	public static path = '/priem_api.fcgi';
-	public static checkData = <Request, Response>(api: string, payload: Request): Promise<Response> => {
-		const body = new FormData();
-		body.append('api', api);
-		body.append('values', JSON.stringify(payload));
+	static root: string = '/dev-bin';
+	static path: string = '/priem_api.fcgi';
+	static checkData = <Q, R>(api: string, payload: Q, extraData: object = {}): Promise<R> => {
+		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, payload, extraData);
 
-		return fetch(`${PriemApi.host}${PriemApi.path}`, {
-			method: 'POST',
-			credentials: 'include',
-			body,
-		})
-			.then(response => {
-				return response.json();
-			})
-			.then(data => {
-				if (data.error) {
-					return Promise.reject({ message: data.error.string, type: data.error.id });
-				}
-
-				return Promise.resolve(data.result[0]);
-			});
-	};
-	public static post = <Request, Response>(
-		api: PriemApiName,
-		payload: Request,
-		extraData: object = {},
-	): Promise<Response> => {
-		const body = new FormData();
-		body.append('api', api);
-		body.append('values', JSON.stringify(payload));
-		Object.keys(extraData).forEach((key: string) => {
-			console.log('key', extraData);
-			body.append(key, extraData[key].value, extraData[key].name);
+		return Request.send<IPriemApiResponse>().then(response => {
+			return Promise.resolve(response.result[0]);
 		});
+	};
+	static post = <Q, R>(api: PriemRestApi, payload: Q, extraData: object = {}): Promise<any> => {
+		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, payload, extraData);
 
-		return fetch(`${PriemApi.host}${PriemApi.path}`, {
-			method: 'POST',
-			credentials: 'include',
-			body,
-		})
-			.then(response => {
-				return response.json();
-			})
-			.then(data => {
-				if (data.error) {
-					return Promise.reject({ message: data.error.string, type: data.error.id });
-				}
+		return Request.send<IPriemApiResponse>().then(response => {
+			if (response.error) {
+				return Promise.reject({ message: response.error.string, type: response.error.id });
+			}
 
-				return Promise.resolve(data);
-			});
+			return Promise.resolve(response);
+		});
 	};
 }
 
