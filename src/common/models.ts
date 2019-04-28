@@ -1,7 +1,6 @@
 import { Style } from 'jss/css';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import { IEnrollState } from '../containers/Enroll';
-import { ISelectItem } from '../platform/DropdownSelect';
 
 export interface IRootState {
 	user: any;
@@ -71,4 +70,26 @@ export interface IServerResponseResult<T> {
 
 export interface IClasses {
 	classes: any;
+}
+
+export interface IDictionaryItem {
+	id: string;
+	name: string;
+}
+
+export interface ISelectItem {
+	name: string;
+	id: number;
+}
+
+export interface IDocument {
+	docType: IDocType | null;
+	docSubType?: IDocType | null;
+	docGovernment: ISelectItem | null;
+	docSeries?: string;
+	docNumber?: string;
+	docIssieBy?: string;
+	docDate?: string;
+	docFile: File | null;
+	codeDepartment?: string;
 }

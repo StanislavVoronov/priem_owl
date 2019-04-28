@@ -1,15 +1,12 @@
 import React from 'react';
-import { DropdownSelect, Button, DocDataForm, TextInput, ISelectItem } from '../../../platform';
+import { DropdownSelect, Checkbox, Button, WebPhoto, DocDataForm, TextInput, FormControlLabel } from '$components';
 
-import { EDictionaryNameList, IDocType, inValidateDataForm } from '../../../common';
+import { EDictionaryNameList, IDocType, IDocument, inputValueAsString, inValidateDataForm, ISelectItem } from '$common';
 
-import { IDocWithDepartment, IPersonDataForm } from '../models';
-import Styles from '../styles/common.css';
+import { IDocumentWithDepartment, IPersonDataForm } from '../models';
+import Styles from '../styles/common.module.css';
 import { DictionaryContext } from '../EnrollContainer';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import WebPhoto from '../../../platform/WebPhoto';
-import styles from './styles.css';
+import styles from './styles.module.css';
 interface IOwnProps {
 	defaultData: IPersonDataForm;
 	submit: (data: IPersonDataForm) => void;
@@ -18,37 +15,13 @@ interface IOwnProps {
 type IProps = IOwnProps;
 interface IState extends IPersonDataForm {
 	isApplyPersonData: boolean;
-	photo: IDocWithDepartment;
+	photo: IDocumentWithDepartment;
 }
 
 class PersonDataForm extends React.PureComponent<IProps, IState> {
-	public state = {
+	state = {
 		...this.props.defaultData,
 		isApplyPersonData: false,
-	};
-	public onChangeTextField = (name: string) => (value: string) => {
-		this.setState(state => ({
-			...state,
-			[name]: value,
-		}));
-	};
-	public onChangeSelectField = (name: string) => (value: ISelectItem) => {
-		this.setState(state => ({
-			...state,
-			[name]: value,
-		}));
-	};
-	public onDownloadFile = (doc: File) => {
-		this.setState({
-			docFile: doc,
-		});
-	};
-	selectSubType = (docSubType: IDocType) => {
-		let docGovernment = null;
-		if (docSubType.id === 1) {
-			docGovernment = { id: 1, name: 'Россия' };
-		}
-		this.setState({ docSubType, docGovernment });
 	};
 	toggleAgreePersonData = () => {
 		this.setState({ isApplyPersonData: !this.state.isApplyPersonData });
@@ -59,18 +32,28 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 	removePhoto = () => {
 		this.setState({ photo: { ...this.state.photo, docFile: null } });
 	};
-	onChangeGovernment = (docGovernment: ISelectItem) => {
-		this.setState({ docGovernment });
-	};
 	submit = () => {
 		this.props.submit(this.state);
 	};
-	public render() {
+	onChangeCodeDepartment: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ document: { ...this.state.document, codeDepartment: inputValueAsString(event) } });
+	};
+	updateDocument = (document: IDocument) => {
+		this.setState({ document });
+	};
+	onChangeBirthPlace: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ birthPlace: inputValueAsString(event) });
+	};
+	onChangeGovernment = (item: ISelectItem) => {
+		this.setState({ document: { ...this.state.document, docGovernment: item } });
+	};
+	render() {
 		return (
 			<DictionaryContext.Consumer>
 				{dictionaries => {
 					const dictionaryGovernments = dictionaries[EDictionaryNameList.Governments];
 					const dictionaryPersonDocTypes = dictionaries[EDictionaryNameList.PersonDocTypes];
+
 					return (
 						<div className={Styles.flexColumn}>
 							<WebPhoto downloadPhoto={this.addPhoto} removePhoto={this.removePhoto} />
@@ -78,39 +61,29 @@ class PersonDataForm extends React.PureComponent<IProps, IState> {
 								label="Место рождения"
 								defaultValue={this.props.defaultData.birthPlace}
 								placeholder={'Введите место рождения'}
-								onBlur={this.onChangeTextField('birthPlace')}
+								onBlur={this.onChangeBirthPlace}
 							/>
 							<DocDataForm
+								document={this.state.document}
 								docTitle="Файл документа, удостоверяющего личность"
-								file={this.state.docFile}
-								defaultDate={this.state.docDate}
-								defaultIssieBy={this.state.docIssieBy}
-								defaultNumber={this.state.docNumber}
-								defaultSeries={this.state.docSeries}
-								selectDocSubType={this.selectSubType}
-								defaultSubType={this.state.docSubType}
-								onDownloadFile={this.onDownloadFile}
-								onChangeSeries={this.onChangeTextField('docSeries')}
-								onChangeNumber={this.onChangeTextField('docNumber')}
-								onChangeIssieBy={this.onChangeTextField('docIssieBy')}
-								onChangeDate={this.onChangeTextField('docDate')}
+								updateDocument={this.updateDocument}
 								dictionarySubTypes={dictionaryPersonDocTypes && dictionaryPersonDocTypes.values}
 								subTitle={'Тип документа удостоверяющего личность'}
 								extraFields={
-									this.state.docSubType && this.state.docSubType.id === 1 ? (
+									this.state.document.docSubType && this.state.document.docSubType.id === 1 ? (
 										<TextInput
 											label="Код подразделения"
 											type="number"
 											defaultValue={this.props.defaultData.codeDepartment}
 											placeholder={'Введите код подразделения'}
-											onChange={this.onChangeTextField('codeDepartment')}
+											onChange={this.onChangeCodeDepartment}
 										/>
 									) : null
 								}
 							/>
 
 							<DropdownSelect
-								value={this.state.docGovernment}
+								value={this.state.document.docGovernment}
 								required={true}
 								options={dictionaryGovernments && dictionaryGovernments.values}
 								placeholder="Выберите гражданство"

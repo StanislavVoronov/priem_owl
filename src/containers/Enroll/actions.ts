@@ -3,7 +3,7 @@ import { createAction } from 'redux-actions';
 import { IRegisterDataForm } from './models';
 import { IServerError } from './serverModels';
 
-export const checkPersonExistRequest = createAction('checkPersonExistRequest', () => {});
+export const checkPersonExistRequest = createAction('checkPersonExistRequest', () => void 0);
 export const checkPersonSuccess = createAction('checkPersonSuccess', () => void 0);
 export const checkPersonFailure = createAction('checkPersonFailure', (error: IServerError) => error);
 
@@ -16,7 +16,7 @@ export const registerNewPersonSuccess = createAction('registerNewPersonSuccess',
 export const registerNewPersonFailure = createAction('registerNewPersonFailure', (error: IServerError) => error);
 
 export const createPersonFetching = createAction('createPersonFetching', () => void 0);
-export const createPersonSuccess = createAction('createPersonSuccess', (npId: string) => npId);
+export const createPersonSuccess = createAction('createPersonSuccess', (npId: number) => npId);
 export const createPersonFailure = createAction('createPersonFailure', (error: IServerError) => error);
 
 export const sendVerificationCodeFetching = createAction('sendVerificationCodeFetching', () => void 0);

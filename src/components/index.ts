@@ -9,12 +9,13 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
 import DocDataForm from './DocDataForm/';
-import DropdownSelect, { ISelectItem } from './DropdownSelect/';
+import DropdownSelect from './DropdownSelect/';
 import RadioButtonGroup from './RadioButtonGroup/';
 import { H2 } from './Typography/Headers';
 import Checkbox from '@material-ui/core/Checkbox';
 import StepButton from '@material-ui/core/StepButton';
 import WebPhoto from './WebPhoto';
+import { CardMedia, withStyles } from '@material-ui/core';
 
 export {
 	Autocomplete,
@@ -32,7 +33,8 @@ export {
 	DocDataForm,
 	H2,
 	Checkbox,
-	ISelectItem,
 	StepButton,
 	WebPhoto,
+	CardMedia,
+	withStyles,
 };

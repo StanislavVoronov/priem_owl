@@ -1,16 +1,16 @@
 import { IDisabled, IHasError, IHelperText } from '../models';
 import TextField from '@material-ui/core/TextField';
-import React from 'react';
+import React, { ChangeEvent, EventHandler, ReactText } from 'react';
 import { FormLabel, withStyles } from '@material-ui/core';
 import { noop } from 'lodash';
 
 export interface IInputProps extends IHasError, IHelperText, IDisabled {
-	onChange: (text: string) => void;
-	placeholder?: string;
+	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+	classes: any;
 	type: string;
-	onBlur: (text: string) => void;
+	onBlur: (event: ChangeEvent<HTMLInputElement>) => void;
 	isTopLabel: boolean;
-	defaultValue?: string;
+	defaultValue?: ReactText;
 	label?: string;
 	required?: boolean;
 	multiline?: boolean;
@@ -18,7 +18,7 @@ export interface IInputProps extends IHasError, IHelperText, IDisabled {
 	prefix?: string | number;
 	postfix?: string | number;
 	regExp?: string;
-	classes: any;
+	placeholder?: string;
 }
 const localStyles = {
 	asterisk: {
@@ -29,12 +29,11 @@ interface IState {
 	value?: string;
 	isControlled: boolean;
 }
-class TextInput extends React.PureComponent<IInputProps, IState> {
+class TextInput<T> extends React.PureComponent<IInputProps, IState> {
 	static defaultProps = {
 		onBlur: noop,
 		onChange: noop,
 		type: 'text',
-		required: false,
 		isTopLabel: true,
 		classes: {},
 	};
@@ -44,18 +43,17 @@ class TextInput extends React.PureComponent<IInputProps, IState> {
 		isControlled: !!this.props.value,
 	};
 
-	public onChange = (event: any) => {
+	public onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
 		if (event.target.value.length && this.props.regExp && !new RegExp(this.props.regExp).test(event.target.value)) {
 			return;
 		}
 		if (!this.state.isControlled) {
 			this.setState({ value: event.target.value });
 		}
-
-		this.props.onChange(event.target.value);
+		this.props.onChange(event);
 	};
-	public onBlur = (event: any) => {
-		this.props.onBlur(event.target.value);
+	onBlur: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.props.onBlur(event);
 	};
 	public render() {
 		return (

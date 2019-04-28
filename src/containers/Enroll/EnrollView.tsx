@@ -1,16 +1,19 @@
 import * as React from 'react';
 
-import { Stepper, StepContent, Step, TextInput, Button, StepButton } from '../../platform';
-import { IContactDataForm, IDocument, IEducationDataForm, IPersonDataForm, IRegisterDataForm } from './models';
-import styles from './styles/common.css';
+import { Stepper, StepContent, Step, TextInput, Button, StepButton, CardMedia, withStyles } from '$components';
+import { IContactDataForm, IEducationDataForm, IPersonDataForm, IRegisterDataForm } from './models';
+import { IDocument } from '$common';
+import styles from './styles/common.module.css';
 import ContactsDataForm from './components/ContactsDataForm';
 import RegisterDataForm from './components/RegisterDataForm';
 import PersonDataForm from './components/PersonDataForm';
 import EducationDataForm from './components/EducationDataForm';
 import DocumentsDataForm from './components/DocumentsDataForm';
-import { CardMedia, withStyles } from '@material-ui/core';
+
 import { IServerError } from './serverModels';
 import Logo from '../../static/logo.png';
+import { ReactText } from 'react';
+import { ChangeEvent } from 'react';
 
 const localStyles = {
 	currentStepLabel: {
@@ -68,7 +71,7 @@ interface IProps {
 	submitPersonDataForm: (personData: IPersonDataForm) => void;
 	submitRegisterDataForm: (registerData: IRegisterDataForm) => void;
 	submitAddDocumentsDataForm: (documentsData: IDocument[]) => void;
-	onChangeConfirmationCode: (value: string) => void;
+	onChangeConfirmationCode: (event: ChangeEvent<HTMLInputElement>) => void;
 	handleStep: (step: number) => any;
 	classes: Record<string, string>;
 	onConfirmCode: () => void;

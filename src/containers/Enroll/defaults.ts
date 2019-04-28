@@ -1,5 +1,5 @@
-import { IContactDataForm, IDocument, IEducationDataForm, IPersonDataForm, IRegisterDataForm } from './models';
-import { Gender } from '../../common';
+import { IContactDataForm, IEducationDataForm, IPersonDataForm, IRegisterDataForm } from './models';
+import { Gender, IDocument } from '$common';
 export const defaultDocument: IDocument = {
 	docType: null,
 	docFile: null,
@@ -7,17 +7,19 @@ export const defaultDocument: IDocument = {
 };
 
 export const defaultContactsDataForm: IContactDataForm = {
-	...defaultDocument,
 	needDormitory: false,
 	regLocality: '',
-	docType: { id: 3, name: 'Регистрация места жительства', needInfo: false, hasNumber: false },
-	phoneGovernment: { id: 1, name: 'Россия', phone_code: '7' },
 	regIndex: '',
 	regHome: '',
 	regRegion: '',
 	email: '',
 	mobPhone: '',
 	isRegAddressEqualLive: true,
+	document: {
+		...defaultDocument,
+		docType: { id: 3, name: 'Регистрация места жительства' },
+	},
+	phoneGovernment: { id: 1, name: 'Россия', phone_code: '7' },
 };
 
 export const defaultRegisterDataForm: IRegisterDataForm = {
@@ -32,16 +34,17 @@ export const defaultRegisterDataForm: IRegisterDataForm = {
 };
 
 export const defaultPersonDataForm: IPersonDataForm = {
-	...defaultDocument,
-	docSubType: { id: 1, name: 'Паспорт гражданина РФ', needInfo: true, hasNumber: true },
-	docType: { id: 1, name: 'Документ удостоверяющий личность', hasNumber: true, needInfo: true },
-	photo: { ...defaultDocument, docType: { id: 14, name: 'Фотография', hasNumber: false, needInfo: false } },
+	photo: { ...defaultDocument, docType: { id: 14, name: 'Фотография' } },
 	birthPlace: '',
+	document: {
+		...defaultDocument,
+		docSubType: { id: 1, name: 'Паспорт гражданина РФ', needInfo: true, hasNumber: true },
+		docType: { id: 1, name: 'Документ удостоверяющий личность', hasNumber: true, needInfo: true },
+	},
 };
 
 export const defaultEducationDataForm: IEducationDataForm = {
-	...defaultDocument,
-	docType: { id: 2, name: 'Документ об предыдущем образовании', hasNumber: true, needInfo: true },
+	document: { ...defaultDocument, docType: { id: 2, name: 'Документ об предыдущем образовании' } },
 	firstHighEducation: true,
 	coolnessTypes: [],
 	prevEducation: 3,

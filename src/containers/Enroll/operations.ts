@@ -1,4 +1,4 @@
-import { IDocWithDepartment, IPerson, PersonInfo } from './models';
+import { IDocumentWithDepartment, IEnrollForm, IPerson } from './models';
 
 import { IRootState, ServerBoolean } from '../../common';
 import PriemApi from '../../services/PriemApi';
@@ -34,14 +34,16 @@ import {
 	IUploadDocPayload,
 	IVerifyPersonRequest,
 	IVerifyPersonResponse,
+	IServerError,
 } from './serverModels';
 import { EnrollApiName, PriemApiName } from './apiNames';
 import PriemEnroll from '../../services/PriemEnroll';
 import moment from 'moment';
 import { omitBy, isNull } from 'lodash';
+import { ReactText } from 'react';
 export const registerNewPerson = (
-	login: string,
-	password: string,
+	login: ReactText,
+	password: ReactText,
 ): ThunkAction<Promise<number>, IRootState, void, Action> => dispatch => {
 	const payload = { login, password };
 
@@ -50,14 +52,16 @@ export const registerNewPerson = (
 	return PriemApi.post<IRegisterNewPersonRequest, IRegisterNewPersonResponse>(PriemApiName.AddEnroll, payload)
 		.then(response => {
 			dispatch(registerNewPersonSuccess(response.id));
+
 			return response.id;
 		})
 		.catch(error => {
 			dispatch(registerNewPersonFailure(error));
+
 			return Promise.reject();
 		});
 };
-export const checkPerson = (data: PersonInfo): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
+export const checkPerson = (data: IPerson): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	const { firstName, birthday, lastName, middleName = '' } = data;
 
 	const payload = {
@@ -70,23 +74,26 @@ export const checkPerson = (data: PersonInfo): ThunkAction<Promise<void>, IRootS
 	dispatch(checkPersonExistRequest());
 
 	return PriemApi.checkData<ICheckPersonExistRequest, ICheckPersonExistResponse>(PriemApiName.FindNpId, payload)
-		.then(data => {
-			if (data) {
+		.then(response => {
+			if (response) {
 				dispatch(checkPersonFailure({ message: 'Пользователь уже зарегистрирован в системе' }));
+
 				return Promise.reject();
 			}
 			dispatch(checkPersonSuccess());
+
 			return Promise.resolve();
 		})
-		.catch(error => {
+		.catch((error: IServerError) => {
 			dispatch(checkPersonFailure(error));
+
 			return Promise.reject(error);
 		});
 };
 
 export const checkLogin = (login: string): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	const payload = { login };
-	if (login.length < 5) {
+	if (typeof login === 'string' && login.length < 5) {
 		return;
 	}
 	dispatch(checkLoginRequest());
@@ -99,7 +106,7 @@ export const checkLogin = (login: string): ThunkAction<void, IRootState, void, A
 				dispatch(checkLoginFailure({ message: 'Логин уже занят' }));
 			}
 		})
-		.catch(error => {
+		.catch((error: IServerError) => {
 			dispatch(checkLoginFailure(error));
 		});
 };
@@ -116,32 +123,34 @@ export const sendVerificationCode = (
 		.then(response => {
 			console.log(response);
 			dispatch(sendVerificationCodeSuccess());
+
 			return Promise.resolve();
 		})
 		.catch(error => {
 			console.log('error', error);
 			dispatch(sendVerificationCodeFailure(error));
+
 			return Promise.reject();
 		});
 };
 
 export const createPerson = (
-	confirmCode: string,
-	data: IPerson,
+	confirmCode: ReactText,
+	data: IEnrollForm,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	if (data.contactsData && data.registerData && data.personData && data.educationData) {
 		dispatch(createPersonFetching());
 
-		const passport: IDocWithDepartment = { ...data.personData, docGovernment: data.personData.docGovernment };
+		const passport: IDocumentWithDepartment = data.personData.document;
 
-		const education: IDocWithDepartment = data.educationData;
+		const education: IDocumentWithDepartment = data.educationData.document;
 
-		const registration: IDocWithDepartment = data.contactsData;
+		const registration: IDocumentWithDepartment = data.contactsData.document;
 
-		const photo: IDocWithDepartment = data.personData.photo;
+		const photo: IDocumentWithDepartment = data.personData.photo;
 
 		const payload = {
-			email_code: parseInt(confirmCode) || 0,
+			email_code: confirmCode,
 			phone_code: '000000',
 			email: data.contactsData.email,
 			lname: data.registerData.lastName,
@@ -165,16 +174,18 @@ export const createPerson = (
 			.catch((error: any) => {
 				console.log('error', error);
 				dispatch(createPersonFailure(error));
+
 				return Promise.reject();
 			});
 	}
+
 	return Promise.reject();
 };
 
-const uploadDocList = (docList: IDocWithDepartment[]): ThunkAction<void, IRootState, void, Action> => dispatch => {
+const uploadDocList = (docList: IDocumentWithDepartment[]): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	dispatch(uploadDocsFetching());
 	console.log('documents', docList);
-	docList.forEach((item: IDocWithDepartment) => {
+	docList.forEach((item: IDocumentWithDepartment) => {
 		const document: IUploadDocPayload = {
 			mime: item.docFile ? item.docFile.type : null,
 			type: item.docType ? item.docType.id : 0,

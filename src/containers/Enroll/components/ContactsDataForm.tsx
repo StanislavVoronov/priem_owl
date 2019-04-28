@@ -1,10 +1,8 @@
-import React from 'react';
-import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocDataForm } from '../../../platform';
-import { EDictionaryNameList, makeVerticalSpace, inValidateDataForm, IGovernmentSelectItem } from '../../../common';
+import React, { ReactText } from 'react';
+import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, Button, DocDataForm } from '$components';
+import { EDictionaryNameList, inValidateDataForm, IGovernmentSelectItem, inputValueAsString, IDocument } from '$common';
 import { IContactDataForm } from '../models';
-import Button from '@material-ui/core/Button';
-import styles from './styles.css';
-import { defaultContactsDataForm } from '../defaults';
+import styles from './styles.module.css';
 import { DictionaryContext } from '../EnrollContainer';
 
 interface IOwnProps {
@@ -18,9 +16,6 @@ interface IState extends IContactDataForm {
 class ContactsDataForm extends React.PureComponent<IProps, IState> {
 	state: IState = this.props.defaultData;
 
-	onChangeTextField = (name: string) => (value: string) => {
-		this.setState(state => ({ ...state, [name]: value }));
-	};
 	toggleLiveAddressStatus = () => {
 		this.setState(state => ({ ...state, isRegAddressEqualLive: !state.isRegAddressEqualLive }));
 	};
@@ -28,12 +23,14 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 		this.setState(state => ({ ...state, needDormitory: !state.needDormitory }));
 	};
 	onChangeSelectItem = (item: IGovernmentSelectItem) => {
-		const phoneNumber = this.state.mobPhone.substr(this.state.phoneGovernment.phone_code.length + 1);
+		const phoneNumber =
+			typeof this.state.mobPhone === 'string' &&
+			this.state.mobPhone.substr(this.state.phoneGovernment.phone_code.length + 1);
 		const maskedMobPhone = `+${item.phone_code}${phoneNumber}`;
 		this.setState({ mobPhone: maskedMobPhone, phoneGovernment: item });
 	};
-	onChangeMobPhone = (value: string) => {
-		const mobPhoneValue: string[] | null = value
+	onChangeMobPhone: React.ChangeEventHandler<HTMLInputElement> = event => {
+		const mobPhoneValue: string[] | null = inputValueAsString(event)
 			.replace(/\D/g, '')
 			.substring(`${this.state.phoneGovernment.phone_code}`.length)
 			.match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
@@ -52,15 +49,62 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 				: '');
 		this.setState(state => ({ ...state, mobPhone: maskMobPhone }));
 	};
-	onDownloadFile = (doc: File) => {
+	updateDocument = (document: IDocument) => {
 		this.setState({
-			docFile: doc,
+			document,
 		});
 	};
 	submit = () => {
 		this.props.submit(this.state);
 	};
-
+	onChangeRegIndex: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ regIndex: inputValueAsString(event) });
+	};
+	onChangeRegRegion: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ regRegion: inputValueAsString(event) });
+	};
+	onChangeRegLocality: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ regLocality: inputValueAsString(event) });
+	};
+	onChangeRegStreet: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ regStreet: inputValueAsString(event) });
+	};
+	onChangeRegHome: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ regHome: inputValueAsString(event) });
+	};
+	onChangeRegBlock: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ regBlock: inputValueAsString(event) });
+	};
+	onChangeRegFlat: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ regFlat: inputValueAsString(event) });
+	};
+	onChangeLiveIndex: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ liveIndex: inputValueAsString(event) });
+	};
+	onChangeLiveRegion: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ liveRegion: inputValueAsString(event) });
+	};
+	onChangeLiveLocality: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ liveLocality: inputValueAsString(event) });
+	};
+	onChangeLiveStreet: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ liveStreet: inputValueAsString(event) });
+	};
+	onChangeLiveHome: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ liveHome: inputValueAsString(event) });
+	};
+	onChangeLiveBlock: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ liveBlock: inputValueAsString(event) });
+	};
+	onChangeLiveFlat: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ liveFlat: inputValueAsString(event) });
+	};
+	onChangeEmail: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ email: inputValueAsString(event) });
+	};
+	onChangeHomePhone: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ homePhone: inputValueAsString(event) });
+	};
 	render() {
 		return (
 			<DictionaryContext.Consumer>
@@ -75,11 +119,9 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 						<div className={styles.flexColumn}>
 							<H2>Адрес регистрации</H2>
 							<DocDataForm
-								hasNumber={false}
-								needInfo={false}
+								document={this.state.document}
 								docTitle="Файл  регистрации места жительства"
-								file={this.state.docFile}
-								onDownloadFile={this.onDownloadFile}
+								updateDocument={this.updateDocument}
 								extraFields={
 									<React.Fragment>
 										<TextInput
@@ -87,34 +129,34 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 											type="number"
 											placeholder={'Введите индекс'}
 											required={true}
-											onBlur={this.onChangeTextField('regIndex')}
+											onBlur={this.onChangeRegIndex}
 										/>
 										<TextInput
 											label={'Область'}
 											placeholder={'Введите область'}
 											required={true}
-											onBlur={this.onChangeTextField('regRegion')}
+											onBlur={this.onChangeRegRegion}
 										/>
 										<TextInput
 											label={'Населенный пункт'}
 											placeholder={'Введите населенный пункт'}
 											required={true}
-											onBlur={this.onChangeTextField('regLocality')}
+											onBlur={this.onChangeRegLocality}
 										/>
 										<TextInput
 											label={'Улица'}
 											placeholder={'Введите улицу'}
 											required={true}
-											onBlur={this.onChangeTextField('regStreet')}
+											onBlur={this.onChangeRegStreet}
 										/>
 										<TextInput
 											label={'Дом'}
 											placeholder={'Введите дом'}
 											required={true}
-											onBlur={this.onChangeTextField('regHome')}
+											onBlur={this.onChangeRegHome}
 										/>
-										<TextInput label={'Корпус'} onBlur={this.onChangeTextField('regBlock')} />
-										<TextInput label={'Квартира'} onBlur={this.onChangeTextField('regFlat')} />
+										<TextInput label={'Корпус'} onBlur={this.onChangeRegBlock} />
+										<TextInput label={'Квартира'} onBlur={this.onChangeRegFlat} />
 									</React.Fragment>
 								}
 							/>
@@ -131,40 +173,35 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								labelPlacement="start"
 							/>
 							{!isRegAddressEqualLive && (
-								<div className="flexColumn" style={makeVerticalSpace('normal')}>
+								<div className="flexColumn">
 									<H2>Адрес проживания</H2>
 									<TextInput
 										label={'Индекс'}
 										placeholder={'Введите индекс'}
 										required={true}
-										onBlur={this.onChangeTextField('liveIndex')}
+										onBlur={this.onChangeLiveIndex}
 									/>
 									<TextInput
 										label={'Область'}
 										placeholder={'Введите область'}
 										required={true}
-										onBlur={this.onChangeTextField('liveRegion')}
+										onBlur={this.onChangeLiveRegion}
 									/>
 									<TextInput
 										label={'Населенный пункт'}
 										placeholder={'Введите населенный пункт'}
 										required={true}
-										onBlur={this.onChangeTextField('liveLocality')}
+										onBlur={this.onChangeLiveLocality}
 									/>
 									<TextInput
 										label={'Улица'}
 										required={true}
 										placeholder={'Введите улицу'}
-										onBlur={this.onChangeTextField('liveStreet')}
+										onBlur={this.onChangeLiveStreet}
 									/>
-									<TextInput
-										label={'Дом'}
-										placeholder={'Введите дом'}
-										required={true}
-										onBlur={this.onChangeTextField('liveHome')}
-									/>
-									<TextInput label={'Корпус'} onBlur={this.onChangeTextField('liveBlock')} />
-									<TextInput label={'Квартира'} onBlur={this.onChangeTextField('liveFlat')} />
+									<TextInput label={'Дом'} placeholder={'Введите дом'} required onBlur={this.onChangeLiveHome} />
+									<TextInput label={'Корпус'} onBlur={this.onChangeLiveBlock} />
+									<TextInput label={'Квартира'} onBlur={this.onChangeLiveFlat} />
 								</div>
 							)}
 							<FormControlLabel
@@ -173,10 +210,10 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								label="Нуждаюсь в предоставлении общежития"
 								labelPlacement="start"
 							/>
-							<TextInput label={'Электронная почта'} required onBlur={this.onChangeTextField('email')} />
+							<TextInput label={'Электронная почта'} required onBlur={this.onChangeEmail} />
 							{defaultGovernmentValue && (
 								<DropdownSelect
-									isClearable={false}
+									isCleanable={false}
 									defaultValue={defaultGovernmentValue}
 									onChange={this.onChangeSelectItem}
 									title={'Страна оператора сотовой связи'}
@@ -191,7 +228,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 								required={true}
 								onChange={this.onChangeMobPhone}
 							/>
-							<TextInput label={'Домашний телефон'} onBlur={this.onChangeTextField('homePhone')} />
+							<TextInput label={'Домашний телефон'} onBlur={this.onChangeHomePhone} />
 							<div className={styles.nextButtonContainer}>
 								<Button
 									variant="contained"
@@ -202,7 +239,7 @@ class ContactsDataForm extends React.PureComponent<IProps, IState> {
 											regRegion: this.state.regRegion,
 											regLocality: this.state.regLocality,
 											regHome: this.state.regHome,
-											docFile: this.state.docFile,
+											docFile: this.state.document.docFile,
 											mobPhone: this.state.mobPhone,
 										}) ||
 										this.state.mobPhone.length <= 16 ||

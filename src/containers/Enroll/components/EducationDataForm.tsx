@@ -1,20 +1,16 @@
-import { EDictionaryNameList, IDocType, inValidateDataForm } from '../../../common';
-import React from 'react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import { EDictionaryNameList, IDocType, IDocument, inValidateDataForm, ISelectItem } from '$common';
 import { IEducationDataForm } from '../models';
-import Button from '@material-ui/core/Button';
-import styles from './styles.css';
-import { ISelectItem, DocDataForm, DropdownSelect } from '../../../platform';
+import styles from './styles.module.css';
+import { DocDataForm, DropdownSelect, Button, FormControlLabel, Checkbox } from '$components';
 import { DictionaryContext } from '../EnrollContainer';
+import * as React from 'react';
 
 interface IOwnProps {
 	defaultData: IEducationDataForm;
-	submit(data: IState): void;
+	submit(data: IEducationDataForm): void;
 }
 type IProps = IOwnProps;
 
-interface IState extends IEducationDataForm {}
 class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> {
 	state = this.props.defaultData;
 	toggleFirstHighEducationStatus = () => {
@@ -27,18 +23,13 @@ class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> 
 	onChangePersonCoolnessTypes = (items: ISelectItem[]) => {
 		this.setState({ coolnessTypes: items });
 	};
-	downloadFile = (file: File | null) => {
-		this.setState({ docFile: file });
-	};
-	onChangeTextField = (name: string) => (value: string) => {
-		this.setState(state => ({ ...state, [name]: value }));
+	updateDocument = (document: IDocument) => {
+		this.setState({ document });
 	};
 	submit = () => {
 		this.props.submit(this.state);
 	};
-	selectTypeEducation = (item: IDocType) => {
-		this.setState({ docSubType: item, prevEducation: Number(item.id) });
-	};
+
 	render() {
 		return (
 			<DictionaryContext.Consumer>
@@ -46,6 +37,7 @@ class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> 
 					const coolnessTypeDictionary = dictionaries[EDictionaryNameList.CoolnessTypes];
 					const educationTypeDictionary = dictionaries[EDictionaryNameList.EducationDocTypes];
 					const { firstHighEducation, ...rest } = this.state;
+
 					return (
 						<div className={styles.flexColumn}>
 							<FormControlLabel
@@ -64,21 +56,10 @@ class EducationDataForm extends React.PureComponent<IProps, IEducationDataForm> 
 								title={'Индивидуальные достижения'}
 							/>
 							<DocDataForm
+								document={this.state.document}
 								title={'Предыдущее образование'}
-								required
 								docTitle={'Документ о предыдущем образовании'}
-								defaultSubType={this.state.docSubType}
-								defaultDate={this.state.docDate}
-								defaultIssieBy={this.state.docIssieBy}
-								defaultNumber={this.state.docNumber}
-								defaultSeries={this.state.docSeries}
-								file={this.state.docFile}
-								selectDocType={this.selectTypeEducation}
-								onDownloadFile={this.downloadFile}
-								onChangeSeries={this.onChangeTextField('docSeries')}
-								onChangeNumber={this.onChangeTextField('docNumber')}
-								onChangeIssieBy={this.onChangeTextField('docIssieBy')}
-								onChangeDate={this.onChangeTextField('docDate')}
+								updateDocument={this.updateDocument}
 								dictionaryTypes={educationTypeDictionary && educationTypeDictionary.values}
 								subTitle={'Тип документа о предыдущем образовании'}
 								extraFields={

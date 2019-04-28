@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactText } from 'react';
 import deburr from 'lodash/deburr';
 import Autosuggest, { SuggestionSelectedEventData } from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
@@ -55,6 +55,7 @@ function getSuggestions(value: string, suggestions: string[]) {
 	const inputValue = deburr(value.trim()).toLowerCase();
 	const inputLength = inputValue.length;
 	let count = 0;
+
 	return inputLength === 0
 		? []
 		: suggestions.filter(suggestion => {
@@ -75,11 +76,11 @@ function getSuggestionValue(suggestion: string) {
 interface IAutoCompleteProps extends IInputProps, IHasError, IHelperText {
 	suggestions: string[];
 	required?: boolean;
-	defaultValue: string;
+	defaultValue: ReactText;
 }
 
 interface IAutoCompleteState {
-	value: string;
+	value: ReactText;
 	suggestions: string[];
 }
 
@@ -144,7 +145,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 	};
 
 	public onSelectSuggestion = (event: any, data: SuggestionSelectedEventData<string>) => {
-		const index = this.props.suggestions.findIndex(item => item == data.suggestion) || 0;
+		const index = this.props.suggestions.findIndex(item => item === data.suggestion) || 0;
 		this.setState(state => {
 			return { ...state, value: data.suggestion };
 		});
@@ -170,7 +171,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 						styles: this.props.classes,
 						label: inputProps.label,
 						placeholder: inputProps.placeholder,
-						value: this.state.value,
+						value: this.state.value as string,
 						onChange: this.handleChange,
 						helperText: this.props.helperText,
 						error: this.props.hasError,

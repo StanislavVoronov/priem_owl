@@ -2,22 +2,18 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import React from 'react';
 import Select from 'react-select';
-import styles from './styles.css';
+import styles from './styles.module.css';
 import { IHasError, IHelperText } from '../models';
-
-export interface ISelectItem {
-	name: string;
-	id: number;
-}
+import { ISelectItem } from '$common';
 
 interface ISelectProps extends IHasError, IHelperText {
-	value?: Record<string, any> | null;
+	value?: ISelectItem | null;
 	placeholder?: string;
 	onChange: (data: any) => void;
 	options: any[];
 	title: string;
 	isSearchable?: boolean;
-	isClearable?: boolean;
+	isCleanable?: boolean;
 	defaultValue?: any;
 	isMulti?: boolean;
 	required?: boolean;
@@ -42,7 +38,9 @@ class DropdownSelect extends React.PureComponent<ISelectProps, IState> {
 		}
 		this.props.onChange(value);
 	};
-	public render() {
+	getOptionLabel = (item: ISelectItem) => item.name;
+	getOptionValue = (item: ISelectItem): any => item.id;
+	render() {
 		return (
 			<FormControl margin="normal">
 				<FormLabel className={styles.label} style={{ fontSize: '0.75rem' }}>
@@ -57,10 +55,10 @@ class DropdownSelect extends React.PureComponent<ISelectProps, IState> {
 					classNamePrefix="select"
 					placeholder={this.props.placeholder}
 					onChange={this.onChange}
-					isClearable={this.props.isClearable}
+					isClearable={this.props.isCleanable}
 					isSearchable={this.props.isSearchable}
-					getOptionLabel={(item: any) => item.name}
-					getOptionValue={(item: any) => item.id}
+					getOptionLabel={this.getOptionLabel}
+					getOptionValue={this.getOptionValue}
 					options={this.props.options}
 				/>
 				{this.props.hasError && <FormLabel classes={{ root: 'requiredLabel' }}>{this.props.helperText}</FormLabel>}
