@@ -36,7 +36,7 @@ import {
 	IVerifyPersonResponse,
 	IServerError,
 } from './serverModels';
-import { EnrollApiName, PriemApiName } from './apiNames';
+import { EnrollRestApi, PriemRestApi } from '../../services/restApiNames';
 import PriemEnroll from '../../services/PriemEnroll';
 import moment from 'moment';
 import { omitBy, isNull } from 'lodash';
@@ -49,7 +49,7 @@ export const registerNewPerson = (
 
 	dispatch(registerPersonFetching());
 
-	return PriemApi.post<IRegisterNewPersonRequest, IRegisterNewPersonResponse>(PriemApiName.AddEnroll, payload)
+	return PriemApi.post<IRegisterNewPersonRequest, IRegisterNewPersonResponse>(PriemRestApi.AddEnroll, payload)
 		.then(response => {
 			dispatch(registerNewPersonSuccess(response.id));
 
@@ -73,7 +73,7 @@ export const checkPerson = (data: IPerson): ThunkAction<Promise<void>, IRootStat
 
 	dispatch(checkPersonExistRequest());
 
-	return PriemApi.checkData<ICheckPersonExistRequest, ICheckPersonExistResponse>(PriemApiName.FindNpId, payload)
+	return PriemApi.checkData<ICheckPersonExistRequest, ICheckPersonExistResponse>(PriemRestApi.FindNpId, payload)
 		.then(response => {
 			if (response) {
 				dispatch(checkPersonFailure({ message: 'Пользователь уже зарегистрирован в системе' }));
@@ -98,7 +98,7 @@ export const checkLogin = (login: string): ThunkAction<void, IRootState, void, A
 	}
 	dispatch(checkLoginRequest());
 
-	PriemApi.checkData<ICheckLoginRequest, ICheckLoginResponse>(PriemApiName.TestUniqueEnroll, payload)
+	PriemApi.checkData<ICheckLoginRequest, ICheckLoginResponse>(PriemRestApi.TestUniqueEnroll, payload)
 		.then(data => {
 			if (data.COUNT === 0) {
 				dispatch(checkLoginSuccess());
@@ -119,7 +119,7 @@ export const sendVerificationCode = (
 
 	dispatch(sendVerificationCodeFetching());
 
-	return PriemEnroll.post<IVerifyPersonRequest, IVerifyPersonResponse>(EnrollApiName.VerNewNp, payload)
+	return PriemEnroll.post<IVerifyPersonRequest, IVerifyPersonResponse>(EnrollRestApi.VerNewNp, payload)
 		.then(response => {
 			console.log(response);
 			dispatch(sendVerificationCodeSuccess());
@@ -165,7 +165,7 @@ export const createPerson = (
 			cheat_type: 0,
 		};
 
-		PriemEnroll.post<INewPersonDataRequest, INewPersonDataResponse>(EnrollApiName.SetNewNp, payload)
+		PriemEnroll.post<INewPersonDataRequest, INewPersonDataResponse>(EnrollRestApi.SetNewNp, payload)
 			.then(response => {
 				dispatch(createPersonSuccess(response.np_uid));
 
@@ -197,7 +197,7 @@ const uploadDocList = (docList: IDocumentWithDepartment[]): ThunkAction<void, IR
 			iss_gov: item.docGovernment ? item.docGovernment.id : 1,
 		};
 
-		PriemApi.post(PriemApiName.AddDocuments, omitBy(document, isNull), {
+		PriemApi.post(PriemRestApi.AddDocuments, omitBy(document, isNull), {
 			page: { value: item.docFile, name: item.docFile ? item.docFile.name : '-' },
 		})
 			.then(response => {

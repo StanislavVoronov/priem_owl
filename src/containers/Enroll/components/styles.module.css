@@ -33,6 +33,9 @@ body {
 	flex-direction: column;
 }
 .nextButtonContainer {
+	display: flex;
+	justify-content: center;
+	min-height: 44px;
 	margin-top: 22px;
 	margin-bottom: 14px;
 }

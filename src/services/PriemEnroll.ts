@@ -1,10 +1,10 @@
-import { EnrollApiName } from '../containers/Enroll/apiNames';
+import { EnrollRestApi } from './restApiNames';
 
 class PriemEnroll {
 	public static host = 'https://monitoring.mgutm.ru/dev-bin';
 	public static path = '/priem_enroll_verify';
 
-	public static post = <Request, Response>(api: EnrollApiName, payload: Request): Promise<Response> => {
+	public static post = <Request, Response>(api: EnrollRestApi, payload: Request): Promise<Response> => {
 		const body = new FormData();
 		body.append('api', api);
 		body.append('values', JSON.stringify(payload));
