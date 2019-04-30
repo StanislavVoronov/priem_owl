@@ -7,7 +7,7 @@
     "tsc": "rm -rf build/dist && tsc",
     "lint": "tslint src/**/*.{tsx,ts} --fix",
     "build": "node scripts/build.js",
-    "delivery": "rm -rf build/dist && ./node_modules/.bin/webpack && sh delivery.sh",
+    "delivery": "sh ./scripts/delivery.sh",
     "watch": "tsc --watch",
     "prepush": "tsc && tslint --project ./tsconfig.json"
   },

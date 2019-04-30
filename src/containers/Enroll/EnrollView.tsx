@@ -11,8 +11,8 @@ import EducationDataForm from './components/EducationDataForm';
 import DocumentsDataForm from './components/DocumentsDataForm';
 
 import { IServerError } from './serverModels';
-import Logo from '../../static/logo.png';
-import { ReactText } from 'react';
+import BackgroundLogo from '$assets/logo.png';
+import Logo from '$assets/mgutm.png';
 import { ChangeEvent } from 'react';
 
 const localStyles = {
@@ -22,7 +22,7 @@ const localStyles = {
 	stepLabel: {
 		fontSize: '1rem',
 	},
-	logo: { height: window.innerHeight },
+	logo: { height: window.innerHeight, marginBottom: 20 },
 	head: {
 		textAlign: 'center' as any,
 		justifyContent: 'center' as any,
@@ -41,15 +41,11 @@ const localStyles = {
 		textAlign: 'center' as any,
 		justifyContent: 'center' as any,
 		display: 'flex',
-		fontSize: '1.5em',
+		fontSize: '1.4em',
 		margin: 0,
-		paddingLeft: 10,
-		paddingRight: 10,
+		font: 'normal 28px Tahoma, Arial, sans-serif',
 		flexWrap: 'wrap' as any,
-		backgroundColor: '#24529D',
-		color: 'white',
-		paddingBottom: 15,
-		marginBottom: 20,
+		color: '#142A4F',
 	},
 };
 
@@ -85,16 +81,32 @@ export class EnrollView extends React.PureComponent<IProps> {
 	public render() {
 		return (
 			<React.Fragment>
-				<h2 className={this.props.classes.head}>
-					Московский государвственый университет технологии и управлении им. К.Г. Разумовского (ПКУ)
+				<div
+					style={{
+						height: 64,
+						marginBottom: 20,
+						backgroundColor: '#e8f0ff',
+						paddingTop: 5,
+						paddingBottom: 5,
+						paddingLeft: 20,
+						paddingRight: 20,
+						alignItems: 'center',
+						display: 'flex',
+					}}>
+					<img style={{ maxHeight: 60 }} src={Logo} />
+					<div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+						<h2 className={this.props.classes.subHead}>Электронная подача документов для поступления в Университет</h2>
+					</div>
+				</div>
+				<h2 style={{ color: '#3f51b5', fontSize: '1.3rem', textAlign: 'center' }}>
+					Приемная компания {new Date().getFullYear()}
 				</h2>
-				<h2 className={this.props.classes.subHead}>Приемная компания {new Date().getFullYear()}</h2>
-				<CardMedia className={this.props.classes.logo} image={Logo}>
+				<CardMedia className={this.props.classes.logo} image={BackgroundLogo}>
 					<Stepper
 						style={{
-							marginRight: 100,
-							marginLeft: 100,
-							backgroundColor: '#FBFDF0',
+							marginRight: 50,
+							marginLeft: 50,
+							backgroundColor: '#fdfdff',
 							borderRadius: 10,
 							boxShadow: '0px 0px 0px 1px rgba(0,0,0,0.3)',
 						}}

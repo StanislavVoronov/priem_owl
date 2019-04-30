@@ -38,20 +38,17 @@ module.exports = function(webpackEnv) {
 	const shouldUseRelativeAssetPaths = publicPath === './';
 	const publicUrl = isEnvProduction ? publicPath.slice(0, -1) : isEnvDevelopment && '';
 	const env = getClientEnvironment(publicUrl);
-	
-	const srcPath = (subdir) => {
+
+	const srcPath = subdir => {
 		return path.join(__dirname, '../src', subdir);
 	};
-	
+
 	const getStyleLoaders = (cssOptions, preProcessor) => {
 		const loaders = [
 			isEnvDevelopment && require.resolve('style-loader'),
 			isEnvProduction && {
 				loader: MiniCssExtractPlugin.loader,
-				options: Object.assign(
-					{},
-					shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined,
-				),
+				options: Object.assign({}, shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined),
 			},
 			{
 				loader: require.resolve('css-loader'),
@@ -82,18 +79,18 @@ module.exports = function(webpackEnv) {
 				},
 			});
 		}
-		
+
 		return loaders;
 	};
-	
+
 	return {
 		mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
 		bail: isEnvProduction,
 		devtool: isEnvProduction
-						 ? shouldUseSourceMap
-							 ? 'source-map'
-							 : false
-						 : isEnvDevelopment && 'cheap-module-source-map',
+			? shouldUseSourceMap
+				? 'source-map'
+				: false
+			: isEnvDevelopment && 'cheap-module-source-map',
 		entry: [
 			// require.resolve('webpack-dev-server/client') + '?/',
 			// require.resolve('webpack/hot/dev-server'),
@@ -103,17 +100,14 @@ module.exports = function(webpackEnv) {
 		output: {
 			path: isEnvProduction ? paths.appBuild : undefined,
 			pathinfo: isEnvDevelopment,
-			filename: isEnvProduction
-								? 'static/js/[name].[contenthash:8].js'
-								: isEnvDevelopment && 'static/js/bundle.js',
+			filename: isEnvProduction ? 'assets/js/[name].[contenthash:8].js' : isEnvDevelopment && 'assets/js/bundle.js',
 			chunkFilename: isEnvProduction
-										 ? 'static/js/[name].[contenthash:8].chunk.js'
-										 : isEnvDevelopment && 'static/js/[name].chunk.js',
+				? 'assets/js/[name].[contenthash:8].chunk.js'
+				: isEnvDevelopment && 'assets/js/[name].chunk.js',
 			publicPath: publicPath,
 			devtoolModuleFilenameTemplate: isEnvProduction
-																		 ? (info) => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
-																		 : isEnvDevelopment &&
-																			 ((info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+				? info => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
+				: isEnvDevelopment && (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
 		},
 		optimization: {
 			minimize: isEnvProduction,
@@ -146,11 +140,11 @@ module.exports = function(webpackEnv) {
 					cssProcessorOptions: {
 						parser: safePostCssParser,
 						map: shouldUseSourceMap
-								 ? {
-								inline: false,
-								annotation: true,
-							}
-								 : false,
+							? {
+									inline: false,
+									annotation: true,
+							  }
+							: false,
 					},
 				}),
 			],
@@ -168,11 +162,10 @@ module.exports = function(webpackEnv) {
 				$containers: srcPath('containers'),
 				$services: srcPath('services'),
 				$store: srcPath('store'),
+				$assets: srcPath('assets'),
 				$platform: srcPath('platform'),
 			},
-			extensions: paths.moduleFileExtensions
-			.map((ext) => `.${ext}`)
-			.filter((ext) => useTypeScript || !ext.includes('ts')),
+			extensions: paths.moduleFileExtensions.map(ext => `.${ext}`).filter(ext => useTypeScript || !ext.includes('ts')),
 			plugins: [PnpWebpackPlugin, new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson])],
 		},
 		resolveLoader: {
@@ -182,7 +175,7 @@ module.exports = function(webpackEnv) {
 			strictExportPresence: true,
 			rules: [
 				{ parser: { requireEnsure: false } },
-				
+
 				{
 					oneOf: [
 						{
@@ -190,7 +183,7 @@ module.exports = function(webpackEnv) {
 							loader: require.resolve('url-loader'),
 							options: {
 								limit: 10000,
-								name: 'static/media/[name].[hash:8].[ext]',
+								name: 'assets/media/[name].[hash:8].[ext]',
 							},
 						},
 						{
@@ -199,7 +192,7 @@ module.exports = function(webpackEnv) {
 							loader: require.resolve('babel-loader'),
 							options: {
 								customize: require.resolve('babel-preset-react-app/webpack-overrides'),
-								
+
 								plugins: [
 									[
 										require.resolve('babel-plugin-named-asset-import'),
@@ -225,12 +218,10 @@ module.exports = function(webpackEnv) {
 								babelrc: false,
 								configFile: false,
 								compact: false,
-								presets: [
-									[require.resolve('babel-preset-react-app/dependencies'), { helpers: true }],
-								],
+								presets: [[require.resolve('babel-preset-react-app/dependencies'), { helpers: true }]],
 								cacheDirectory: true,
 								cacheCompression: isEnvProduction,
-								
+
 								sourceMaps: false,
 							},
 						},
@@ -256,7 +247,7 @@ module.exports = function(webpackEnv) {
 							loader: require.resolve('file-loader'),
 							exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
 							options: {
-								name: 'static/media/[name].[hash:8].[ext]',
+								name: 'assets/media/[name].[hash:8].[ext]',
 							},
 						},
 					],
@@ -272,26 +263,24 @@ module.exports = function(webpackEnv) {
 						template: paths.appHtml,
 					},
 					isEnvProduction
-					? {
-							minify: {
-								removeComments: true,
-								collapseWhitespace: true,
-								removeRedundantAttributes: true,
-								useShortDoctype: true,
-								removeEmptyAttributes: true,
-								removeStyleLinkTypeAttributes: true,
-								keepClosingSlash: true,
-								minifyJS: true,
-								minifyCSS: true,
-								minifyURLs: true,
-							},
-						}
-					: undefined,
+						? {
+								minify: {
+									removeComments: true,
+									collapseWhitespace: true,
+									removeRedundantAttributes: true,
+									useShortDoctype: true,
+									removeEmptyAttributes: true,
+									removeStyleLinkTypeAttributes: true,
+									keepClosingSlash: true,
+									minifyJS: true,
+									minifyCSS: true,
+									minifyURLs: true,
+								},
+						  }
+						: undefined,
 				),
 			),
-			isEnvProduction &&
-			shouldInlineRuntimeChunk &&
-			new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
+			isEnvProduction && shouldInlineRuntimeChunk && new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
 			new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
 			new ModuleNotFoundPlugin(paths.appPath),
 			new webpack.DefinePlugin(env.stringified),
@@ -299,44 +288,44 @@ module.exports = function(webpackEnv) {
 			isEnvDevelopment && new CaseSensitivePathsPlugin(),
 			isEnvDevelopment && new WatchMissingNodeModulesPlugin(paths.appNodeModules),
 			isEnvProduction &&
-			new MiniCssExtractPlugin({
-				filename: 'static/css/[name].[contenthash:8].css',
-				chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
-			}),
+				new MiniCssExtractPlugin({
+					filename: 'assets/css/[name].[contenthash:8].css',
+					chunkFilename: 'assets/css/[name].[contenthash:8].chunk.css',
+				}),
 			new ManifestPlugin({
 				fileName: 'asset-manifest.json',
 				publicPath: publicPath,
 			}),
 			new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 			isEnvProduction &&
-			new WorkboxWebpackPlugin.GenerateSW({
-				clientsClaim: true,
-				exclude: [/\.map$/, /asset-manifest\.json$/],
-				importWorkboxFrom: 'cdn',
-				navigateFallback: publicUrl + '/index.html',
-				navigateFallbackBlacklist: [new RegExp('^/_'), new RegExp('/[^/]+\\.[^/]+$')],
-			}),
-			useTypeScript &&
-			new ForkTsCheckerWebpackPlugin({
-				typescript: resolve.sync('typescript', {
-					basedir: paths.appNodeModules,
+				new WorkboxWebpackPlugin.GenerateSW({
+					clientsClaim: true,
+					exclude: [/\.map$/, /asset-manifest\.json$/],
+					importWorkboxFrom: 'cdn',
+					navigateFallback: publicUrl + '/index.html',
+					navigateFallbackBlacklist: [new RegExp('^/_'), new RegExp('/[^/]+\\.[^/]+$')],
 				}),
-				async: isEnvDevelopment,
-				useTypescriptIncrementalApi: true,
-				checkSyntacticErrors: true,
-				tsconfig: paths.appTsConfig,
-				reportFiles: [
-					'**',
-					'!**/*.json',
-					'!**/__tests__/**',
-					'!**/?(*.)(spec|test).*',
-					'!**/src/setupProxy.*',
-					'!**/src/setupTests.*',
-				],
-				watch: paths.appSrc,
-				silent: true,
-				formatter: isEnvProduction ? typescriptFormatter : undefined,
-			}),
+			useTypeScript &&
+				new ForkTsCheckerWebpackPlugin({
+					typescript: resolve.sync('typescript', {
+						basedir: paths.appNodeModules,
+					}),
+					async: isEnvDevelopment,
+					useTypescriptIncrementalApi: true,
+					checkSyntacticErrors: true,
+					tsconfig: paths.appTsConfig,
+					reportFiles: [
+						'**',
+						'!**/*.json',
+						'!**/__tests__/**',
+						'!**/?(*.)(spec|test).*',
+						'!**/src/setupProxy.*',
+						'!**/src/setupTests.*',
+					],
+					watch: paths.appSrc,
+					silent: true,
+					formatter: isEnvProduction ? typescriptFormatter : undefined,
+				}),
 		].filter(Boolean),
 		node: {
 			module: 'empty',

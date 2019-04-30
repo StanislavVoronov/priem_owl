@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './root.module.css';
 import * as ReactDOM from 'react-dom';
 import { IDictionaryStore, reducerDictionaries } from '@mgutm-fcu/dictionary';
 import { Provider } from 'react-redux';
