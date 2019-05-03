@@ -23,7 +23,7 @@
     "@material-ui/core": "^3.8.3",
     "@material-ui/lab": "^3.0.0-alpha.30",
     "@mgutm-fcu/auth": "^0.21.26",
-    "@mgutm-fcu/dictionary": "^0.1.38",
+    "@mgutm-fcu/dictionary": "^0.1.41",
     "@types/classnames": "^2.2.7",
     "autosuggest-highlight": "latest",
     "classnames": "^2.2.6",

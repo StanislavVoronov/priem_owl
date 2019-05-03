@@ -1,19 +1,20 @@
-import { IContactDataForm, IEducationDataForm, IPersonDataForm, IRegisterDataForm } from './models';
-import { Gender, IDocument } from '$common';
+import { IDocument } from '$common';
+import { IContactsForm, IEducationForm, IPersonForm, IRegisterForm, Gender } from '$common';
+
 export const defaultDocument: IDocument = {
 	docType: null,
 	docFile: null,
 	docGovernment: { id: 1, name: 'Россия' },
 };
 
-export const defaultContactsDataForm: IContactDataForm = {
+export const defaultContactsDataForm: IContactsForm = {
 	needDormitory: false,
 	regLocality: '',
 	regIndex: '',
 	regHome: '',
 	regRegion: '',
 	email: '',
-	mobPhone: '',
+	mobPhone: '+7',
 	isRegAddressEqualLive: true,
 	document: {
 		...defaultDocument,
@@ -22,7 +23,7 @@ export const defaultContactsDataForm: IContactDataForm = {
 	phoneGovernment: { id: 1, name: 'Россия', phone_code: '7' },
 };
 
-export const defaultRegisterDataForm: IRegisterDataForm = {
+export const defaultRegisterDataForm: IRegisterForm = {
 	lastName: '',
 	firstName: '',
 	middleName: '',
@@ -33,18 +34,22 @@ export const defaultRegisterDataForm: IRegisterDataForm = {
 	repeatPassword: '',
 };
 
-export const defaultPersonDataForm: IPersonDataForm = {
+export const defaultPersonDataForm: IPersonForm = {
+	isApplyPersonData: false,
 	photo: { ...defaultDocument, docType: { id: 14, name: 'Фотография' } },
 	birthPlace: '',
 	document: {
 		...defaultDocument,
-		docSubType: { id: 1, name: 'Паспорт гражданина РФ', needInfo: true, hasNumber: true },
+		docSubType: { id: 1, name: 'Паспорт гражданина РФ' },
 		docType: { id: 1, name: 'Документ удостоверяющий личность', hasNumber: true, needInfo: true },
 	},
 };
 
-export const defaultEducationDataForm: IEducationDataForm = {
-	document: { ...defaultDocument, docType: { id: 2, name: 'Документ об предыдущем образовании' } },
+export const defaultEducationDataForm: IEducationForm = {
+	document: {
+		...defaultDocument,
+		docType: { id: 2, name: 'Документ об предыдущем образовании', needInfo: true, hasNumber: true },
+	},
 	firstHighEducation: true,
 	coolnessTypes: [],
 	prevEducation: 3,

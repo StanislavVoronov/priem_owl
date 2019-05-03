@@ -1,7 +1,5 @@
 import { EDictionaryNameList, IDictionaryScanableFilter, IDictionaryTypeFilter } from '../../common';
 
-export const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { value: 2, label: 'Жен.' }];
-
 export const SHORT_DICTIONARY_LIST = [
 	{
 		name: EDictionaryNameList.FirstNames,

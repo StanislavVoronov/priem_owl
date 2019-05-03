@@ -27,6 +27,8 @@
 		"strict": true,
 		"paths": {
 			"$components": ["components"],
+			"$containers": ["containers"],
+			"$store": ["store"],
 			"$common": ["common"]
 		}
 	},

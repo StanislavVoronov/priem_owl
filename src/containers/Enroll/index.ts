@@ -1,10 +1,8 @@
-import RegisterDataForm from './components/RegisterDataForm';
-import PersonDataForm from './components/PersonDataForm';
+import EnrollContainer from './EnrollContainer';
 import enrollReducer from './reducers';
+
 export * from './operations';
 export * from './models';
 export * from './selectors';
-import EnrollContainer from './EnrollContainer';
-export { RegisterDataForm, enrollReducer };
-
+export { enrollReducer };
 export default EnrollContainer;

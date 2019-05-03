@@ -1,8 +1,9 @@
 import { IDisabled, IHasError, IHelperText } from '../models';
 import TextField from '@material-ui/core/TextField';
-import React, { ChangeEvent, EventHandler, ReactText } from 'react';
+import React, { ChangeEvent, ReactText } from 'react';
 import { FormLabel, withStyles } from '@material-ui/core';
 import { noop } from 'lodash';
+import styles from './styles';
 
 export interface IInputProps extends IHasError, IHelperText, IDisabled {
 	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -20,11 +21,7 @@ export interface IInputProps extends IHasError, IHelperText, IDisabled {
 	regExp?: string;
 	placeholder?: string;
 }
-const localStyles = {
-	asterisk: {
-		color: 'red',
-	},
-};
+
 interface IState {
 	value?: string;
 	isControlled: boolean;
@@ -82,4 +79,4 @@ class TextInput<T> extends React.PureComponent<IInputProps, IState> {
 	}
 }
 
-export default withStyles(localStyles)(TextInput);
+export default withStyles(styles)(TextInput);

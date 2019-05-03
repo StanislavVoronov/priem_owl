@@ -1,4 +1,4 @@
-import { checkPayload } from '../../common';
+import { checkPayload, IServerError } from '$common';
 
 import {
 	checkPersonExistRequest,
@@ -22,7 +22,7 @@ import {
 } from './actions';
 import { Action, handleActions } from 'redux-actions';
 import { IEnrollState } from './models';
-import { INewPersonDataResponse, IServerError } from './serverModels';
+import { INewPersonDataResponse } from './serverModels';
 
 const defaultState: IEnrollState = {
 	checkPersonFetching: false,
@@ -137,4 +137,4 @@ const enrollReducer = handleActions<IEnrollState>(
 	defaultState,
 );
 
-export default { enroll: enrollReducer };
+export default enrollReducer;

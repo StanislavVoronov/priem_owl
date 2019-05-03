@@ -1,6 +1,7 @@
 import { Action } from 'redux-actions';
-import { IDictionaryItem } from './models';
+import { IDictionaryItem } from './models/common';
 import { ChangeEvent } from 'react';
+import { IDictionary } from '@mgutm-fcu/dictionary';
 
 export const checkPayload = <State, Payload>(action: Action<any>, callback: (data: Payload) => State) => {
 	const data = action.payload;

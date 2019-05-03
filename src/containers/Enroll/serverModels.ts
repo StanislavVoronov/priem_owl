@@ -62,11 +62,6 @@ export interface INewPersonDataResponse {
 	np_uid: number;
 }
 
-export interface IServerError {
-	message: string;
-	type?: string;
-}
-
 export interface IConfirmRegisterCodeRequest {
 	np_uid: number;
 	code: string;

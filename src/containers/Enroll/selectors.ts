@@ -1,10 +1,12 @@
 import { createSelector } from 'reselect';
-import { IRootState } from '../../common';
 import { IEnrollState } from './models';
+import { IRootState } from '$store';
 
-const enrollCreateSelector = (state: IRootState) => state.enroll;
+const enrollSelector = (state: IRootState) => state.enroll;
 
 export const enrollStateSelector = createSelector(
-	enrollCreateSelector,
+	enrollSelector,
 	(enroll): IEnrollState => enroll,
 );
+
+export const dictionariesSelector = (state: IRootState) => state.dictionaries;

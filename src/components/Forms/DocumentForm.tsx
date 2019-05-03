@@ -1,14 +1,14 @@
 import React, { ReactElement } from 'react';
-import { TextInput, FormControl } from '../';
+import { TextInput, FormControl } from '..';
 import DropdownSelect from '../DropdownSelect';
 import Dropzone from 'react-dropzone';
-import Image from '../ImageEditor/';
-import { IDictionary } from '@mgutm-fcu/dictionary';
+import Image from '../ImageEditor';
 import FormLabel from '@material-ui/core/FormLabel';
 import styles from './styles.module.css';
 import { IDocType, inputValueAsString, noop, IDocument } from '$common';
+import { IDictionary } from '@mgutm-fcu/dictionary';
 
-interface IDocDataProps {
+interface IDocumentFormProps {
 	document: IDocument;
 	dictionaryTypes?: IDictionary[];
 	dictionarySubTypes?: IDictionary[];
@@ -19,7 +19,7 @@ interface IDocDataProps {
 	updateDocument: (document: IDocument) => void;
 }
 
-class DocDataForm extends React.PureComponent<IDocDataProps> {
+class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 	public static defaultProps = {
 		onChangeSeries: noop,
 		onChangeNumber: noop,
@@ -185,4 +185,4 @@ class DocDataForm extends React.PureComponent<IDocDataProps> {
 	}
 }
 
-export default DocDataForm;
+export default DocumentForm;

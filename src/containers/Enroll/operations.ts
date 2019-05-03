@@ -1,6 +1,4 @@
-import { IDocumentWithDepartment, IEnrollForm, IPerson } from './models';
-
-import { IRootState, ServerBoolean } from '../../common';
+import { IDocument, ServerBoolean, IServerError, IPerson } from '$common';
 import PriemApi from '../../services/PriemApi';
 import {
 	checkPersonFailure,
@@ -34,16 +32,17 @@ import {
 	IUploadDocPayload,
 	IVerifyPersonRequest,
 	IVerifyPersonResponse,
-	IServerError,
 } from './serverModels';
 import { EnrollRestApi, PriemRestApi } from '../../services/restApiNames';
 import PriemEnroll from '../../services/PriemEnroll';
 import moment from 'moment';
 import { omitBy, isNull } from 'lodash';
-import { ReactText } from 'react';
+import { IRootState } from '$store';
+import { IEnrollForm } from './models';
+
 export const registerNewPerson = (
-	login: ReactText,
-	password: ReactText,
+	login: string,
+	password: string,
 ): ThunkAction<Promise<number>, IRootState, void, Action> => dispatch => {
 	const payload = { login, password };
 
@@ -93,7 +92,7 @@ export const checkPerson = (data: IPerson): ThunkAction<Promise<void>, IRootStat
 
 export const checkLogin = (login: string): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	const payload = { login };
-	if (typeof login === 'string' && login.length < 5) {
+	if (login.length < 5) {
 		return;
 	}
 	dispatch(checkLoginRequest());
@@ -135,19 +134,19 @@ export const sendVerificationCode = (
 };
 
 export const createPerson = (
-	confirmCode: ReactText,
+	confirmCode: string,
 	data: IEnrollForm,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	if (data.contactsData && data.registerData && data.personData && data.educationData) {
 		dispatch(createPersonFetching());
 
-		const passport: IDocumentWithDepartment = data.personData.document;
+		const passport = data.personData.document;
 
-		const education: IDocumentWithDepartment = data.educationData.document;
+		const education = data.educationData.document;
 
-		const registration: IDocumentWithDepartment = data.contactsData.document;
+		const registration = data.contactsData.document;
 
-		const photo: IDocumentWithDepartment = data.personData.photo;
+		const photo = data.personData.photo;
 
 		const payload = {
 			email_code: confirmCode,
@@ -182,10 +181,10 @@ export const createPerson = (
 	return Promise.reject();
 };
 
-const uploadDocList = (docList: IDocumentWithDepartment[]): ThunkAction<void, IRootState, void, Action> => dispatch => {
+const uploadDocList = (docList: IDocument[]): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	dispatch(uploadDocsFetching());
 	console.log('documents', docList);
-	docList.forEach((item: IDocumentWithDepartment) => {
+	docList.forEach((item: IDocument) => {
 		const document: IUploadDocPayload = {
 			mime: item.docFile ? item.docFile.type : null,
 			type: item.docType ? item.docType.id : 0,

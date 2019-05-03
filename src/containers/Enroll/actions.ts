@@ -1,7 +1,5 @@
 import { createAction } from 'redux-actions';
-
-import { IRegisterDataForm } from './models';
-import { IServerError } from './serverModels';
+import { IServerError } from '$common';
 
 export const checkPersonExistRequest = createAction('checkPersonExistRequest', () => void 0);
 export const checkPersonSuccess = createAction('checkPersonSuccess', () => void 0);
