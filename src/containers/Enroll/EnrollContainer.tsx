@@ -37,6 +37,7 @@ interface IStateToProps {
 	checkPersonError: IServerError | null;
 	checkLoginError: IServerError | null;
 	verifyPersonError: IServerError | null;
+	verifyPersonFetching: boolean;
 	checkPersonFetching: boolean;
 	dictionaries: Record<string, IDictionary>;
 }
@@ -51,7 +52,7 @@ interface IState extends IEnrollForm {
 class EnrollContainer extends React.Component<IProps, IState> {
 	state: IState = {
 		passedStep: 0,
-		activeStep: 0,
+		activeStep: 4,
 		confirmCode: '',
 		registerData: defaultRegisterDataForm,
 		personData: defaultPersonDataForm,
@@ -142,6 +143,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 					steps={NEW_PERSON_STEPS}
 					onConfirmCode={this.onConfirmCode}
 					verifyPersonError={this.props.verifyPersonError}
+					verifyPersonFetching={this.props.verifyPersonFetching}
 				/>
 			</Dictionary>
 		);
@@ -157,6 +159,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		checkLoginError,
 		checkPersonFetching,
 		verifyPersonError,
+		verifyPersonFetching,
 	} = enrollStateSelector(state);
 	const dictionaries = dictionariesSelector(state);
 
@@ -168,6 +171,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		checkPersonError,
 		checkLoginError,
 		verifyPersonError,
+		verifyPersonFetching,
 		dictionaries,
 	};
 };

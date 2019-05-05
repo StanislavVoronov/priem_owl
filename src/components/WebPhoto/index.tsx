@@ -3,22 +3,27 @@ import React from 'react';
 import WebCamera from 'react-webcam';
 import Image from '../ImageEditor/';
 import AvatarEditor from 'react-avatar-editor';
-import DialogTitle from '@material-ui/core/DialogTitle';
+
+import styles from './styles';
 import Dialog from '@material-ui/core/Dialog';
-import { Button } from '@material-ui/core';
+import { Button } from '../Buttons';
+import { withStyles } from '@material-ui/core';
 interface IState {
-	file: File | null;
+	file: string | null;
 	open: boolean;
 	photo: File | null;
 }
 interface IProps {
 	downloadPhoto: (file: File) => void;
 	removePhoto: () => void;
+	classes: any;
 }
+
 class WebPhoto extends React.Component<IProps, IState> {
 	static defaultProps = {
 		downloadPhoto: () => void 0,
 		removePhoto: () => void 0,
+		classes: {},
 	};
 	webCamera: any;
 	state: IState = {
@@ -30,9 +35,16 @@ class WebPhoto extends React.Component<IProps, IState> {
 		this.webCamera = webCamera;
 	};
 	onDownload = () => {
-		this.setState({ photo: this.state.file, open: false });
 		if (this.state.file) {
-			this.props.downloadPhoto(this.state.file);
+			const matches = this.state.file.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+
+			if (!matches || matches.length !== 3) {
+				throw new Error('Invalid base64 string');
+			}
+
+			const photo: File = new File([new Buffer(matches[2], 'base64')], 'photo', { type: matches[1] });
+			this.setState({ open: false, photo });
+			this.props.downloadPhoto(photo);
 		}
 	};
 	capture = () => {
@@ -46,6 +58,7 @@ class WebPhoto extends React.Component<IProps, IState> {
 		this.props.removePhoto();
 	};
 	render() {
+		const { classes } = this.props;
 		const videoConstraints = {
 			height: 200,
 			width: 200,
@@ -53,30 +66,26 @@ class WebPhoto extends React.Component<IProps, IState> {
 		};
 
 		return (
-			<div style={{ width: '50%' }}>
+			<div className={classes.container}>
 				{!this.state.photo && (
-					<div style={{ marginTop: 24, display: 'flex', flex: 0, flexDirection: 'column', marginBottom: 8 }}>
-						<div>
-							<Button variant="contained" color="primary" onClick={this.toggleDialog}>
+					<div className={classes.wrapper}>
+						<div className={classes.addPhotoButtonWrapper}>
+							<Button className={classes.addPhotoButton} onClick={this.toggleDialog}>
 								Добавить фотографию
 							</Button>
 						</div>
-						<div style={{ marginTop: 10 }}>
-							<label style={{ textAlign: 'center' }}>
-								Необходимо для пропуска в Университет, в случае поступления.
-							</label>
-						</div>
+						<label>Необходимо для пропуска в Университет, в случае поступления.</label>
 					</div>
 				)}
 				<Dialog maxWidth="lg" open={this.state.open} onBackdropClick={this.toggleDialog}>
-					<div style={{ display: 'flex', flexDirection: 'row' }}>
+					<div className="flexRow">
 						<WebCamera
-							style={{ padding: 22 }}
+							className={classes.webCamera}
 							audio={false}
 							ref={this.setRef}
 							screenshotFormat="image/jpeg"
 							videoConstraints={videoConstraints}
-						/>{' '}
+						/>
 						{this.state.file && (
 							<AvatarEditor
 								image={this.state.file}
@@ -86,22 +95,12 @@ class WebPhoto extends React.Component<IProps, IState> {
 							/>
 						)}
 					</div>
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'stretch',
-							flexDirection: 'row',
-							marginTop: 16,
-						}}>
-						<Button fullWidth color="primary" style={{ borderRadius: 0 }} variant="contained" onClick={this.capture}>
+					<div className={classes.actionWrapper}>
+						<Button fullWidth primary className={classes.takePhotoButton} onClick={this.capture}>
 							Сфотографировать
 						</Button>
 						{this.state.file && (
-							<Button
-								fullWidth
-								variant="contained"
-								style={{ backgroundColor: 'green', borderRadius: 0, color: 'white' }}
-								onClick={this.onDownload}>
+							<Button className={classes.downloadButton} fullWidth onClick={this.onDownload}>
 								Загрузить
 							</Button>
 						)}
@@ -115,4 +114,4 @@ class WebPhoto extends React.Component<IProps, IState> {
 	}
 }
 
-export default WebPhoto;
+export default withStyles(styles)(WebPhoto);

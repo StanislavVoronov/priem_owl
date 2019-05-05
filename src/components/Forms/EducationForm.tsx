@@ -68,7 +68,7 @@ class EducationForm extends React.PureComponent<IProps, IEducationForm> {
 					title={'Предыдущее образование'}
 					docTitle={'Документ о предыдущем образовании'}
 					updateDocument={this.updateDocument}
-					dictionaryTypes={educationTypeDictionary && educationTypeDictionary.values}
+					dictionarySubTypes={educationTypeDictionary && educationTypeDictionary.values}
 					subTitle={'Тип документа о предыдущем образовании'}
 					extraFields={
 						<FormControlLabel

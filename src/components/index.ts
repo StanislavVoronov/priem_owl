@@ -1,4 +1,3 @@
-import Button from '@material-ui/core/Button';
 import { Stepper, Step, StepLabel, StepContent } from '@material-ui/core/';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -21,7 +20,6 @@ export {
 	Step,
 	StepContent,
 	StepLabel,
-	Button,
 	RadioButtonGroup,
 	FormControl,
 	FormControlLabel,

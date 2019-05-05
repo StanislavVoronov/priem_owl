@@ -2,7 +2,7 @@ import { IDocument, ServerBoolean, IServerError, IPerson } from '$common';
 import PriemApi from '../../services/PriemApi';
 import {
 	checkPersonFailure,
-	checkPersonExistRequest,
+	checkPersonRequest,
 	checkPersonSuccess,
 	checkLoginFailure,
 	checkLoginRequest,
@@ -70,14 +70,12 @@ export const checkPerson = (data: IPerson): ThunkAction<Promise<void>, IRootStat
 		birthdate: moment(birthday).format('YYYY-MM-DD'),
 	};
 
-	dispatch(checkPersonExistRequest());
+	dispatch(checkPersonRequest());
 
 	return PriemApi.checkData<ICheckPersonExistRequest, ICheckPersonExistResponse>(PriemRestApi.FindNpId, payload)
 		.then(response => {
 			if (response) {
-				dispatch(checkPersonFailure({ message: 'Пользователь уже зарегистрирован в системе' }));
-
-				return Promise.reject();
+				throw { message: 'Пользователь уже зарегистрирован в системе' };
 			}
 			dispatch(checkPersonSuccess());
 
@@ -86,7 +84,7 @@ export const checkPerson = (data: IPerson): ThunkAction<Promise<void>, IRootStat
 		.catch((error: IServerError) => {
 			dispatch(checkPersonFailure(error));
 
-			return Promise.reject(error);
+			return Promise.reject();
 		});
 };
 
@@ -185,13 +183,14 @@ const uploadDocList = (docList: IDocument[]): ThunkAction<void, IRootState, void
 	dispatch(uploadDocsFetching());
 	console.log('documents', docList);
 	docList.forEach((item: IDocument) => {
+		console.log(item.docFile);
 		const document: IUploadDocPayload = {
 			mime: item.docFile ? item.docFile.type : null,
 			type: item.docType ? item.docType.id : 0,
 			stype: item.docSubType ? item.docSubType.id : null,
 			seria: item.docSeries || '-',
 			num: item.docNumber || '-',
-			iss_org: item.docIssieBy ? `${item.docIssieBy}${' ' + item.codeDepartment}` : '-',
+			iss_org: item.docIssieBy ? `${item.docIssieBy}${item.codeDepartment ? ' ' + item.codeDepartment : ''}` : '-',
 			iss_date: item.docDate ? moment(item.docDate).format('DD-MM-YYYY') : '01-01-1970',
 			iss_gov: item.docGovernment ? item.docGovernment.id : 1,
 		};

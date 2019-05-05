@@ -8,6 +8,7 @@ import {
 	IDocument,
 	IContactsForm,
 	validateDocument,
+	IServerError,
 } from '$common';
 
 import styles from './styles.module.css';
@@ -15,6 +16,8 @@ import { IDictionaryState } from '@mgutm-fcu/dictionary';
 
 interface IOwnProps {
 	dictionaries: IDictionaryState;
+	error: IServerError | null;
+	loading: boolean;
 	defaultData: IContactsForm;
 	submit(data: any): void;
 }
@@ -218,7 +221,8 @@ class ContactsForm extends React.PureComponent<IProps, IState> {
 					onChange={this.onChangeMobPhone}
 				/>
 				<TextInput label={'Домашний телефон'} onBlur={this.onChangeHomePhone} />
-				<LoadingButton disabled={invalidForm} onClick={this.submit}>
+				{this.props.error && <H2 color="red">{this.props.error.message}</H2>}
+				<LoadingButton loading={this.props.loading} disabled={invalidForm} onClick={this.submit}>
 					Подтвердить
 				</LoadingButton>
 			</div>

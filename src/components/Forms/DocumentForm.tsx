@@ -153,7 +153,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 								return (
 									<div {...getRootProps()} className={styles.fileContainer}>
 										{this.props.docTitle && (
-											<div style={{ display: 'flex', flexDirection: 'row' }}>
+											<div className="flexRow">
 												<FormLabel style={{ fontSize: '.875rem', marginRight: 2 }}>{this.props.docTitle}</FormLabel>
 												<FormLabel style={{ color: 'red' }}>{'*'}</FormLabel>
 											</div>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from '$components';
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { green } from '@material-ui/core/colors';
 import withStyles from '@material-ui/core/styles/withStyles';

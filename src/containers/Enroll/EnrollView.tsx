@@ -48,6 +48,7 @@ interface IProps {
 	classes: Record<string, string>;
 	onConfirmCode: () => void;
 	dictionaries: IDictionaryState;
+	verifyPersonFetching: boolean;
 }
 
 export class EnrollView extends React.PureComponent<IProps> {
@@ -92,6 +93,8 @@ export class EnrollView extends React.PureComponent<IProps> {
 									)}
 									{index === 2 && (
 										<ContactsForm
+											error={this.props.verifyPersonError}
+											loading={this.props.verifyPersonFetching}
 											dictionaries={this.props.dictionaries}
 											defaultData={this.props.defaultContactsData}
 											submit={this.props.submitContactsDataForm}

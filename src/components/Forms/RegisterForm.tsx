@@ -100,8 +100,8 @@ class RegisterForm extends React.PureComponent<IProps, IRegisterForm> {
 		const { dictionaries } = this.props;
 		const dictionaryFirstNames = dictionaries[EDictionaryNameList.FirstNames];
 		const dictionaryMiddleNames = dictionaries[EDictionaryNameList.MiddleNames];
-		const inValidLogin = this.state.login.length > 0 && this.state.login.length < 5;
-		const inValidPassword = this.state.password.length > 0 && this.state.password.length < 7;
+		const inValidLogin = this.state.login.length > 0 && this.state.login.length < 8;
+		const inValidPassword = this.state.password.length > 0 && this.state.password.length < 10;
 		const inValidRepeatPassword =
 			!inValidLogin && this.state.repeatPassword.length ? this.state.repeatPassword !== this.state.password : false;
 		console.log('inValidRepeatPassword', inValidRepeatPassword);
@@ -172,7 +172,7 @@ class RegisterForm extends React.PureComponent<IProps, IRegisterForm> {
 						onChange={this.onChangeLoginField}
 						hasError={!!this.props.checkLoginError || inValidLogin}
 						helperText={
-							this.props.checkLoginError ? this.props.checkLoginError.message : 'Логин должен быть не менее 5 символов'
+							this.props.checkLoginError ? this.props.checkLoginError.message : 'Логин должен быть не менее 8 символов'
 						}
 					/>
 
@@ -183,7 +183,7 @@ class RegisterForm extends React.PureComponent<IProps, IRegisterForm> {
 						defaultValue={this.props.defaultData.password}
 						onBlur={this.onChangePasswordField}
 						hasError={inValidPassword}
-						helperText={'Пароль должен быть не менее 7 символов'}
+						helperText={'Пароль должен быть не менее 10 символов'}
 					/>
 					<TextInput
 						required={true}

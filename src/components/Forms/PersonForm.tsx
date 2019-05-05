@@ -58,7 +58,9 @@ class PersonForm extends React.PureComponent<IProps, IPersonForm> {
 		const { dictionaries } = this.props;
 		const dictionaryGovernments = dictionaries[EDictionaryNameList.Governments];
 		const dictionaryPersonDocTypes = dictionaries[EDictionaryNameList.PersonDocTypes];
-		const invalidForm = !(validateDataForm(this.state) && validateDocument(this.state.document));
+		const invalidForm =
+			!(validateDataForm(this.state) && validateDocument(this.state.document) && validateDocument(this.state.photo)) ||
+			!this.state.isApplyPersonData;
 
 		return (
 			<div className="flexColumn">

@@ -1,7 +1,7 @@
 import { checkPayload, IServerError } from '$common';
 
 import {
-	checkPersonExistRequest,
+	checkPersonRequest,
 	checkPersonSuccess,
 	checkPersonFailure,
 	checkLoginFailure,
@@ -43,7 +43,7 @@ const defaultState: IEnrollState = {
 
 const enrollReducer = handleActions<IEnrollState>(
 	{
-		[checkPersonExistRequest.toString()]: (state: IEnrollState) => {
+		[checkPersonRequest.toString()]: (state: IEnrollState) => {
 			return {
 				...state,
 				checkPersonFetching: true,
@@ -54,8 +54,8 @@ const enrollReducer = handleActions<IEnrollState>(
 				return { ...state, checkPersonFetching: false };
 			}),
 		[checkPersonFailure.toString()]: (state: IEnrollState, action: Action<any>) =>
-			checkPayload(action, (data: IServerError) => {
-				return { ...state, checkPersonFetching: false, checkPersonError: data };
+			checkPayload(action, (error: IServerError) => {
+				return { ...state, checkPersonFetching: false, checkPersonError: error };
 			}),
 
 		[checkLoginRequest.toString()]: (state: IEnrollState) => {
