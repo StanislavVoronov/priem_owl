@@ -31,6 +31,7 @@ interface IDispatchToProps {
 	checkPerson(data: IPerson): Promise<void>;
 }
 interface IStateToProps {
+	registrationCompleted: boolean;
 	createPersonFetching: boolean;
 	createPersonError: IServerError | null;
 	npId: number;
@@ -52,7 +53,7 @@ interface IState extends IEnrollForm {
 class EnrollContainer extends React.Component<IProps, IState> {
 	state: IState = {
 		passedStep: 0,
-		activeStep: 4,
+		activeStep: 0,
 		confirmCode: '',
 		registerData: defaultRegisterDataForm,
 		personData: defaultPersonDataForm,
@@ -144,6 +145,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 					onConfirmCode={this.onConfirmCode}
 					verifyPersonError={this.props.verifyPersonError}
 					verifyPersonFetching={this.props.verifyPersonFetching}
+					registrationCompleted={this.props.registrationCompleted}
 				/>
 			</Dictionary>
 		);
@@ -159,11 +161,13 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		checkLoginError,
 		checkPersonFetching,
 		verifyPersonError,
+		registrationCompleted,
 		verifyPersonFetching,
 	} = enrollStateSelector(state);
 	const dictionaries = dictionariesSelector(state);
 
 	return {
+		registrationCompleted,
 		checkPersonFetching,
 		createPersonFetching,
 		createPersonError,

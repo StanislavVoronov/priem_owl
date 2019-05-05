@@ -107,7 +107,7 @@ class PersonForm extends React.PureComponent<IProps, IPersonForm> {
 					label="Согласие на обработку персональных данных"
 				/>
 				<LoadingButton onClick={this.submit} disabled={invalidForm}>
-					Подтвердить
+					Далее
 				</LoadingButton>
 			</div>
 		);

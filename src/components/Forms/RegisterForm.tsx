@@ -17,11 +17,11 @@ export const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { valu
 
 interface IProps {
 	npId: number;
-	checkPersonFetching: boolean;
+	loading: boolean;
+	error: IServerError | null;
 	dictionaries: IDictionaryState;
 	defaultData: IRegisterForm;
 	checkLoginError: IServerError | null;
-	checkPersonError: IServerError | null;
 	submit(data: IRegisterForm): void;
 	onCheckLogin(login: ReactText): void;
 }
@@ -123,7 +123,7 @@ class RegisterForm extends React.PureComponent<IProps, IRegisterForm> {
 			inValidLogin;
 
 		return (
-			<div className={styles.flexColumn}>
+			<div className="flexColumn">
 				<TextInput
 					required
 					defaultValue={this.state.lastName}
@@ -195,9 +195,9 @@ class RegisterForm extends React.PureComponent<IProps, IRegisterForm> {
 						helperText={inValidRepeatPassword ? 'Пароли не совпадают' : ''}
 					/>
 				</React.Fragment>
-				{this.props.checkPersonError && <H2 color="red">{this.props.checkPersonError.message}</H2>}
+				{this.props.error && <H2 color="red">{this.props.error.message}</H2>}
 
-				<LoadingButton disabled={invalidForm} loading={this.props.checkPersonFetching} onClick={this.submit}>
+				<LoadingButton disabled={invalidForm} loading={this.props.loading} onClick={this.submit}>
 					Зарегистрироваться
 				</LoadingButton>
 			</div>

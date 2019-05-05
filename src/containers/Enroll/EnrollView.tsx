@@ -11,8 +11,10 @@ import { IDictionaryState } from '@mgutm-fcu/dictionary';
 import LoadingButton from '../../components/Buttons/LoadingButtont';
 
 const localStyles = {
-	logo: { height: window.innerHeight, marginBottom: 20 },
+	logo: { height: window.innerHeight },
 	stepper: {
+		height: window.innerHeight,
+		marginBottom: 50,
 		marginRight: 50,
 		marginLeft: 50,
 		backgroundColor: '#fdfdff',
@@ -22,6 +24,7 @@ const localStyles = {
 };
 
 interface IProps {
+	registrationCompleted: boolean;
 	npId: number;
 	createPersonFetching: boolean;
 	createPersonError: IServerError | null;
@@ -55,6 +58,66 @@ export class EnrollView extends React.PureComponent<IProps> {
 	static defaultProps = {
 		classes: {},
 	};
+	renderForm = () => {
+		switch (this.props.activeStep) {
+			case 0: {
+				return (
+					<RegisterForm
+						npId={this.props.npId}
+						dictionaries={this.props.dictionaries}
+						defaultData={this.props.defaultRegisterData}
+						checkLoginError={this.props.checkLoginError}
+						loading={this.props.checkPersonFetching}
+						error={this.props.checkPersonError}
+						onCheckLogin={this.props.onCheckLogin}
+						submit={this.props.submitRegisterDataForm}
+					/>
+				);
+			}
+			case 1: {
+				return (
+					<PersonForm
+						dictionaries={this.props.dictionaries}
+						defaultData={this.props.defaultPersonData}
+						submit={this.props.submitPersonDataForm}
+					/>
+				);
+			}
+			case 2: {
+				return (
+					<ContactsForm
+						error={this.props.verifyPersonError}
+						loading={this.props.verifyPersonFetching}
+						dictionaries={this.props.dictionaries}
+						defaultData={this.props.defaultContactsData}
+						submit={this.props.submitContactsDataForm}
+					/>
+				);
+			}
+			case 3: {
+				return (
+					<EducationForm
+						dictionaries={this.props.dictionaries}
+						defaultData={this.props.defaultEducationData}
+						submit={this.props.submitEducationDataForm}
+					/>
+				);
+			}
+			case 4: {
+				return (
+					<DocumentsForm
+						isForeigner={this.props.defaultPersonData.document.docGovernment.id !== 1}
+						dictionaries={this.props.dictionaries}
+						defaultData={this.props.defaultDocumentsData}
+						submit={this.props.submitAddDocumentsDataForm}
+					/>
+				);
+			}
+			default: {
+				return null;
+			}
+		}
+	};
 	public render() {
 		return (
 			<React.Fragment>
@@ -70,54 +133,15 @@ export class EnrollView extends React.PureComponent<IProps> {
 								<StepButton onClick={this.props.handleStep(index)} disabled={index >= this.props.passedStep}>
 									<span className={index === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
 								</StepButton>
-
-								<StepContent>
-									{index === 0 && (
-										<RegisterForm
-											npId={this.props.npId}
-											dictionaries={this.props.dictionaries}
-											defaultData={this.props.defaultRegisterData}
-											checkLoginError={this.props.checkLoginError}
-											checkPersonFetching={this.props.checkPersonFetching}
-											checkPersonError={this.props.checkPersonError}
-											onCheckLogin={this.props.onCheckLogin}
-											submit={this.props.submitRegisterDataForm}
-										/>
-									)}
-									{index === 1 && (
-										<PersonForm
-											dictionaries={this.props.dictionaries}
-											defaultData={this.props.defaultPersonData}
-											submit={this.props.submitPersonDataForm}
-										/>
-									)}
-									{index === 2 && (
-										<ContactsForm
-											error={this.props.verifyPersonError}
-											loading={this.props.verifyPersonFetching}
-											dictionaries={this.props.dictionaries}
-											defaultData={this.props.defaultContactsData}
-											submit={this.props.submitContactsDataForm}
-										/>
-									)}
-									{index === 3 && (
-										<EducationForm
-											dictionaries={this.props.dictionaries}
-											defaultData={this.props.defaultEducationData}
-											submit={this.props.submitEducationDataForm}
-										/>
-									)}
-									{index === 4 && (
-										<DocumentsForm
-											dictionaries={this.props.dictionaries}
-											defaultData={this.props.defaultDocumentsData}
-											submit={this.props.submitAddDocumentsDataForm}
-										/>
-									)}
-								</StepContent>
+								<StepContent>{this.renderForm()}</StepContent>
 							</Step>
 						))}
-						{this.props.activeStep >= this.props.steps.length ? (
+						{this.props.registrationCompleted && (
+							<h2 style={{ textAlign: 'center' }}>
+								Процесс подачи документов для поступления в Университет успешно завершен!
+							</h2>
+						)}
+						{!this.props.registrationCompleted && this.props.activeStep >= this.props.steps.length ? (
 							<React.Fragment>
 								<p>
 									<TextInput

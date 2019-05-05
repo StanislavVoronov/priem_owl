@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { TextInput, DocumentForm, Button } from '$components';
+import { TextInput, DocumentForm, Button, H2 } from '$components';
 import {
 	EDictionaryNameList,
 	validateDataForm,
@@ -8,6 +8,7 @@ import {
 	IDocument,
 	defaultDocument,
 	validateDocument,
+	IDocType,
 } from '$common';
 
 import styles from './styles';
@@ -16,6 +17,7 @@ import LoadingButton from '../Buttons/LoadingButtont';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 interface IOwnProps {
+	isForeigner: boolean;
 	dictionaries: IDictionaryState;
 	defaultData: IDocument[];
 	classes: Record<string, string>;
@@ -30,6 +32,7 @@ type IProps = IOwnProps;
 
 class DocumentsForm extends React.PureComponent<IProps, IState> {
 	static defaultProps = {
+		isForeigner: false,
 		classes: {},
 	};
 	state = {
@@ -59,8 +62,36 @@ class DocumentsForm extends React.PureComponent<IProps, IState> {
 		const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
 		const isDisabledAddButton = this.state.documents.map(validateDocument).includes(false);
 
+		const isDisabledNextButton =
+			this.state.documents.map(validateDocument).includes(false) || (dictionaryDocTypes && this.props.isForeigner)
+				? dictionaryDocTypes.values
+						.filter((item: IDocType) => item.need_foreigner)
+						.filter(
+							(item: IDocType) =>
+								this.state.documents.find((doc: IDocument) => item.id === (doc.docType && doc.docType.id)) ===
+								undefined,
+						).length > 0
+				: false;
+
 		return (
 			<div className="flexColumn">
+				<div>
+					<H2>Необходимые документы для поступления:</H2>
+					<ol>
+						<li>Приложение к документу об обрзовании</li>
+						{this.props.isForeigner &&
+							dictionaryDocTypes &&
+							dictionaryDocTypes.values
+								.map((item: IDocType) => {
+									if (item.need_foreigner) {
+										return <li key={item.id}>{item.name}</li>;
+									}
+
+									return null;
+								})
+								.filter(Boolean)}
+					</ol>
+				</div>
 				<div>
 					{this.state.documents.map((item: IDocument, index) => {
 						const docType = item.docType && item.docType.id;
@@ -106,8 +137,8 @@ class DocumentsForm extends React.PureComponent<IProps, IState> {
 						{'Добавить новый документ'}
 					</Button>
 				</div>
-				<LoadingButton disabled={isDisabledAddButton} onClick={this.submit}>
-					Подтвердить
+				<LoadingButton disabled={isDisabledNextButton} onClick={this.submit}>
+					Далее
 				</LoadingButton>
 			</div>
 		);

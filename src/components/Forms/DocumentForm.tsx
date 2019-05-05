@@ -74,11 +74,11 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 		const isDataVisible = !!(
 			(this.props.dictionaryTypes && this.props.title) ||
 			(this.props.dictionarySubTypes && this.props.subTitle) ||
-			(this.props.document.docType && this.props.document.docType.needInfo) ||
+			(this.props.document.docType && this.props.document.docType.need_info) ||
 			this.props.extraFields
 		);
-		const needInfo = this.props.document.docType && this.props.document.docType.needInfo;
-		const hasNumber = this.props.document.docType && this.props.document.docType.hasNumber;
+		const needInfo = this.props.document.docType && this.props.document.docType.need_info;
+		const hasNumber = this.props.document.docType && this.props.document.docType.has_number;
 
 		return (
 			<FormControl>

@@ -30,7 +30,7 @@ export const FULL_DICTIONARY_LIST = [
 	},
 	{
 		dictionary: EDictionaryNameList.DocTypes,
-		columns: ['id', 'name', 'scanable', 'need_info'],
+		columns: ['id', 'name', 'scanable', 'need_info', 'need_foreigner', 'has_number'],
 		filter: (item: IDictionaryScanableFilter) => item.scanable === 1,
 	},
 	{

@@ -79,7 +79,7 @@ class EducationForm extends React.PureComponent<IProps, IEducationForm> {
 					}
 				/>
 				<LoadingButton disabled={invalidForm} onClick={this.submit}>
-					Подтвердить
+					Далее
 				</LoadingButton>
 			</div>
 		);

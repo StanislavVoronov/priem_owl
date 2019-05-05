@@ -39,6 +39,7 @@ const defaultState: IEnrollState = {
 	createPersonError: null,
 	uploadDocsError: null,
 	uploadDocsFetching: false,
+	registrationCompleted: false,
 };
 
 const enrollReducer = handleActions<IEnrollState>(
@@ -114,7 +115,7 @@ const enrollReducer = handleActions<IEnrollState>(
 		},
 		[createPersonSuccess.toString()]: (state: IEnrollState, action: Action<any>) =>
 			checkPayload(action, (data: INewPersonDataResponse) => {
-				return { ...state, createPersonFetching: false, personVerified: true, npId: data.np_uid };
+				return { ...state, createPersonFetching: false, registrationCompleted: true, npId: data.np_uid };
 			}),
 		[createPersonFailure.toString()]: (state: IEnrollState, action: Action<any>) =>
 			checkPayload(action, (data: IServerError) => {

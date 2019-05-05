@@ -2,6 +2,7 @@ import { IDocument, IServerError } from '$common';
 import { IContactsForm, IEducationForm, IPersonForm, IRegisterForm } from '$common';
 
 export interface IEnrollState {
+	registrationCompleted: boolean;
 	checkPersonFetching: boolean;
 	npId: number;
 	checkPersonError: IServerError | null;

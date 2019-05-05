@@ -119,9 +119,10 @@ class ContactsForm extends React.PureComponent<IProps, IState> {
 		const { isRegAddressEqualLive } = this.state;
 		const governmentDictionary = this.props.dictionaries[EDictionaryNameList.Governments];
 		const invalidForm = !(validateDataForm(this.state) && validateDocument(this.state.document));
+		const isEmailError = this.props.error ? this.props.error.type === 'EMAILERROR' : false;
 
 		return (
-			<div className={styles.flexColumn}>
+			<div className="flexColumn">
 				<H2>Адрес регистрации</H2>
 				<DocumentForm
 					document={this.state.document}
@@ -131,6 +132,7 @@ class ContactsForm extends React.PureComponent<IProps, IState> {
 						<React.Fragment>
 							<TextInput
 								label={'Индекс'}
+								defaultValue={this.state.regIndex}
 								type="number"
 								placeholder={'Введите индекс'}
 								required={true}
@@ -138,25 +140,34 @@ class ContactsForm extends React.PureComponent<IProps, IState> {
 							/>
 							<TextInput
 								label={'Область'}
+								defaultValue={this.state.regRegion}
 								placeholder={'Введите область'}
 								required={true}
 								onBlur={this.onChangeRegRegion}
 							/>
 							<TextInput
 								label={'Населенный пункт'}
+								defaultValue={this.state.regLocality}
 								placeholder={'Введите населенный пункт'}
 								required={true}
 								onBlur={this.onChangeRegLocality}
 							/>
 							<TextInput
 								label={'Улица'}
+								defaultValue={this.state.regStreet}
 								placeholder={'Введите улицу'}
 								required={true}
 								onBlur={this.onChangeRegStreet}
 							/>
-							<TextInput label={'Дом'} placeholder={'Введите дом'} required={true} onBlur={this.onChangeRegHome} />
-							<TextInput label={'Корпус'} onBlur={this.onChangeRegBlock} />
-							<TextInput label={'Квартира'} onBlur={this.onChangeRegFlat} />
+							<TextInput
+								label={'Дом'}
+								defaultValue={this.state.regHome}
+								placeholder={'Введите дом'}
+								required={true}
+								onBlur={this.onChangeRegHome}
+							/>
+							<TextInput label={'Корпус'} defaultValue={this.state.regBlock} onBlur={this.onChangeRegBlock} />
+							<TextInput label={'Квартира'} defaultValue={this.state.regFlat} onBlur={this.onChangeRegFlat} />
 						</React.Fragment>
 					}
 				/>
@@ -181,30 +192,52 @@ class ContactsForm extends React.PureComponent<IProps, IState> {
 						<H2>Адрес проживания</H2>
 						<TextInput
 							label={'Индекс'}
+							defaultValue={this.state.liveIndex}
 							placeholder={'Введите индекс'}
 							required={true}
 							onBlur={this.onChangeLiveIndex}
 						/>
 						<TextInput
 							label={'Область'}
+							defaultValue={this.state.liveRegion}
 							placeholder={'Введите область'}
 							required={true}
 							onBlur={this.onChangeLiveRegion}
 						/>
 						<TextInput
 							label={'Населенный пункт'}
+							defaultValue={this.state.liveLocality}
 							placeholder={'Введите населенный пункт'}
 							required={true}
 							onBlur={this.onChangeLiveLocality}
 						/>
-						<TextInput label={'Улица'} required={true} placeholder={'Введите улицу'} onBlur={this.onChangeLiveStreet} />
-						<TextInput label={'Дом'} placeholder={'Введите дом'} required onBlur={this.onChangeLiveHome} />
-						<TextInput label={'Корпус'} onBlur={this.onChangeLiveBlock} />
-						<TextInput label={'Квартира'} onBlur={this.onChangeLiveFlat} />
+						<TextInput
+							defaultValue={this.state.liveStreet}
+							label={'Улица'}
+							required={true}
+							placeholder={'Введите улицу'}
+							onBlur={this.onChangeLiveStreet}
+						/>
+						<TextInput
+							defaultValue={this.state.liveHome}
+							label={'Дом'}
+							placeholder={'Введите дом'}
+							required
+							onBlur={this.onChangeLiveHome}
+						/>
+						<TextInput defaultValue={this.state.liveBlock} label={'Корпус'} onBlur={this.onChangeLiveBlock} />
+						<TextInput defaultValue={this.state.liveFlat} label={'Квартира'} onBlur={this.onChangeLiveFlat} />
 					</div>
 				)}
 
-				<TextInput label={'Электронная почта'} required onBlur={this.onChangeEmail} />
+				<TextInput
+					label={'Электронная почта'}
+					defaultValue={this.state.email}
+					hasError={isEmailError}
+					helperText={isEmailError && this.props.error ? this.props.error.message : ''}
+					required
+					onBlur={this.onChangeEmail}
+				/>
 				<DropdownSelect
 					isCleanable={false}
 					defaultValue={this.state.phoneGovernment}
@@ -220,10 +253,10 @@ class ContactsForm extends React.PureComponent<IProps, IState> {
 					required={true}
 					onChange={this.onChangeMobPhone}
 				/>
-				<TextInput label={'Домашний телефон'} onBlur={this.onChangeHomePhone} />
+				<TextInput label={'Домашний телефон'} defaultValue={this.state.homePhone} onBlur={this.onChangeHomePhone} />
 				{this.props.error && <H2 color="red">{this.props.error.message}</H2>}
 				<LoadingButton loading={this.props.loading} disabled={invalidForm} onClick={this.submit}>
-					Подтвердить
+					Далее
 				</LoadingButton>
 			</div>
 		);

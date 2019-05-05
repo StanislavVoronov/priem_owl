@@ -13,8 +13,10 @@ export interface IDictionaryName {
 }
 
 export interface IDocType extends ISelectItem {
-	needInfo?: boolean;
-	hasNumber?: boolean;
+	scanable?: boolean;
+	need_info?: boolean;
+	has_number?: boolean;
+	need_foreigner?: boolean;
 }
 
 export interface IGovernmentSelectItem extends ISelectItem {
@@ -40,7 +42,7 @@ export interface ISelectItem {
 export interface IDocument {
 	docType: IDocType | null;
 	docSubType?: IDocType | null;
-	docGovernment: ISelectItem | null;
+	docGovernment: ISelectItem;
 	docSeries?: string;
 	docNumber?: string;
 	docIssieBy?: string;

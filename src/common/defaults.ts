@@ -41,14 +41,14 @@ export const defaultPersonDataForm: IPersonForm = {
 	document: {
 		...defaultDocument,
 		docSubType: { id: 1, name: 'Паспорт гражданина РФ' },
-		docType: { id: 1, name: 'Документ удостоверяющий личность', hasNumber: true, needInfo: true },
+		docType: { id: 1, name: 'Документ удостоверяющий личность', has_number: true, need_info: true },
 	},
 };
 
 export const defaultEducationDataForm: IEducationForm = {
 	document: {
 		...defaultDocument,
-		docType: { id: 2, name: 'Документ об предыдущем образовании', needInfo: true, hasNumber: true },
+		docType: { id: 2, name: 'Документ об предыдущем образовании', need_info: true, has_number: true },
 	},
 	firstHighEducation: true,
 	coolnessTypes: [],
