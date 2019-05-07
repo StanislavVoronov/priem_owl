@@ -11,6 +11,8 @@ import {
 	defaultEducationDataForm,
 	defaultPersonDataForm,
 	defaultRegisterDataForm,
+	validateRegistrationForm,
+	EnrollForms,
 } from '$common';
 import EnrollView from './EnrollView';
 import Dictionary, { IDictionary } from '@mgutm-fcu/dictionary';
@@ -48,10 +50,12 @@ interface IState extends IEnrollForm {
 	passedStep: number;
 	activeStep: number;
 	confirmCode: string;
+	invalidData: Partial<EnrollForms>;
 }
 
 class EnrollContainer extends React.Component<IProps, IState> {
 	state: IState = {
+		invalidData: {},
 		passedStep: 0,
 		activeStep: 0,
 		confirmCode: '',
@@ -112,6 +116,16 @@ class EnrollContainer extends React.Component<IProps, IState> {
 			educationData: this.state.educationData,
 		});
 	};
+	updateRegistrationForm = (field: keyof IRegisterForm, value: any) => {
+		const invalidData = validateRegistrationForm(this.state.registerData);
+
+		this.setState({
+			invalidData: {
+				...invalidData,
+			},
+		});
+	};
+
 	render() {
 		return (
 			<Dictionary
@@ -120,6 +134,8 @@ class EnrollContainer extends React.Component<IProps, IState> {
 				list={this.props.npId ? FULL_DICTIONARY_LIST : SHORT_DICTIONARY_LIST}>
 				<EnrollView
 					npId={this.props.npId}
+					invalidData={this.state.invalidData}
+					updateRegistrationForm={this.updateRegistrationForm}
 					createPersonError={this.props.createPersonError}
 					createPersonFetching={this.props.createPersonFetching}
 					dictionaries={this.props.dictionaries}

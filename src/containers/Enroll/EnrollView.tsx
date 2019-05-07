@@ -1,14 +1,21 @@
 import * as React from 'react';
 
 import { Stepper, StepContent, Step, TextInput, Button, StepButton, CardMedia, withStyles, H2 } from '$components';
-import { IContactsForm, IEducationForm, IPersonForm, IRegisterForm, IDocument, IServerError } from '$common';
+import {
+	IContactsForm,
+	IEducationForm,
+	IPersonForm,
+	IRegisterForm,
+	IDocument,
+	IServerError,
+	EnrollForms,
+} from '$common';
 import styles from './styles.module.css';
 import { ContactsForm, RegisterForm, PersonForm, EducationForm, DocumentsForm } from '$components';
 import BackgroundLogo from '$assets/logo.png';
 import Logo from '$assets/mgutm.png';
 import { ChangeEvent } from 'react';
 import { IDictionaryState } from '@mgutm-fcu/dictionary';
-import LoadingButton from '../../components/Buttons/LoadingButtont';
 
 const localStyles = {
 	logo: { height: window.innerHeight },
@@ -52,6 +59,8 @@ interface IProps {
 	onConfirmCode: () => void;
 	dictionaries: IDictionaryState;
 	verifyPersonFetching: boolean;
+	updateRegistrationForm: <T>(field: keyof IRegisterForm, value: T) => void;
+	invalidData: Partial<EnrollForms>;
 }
 
 export class EnrollView extends React.PureComponent<IProps> {
@@ -63,14 +72,10 @@ export class EnrollView extends React.PureComponent<IProps> {
 			case 0: {
 				return (
 					<RegisterForm
-						npId={this.props.npId}
+						invalidData={this.props.invalidData}
+						updateForm={this.props.updateRegistrationForm}
 						dictionaries={this.props.dictionaries}
 						defaultData={this.props.defaultRegisterData}
-						checkLoginError={this.props.checkLoginError}
-						loading={this.props.checkPersonFetching}
-						error={this.props.checkPersonError}
-						onCheckLogin={this.props.onCheckLogin}
-						submit={this.props.submitRegisterDataForm}
 					/>
 				);
 			}
@@ -119,7 +124,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 		}
 	};
 	public render() {
-		return (
+		const fragment = (
 			<React.Fragment>
 				<div className={styles.header}>
 					<img className={styles.logo} src={Logo} />
@@ -152,16 +157,14 @@ export class EnrollView extends React.PureComponent<IProps> {
 									/>
 								</p>
 								{this.props.createPersonError && <H2 color="red">{this.props.createPersonError.message}</H2>}
-
-								<LoadingButton loading={this.props.createPersonFetching} onClick={this.props.onConfirmCode}>
-									Отправить
-								</LoadingButton>
 							</React.Fragment>
 						) : null}
 					</Stepper>
 				</CardMedia>
 			</React.Fragment>
 		);
+
+		return fragment;
 	}
 }
 

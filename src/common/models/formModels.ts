@@ -46,3 +46,5 @@ export interface IPersonForm {
 	birthPlace: string;
 	document: IDocument;
 }
+
+export type EnrollForms = IRegisterForm & IContactsForm & IEducationForm & IPersonForm & IDocument;
