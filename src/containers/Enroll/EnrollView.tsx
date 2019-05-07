@@ -17,6 +17,7 @@ import Logo from '$assets/mgutm.png';
 import { ChangeEvent } from 'react';
 import { IDictionaryState } from '@mgutm-fcu/dictionary';
 import LoadingButton from '../../components/Buttons/LoadingButtont';
+import { IEnrollFormState } from './models';
 
 const localStyles = {
 	logo: { height: window.innerHeight },
@@ -51,7 +52,7 @@ interface IProps {
 	classes: Record<string, string>;
 	onConfirmCode: () => void;
 	dictionaries: IDictionaryState;
-	updateRegistrationForm: <T>(field: keyof IRegisterForm, value: T) => void;
+	updateForm: (form: keyof IEnrollFormState) => <T>(field: keyof IRegisterForm, value: T) => void;
 	invalidData: Partial<EnrollForms>;
 	loading: boolean;
 	submit: () => void;
@@ -77,7 +78,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return (
 					<RegisterForm
 						invalidData={this.props.invalidData}
-						updateForm={this.props.updateRegistrationForm}
+						updateForm={this.props.updateForm('registerData')}
 						dictionaries={this.props.dictionaries}
 						defaultData={this.props.defaultRegisterData}
 					/>

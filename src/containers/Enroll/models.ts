@@ -19,7 +19,7 @@ export interface IEnrollState {
 	uploadDocsFetching: boolean;
 }
 
-export interface IEnrollForm {
+export interface IEnrollFormState {
 	registerData: IRegisterForm;
 	personData: IPersonForm;
 	contactsData: IContactsForm;

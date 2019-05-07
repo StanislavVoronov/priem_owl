@@ -22,14 +22,14 @@ import { dictionariesSelector, enrollStateSelector } from './selectors';
 import { checkPerson, checkLogin, registerNewPerson, createPerson, sendVerificationCode } from './operations';
 import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
 import { ChangeEvent } from 'react';
-import { IEnrollForm } from './models';
+import { IEnrollFormState } from './models';
 import { IRootState } from '$store';
 
 interface IDispatchToProps {
 	registerNewPerson: (login: string, password: string) => Promise<number>;
 	checkLogin(login: string): Promise<boolean>;
 	sendVerificationCode(email: string, mobPhone: string): Promise<void>;
-	createPerson(confirmCode: string, data: IEnrollForm): void;
+	createPerson(confirmCode: string, data: IEnrollFormState): void;
 	checkPerson(data: IPerson): Promise<void>;
 }
 interface IStateToProps {
@@ -44,7 +44,7 @@ interface IStateToProps {
 }
 type IProps = IDispatchToProps & IStateToProps;
 
-interface IState extends IEnrollForm {
+interface IState extends IEnrollFormState {
 	passedStep: number;
 	activeStep: number;
 	confirmCode: string;
@@ -115,7 +115,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 			educationData: this.state.educationData,
 		});
 	};
-	updateRegistrationForm = (field: keyof IRegisterForm, value: any) => {
+	updateForm = (form: keyof IEnrollFormState) => (field: keyof IRegisterForm, value: any) => {
 		if (field === 'login') {
 			this.props.checkLogin(value).catch(error => {
 				this.setState({ invalidData: { ...this.state.invalidData, login: error.message } });
@@ -124,8 +124,9 @@ class EnrollContainer extends React.Component<IProps, IState> {
 
 		const invalidData = validateRegistrationForm(this.state.registerData);
 		this.setState({
-			registerData: {
-				...this.state.registerData,
+			...this.state,
+			[form]: {
+				...this.state[form],
 				[field]: value,
 			},
 			invalidData: {
@@ -144,7 +145,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 				<EnrollView
 					loading={this.props.loading}
 					invalidData={this.state.invalidData}
-					updateRegistrationForm={this.updateRegistrationForm}
+					updateForm={this.updateForm}
 					createPersonError={this.props.createPersonError}
 					dictionaries={this.props.dictionaries}
 					defaultRegisterData={this.state.registerData}

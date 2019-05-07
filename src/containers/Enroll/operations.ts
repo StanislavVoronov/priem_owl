@@ -38,7 +38,7 @@ import PriemEnroll from '../../services/PriemEnroll';
 import moment from 'moment';
 import { omitBy, isNull } from 'lodash';
 import { IRootState } from '$store';
-import { IEnrollForm } from './models';
+import { IEnrollFormState } from './models';
 
 export const registerNewPerson = (
 	login: string,
@@ -139,7 +139,7 @@ export const sendVerificationCode = (
 
 export const createPerson = (
 	confirmCode: string,
-	data: IEnrollForm,
+	data: IEnrollFormState,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	if (data.contactsData && data.registerData && data.personData && data.educationData) {
 		dispatch(createPersonFetching());
