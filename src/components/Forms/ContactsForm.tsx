@@ -9,6 +9,7 @@ import {
 	IContactsForm,
 	validateDocument,
 	IServerError,
+	IRegisterForm,
 } from '$common';
 
 import styles from './styles.module.css';
@@ -16,12 +17,11 @@ import { IDictionaryState } from '@mgutm-fcu/dictionary';
 
 interface IOwnProps {
 	dictionaries: IDictionaryState;
-	error: IServerError | null;
-	loading: boolean;
 	defaultData: IContactsForm;
-	submit(data: any): void;
+	invalidData: Partial<IContactsForm>;
 }
 type IProps = IOwnProps;
+
 interface IState extends IContactsForm {
 	phoneGovernment: IGovernmentSelectItem;
 }
@@ -63,9 +63,6 @@ class ContactsForm extends React.PureComponent<IProps, IState> {
 		this.setState({
 			document,
 		});
-	};
-	submit = () => {
-		this.props.submit(this.state);
 	};
 	onChangeRegIndex: React.ChangeEventHandler<HTMLInputElement> = event => {
 		this.setState({ regIndex: inputValueAsString(event) });
@@ -119,7 +116,6 @@ class ContactsForm extends React.PureComponent<IProps, IState> {
 		const { isRegAddressEqualLive } = this.state;
 		const governmentDictionary = this.props.dictionaries[EDictionaryNameList.Governments];
 		const invalidForm = !(validateDataForm(this.state) && validateDocument(this.state.document));
-		const isEmailError = this.props.error ? this.props.error.type === 'EMAILERROR' : false;
 
 		return (
 			<div className="flexColumn">
@@ -233,8 +229,8 @@ class ContactsForm extends React.PureComponent<IProps, IState> {
 				<TextInput
 					label={'Электронная почта'}
 					defaultValue={this.state.email}
-					hasError={isEmailError}
-					helperText={isEmailError && this.props.error ? this.props.error.message : ''}
+					hasError={!!this.props.invalidData.email}
+					helperText={this.props.invalidData.email}
 					required
 					onBlur={this.onChangeEmail}
 				/>
@@ -254,10 +250,6 @@ class ContactsForm extends React.PureComponent<IProps, IState> {
 					onChange={this.onChangeMobPhone}
 				/>
 				<TextInput label={'Домашний телефон'} defaultValue={this.state.homePhone} onBlur={this.onChangeHomePhone} />
-				{this.props.error && <H2 color="red">{this.props.error.message}</H2>}
-				<LoadingButton loading={this.props.loading} disabled={invalidForm} onClick={this.submit}>
-					Далее
-				</LoadingButton>
 			</div>
 		);
 	}

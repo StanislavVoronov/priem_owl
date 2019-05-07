@@ -27,21 +27,19 @@ import { IRootState } from '$store';
 
 interface IDispatchToProps {
 	registerNewPerson: (login: string, password: string) => Promise<number>;
-	checkLogin(login: string): void;
+	checkLogin(login: string): Promise<boolean>;
 	sendVerificationCode(email: string, mobPhone: string): Promise<void>;
 	createPerson(confirmCode: string, data: IEnrollForm): void;
 	checkPerson(data: IPerson): Promise<void>;
 }
 interface IStateToProps {
+	loading: boolean;
 	registrationCompleted: boolean;
-	createPersonFetching: boolean;
 	createPersonError: IServerError | null;
 	npId: number;
 	checkPersonError: IServerError | null;
 	checkLoginError: IServerError | null;
 	verifyPersonError: IServerError | null;
-	verifyPersonFetching: boolean;
-	checkPersonFetching: boolean;
 	dictionaries: Record<string, IDictionary>;
 }
 type IProps = IDispatchToProps & IStateToProps;
@@ -81,9 +79,13 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		const { lastName, middleName, birthday, firstName, gender } = this.state.registerData;
 		this.props.checkPerson({ firstName, lastName, birthday, middleName, gender }).then(this.handleNext);
 	};
-	submitRegisterDataForm = (registerData: IRegisterForm) => {
-		this.setState({ registerData });
-		this.props.registerNewPerson(registerData.login, registerData.password).then(this.onCheckPerson);
+	submit = () => {
+		const { registerData } = this.state;
+		switch (this.state.activeStep) {
+			case 0: {
+				this.props.registerNewPerson(registerData.login, registerData.password).then(this.onCheckPerson);
+			}
+		}
 	};
 	submitAddDocumentsDataForm = (documents: IDocument[]) => {
 		this.setState({ documents });
@@ -104,9 +106,6 @@ class EnrollContainer extends React.Component<IProps, IState> {
 	onChangeConfirmationCode = (event: ChangeEvent<HTMLInputElement>) => {
 		this.setState({ confirmCode: inputValueAsString(event) });
 	};
-	onCheckLogin = (login: string) => {
-		this.props.checkLogin(login);
-	};
 	onConfirmCode = () => {
 		this.props.createPerson(this.state.confirmCode, {
 			registerData: this.state.registerData,
@@ -117,10 +116,20 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		});
 	};
 	updateRegistrationForm = (field: keyof IRegisterForm, value: any) => {
-		const invalidData = validateRegistrationForm(this.state.registerData);
+		if (field === 'login') {
+			this.props.checkLogin(value).catch(error => {
+				this.setState({ invalidData: { ...this.state.invalidData, login: error.message } });
+			});
+		}
 
+		const invalidData = validateRegistrationForm(this.state.registerData);
 		this.setState({
+			registerData: {
+				...this.state.registerData,
+				[field]: value,
+			},
 			invalidData: {
+				...this.state.invalidData,
 				...invalidData,
 			},
 		});
@@ -133,11 +142,10 @@ class EnrollContainer extends React.Component<IProps, IState> {
 				url={'/dev-bin/priem_api.fcgi'}
 				list={this.props.npId ? FULL_DICTIONARY_LIST : SHORT_DICTIONARY_LIST}>
 				<EnrollView
-					npId={this.props.npId}
+					loading={this.props.loading}
 					invalidData={this.state.invalidData}
 					updateRegistrationForm={this.updateRegistrationForm}
 					createPersonError={this.props.createPersonError}
-					createPersonFetching={this.props.createPersonFetching}
 					dictionaries={this.props.dictionaries}
 					defaultRegisterData={this.state.registerData}
 					defaultPersonData={this.state.personData}
@@ -147,20 +155,14 @@ class EnrollContainer extends React.Component<IProps, IState> {
 					activeStep={this.state.activeStep}
 					passedStep={this.state.passedStep}
 					handleStep={this.handleStep}
-					onCheckLogin={this.onCheckLogin}
-					checkLoginError={this.props.checkLoginError}
-					checkPersonError={this.props.checkPersonError}
-					checkPersonFetching={this.props.checkPersonFetching}
 					onChangeConfirmationCode={this.onChangeConfirmationCode}
 					submitPersonDataForm={this.submitPersonDataForm}
-					submitRegisterDataForm={this.submitRegisterDataForm}
+					submit={this.submit}
 					submitContactsDataForm={this.submitContactsDataForm}
 					submitAddDocumentsDataForm={this.submitAddDocumentsDataForm}
 					submitEducationDataForm={this.submitEducationDataForm}
 					steps={NEW_PERSON_STEPS}
 					onConfirmCode={this.onConfirmCode}
-					verifyPersonError={this.props.verifyPersonError}
-					verifyPersonFetching={this.props.verifyPersonFetching}
 					registrationCompleted={this.props.registrationCompleted}
 				/>
 			</Dictionary>
@@ -183,15 +185,13 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	const dictionaries = dictionariesSelector(state);
 
 	return {
+		loading: checkPersonFetching || createPersonFetching || verifyPersonFetching,
 		registrationCompleted,
-		checkPersonFetching,
-		createPersonFetching,
 		createPersonError,
 		npId,
 		checkPersonError,
 		checkLoginError,
 		verifyPersonError,
-		verifyPersonFetching,
 		dictionaries,
 	};
 };

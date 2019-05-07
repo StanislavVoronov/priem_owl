@@ -88,23 +88,29 @@ export const checkPerson = (data: IPerson): ThunkAction<Promise<void>, IRootStat
 		});
 };
 
-export const checkLogin = (login: string): ThunkAction<void, IRootState, void, Action> => dispatch => {
+export const checkLogin = (login: string): ThunkAction<Promise<boolean>, IRootState, void, Action> => dispatch => {
 	const payload = { login };
-	if (login.length < 5) {
-		return;
-	}
+
 	dispatch(checkLoginRequest());
 
-	PriemApi.checkData<ICheckLoginRequest, ICheckLoginResponse>(PriemRestApi.TestUniqueEnroll, payload)
+	return PriemApi.checkData<ICheckLoginRequest, ICheckLoginResponse>(PriemRestApi.TestUniqueEnroll, payload)
 		.then(data => {
 			if (data.COUNT === 0) {
 				dispatch(checkLoginSuccess());
+
+				return Promise.resolve(false);
 			} else {
-				dispatch(checkLoginFailure({ message: 'Логин уже занят' }));
+				const error = { message: 'Логин уже занят' };
+
+				dispatch(checkLoginFailure(error));
+
+				throw error;
 			}
 		})
 		.catch((error: IServerError) => {
 			dispatch(checkLoginFailure(error));
+
+			return Promise.reject(error);
 		});
 };
 

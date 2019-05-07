@@ -16,6 +16,7 @@ import BackgroundLogo from '$assets/logo.png';
 import Logo from '$assets/mgutm.png';
 import { ChangeEvent } from 'react';
 import { IDictionaryState } from '@mgutm-fcu/dictionary';
+import LoadingButton from '../../components/Buttons/LoadingButtont';
 
 const localStyles = {
 	logo: { height: window.innerHeight },
@@ -32,10 +33,7 @@ const localStyles = {
 
 interface IProps {
 	registrationCompleted: boolean;
-	npId: number;
-	createPersonFetching: boolean;
 	createPersonError: IServerError | null;
-	checkPersonFetching: boolean;
 	defaultRegisterData: IRegisterForm;
 	defaultPersonData: IPersonForm;
 	defaultEducationData: IEducationForm;
@@ -43,29 +41,35 @@ interface IProps {
 	defaultDocumentsData: IDocument[];
 	steps: string[];
 	activeStep: number;
-	checkLoginError: IServerError | null;
-	checkPersonError: IServerError | null;
-	verifyPersonError: IServerError | null;
-	onCheckLogin: (login: string) => void;
 	passedStep: number;
 	submitEducationDataForm: (educationData: IEducationForm) => void;
 	submitContactsDataForm: (contactsData: IContactsForm) => void;
 	submitPersonDataForm: (personData: IPersonForm) => void;
-	submitRegisterDataForm: (registerData: IRegisterForm) => void;
 	submitAddDocumentsDataForm: (documentsData: IDocument[]) => void;
 	onChangeConfirmationCode: (event: ChangeEvent<HTMLInputElement>) => void;
 	handleStep: (step: number) => any;
 	classes: Record<string, string>;
 	onConfirmCode: () => void;
 	dictionaries: IDictionaryState;
-	verifyPersonFetching: boolean;
 	updateRegistrationForm: <T>(field: keyof IRegisterForm, value: T) => void;
 	invalidData: Partial<EnrollForms>;
+	loading: boolean;
+	submit: () => void;
 }
 
 export class EnrollView extends React.PureComponent<IProps> {
 	static defaultProps = {
 		classes: {},
+	};
+	renderTitleButton = () => {
+		switch (this.props.activeStep) {
+			case 0: {
+				return 'Зарегистрироваться';
+			}
+			default: {
+				return 'Далее';
+			}
+		}
 	};
 	renderForm = () => {
 		switch (this.props.activeStep) {
@@ -91,11 +95,9 @@ export class EnrollView extends React.PureComponent<IProps> {
 			case 2: {
 				return (
 					<ContactsForm
-						error={this.props.verifyPersonError}
-						loading={this.props.verifyPersonFetching}
 						dictionaries={this.props.dictionaries}
 						defaultData={this.props.defaultContactsData}
-						submit={this.props.submitContactsDataForm}
+						invalidData={this.props.invalidData}
 					/>
 				);
 			}
@@ -138,7 +140,15 @@ export class EnrollView extends React.PureComponent<IProps> {
 								<StepButton onClick={this.props.handleStep(index)} disabled={index >= this.props.passedStep}>
 									<span className={index === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
 								</StepButton>
-								<StepContent>{this.renderForm()}</StepContent>
+								<StepContent>
+									{this.renderForm()}
+									<LoadingButton
+										loading={this.props.loading}
+										onClick={this.props.submit}
+										disabled={Object.keys(this.props.invalidData).length > 0}>
+										{this.renderTitleButton()}
+									</LoadingButton>
+								</StepContent>
 							</Step>
 						))}
 						{this.props.registrationCompleted && (
