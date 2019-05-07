@@ -17,7 +17,7 @@ import Logo from '$assets/mgutm.png';
 import { ChangeEvent } from 'react';
 import { IDictionaryState } from '@mgutm-fcu/dictionary';
 import LoadingButton from '../../components/Buttons/LoadingButtont';
-import { IEnrollFormState } from './models';
+import { IEnrollForm } from './models';
 
 const localStyles = {
 	logo: { height: window.innerHeight },
@@ -35,11 +35,7 @@ const localStyles = {
 interface IProps {
 	registrationCompleted: boolean;
 	createPersonError: IServerError | null;
-	defaultRegisterData: IRegisterForm;
-	defaultPersonData: IPersonForm;
-	defaultEducationData: IEducationForm;
-	defaultContactsData: IContactsForm;
-	defaultDocumentsData: IDocument[];
+	defaultData: IEnrollForm;
 	steps: string[];
 	activeStep: number;
 	passedStep: number;
@@ -47,12 +43,11 @@ interface IProps {
 	submitContactsDataForm: (contactsData: IContactsForm) => void;
 	submitPersonDataForm: (personData: IPersonForm) => void;
 	submitAddDocumentsDataForm: (documentsData: IDocument[]) => void;
-	onChangeConfirmationCode: (event: ChangeEvent<HTMLInputElement>) => void;
+	onChangeConfirmCode: (event: ChangeEvent<HTMLInputElement>) => void;
 	handleStep: (step: number) => any;
 	classes: Record<string, string>;
-	onConfirmCode: () => void;
 	dictionaries: IDictionaryState;
-	updateForm: (form: keyof IEnrollFormState) => <T>(field: keyof IRegisterForm, value: T) => void;
+	updateForm: (form: keyof IEnrollForm) => <T>(field: keyof IRegisterForm, value: T) => void;
 	invalidData: Partial<EnrollForms>;
 	loading: boolean;
 	submit: () => void;
@@ -78,9 +73,9 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return (
 					<RegisterForm
 						invalidData={this.props.invalidData}
-						updateForm={this.props.updateForm('registerData')}
+						updateForm={this.props.updateForm('registerForm')}
 						dictionaries={this.props.dictionaries}
-						defaultData={this.props.defaultRegisterData}
+						defaultData={this.props.defaultData.registerForm}
 					/>
 				);
 			}
@@ -88,7 +83,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return (
 					<PersonForm
 						dictionaries={this.props.dictionaries}
-						defaultData={this.props.defaultPersonData}
+						defaultData={this.props.defaultData.personForm}
 						submit={this.props.submitPersonDataForm}
 					/>
 				);
@@ -97,7 +92,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return (
 					<ContactsForm
 						dictionaries={this.props.dictionaries}
-						defaultData={this.props.defaultContactsData}
+						defaultData={this.props.defaultData.contactsForm}
 						invalidData={this.props.invalidData}
 					/>
 				);
@@ -106,7 +101,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return (
 					<EducationForm
 						dictionaries={this.props.dictionaries}
-						defaultData={this.props.defaultEducationData}
+						defaultData={this.props.defaultData.educationForm}
 						submit={this.props.submitEducationDataForm}
 					/>
 				);
@@ -114,9 +109,9 @@ export class EnrollView extends React.PureComponent<IProps> {
 			case 4: {
 				return (
 					<DocumentsForm
-						isForeigner={this.props.defaultPersonData.document.docGovernment.id !== 1}
+						isForeigner={this.props.defaultData.personForm.document.docGovernment.id !== 1}
 						dictionaries={this.props.dictionaries}
-						defaultData={this.props.defaultDocumentsData}
+						defaultData={this.props.defaultData.documentsForm}
 						submit={this.props.submitAddDocumentsDataForm}
 					/>
 				);
@@ -163,7 +158,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 									<TextInput
 										label="Код подтверждения"
 										type="number"
-										onBlur={this.props.onChangeConfirmationCode}
+										onBlur={this.props.onChangeConfirmCode}
 										helperText={`Введите код, отправленный на указанную в контактах электронную почту`}
 									/>
 								</p>

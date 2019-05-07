@@ -22,14 +22,14 @@ import { dictionariesSelector, enrollStateSelector } from './selectors';
 import { checkPerson, checkLogin, registerNewPerson, createPerson, sendVerificationCode } from './operations';
 import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
 import { ChangeEvent } from 'react';
-import { IEnrollFormState } from './models';
+import { IEnrollForm } from './models';
 import { IRootState } from '$store';
 
 interface IDispatchToProps {
 	registerNewPerson: (login: string, password: string) => Promise<number>;
 	checkLogin(login: string): Promise<boolean>;
 	sendVerificationCode(email: string, mobPhone: string): Promise<void>;
-	createPerson(confirmCode: string, data: IEnrollFormState): void;
+	createPerson(confirmCode: string, data: IEnrollForm): void;
 	checkPerson(data: IPerson): Promise<void>;
 }
 interface IStateToProps {
@@ -44,7 +44,7 @@ interface IStateToProps {
 }
 type IProps = IDispatchToProps & IStateToProps;
 
-interface IState extends IEnrollFormState {
+interface IState extends IEnrollForm {
 	passedStep: number;
 	activeStep: number;
 	confirmCode: string;
@@ -57,11 +57,11 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		passedStep: 0,
 		activeStep: 0,
 		confirmCode: '',
-		registerData: defaultRegisterDataForm,
-		personData: defaultPersonDataForm,
-		contactsData: defaultContactsDataForm,
-		educationData: defaultEducationDataForm,
-		documents: [],
+		registerForm: defaultRegisterDataForm,
+		personForm: defaultPersonDataForm,
+		contactsForm: defaultContactsDataForm,
+		educationForm: defaultEducationDataForm,
+		documentsForm: [],
 	};
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
@@ -76,53 +76,44 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		});
 	};
 	onCheckPerson = () => {
-		const { lastName, middleName, birthday, firstName, gender } = this.state.registerData;
+		const { lastName, middleName, birthday, firstName, gender } = this.state.registerForm;
 		this.props.checkPerson({ firstName, lastName, birthday, middleName, gender }).then(this.handleNext);
 	};
 	submit = () => {
-		const { registerData } = this.state;
+		const { registerForm } = this.state;
 		switch (this.state.activeStep) {
 			case 0: {
-				this.props.registerNewPerson(registerData.login, registerData.password).then(this.onCheckPerson);
+				this.props.registerNewPerson(registerForm.login, registerForm.password).then(this.onCheckPerson);
 			}
 		}
 	};
-	submitAddDocumentsDataForm = (documents: IDocument[]) => {
-		this.setState({ documents });
+	submitAddDocumentsDataForm = (documentsForm: IDocument[]) => {
+		this.setState({ documentsForm });
 		this.handleNext();
 	};
-	submitPersonDataForm = (personData: IPersonForm) => {
-		this.setState({ personData });
+	submitPersonDataForm = (personForm: IPersonForm) => {
+		this.setState({ personForm });
 		this.handleNext();
 	};
-	submitContactsDataForm = (contactsData: IContactsForm) => {
-		this.setState({ contactsData });
-		this.props.sendVerificationCode(contactsData.email, contactsData.mobPhone).then(this.handleNext);
+	submitContactsDataForm = (contactsForm: IContactsForm) => {
+		this.setState({ contactsForm });
+		this.props.sendVerificationCode(contactsForm.email, contactsForm.mobPhone).then(this.handleNext);
 	};
-	submitEducationDataForm = (educationData: IEducationForm) => {
-		this.setState({ educationData });
+	submitEducationDataForm = (educationForm: IEducationForm) => {
+		this.setState({ educationForm });
 		this.handleNext();
 	};
-	onChangeConfirmationCode = (event: ChangeEvent<HTMLInputElement>) => {
+	onChangeConfirmCode = (event: ChangeEvent<HTMLInputElement>) => {
 		this.setState({ confirmCode: inputValueAsString(event) });
 	};
-	onConfirmCode = () => {
-		this.props.createPerson(this.state.confirmCode, {
-			registerData: this.state.registerData,
-			contactsData: this.state.contactsData,
-			personData: this.state.personData,
-			documents: this.state.documents,
-			educationData: this.state.educationData,
-		});
-	};
-	updateForm = (form: keyof IEnrollFormState) => (field: keyof IRegisterForm, value: any) => {
+	updateForm = (form: keyof IEnrollForm) => (field: keyof IRegisterForm, value: any) => {
 		if (field === 'login') {
 			this.props.checkLogin(value).catch(error => {
 				this.setState({ invalidData: { ...this.state.invalidData, login: error.message } });
 			});
 		}
 
-		const invalidData = validateRegistrationForm(this.state.registerData);
+		const invalidData = validateRegistrationForm(this.state.registerForm);
 		this.setState({
 			...this.state,
 			[form]: {
@@ -148,22 +139,23 @@ class EnrollContainer extends React.Component<IProps, IState> {
 					updateForm={this.updateForm}
 					createPersonError={this.props.createPersonError}
 					dictionaries={this.props.dictionaries}
-					defaultRegisterData={this.state.registerData}
-					defaultPersonData={this.state.personData}
-					defaultEducationData={this.state.educationData}
-					defaultContactsData={this.state.contactsData}
-					defaultDocumentsData={this.state.documents}
+					defaultData={{
+						registerForm: this.state.registerForm,
+						contactsForm: this.state.contactsForm,
+						educationForm: this.state.educationForm,
+						documentsForm: this.state.documentsForm,
+						personForm: this.state.personForm,
+					}}
 					activeStep={this.state.activeStep}
 					passedStep={this.state.passedStep}
 					handleStep={this.handleStep}
-					onChangeConfirmationCode={this.onChangeConfirmationCode}
 					submitPersonDataForm={this.submitPersonDataForm}
 					submit={this.submit}
 					submitContactsDataForm={this.submitContactsDataForm}
 					submitAddDocumentsDataForm={this.submitAddDocumentsDataForm}
 					submitEducationDataForm={this.submitEducationDataForm}
 					steps={NEW_PERSON_STEPS}
-					onConfirmCode={this.onConfirmCode}
+					onChangeConfirmCode={this.onChangeConfirmCode}
 					registrationCompleted={this.props.registrationCompleted}
 				/>
 			</Dictionary>

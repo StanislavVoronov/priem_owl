@@ -38,7 +38,7 @@ import PriemEnroll from '../../services/PriemEnroll';
 import moment from 'moment';
 import { omitBy, isNull } from 'lodash';
 import { IRootState } from '$store';
-import { IEnrollFormState } from './models';
+import { IEnrollForm } from './models';
 
 export const registerNewPerson = (
 	login: string,
@@ -139,32 +139,32 @@ export const sendVerificationCode = (
 
 export const createPerson = (
 	confirmCode: string,
-	data: IEnrollFormState,
+	data: IEnrollForm,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
-	if (data.contactsData && data.registerData && data.personData && data.educationData) {
+	if (data.contactsForm && data.registerForm && data.personForm && data.educationForm) {
 		dispatch(createPersonFetching());
 
-		const passport = data.personData.document;
+		const passport = data.personForm.document;
 
-		const education = data.educationData.document;
+		const education = data.educationForm.document;
 
-		const registration = data.contactsData.document;
+		const registration = data.contactsForm.document;
 
-		const photo = data.personData.photo;
+		const photo = data.personForm.photo;
 
 		const payload = {
 			email_code: confirmCode,
 			phone_code: '000000',
-			email: data.contactsData.email,
-			lname: data.registerData.lastName,
-			fname: data.registerData.firstName,
-			mname: data.registerData.middleName,
-			birthdate: moment(data.registerData.birthday).format('DD-MM-YYYY'),
-			birthplace: data.personData.birthPlace,
-			need_hostel: data.contactsData.needDormitory ? ServerBoolean.True : ServerBoolean.False,
-			sex: data.registerData.gender,
-			hight_first: data.educationData.firstHighEducation ? ServerBoolean.True : ServerBoolean.False,
-			best_prev_edu: data.educationData.prevEducation,
+			email: data.contactsForm.email,
+			lname: data.registerForm.lastName,
+			fname: data.registerForm.firstName,
+			mname: data.registerForm.middleName,
+			birthdate: moment(data.registerForm.birthday).format('DD-MM-YYYY'),
+			birthplace: data.personForm.birthPlace,
+			need_hostel: data.contactsForm.needDormitory ? ServerBoolean.True : ServerBoolean.False,
+			sex: data.registerForm.gender,
+			hight_first: data.educationForm.firstHighEducation ? ServerBoolean.True : ServerBoolean.False,
+			best_prev_edu: data.educationForm.prevEducation,
 			cheat_type: 0,
 		};
 
@@ -172,7 +172,7 @@ export const createPerson = (
 			.then(response => {
 				dispatch(createPersonSuccess(response.np_uid));
 
-				dispatch(uploadDocList([passport, photo, education, registration, ...(data.documents || [])]));
+				dispatch(uploadDocList([passport, photo, education, registration, ...(data.documentsForm || [])]));
 			})
 			.catch((error: any) => {
 				console.log('error', error);
@@ -187,7 +187,7 @@ export const createPerson = (
 
 const uploadDocList = (docList: IDocument[]): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	dispatch(uploadDocsFetching());
-	console.log('documents', docList);
+	console.log('documentsForm', docList);
 	docList.forEach((item: IDocument) => {
 		console.log(item.docFile);
 		const document: IUploadDocPayload = {
