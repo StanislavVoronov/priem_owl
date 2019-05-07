@@ -121,8 +121,8 @@ export class EnrollView extends React.PureComponent<IProps> {
 			}
 		}
 	};
-	public render() {
-		const fragment = (
+	render() {
+		return (
 			<React.Fragment>
 				<div className={styles.header}>
 					<img className={styles.logo} src={Logo} />
@@ -169,8 +169,6 @@ export class EnrollView extends React.PureComponent<IProps> {
 				</CardMedia>
 			</React.Fragment>
 		);
-
-		return fragment;
 	}
 }
 
