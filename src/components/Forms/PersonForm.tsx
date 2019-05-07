@@ -16,6 +16,7 @@ import {
 	IPersonForm,
 	ISelectItem,
 	validateDocument,
+	IRegisterForm,
 } from '$common';
 
 import styles from './styles.module.css';
@@ -24,43 +25,38 @@ import { IDictionaryState } from '@mgutm-fcu/dictionary';
 interface IProps {
 	dictionaries: IDictionaryState;
 	defaultData: IPersonForm;
-	submit: (data: IPersonForm) => void;
+	updateForm: <T>(field: keyof IPersonForm, value: T) => void;
 }
 
-class PersonForm extends React.PureComponent<IProps, IPersonForm> {
-	state = this.props.defaultData;
-
-	toggleAgreePersonData = () => {
-		this.setState({ isApplyPersonData: !this.state.isApplyPersonData });
+class PersonForm extends React.PureComponent<IProps> {
+	toggleAgreePersonData = (_: any, checked: boolean) => {
+		this.props.updateForm('isApplyPersonData', checked);
 	};
 	addPhoto = (docFile: File) => {
-		this.setState({ photo: { ...this.state.photo, docFile } });
+		this.props.updateForm('photo', { ...this.props.defaultData.photo, docFile });
 	};
 	removePhoto = () => {
-		this.setState({ photo: { ...this.state.photo, docFile: null } });
-	};
-	submit = () => {
-		this.props.submit(this.state);
+		this.props.updateForm('photo', { ...this.props.defaultData.photo, docFile: null });
 	};
 	onChangeCodeDepartment: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.setState({ document: { ...this.state.document, codeDepartment: inputValueAsString(event) } });
+		this.props.updateForm('document', {
+			...this.props.defaultData.document,
+			codeDepartment: inputValueAsString(event),
+		});
 	};
 	updateDocument = (document: IDocument) => {
-		this.setState({ document });
+		this.props.updateForm('document', document);
 	};
 	onChangeBirthPlace: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.setState({ birthPlace: inputValueAsString(event) });
+		this.props.updateForm('birthPlace', inputValueAsString(event));
 	};
 	onChangeGovernment = (item: ISelectItem) => {
-		this.setState({ document: { ...this.state.document, docGovernment: item } });
+		this.props.updateForm('document', { ...this.props.defaultData.document, docGovernment: item });
 	};
 	render() {
 		const { dictionaries } = this.props;
 		const dictionaryGovernments = dictionaries[EDictionaryNameList.Governments];
 		const dictionaryPersonDocTypes = dictionaries[EDictionaryNameList.PersonDocTypes];
-		const invalidForm =
-			!(validateDataForm(this.state) && validateDocument(this.state.document) && validateDocument(this.state.photo)) ||
-			!this.state.isApplyPersonData;
 
 		return (
 			<div className="flexColumn">
@@ -72,13 +68,13 @@ class PersonForm extends React.PureComponent<IProps, IPersonForm> {
 					onBlur={this.onChangeBirthPlace}
 				/>
 				<DocumentForm
-					document={this.state.document}
+					document={this.props.defaultData.document}
 					docTitle="Файл документа, удостоверяющего личность"
 					updateDocument={this.updateDocument}
 					dictionarySubTypes={dictionaryPersonDocTypes && dictionaryPersonDocTypes.values}
 					subTitle={'Тип документа удостоверяющего личность'}
 					extraFields={
-						this.state.document.docSubType && this.state.document.docSubType.id === 1 ? (
+						this.props.defaultData.document.docSubType && this.props.defaultData.document.docSubType.id === 1 ? (
 							<TextInput
 								label="Код подразделения"
 								type="number"
@@ -91,7 +87,7 @@ class PersonForm extends React.PureComponent<IProps, IPersonForm> {
 				/>
 
 				<DropdownSelect
-					value={this.state.document.docGovernment}
+					value={this.props.defaultData.document.docGovernment}
 					required={true}
 					options={dictionaryGovernments && dictionaryGovernments.values}
 					placeholder="Выберите гражданство"
@@ -102,13 +98,14 @@ class PersonForm extends React.PureComponent<IProps, IPersonForm> {
 				<FormControlLabel
 					classes={{ root: styles.checkFormControl, label: styles.checkFormControlLabel }}
 					control={
-						<Checkbox color="primary" checked={this.state.isApplyPersonData} onChange={this.toggleAgreePersonData} />
+						<Checkbox
+							color="primary"
+							checked={this.props.defaultData.isApplyPersonData}
+							onChange={this.toggleAgreePersonData}
+						/>
 					}
 					label="Согласие на обработку персональных данных"
 				/>
-				<LoadingButton onClick={this.submit} disabled={invalidForm}>
-					Далее
-				</LoadingButton>
 			</div>
 		);
 	}

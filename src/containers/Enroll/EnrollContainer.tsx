@@ -91,10 +91,6 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		this.setState({ documentsForm });
 		this.handleNext();
 	};
-	submitPersonDataForm = (personForm: IPersonForm) => {
-		this.setState({ personForm });
-		this.handleNext();
-	};
 	submitContactsDataForm = (contactsForm: IContactsForm) => {
 		this.setState({ contactsForm });
 		this.props.sendVerificationCode(contactsForm.email, contactsForm.mobPhone).then(this.handleNext);
@@ -106,7 +102,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 	onChangeConfirmCode = (event: ChangeEvent<HTMLInputElement>) => {
 		this.setState({ confirmCode: inputValueAsString(event) });
 	};
-	updateForm = (form: keyof IEnrollForm) => (field: keyof IRegisterForm, value: any) => {
+	updateForm = (form: keyof IEnrollForm) => (field: keyof EnrollForms, value: any) => {
 		if (field === 'login') {
 			this.props.checkLogin(value).catch(error => {
 				this.setState({ invalidData: { ...this.state.invalidData, login: error.message } });
@@ -149,7 +145,6 @@ class EnrollContainer extends React.Component<IProps, IState> {
 					activeStep={this.state.activeStep}
 					passedStep={this.state.passedStep}
 					handleStep={this.handleStep}
-					submitPersonDataForm={this.submitPersonDataForm}
 					submit={this.submit}
 					submitContactsDataForm={this.submitContactsDataForm}
 					submitAddDocumentsDataForm={this.submitAddDocumentsDataForm}

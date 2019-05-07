@@ -41,13 +41,12 @@ interface IProps {
 	passedStep: number;
 	submitEducationDataForm: (educationData: IEducationForm) => void;
 	submitContactsDataForm: (contactsData: IContactsForm) => void;
-	submitPersonDataForm: (personData: IPersonForm) => void;
 	submitAddDocumentsDataForm: (documentsData: IDocument[]) => void;
 	onChangeConfirmCode: (event: ChangeEvent<HTMLInputElement>) => void;
 	handleStep: (step: number) => any;
 	classes: Record<string, string>;
 	dictionaries: IDictionaryState;
-	updateForm: (form: keyof IEnrollForm) => <T>(field: keyof IRegisterForm, value: T) => void;
+	updateForm: (form: keyof IEnrollForm) => <T>(field: keyof EnrollForms, value: T) => void;
 	invalidData: Partial<EnrollForms>;
 	loading: boolean;
 	submit: () => void;
@@ -83,14 +82,15 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return (
 					<PersonForm
 						dictionaries={this.props.dictionaries}
+						updateForm={this.props.updateForm('personForm')}
 						defaultData={this.props.defaultData.personForm}
-						submit={this.props.submitPersonDataForm}
 					/>
 				);
 			}
 			case 2: {
 				return (
 					<ContactsForm
+						updateForm={this.props.updateForm('contactsForm')}
 						dictionaries={this.props.dictionaries}
 						defaultData={this.props.defaultData.contactsForm}
 						invalidData={this.props.invalidData}
