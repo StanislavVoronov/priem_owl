@@ -26,9 +26,6 @@ class EducationForm extends React.PureComponent<IProps> {
 		classes: {},
 	};
 
-	updateForm = () => {
-		this.props.updateForm(this.state);
-	};
 	toggleFirstHighEducationStatus = (_: any, checked: boolean) => {
 		this.props.updateForm({ firstHighEducation: checked });
 	};
