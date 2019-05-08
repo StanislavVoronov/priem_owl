@@ -138,7 +138,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 	validateForm = () => {
 		switch (this.props.activeStep) {
 			case 0: {
-				return Object.keys(validateRegistrationForm(this.props.registrationData)).length > 0;
+				return !validateRegistrationForm(this.props.registrationData);
 			}
 			default: {
 				return false;
