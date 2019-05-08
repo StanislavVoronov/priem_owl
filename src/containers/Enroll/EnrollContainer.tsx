@@ -48,12 +48,10 @@ interface IState extends IEnrollForm {
 	passedStep: number;
 	activeStep: number;
 	confirmCode: string;
-	invalidData: Record<string, string>;
 }
 
 class EnrollContainer extends React.Component<IProps, IState> {
 	state: IState = {
-		invalidData: {},
 		passedStep: 0,
 		activeStep: 0,
 		confirmCode: '',
@@ -83,12 +81,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		switch (this.state.activeStep) {
 			case 0: {
 				const { registrationData } = this.state;
-				const invalidData = validateRegistrationForm(registrationData);
-				if (Object.keys(invalidData).length > 0) {
-					this.setState({ invalidData });
-				} else {
-					this.props.registerNewPerson(registrationData.login, registrationData.password).then(this.onCheckPerson);
-				}
+				this.props.registerNewPerson(registrationData.login, registrationData.password).then(this.onCheckPerson);
 			}
 		}
 	};
@@ -135,7 +128,6 @@ class EnrollContainer extends React.Component<IProps, IState> {
 					handleStep={this.handleStep}
 					submit={this.submit}
 					steps={NEW_PERSON_STEPS}
-					invalidData={this.state.invalidData}
 					onChangeConfirmCode={this.onChangeConfirmCode}
 				/>
 			</Dictionary>

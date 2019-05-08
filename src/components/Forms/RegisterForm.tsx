@@ -21,7 +21,6 @@ interface IProps {
 	updateForm: (data: Partial<IRegisterForm>) => void;
 	dictionaries: IDictionaryState;
 	data: IRegisterForm;
-	invalidData: Record<keyof IRegisterForm, string>;
 	disabled: boolean;
 }
 
@@ -64,6 +63,11 @@ class RegisterForm extends React.PureComponent<IProps> {
 		const { dictionaries } = this.props;
 		const dictionaryFirstNames = dictionaries[EDictionaryNameList.FirstNames];
 		const dictionaryMiddleNames = dictionaries[EDictionaryNameList.MiddleNames];
+
+		const invalidPassword = this.props.data.password.length > 0 && this.props.data.password.length < 8;
+		const invalidLogin = this.props.data.login.length > 0 && this.props.data.login.length < 5;
+		const invalidRepeatPassword =
+			this.props.data.password.length > 0 && this.props.data.password !== this.props.data.repeatPassword;
 
 		const filteredDictionaryMiddleName = dictionaryMiddleNames
 			? this.props.data.gender
@@ -126,8 +130,8 @@ class RegisterForm extends React.PureComponent<IProps> {
 						defaultValue={this.props.data.login}
 						label="Логин"
 						onChange={this.onChangeLogin}
-						hasError={!!this.props.invalidData.login}
-						helperText={this.props.invalidData.password || 'Логин должен быть не менее 7 символов'}
+						hasError={invalidLogin}
+						helperText={'Логин должен быть не менее 5 символов'}
 					/>
 
 					<TextInput
@@ -137,8 +141,8 @@ class RegisterForm extends React.PureComponent<IProps> {
 						type="password"
 						defaultValue={this.props.data.password}
 						onBlur={this.onChangePassword}
-						hasError={!!this.props.invalidData.password}
-						helperText={'Пароль должен быть не менее 7 символов'}
+						hasError={invalidPassword}
+						helperText={'Пароль должен быть не менее 8 символов'}
 					/>
 					<TextInput
 						required
@@ -147,8 +151,8 @@ class RegisterForm extends React.PureComponent<IProps> {
 						label="Подтвердить пароль"
 						defaultValue={this.props.data.repeatPassword}
 						onBlur={this.onChangeRepeatPassword}
-						hasError={!!this.props.invalidData.repeatPassword}
-						helperText={this.props.invalidData.repeatPassword}
+						hasError={invalidRepeatPassword}
+						helperText={invalidRepeatPassword ? 'Пароли не совпадают' : ''}
 					/>
 				</React.Fragment>
 			</div>

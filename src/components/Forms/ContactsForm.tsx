@@ -18,7 +18,6 @@ interface IProps extends IStylable {
 	dictionaries: IDictionaryState;
 	data: IContactsForm;
 	updateForm: (data: Partial<IContactsForm>) => void;
-	invalidData: Partial<IContactsForm>;
 }
 
 class ContactsForm extends React.PureComponent<IProps> {
@@ -182,8 +181,7 @@ class ContactsForm extends React.PureComponent<IProps> {
 					disabled={this.props.disabled}
 					label={'Электронная почта'}
 					defaultValue={this.props.data.email}
-					hasError={!!this.props.invalidData.email}
-					helperText={this.props.invalidData.email}
+					helperText={'Необходимо для подтверждения учетной записи'}
 					required
 					onBlur={this.onChange('email')}
 				/>

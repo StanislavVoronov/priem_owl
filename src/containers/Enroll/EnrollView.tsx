@@ -49,7 +49,6 @@ interface IProps extends IEnrollForm {
 	updateContactsForm: (data: Partial<IContactsForm>) => void;
 	updateRegisterForm: (data: Partial<IRegisterForm>) => void;
 	updateDocumentsForm: (data: IDocument[]) => void;
-	invalidData: Record<string, string>;
 }
 
 export class EnrollView extends React.PureComponent<IProps> {
@@ -81,7 +80,6 @@ export class EnrollView extends React.PureComponent<IProps> {
 			case 0: {
 				return (
 					<RegisterForm
-						invalidData={this.props.invalidData}
 						updateForm={this.props.updateRegisterForm}
 						dictionaries={this.props.dictionaries}
 						data={this.props.registrationData}
@@ -102,7 +100,6 @@ export class EnrollView extends React.PureComponent<IProps> {
 					<ContactsForm
 						dictionaries={this.props.dictionaries}
 						data={this.props.contactsData}
-						invalidData={this.props.invalidData}
 						updateForm={this.props.updateContactsForm}
 					/>
 				);
