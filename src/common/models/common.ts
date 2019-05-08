@@ -50,3 +50,7 @@ export interface IDocument {
 	docFile: File | null;
 	codeDepartment?: string;
 }
+
+export interface IStylable {
+	classes: Record<string, string>;
+}

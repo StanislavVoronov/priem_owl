@@ -1,4 +1,4 @@
-import { IDocument } from '$common';
+import { Gender, IDocument, IRegisterForm } from '$common';
 
 export const validateDataForm = (data: Record<string, any>): boolean => {
 	return !Object.values(data).some(
@@ -42,4 +42,31 @@ export const validateDocument = (document: IDocument): boolean => {
 	}
 
 	return true;
+};
+
+export const validateRegistrationForm = (fields: IRegisterForm) => {
+	const invalidData: Record<string, string> = {};
+
+	if (fields.lastName.length > 0) {
+		invalidData.lastName = 'Поле не должно быть пустым';
+	}
+	if (fields.firstName.length > 0) {
+		invalidData.firstName = 'Поле не должно быть пустым';
+	}
+	if (fields.gender === Gender.None) {
+		invalidData.gender = 'Поле не должно быть пустым';
+	}
+
+	if (fields.login.length > 0 && fields.login.length < 8) {
+		invalidData.login = 'Логин должен быть не менее 8 символов';
+	}
+
+	if (fields.password.length > 0 && fields.password.length < 7) {
+		invalidData.password = 'Логин должен быть не менее 7 символов';
+	}
+	if (fields.password.length > 0 && fields.repeatPassword.length > 0 && fields.password !== fields.repeatPassword) {
+		invalidData.repeatPassword = 'Пароли не совпадают';
+	}
+
+	return invalidData;
 };

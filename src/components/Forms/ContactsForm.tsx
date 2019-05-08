@@ -2,45 +2,50 @@ import React from 'react';
 import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocumentForm, LoadingButton } from '$components';
 import {
 	EDictionaryNameList,
-	validateDataForm,
 	IGovernmentSelectItem,
 	inputValueAsString,
 	IDocument,
 	IContactsForm,
-	validateDocument,
-	IServerError,
-	IRegisterForm,
-	IPersonForm,
+	IStylable,
 } from '$common';
 
-import styles from './styles.module.css';
+import styles from './styles';
 import { IDictionaryState } from '@mgutm-fcu/dictionary';
+import { withStyles } from '@material-ui/core';
 
-interface IOwnProps {
+interface IProps extends IStylable {
+	disabled: boolean;
 	dictionaries: IDictionaryState;
 	defaultData: IContactsForm;
-	updateForm: <T>(field: keyof IContactsForm, value: T) => void;
+	updateForm: (data: IContactsForm) => void;
 	invalidData: Partial<IContactsForm>;
 }
-type IProps = IOwnProps;
 
-class ContactsForm extends React.PureComponent<IProps> {
+class ContactsForm extends React.PureComponent<IProps, IContactsForm> {
+	static defaultProps = {
+		disabled: false,
+		classes: {},
+	};
+	state = this.props.defaultData;
+
 	onChange = (field: keyof IContactsForm): React.ChangeEventHandler<HTMLInputElement> => event => {
-		this.props.updateForm(field, inputValueAsString(event));
+		this.setState({ ...this.state, [field]: inputValueAsString(event) }, this.updateForm);
+	};
+	updateForm = () => {
+		this.props.updateForm(this.state);
 	};
 	toggleLiveAddressStatus = (_: any, checked: boolean) => {
-		this.props.updateForm('isRegAddressEqualLive', checked);
+		this.setState({ isRegAddressEqualLive: checked }, this.updateForm);
 	};
 	toggleNeedDormitoryStatus = (_: any, checked: boolean) => {
-		this.props.updateForm('needDormitory', checked);
+		this.setState({ needDormitory: checked }, this.updateForm);
 	};
 	onChangeSelectItem = (item: IGovernmentSelectItem) => {
 		const phoneNumber = this.props.defaultData.mobPhone.substr(
 			this.props.defaultData.phoneGovernment.phone_code.length + 1,
 		);
 		const maskedMobPhone = `+${item.phone_code}${phoneNumber}`;
-		this.props.updateForm('mobPhone', maskedMobPhone);
-		this.props.updateForm('phoneGovernment', item);
+		this.setState({ mobPhone: maskedMobPhone, phoneGovernment: item }, this.updateForm);
 	};
 	onChangeMobPhone: React.ChangeEventHandler<HTMLInputElement> = event => {
 		const mobPhoneValue: string[] | null = inputValueAsString(event)
@@ -60,10 +65,11 @@ class ContactsForm extends React.PureComponent<IProps> {
 					  (mobPhoneValue[3] ? `-${mobPhoneValue[3]}` : '') +
 					  (mobPhoneValue[4] ? +`-${mobPhoneValue[4]}` : '')
 				: '');
-		this.props.updateForm('mobPhone', maskMobPhone);
+
+		this.setState({ mobPhone: maskMobPhone }, this.updateForm);
 	};
 	updateDocument = (document: IDocument) => {
-		this.props.updateForm('document', document);
+		this.setState({ document }, this.updateForm);
 	};
 	render() {
 		const governmentDictionary = this.props.dictionaries[EDictionaryNameList.Governments];
@@ -127,12 +133,12 @@ class ContactsForm extends React.PureComponent<IProps> {
 					}
 				/>
 				<FormControlLabel
-					classes={{ root: styles.checkFormControl, label: styles.checkFormControlLabel }}
+					className={this.props.classes.checkFormControl}
 					control={<Checkbox color="primary" onChange={this.toggleNeedDormitoryStatus} />}
 					label="Нуждаюсь в предоставлении общежития"
 				/>
 				<FormControlLabel
-					classes={{ root: styles.checkFormControl, label: styles.checkFormControlLabel }}
+					className={this.props.classes.checkFormControl}
 					control={
 						<Checkbox
 							color="primary"
@@ -194,6 +200,7 @@ class ContactsForm extends React.PureComponent<IProps> {
 				)}
 
 				<TextInput
+					disabled={this.props.disabled}
 					label={'Электронная почта'}
 					defaultValue={this.props.defaultData.email}
 					hasError={!!this.props.invalidData.email}
@@ -225,4 +232,4 @@ class ContactsForm extends React.PureComponent<IProps> {
 		);
 	}
 }
-export default ContactsForm;
+export default withStyles(styles)(ContactsForm);

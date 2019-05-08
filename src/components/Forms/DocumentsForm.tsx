@@ -9,6 +9,7 @@ import {
 	defaultDocument,
 	validateDocument,
 	IDocType,
+	IStylable,
 } from '$common';
 
 import styles from './styles';
@@ -16,19 +17,16 @@ import { IDictionaryState } from '@mgutm-fcu/dictionary';
 import LoadingButton from '../Buttons/LoadingButtont';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-interface IOwnProps {
+interface IProps extends IStylable {
 	isForeigner: boolean;
 	dictionaries: IDictionaryState;
 	defaultData: IDocument[];
-	classes: Record<string, string>;
-	submit(data: IDocument[]): void;
+	updateForm: (data: IDocument[]) => void;
 }
 
 interface IState {
 	documents: IDocument[];
 }
-
-type IProps = IOwnProps;
 
 class DocumentsForm extends React.PureComponent<IProps, IState> {
 	static defaultProps = {
@@ -38,47 +36,38 @@ class DocumentsForm extends React.PureComponent<IProps, IState> {
 	state = {
 		documents: this.props.defaultData,
 	};
+	updateForm = () => {
+		this.props.updateForm(this.state.documents);
+	};
 	deleteDoc = (index: number) => () => {
 		const documents = this.state.documents.filter((_: IDocument, key: number) => key !== index);
-		this.setState({ documents });
+		this.setState({ documents }, this.updateForm);
 	};
 	addDoc = () => {
-		this.setState({ documents: [...this.state.documents, { ...defaultDocument }] });
-	};
-	submit = () => {
-		this.props.submit(this.state.documents);
+		this.setState({ documents: [...this.state.documents, { ...defaultDocument }] }, this.updateForm);
 	};
 	updateDocument = (index: number) => (document: IDocument) => {
 		const documents = this.state.documents.filter((_: IDocument, key: number) => key !== index);
-		this.setState({ documents: [...documents, document] });
+		this.setState({ documents: [...documents, document] }, this.updateForm);
 	};
 	onChangeCodeDepartment = (index: number): React.ChangeEventHandler<HTMLInputElement> => event => {
 		const document = this.state.documents[index];
 		const documents = this.state.documents.filter((_: IDocument, key: number) => key !== index);
-		this.setState({ documents: [...documents, { ...document, codeDepartment: inputValueAsString(event) }] });
+		this.setState(
+			{ documents: [...documents, { ...document, codeDepartment: inputValueAsString(event) }] },
+			this.updateForm,
+		);
 	};
 	render() {
 		const { dictionaries, classes } = this.props;
 		const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
 		const isDisabledAddButton = this.state.documents.map(validateDocument).includes(false);
 
-		const isDisabledNextButton =
-			this.state.documents.map(validateDocument).includes(false) || (dictionaryDocTypes && this.props.isForeigner)
-				? dictionaryDocTypes.values
-						.filter((item: IDocType) => item.need_foreigner)
-						.filter(
-							(item: IDocType) =>
-								this.state.documents.find((doc: IDocument) => item.id === (doc.docType && doc.docType.id)) ===
-								undefined,
-						).length > 0
-				: false;
-
 		return (
 			<div className="flexColumn">
 				<div>
 					<H2>Необходимые документы для поступления:</H2>
 					<ol>
-						<li>Приложение к документу об обрзовании</li>
 						{this.props.isForeigner &&
 							dictionaryDocTypes &&
 							dictionaryDocTypes.values
@@ -137,9 +126,6 @@ class DocumentsForm extends React.PureComponent<IProps, IState> {
 						{'Добавить новый документ'}
 					</Button>
 				</div>
-				<LoadingButton disabled={isDisabledNextButton} onClick={this.submit}>
-					Далее
-				</LoadingButton>
 			</div>
 		);
 	}

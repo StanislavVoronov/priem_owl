@@ -9,6 +9,7 @@ import {
 	IDocument,
 	IServerError,
 	EnrollForms,
+	validateRegistrationForm,
 } from '$common';
 import styles from './styles.module.css';
 import { ContactsForm, RegisterForm, PersonForm, EducationForm, DocumentsForm } from '$components';
@@ -33,23 +34,23 @@ const localStyles = {
 };
 
 interface IProps {
-	registrationCompleted: boolean;
 	createPersonError: IServerError | null;
 	defaultData: IEnrollForm;
 	steps: string[];
 	activeStep: number;
 	passedStep: number;
-	submitEducationDataForm: (educationData: IEducationForm) => void;
-	submitContactsDataForm: (contactsData: IContactsForm) => void;
-	submitAddDocumentsDataForm: (documentsData: IDocument[]) => void;
 	onChangeConfirmCode: (event: ChangeEvent<HTMLInputElement>) => void;
 	handleStep: (step: number) => any;
 	classes: Record<string, string>;
 	dictionaries: IDictionaryState;
-	updateForm: (form: keyof IEnrollForm) => <T>(field: keyof EnrollForms, value: T) => void;
-	invalidData: Partial<EnrollForms>;
 	loading: boolean;
 	submit: () => void;
+	updateEducationForm: (data: IEducationForm) => void;
+	updatePersonForm: (data: IPersonForm) => void;
+	updateContactsForm: (data: IContactsForm) => void;
+	updateRegisterForm: (data: IRegisterForm) => void;
+	updateDocumentsForm: (data: IDocument[]) => void;
+	invalidData: Record<string, string>;
 }
 
 export class EnrollView extends React.PureComponent<IProps> {
@@ -61,10 +62,20 @@ export class EnrollView extends React.PureComponent<IProps> {
 			case 0: {
 				return 'Зарегистрироваться';
 			}
+			case 5: {
+				return 'Отправить код';
+			}
 			default: {
 				return 'Далее';
 			}
 		}
+	};
+	renderError = () => {
+		if (this.props.createPersonError) {
+			return <H2 color="red">{this.props.createPersonError.message}</H2>;
+		}
+
+		return null;
 	};
 	renderForm = () => {
 		switch (this.props.activeStep) {
@@ -72,7 +83,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return (
 					<RegisterForm
 						invalidData={this.props.invalidData}
-						updateForm={this.props.updateForm('registerForm')}
+						updateForm={this.props.updateRegisterForm}
 						dictionaries={this.props.dictionaries}
 						defaultData={this.props.defaultData.registerForm}
 					/>
@@ -82,7 +93,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return (
 					<PersonForm
 						dictionaries={this.props.dictionaries}
-						updateForm={this.props.updateForm('personForm')}
+						updateForm={this.props.updatePersonForm}
 						defaultData={this.props.defaultData.personForm}
 					/>
 				);
@@ -90,19 +101,19 @@ export class EnrollView extends React.PureComponent<IProps> {
 			case 2: {
 				return (
 					<ContactsForm
-						updateForm={this.props.updateForm('contactsForm')}
 						dictionaries={this.props.dictionaries}
 						defaultData={this.props.defaultData.contactsForm}
 						invalidData={this.props.invalidData}
+						updateForm={this.props.updateContactsForm}
 					/>
 				);
 			}
 			case 3: {
 				return (
 					<EducationForm
+						updateForm={this.props.updateEducationForm}
 						dictionaries={this.props.dictionaries}
 						defaultData={this.props.defaultData.educationForm}
-						submit={this.props.submitEducationDataForm}
 					/>
 				);
 			}
@@ -112,12 +123,36 @@ export class EnrollView extends React.PureComponent<IProps> {
 						isForeigner={this.props.defaultData.personForm.document.docGovernment.id !== 1}
 						dictionaries={this.props.dictionaries}
 						defaultData={this.props.defaultData.documentsForm}
-						submit={this.props.submitAddDocumentsDataForm}
+						updateForm={this.props.updateDocumentsForm}
+					/>
+				);
+			}
+			case 5: {
+				return (
+					<TextInput
+						label="Код подтверждения"
+						type="number"
+						onBlur={this.props.onChangeConfirmCode}
+						helperText={`Введите код, отправленный на указанную в контактах электронную почту`}
 					/>
 				);
 			}
 			default: {
-				return null;
+				return (
+					<h2 style={{ textAlign: 'center' }}>
+						Процесс подачи документов для поступления в Университет успешно завершен!
+					</h2>
+				);
+			}
+		}
+	};
+	validateForm = () => {
+		switch (this.props.activeStep) {
+			case 0: {
+				return Object.keys(validateRegistrationForm(this.props.defaultData.registerForm)).length > 0;
+			}
+			default: {
+				return false;
 			}
 		}
 	};
@@ -138,33 +173,16 @@ export class EnrollView extends React.PureComponent<IProps> {
 								</StepButton>
 								<StepContent>
 									{this.renderForm()}
+									{this.renderError()}
 									<LoadingButton
 										loading={this.props.loading}
 										onClick={this.props.submit}
-										disabled={Object.keys(this.props.invalidData).length > 0}>
+										disabled={this.validateForm()}>
 										{this.renderTitleButton()}
 									</LoadingButton>
 								</StepContent>
 							</Step>
 						))}
-						{this.props.registrationCompleted && (
-							<h2 style={{ textAlign: 'center' }}>
-								Процесс подачи документов для поступления в Университет успешно завершен!
-							</h2>
-						)}
-						{!this.props.registrationCompleted && this.props.activeStep >= this.props.steps.length ? (
-							<React.Fragment>
-								<p>
-									<TextInput
-										label="Код подтверждения"
-										type="number"
-										onBlur={this.props.onChangeConfirmCode}
-										helperText={`Введите код, отправленный на указанную в контактах электронную почту`}
-									/>
-								</p>
-								{this.props.createPersonError && <H2 color="red">{this.props.createPersonError.message}</H2>}
-							</React.Fragment>
-						) : null}
 					</Stepper>
 				</CardMedia>
 			</React.Fragment>

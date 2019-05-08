@@ -17,41 +17,48 @@ import {
 	ISelectItem,
 	validateDocument,
 	IRegisterForm,
+	IStylable,
 } from '$common';
 
-import styles from './styles.module.css';
+import styles from './styles';
 import { IDictionaryState } from '@mgutm-fcu/dictionary';
+import { withStyles } from '@material-ui/core';
 
-interface IProps {
+interface IProps extends IStylable {
 	dictionaries: IDictionaryState;
 	defaultData: IPersonForm;
-	updateForm: <T>(field: keyof IPersonForm, value: T) => void;
+	updateForm: (data: IPersonForm) => void;
 }
 
-class PersonForm extends React.PureComponent<IProps> {
+class PersonForm extends React.PureComponent<IProps, IPersonForm> {
+	static defaultProps = {
+		classes: {},
+	};
+	state = this.props.defaultData;
+
+	updateForm = () => {
+		this.props.updateForm(this.state);
+	};
 	toggleAgreePersonData = (_: any, checked: boolean) => {
-		this.props.updateForm('isApplyPersonData', checked);
+		this.setState({ isApplyPersonData: checked }, this.updateForm);
 	};
 	addPhoto = (docFile: File) => {
-		this.props.updateForm('photo', { ...this.props.defaultData.photo, docFile });
+		this.setState({ photo: { ...this.state.photo, docFile } }, this.updateForm);
 	};
 	removePhoto = () => {
-		this.props.updateForm('photo', { ...this.props.defaultData.photo, docFile: null });
+		this.setState({ photo: { ...this.state.photo, docFile: null } }, this.updateForm);
 	};
 	onChangeCodeDepartment: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.props.updateForm('document', {
-			...this.props.defaultData.document,
-			codeDepartment: inputValueAsString(event),
-		});
+		this.setState({ document: { ...this.state.document, codeDepartment: inputValueAsString(event) } }, this.updateForm);
 	};
 	updateDocument = (document: IDocument) => {
-		this.props.updateForm('document', document);
+		this.setState({ document }, this.updateForm);
 	};
 	onChangeBirthPlace: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.props.updateForm('birthPlace', inputValueAsString(event));
+		this.setState({ birthPlace: inputValueAsString(event) }, this.updateForm);
 	};
 	onChangeGovernment = (item: ISelectItem) => {
-		this.props.updateForm('document', { ...this.props.defaultData.document, docGovernment: item });
+		this.setState({ document: { ...this.state.document, docGovernment: item } }, this.updateForm);
 	};
 	render() {
 		const { dictionaries } = this.props;
@@ -96,7 +103,7 @@ class PersonForm extends React.PureComponent<IProps> {
 				/>
 
 				<FormControlLabel
-					classes={{ root: styles.checkFormControl, label: styles.checkFormControlLabel }}
+					className={this.props.classes.checkFormControl}
 					control={
 						<Checkbox
 							color="primary"
@@ -111,4 +118,4 @@ class PersonForm extends React.PureComponent<IProps> {
 	}
 }
 
-export default PersonForm;
+export default withStyles(styles)(PersonForm);

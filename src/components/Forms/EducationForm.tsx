@@ -6,47 +6,53 @@ import {
 	validateDataForm,
 	ISelectItem,
 	validateDocument,
+	IContactsForm,
+	IStylable,
 } from '$common';
 
-import styles from './styles.module.css';
+import styles from './styles';
 import { DocumentForm, DropdownSelect, FormControlLabel, Checkbox, LoadingButton } from '$components';
 import { IDictionaryState } from '@mgutm-fcu/dictionary';
+import { withStyles } from '@material-ui/core';
 
-interface IProps {
+interface IProps extends IStylable {
 	dictionaries: IDictionaryState;
 	defaultData: IEducationForm;
-	submit(data: IEducationForm): void;
+	updateForm: (data: IEducationForm) => void;
 }
 
 class EducationForm extends React.PureComponent<IProps, IEducationForm> {
-	state = this.props.defaultData;
-	toggleFirstHighEducationStatus = () => {
-		this.setState({ firstHighEducation: !this.state.firstHighEducation });
+	static defaultProps = {
+		classes: {},
 	};
-	toggleHasEgeStatus = () => {
-		this.setState({ hasEge: !this.state.hasEge });
+	state = this.props.defaultData;
+
+	updateForm = () => {
+		this.props.updateForm(this.state);
+	};
+	toggleFirstHighEducationStatus = (_: any, checked: boolean) => {
+		this.setState({ firstHighEducation: checked }, this.updateForm);
+	};
+	toggleHasEgeStatus = (_: any, checked: boolean) => {
+		this.setState({ hasEge: checked }, this.updateForm);
 	};
 
 	onChangePersonCoolnessTypes = (items: ISelectItem[]) => {
-		this.setState({ coolnessTypes: items });
+		this.setState({ coolnessTypes: items }, this.updateForm);
 	};
 	updateDocument = (document: IDocument) => {
-		this.setState({ document });
-	};
-	submit = () => {
-		this.props.submit(this.state);
+		this.setState({ document }, this.updateForm);
 	};
 
 	render() {
-		const { dictionaries } = this.props;
+		const { dictionaries, classes } = this.props;
 		const coolnessTypeDictionary = dictionaries[EDictionaryNameList.CoolnessTypes];
 		const educationTypeDictionary = dictionaries[EDictionaryNameList.EducationDocTypes];
-		const invalidForm = !(validateDataForm(this.state) && validateDocument(this.state.document));
 
 		return (
 			<div className="flexColumn">
 				<FormControlLabel
-					classes={{ root: styles.checkFormControl, label: styles.checkFormControlLabel }}
+					className={classes.checkFormControl}
 					control={
 						<Checkbox
 							value={this.state.firstHighEducation}
@@ -57,6 +63,7 @@ class EducationForm extends React.PureComponent<IProps, IEducationForm> {
 					label="Получение высшего образования впервые"
 				/>
 				<DropdownSelect
+					defaultValue={this.state.coolnessTypes}
 					placeholder={'Выберите достижения'}
 					onChange={this.onChangePersonCoolnessTypes}
 					options={coolnessTypeDictionary && coolnessTypeDictionary.values}
@@ -72,18 +79,15 @@ class EducationForm extends React.PureComponent<IProps, IEducationForm> {
 					subTitle={'Тип документа о предыдущем образовании'}
 					extraFields={
 						<FormControlLabel
-							classes={{ root: styles.checkFormControl, label: styles.checkFormControlLabel }}
+							className={classes.checkFormControl}
 							control={<Checkbox color="primary" onChange={this.toggleHasEgeStatus} />}
 							label="Имею результаты ЕГЭ"
 						/>
 					}
 				/>
-				<LoadingButton disabled={invalidForm} onClick={this.submit}>
-					Далее
-				</LoadingButton>
 			</div>
 		);
 	}
 }
 
-export default EducationForm;
+export default withStyles(styles)(EducationForm);

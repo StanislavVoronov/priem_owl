@@ -16,7 +16,7 @@ interface IRadioButton {
 }
 interface IRadioGroupButton extends IHelperText, IHasError {
 	required?: boolean;
-	currentValue: string;
+	value: string;
 	values: IRadioButton[];
 	title: string;
 	helperText?: string;
@@ -60,7 +60,7 @@ class RadioButtonGroup extends React.PureComponent<IRadioGroupButton> {
 					aria-label="Gender"
 					name="gender"
 					className={this.props.classes.flexRow}
-					value={this.props.currentValue}
+					value={this.props.value}
 					onChange={this.props.onChange}>
 					{this.props.values.map((item, index) => (
 						<FormControlLabel

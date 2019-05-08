@@ -79,6 +79,7 @@ interface IAutoCompleteProps extends IInputProps, IHasError, IHelperText {
 	suggestions: string[];
 	required?: boolean;
 	defaultValue: ReactText;
+	disabled: boolean;
 }
 
 interface IAutoCompleteState {
@@ -99,6 +100,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 		suggestions: [],
 		classes: {},
 		defaultValue: '',
+		disabled: false,
 	};
 	public state = {
 		value: this.props.defaultValue,
@@ -154,6 +156,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 						onChange: this.handleChange,
 						helperText: this.props.helperText,
 						error: this.props.hasError,
+						disabled: this.props.disabled,
 					}}
 					// @ts-ignore
 					theme={{

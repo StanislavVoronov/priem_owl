@@ -26,6 +26,11 @@ const styles = {
 		flexDirection: 'column' as any,
 		borderBottom: '2px solid #3f51b5',
 	},
+	checkFormControl: {
+		marginTop: 10,
+		marginBottom: 4,
+		fontSize: '1em',
+	},
 };
 
 export default styles;
