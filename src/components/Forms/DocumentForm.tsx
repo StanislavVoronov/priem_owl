@@ -4,11 +4,12 @@ import DropdownSelect from '../DropdownSelect';
 import Dropzone from 'react-dropzone';
 import Image from '../ImageEditor';
 import FormLabel from '@material-ui/core/FormLabel';
-import styles from './styles.module.css';
-import { IDocType, inputValueAsString, noop, IDocument } from '$common';
+import styles from './styles';
+import { IDocType, inputValueAsString, noop, IDocument, IStylable } from '$common';
 import { IDictionary } from '@mgutm-fcu/dictionary';
+import { withStyles } from '@material-ui/core';
 
-interface IDocumentFormProps {
+interface IDocumentFormProps extends IStylable {
 	document: IDocument;
 	dictionaryTypes?: IDictionary[];
 	dictionarySubTypes?: IDictionary[];
@@ -27,6 +28,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 		onChangeIssieBy: noop,
 		selectDocType: noop,
 		selectDocSubType: noop,
+		classes: {},
 	};
 	selectDocType = (docType: IDocType) => {
 		const document = { ...this.props.document, docType };
@@ -71,6 +73,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 		this.props.updateDocument(document);
 	};
 	public render() {
+		const { classes } = this.props;
 		const isDataVisible = !!(
 			(this.props.dictionaryTypes && this.props.title) ||
 			(this.props.dictionarySubTypes && this.props.subTitle) ||
@@ -82,9 +85,9 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 
 		return (
 			<FormControl>
-				<div className={styles.docDataForm}>
+				<div className={classes.docDataForm}>
 					{isDataVisible && (
-						<div className={styles.dataContainer}>
+						<div className={classes.dataContainer}>
 							{this.props.dictionaryTypes && this.props.title && (
 								<DropdownSelect
 									required={true}
@@ -147,11 +150,11 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 							{this.props.extraFields}
 						</div>
 					)}
-					<div className={styles.documentContainer}>
+					<div className={classes.documentContainer}>
 						<Dropzone onDrop={this.onDownload}>
 							{({ getRootProps, getInputProps }) => {
 								return (
-									<div {...getRootProps()} className={styles.fileContainer}>
+									<div {...getRootProps()} className={classes.fileContainer}>
 										{this.props.docTitle && (
 											<div className="flexRow">
 												<FormLabel style={{ fontSize: '.875rem', marginRight: 2 }}>{this.props.docTitle}</FormLabel>
@@ -169,7 +172,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 										) : (
 											<React.Fragment>
 												<input {...getInputProps()} />
-												<div className={styles.dropZone}>
+												<div className={classes.dropZone}>
 													Нажмите, чтобы добавить файл или перетащите файл в отмеченную область
 												</div>
 											</React.Fragment>
@@ -185,4 +188,4 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 	}
 }
 
-export default DocumentForm;
+export default withStyles(styles)(DocumentForm);
