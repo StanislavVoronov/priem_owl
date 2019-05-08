@@ -57,11 +57,11 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		passedStep: 0,
 		activeStep: 0,
 		confirmCode: '',
-		registerForm: defaultRegisterDataForm,
-		personForm: defaultPersonDataForm,
-		contactsForm: defaultContactsDataForm,
-		educationForm: defaultEducationDataForm,
-		documentsForm: [],
+		registrationData: defaultRegisterDataForm,
+		personData: defaultPersonDataForm,
+		contactsData: defaultContactsDataForm,
+		educationData: defaultEducationDataForm,
+		documents: [],
 	};
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
@@ -76,18 +76,18 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		});
 	};
 	onCheckPerson = () => {
-		const { lastName, middleName, birthday, firstName, gender } = this.state.registerForm;
+		const { lastName, middleName, birthday, firstName, gender } = this.state.registrationData;
 		this.props.checkPerson({ firstName, lastName, birthday, middleName, gender }).then(this.handleNext);
 	};
 	submit = () => {
 		switch (this.state.activeStep) {
 			case 0: {
-				const { registerForm } = this.state;
-				const invalidData = validateRegistrationForm(registerForm);
+				const { registrationData } = this.state;
+				const invalidData = validateRegistrationForm(registrationData);
 				if (Object.keys(invalidData).length > 0) {
 					this.setState({ invalidData });
 				} else {
-					this.props.registerNewPerson(registerForm.login, registerForm.password).then(this.onCheckPerson);
+					this.props.registerNewPerson(registrationData.login, registrationData.password).then(this.onCheckPerson);
 				}
 			}
 		}
@@ -95,20 +95,20 @@ class EnrollContainer extends React.Component<IProps, IState> {
 	onChangeConfirmCode = (event: ChangeEvent<HTMLInputElement>) => {
 		this.setState({ confirmCode: inputValueAsString(event) });
 	};
-	updateEducationForm = (educationForm: IEducationForm) => {
-		this.setState({ educationForm });
+	updateEducationForm = (newData: Partial<IEducationForm>) => {
+		this.setState({ educationData: { ...this.state.educationData, ...newData } });
 	};
-	updatePersonForm = (personForm: IPersonForm) => {
-		this.setState({ personForm });
+	updatePersonForm = (newData: Partial<IPersonForm>) => {
+		this.setState({ personData: { ...this.state.personData, ...newData } });
 	};
-	updateContactsForm = (contactsForm: IContactsForm) => {
-		this.setState({ contactsForm });
+	updateContactsForm = (newData: Partial<IContactsForm>) => {
+		this.setState({ contactsData: { ...this.state.contactsData, ...newData } });
 	};
-	updateRegisterForm = (registerForm: IRegisterForm) => {
-		this.setState({ registerForm });
+	updateRegisterForm = (newData: Partial<IRegisterForm>) => {
+		this.setState({ registrationData: { ...this.state.registrationData, ...newData } });
 	};
-	updateDocumentsForm = (documentsForm: IDocument[]) => {
-		this.setState({ documentsForm });
+	updateDocumentsForm = (documents: IDocument[]) => {
+		this.setState({ documents });
 	};
 	render() {
 		return (
@@ -125,13 +125,11 @@ class EnrollContainer extends React.Component<IProps, IState> {
 					updateDocumentsForm={this.updateDocumentsForm}
 					createPersonError={this.props.createPersonError}
 					dictionaries={this.props.dictionaries}
-					defaultData={{
-						registerForm: this.state.registerForm,
-						contactsForm: this.state.contactsForm,
-						educationForm: this.state.educationForm,
-						documentsForm: this.state.documentsForm,
-						personForm: this.state.personForm,
-					}}
+					registrationData={this.state.registrationData}
+					contactsData={this.state.contactsData}
+					educationData={this.state.educationData}
+					documents={this.state.documents}
+					personData={this.state.personData}
 					activeStep={this.state.activeStep}
 					passedStep={this.state.passedStep}
 					handleStep={this.handleStep}

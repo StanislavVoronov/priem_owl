@@ -141,30 +141,30 @@ export const createPerson = (
 	confirmCode: string,
 	data: IEnrollForm,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
-	if (data.contactsForm && data.registerForm && data.personForm && data.educationForm) {
+	if (data.contactsData && data.registrationData && data.personData && data.educationData) {
 		dispatch(createPersonFetching());
 
-		const passport = data.personForm.document;
+		const passport = data.personData.document;
 
-		const education = data.educationForm.document;
+		const education = data.educationData.document;
 
-		const registration = data.contactsForm.document;
+		const registration = data.contactsData.document;
 
-		const photo = data.personForm.photo;
+		const photo = data.personData.photo;
 
 		const payload = {
 			email_code: confirmCode,
 			phone_code: '000000',
-			email: data.contactsForm.email,
-			lname: data.registerForm.lastName,
-			fname: data.registerForm.firstName,
-			mname: data.registerForm.middleName,
-			birthdate: moment(data.registerForm.birthday).format('DD-MM-YYYY'),
-			birthplace: data.personForm.birthPlace,
-			need_hostel: data.contactsForm.needDormitory ? ServerBoolean.True : ServerBoolean.False,
-			sex: data.registerForm.gender,
-			hight_first: data.educationForm.firstHighEducation ? ServerBoolean.True : ServerBoolean.False,
-			best_prev_edu: data.educationForm.prevEducation,
+			email: data.contactsData.email,
+			lname: data.registrationData.lastName,
+			fname: data.registrationData.firstName,
+			mname: data.registrationData.middleName,
+			birthdate: moment(data.registrationData.birthday).format('DD-MM-YYYY'),
+			birthplace: data.personData.birthPlace,
+			need_hostel: data.contactsData.needDormitory ? ServerBoolean.True : ServerBoolean.False,
+			sex: data.registrationData.gender,
+			hight_first: data.educationData.firstHighEducation ? ServerBoolean.True : ServerBoolean.False,
+			best_prev_edu: data.educationData.prevEducation,
 			cheat_type: 0,
 		};
 
@@ -172,7 +172,7 @@ export const createPerson = (
 			.then(response => {
 				dispatch(createPersonSuccess(response.np_uid));
 
-				dispatch(uploadDocList([passport, photo, education, registration, ...(data.documentsForm || [])]));
+				dispatch(uploadDocList([passport, photo, education, registration, ...(data.documents || [])]));
 			})
 			.catch((error: any) => {
 				console.log('error', error);
@@ -187,7 +187,7 @@ export const createPerson = (
 
 const uploadDocList = (docList: IDocument[]): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	dispatch(uploadDocsFetching());
-	console.log('documentsForm', docList);
+	console.log('documents', docList);
 	docList.forEach((item: IDocument) => {
 		console.log(item.docFile);
 		const document: IUploadDocPayload = {

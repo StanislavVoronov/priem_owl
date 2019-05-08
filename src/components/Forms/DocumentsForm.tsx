@@ -20,7 +20,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 interface IProps extends IStylable {
 	isForeigner: boolean;
 	dictionaries: IDictionaryState;
-	defaultData: IDocument[];
+	documents: IDocument[];
 	updateForm: (data: IDocument[]) => void;
 }
 
@@ -28,40 +28,34 @@ interface IState {
 	documents: IDocument[];
 }
 
-class DocumentsForm extends React.PureComponent<IProps, IState> {
+class DocumentsForm extends React.PureComponent<IProps> {
 	static defaultProps = {
 		isForeigner: false,
 		classes: {},
 	};
-	state = {
-		documents: this.props.defaultData,
-	};
-	updateForm = () => {
-		this.props.updateForm(this.state.documents);
-	};
+
 	deleteDoc = (index: number) => () => {
-		const documents = this.state.documents.filter((_: IDocument, key: number) => key !== index);
-		this.setState({ documents }, this.updateForm);
+		const documents = this.props.documents.filter((_: IDocument, key: number) => key !== index);
+		this.props.updateForm(documents);
 	};
 	addDoc = () => {
-		this.setState({ documents: [...this.state.documents, { ...defaultDocument }] }, this.updateForm);
+		const documents = [...this.props.documents, { ...defaultDocument }];
+		this.props.updateForm(documents);
 	};
 	updateDocument = (index: number) => (document: IDocument) => {
-		const documents = this.state.documents.filter((_: IDocument, key: number) => key !== index);
-		this.setState({ documents: [...documents, document] }, this.updateForm);
+		const documents = this.props.documents.filter((_: IDocument, key: number) => key !== index);
+		this.props.updateForm(documents);
 	};
 	onChangeCodeDepartment = (index: number): React.ChangeEventHandler<HTMLInputElement> => event => {
-		const document = this.state.documents[index];
-		const documents = this.state.documents.filter((_: IDocument, key: number) => key !== index);
-		this.setState(
-			{ documents: [...documents, { ...document, codeDepartment: inputValueAsString(event) }] },
-			this.updateForm,
-		);
+		const document = this.props.documents[index];
+		const documents = this.props.documents.filter((_: IDocument, key: number) => key !== index);
+
+		this.props.updateForm([...documents, { ...document, codeDepartment: inputValueAsString(event) }]);
 	};
 	render() {
 		const { dictionaries, classes } = this.props;
 		const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
-		const isDisabledAddButton = this.state.documents.map(validateDocument).includes(false);
+		const isDisabledAddButton = this.props.documents.map(validateDocument).includes(false);
 
 		return (
 			<div className="flexColumn">
@@ -82,7 +76,7 @@ class DocumentsForm extends React.PureComponent<IProps, IState> {
 					</ol>
 				</div>
 				<div>
-					{this.state.documents.map((item: IDocument, index) => {
+					{this.props.documents.map((item: IDocument, index) => {
 						const docType = item.docType && item.docType.id;
 						const dictionarySubDocTypes =
 							docType === 1
@@ -104,6 +98,7 @@ class DocumentsForm extends React.PureComponent<IProps, IState> {
 									extraFields={
 										item.docType && item.docType.id === 1 && item.docSubType && item.docSubType.id === 1 ? (
 											<TextInput
+												defaultValue={item.codeDepartment}
 												label="Код подразделения"
 												type="number"
 												placeholder={'Введите код подразделения'}

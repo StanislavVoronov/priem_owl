@@ -20,9 +20,9 @@ export interface IEnrollState {
 }
 
 export interface IEnrollForm {
-	registerForm: IRegisterForm;
-	personForm: IPersonForm;
-	contactsForm: IContactsForm;
-	educationForm: IEducationForm;
-	documentsForm: IDocument[];
+	registrationData: IRegisterForm;
+	personData: IPersonForm;
+	contactsData: IContactsForm;
+	educationData: IEducationForm;
+	documents: IDocument[];
 }

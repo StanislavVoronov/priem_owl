@@ -33,9 +33,8 @@ const localStyles = {
 	},
 };
 
-interface IProps {
+interface IProps extends IEnrollForm {
 	createPersonError: IServerError | null;
-	defaultData: IEnrollForm;
 	steps: string[];
 	activeStep: number;
 	passedStep: number;
@@ -45,10 +44,10 @@ interface IProps {
 	dictionaries: IDictionaryState;
 	loading: boolean;
 	submit: () => void;
-	updateEducationForm: (data: IEducationForm) => void;
-	updatePersonForm: (data: IPersonForm) => void;
-	updateContactsForm: (data: IContactsForm) => void;
-	updateRegisterForm: (data: IRegisterForm) => void;
+	updateEducationForm: (data: Partial<IEducationForm>) => void;
+	updatePersonForm: (data: Partial<IPersonForm>) => void;
+	updateContactsForm: (data: Partial<IContactsForm>) => void;
+	updateRegisterForm: (data: Partial<IRegisterForm>) => void;
 	updateDocumentsForm: (data: IDocument[]) => void;
 	invalidData: Record<string, string>;
 }
@@ -85,7 +84,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 						invalidData={this.props.invalidData}
 						updateForm={this.props.updateRegisterForm}
 						dictionaries={this.props.dictionaries}
-						defaultData={this.props.defaultData.registerForm}
+						data={this.props.registrationData}
 					/>
 				);
 			}
@@ -94,7 +93,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 					<PersonForm
 						dictionaries={this.props.dictionaries}
 						updateForm={this.props.updatePersonForm}
-						defaultData={this.props.defaultData.personForm}
+						data={this.props.personData}
 					/>
 				);
 			}
@@ -102,7 +101,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return (
 					<ContactsForm
 						dictionaries={this.props.dictionaries}
-						defaultData={this.props.defaultData.contactsForm}
+						data={this.props.contactsData}
 						invalidData={this.props.invalidData}
 						updateForm={this.props.updateContactsForm}
 					/>
@@ -113,16 +112,16 @@ export class EnrollView extends React.PureComponent<IProps> {
 					<EducationForm
 						updateForm={this.props.updateEducationForm}
 						dictionaries={this.props.dictionaries}
-						defaultData={this.props.defaultData.educationForm}
+						data={this.props.educationData}
 					/>
 				);
 			}
 			case 4: {
 				return (
 					<DocumentsForm
-						isForeigner={this.props.defaultData.personForm.document.docGovernment.id !== 1}
+						isForeigner={this.props.personData.document.docGovernment.id !== 1}
 						dictionaries={this.props.dictionaries}
-						defaultData={this.props.defaultData.documentsForm}
+						documents={this.props.documents}
 						updateForm={this.props.updateDocumentsForm}
 					/>
 				);
@@ -149,7 +148,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 	validateForm = () => {
 		switch (this.props.activeStep) {
 			case 0: {
-				return Object.keys(validateRegistrationForm(this.props.defaultData.registerForm)).length > 0;
+				return Object.keys(validateRegistrationForm(this.props.registrationData)).length > 0;
 			}
 			default: {
 				return false;

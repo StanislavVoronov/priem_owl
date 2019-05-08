@@ -26,66 +26,61 @@ import { withStyles } from '@material-ui/core';
 
 interface IProps extends IStylable {
 	dictionaries: IDictionaryState;
-	defaultData: IPersonForm;
-	updateForm: (data: IPersonForm) => void;
+	data: IPersonForm;
+	updateForm: (data: Partial<IPersonForm>) => void;
 }
 
-class PersonForm extends React.PureComponent<IProps, IPersonForm> {
+class PersonForm extends React.PureComponent<IProps> {
 	static defaultProps = {
 		classes: {},
 	};
-	state = this.props.defaultData;
-
-	updateForm = () => {
-		this.props.updateForm(this.state);
-	};
 	toggleAgreePersonData = (_: any, checked: boolean) => {
-		this.setState({ isApplyPersonData: checked }, this.updateForm);
+		this.props.updateForm({ isApplyPersonData: checked });
 	};
 	addPhoto = (docFile: File) => {
-		this.setState({ photo: { ...this.state.photo, docFile } }, this.updateForm);
+		this.props.updateForm({ photo: { ...this.props.data.photo, docFile } });
 	};
-	removePhoto = () => {
-		this.setState({ photo: { ...this.state.photo, docFile: null } }, this.updateForm);
+	deletePhoto = () => {
+		this.props.updateForm({ photo: { ...this.props.data.photo, docFile: null } });
 	};
 	onChangeCodeDepartment: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.setState({ document: { ...this.state.document, codeDepartment: inputValueAsString(event) } }, this.updateForm);
+		this.props.updateForm({ document: { ...this.props.data.document, codeDepartment: inputValueAsString(event) } });
 	};
 	updateDocument = (document: IDocument) => {
-		this.setState({ document }, this.updateForm);
+		this.props.updateForm({ document });
 	};
 	onChangeBirthPlace: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.setState({ birthPlace: inputValueAsString(event) }, this.updateForm);
+		this.props.updateForm({ birthPlace: inputValueAsString(event) });
 	};
 	onChangeGovernment = (item: ISelectItem) => {
-		this.setState({ document: { ...this.state.document, docGovernment: item } }, this.updateForm);
+		this.props.updateForm({ document: { ...this.props.data.document, docGovernment: item } });
 	};
 	render() {
-		const { dictionaries } = this.props;
+		const { dictionaries, classes, data } = this.props;
 		const dictionaryGovernments = dictionaries[EDictionaryNameList.Governments];
 		const dictionaryPersonDocTypes = dictionaries[EDictionaryNameList.PersonDocTypes];
 
 		return (
 			<div className="flexColumn">
-				<WebPhoto downloadPhoto={this.addPhoto} removePhoto={this.removePhoto} />
+				<WebPhoto downloadPhoto={this.addPhoto} removePhoto={this.deletePhoto} />
 				<TextInput
 					label="Место рождения"
-					defaultValue={this.props.defaultData.birthPlace}
+					defaultValue={this.props.data.birthPlace}
 					placeholder={'Введите место рождения'}
 					onBlur={this.onChangeBirthPlace}
 				/>
 				<DocumentForm
-					document={this.props.defaultData.document}
+					document={data.document}
 					docTitle="Файл документа, удостоверяющего личность"
 					updateDocument={this.updateDocument}
 					dictionarySubTypes={dictionaryPersonDocTypes && dictionaryPersonDocTypes.values}
 					subTitle={'Тип документа удостоверяющего личность'}
 					extraFields={
-						this.props.defaultData.document.docSubType && this.props.defaultData.document.docSubType.id === 1 ? (
+						data.document.docSubType && data.document.docSubType.id === 1 ? (
 							<TextInput
 								label="Код подразделения"
 								type="number"
-								defaultValue={this.props.defaultData.codeDepartment}
+								defaultValue={data.codeDepartment}
 								placeholder={'Введите код подразделения'}
 								onChange={this.onChangeCodeDepartment}
 							/>
@@ -94,7 +89,7 @@ class PersonForm extends React.PureComponent<IProps, IPersonForm> {
 				/>
 
 				<DropdownSelect
-					value={this.props.defaultData.document.docGovernment}
+					defaultValue={data.document.docGovernment}
 					required={true}
 					options={dictionaryGovernments && dictionaryGovernments.values}
 					placeholder="Выберите гражданство"
@@ -103,14 +98,8 @@ class PersonForm extends React.PureComponent<IProps, IPersonForm> {
 				/>
 
 				<FormControlLabel
-					className={this.props.classes.checkFormControl}
-					control={
-						<Checkbox
-							color="primary"
-							checked={this.props.defaultData.isApplyPersonData}
-							onChange={this.toggleAgreePersonData}
-						/>
-					}
+					className={classes.checkFormControl}
+					control={<Checkbox color="primary" checked={data.isApplyPersonData} onChange={this.toggleAgreePersonData} />}
 					label="Согласие на обработку персональных данных"
 				/>
 			</div>
