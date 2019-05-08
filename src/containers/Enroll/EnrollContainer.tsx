@@ -34,12 +34,9 @@ interface IDispatchToProps {
 }
 interface IStateToProps {
 	loading: boolean;
+	error: IServerError | null;
 	registrationCompleted: boolean;
-	createPersonError: IServerError | null;
 	npId: number;
-	checkPersonError: IServerError | null;
-	checkLoginError: IServerError | null;
-	verifyPersonError: IServerError | null;
 	dictionaries: Record<string, IDictionary>;
 }
 type IProps = IDispatchToProps & IStateToProps;
@@ -111,12 +108,12 @@ class EnrollContainer extends React.Component<IProps, IState> {
 				list={this.props.npId ? FULL_DICTIONARY_LIST : SHORT_DICTIONARY_LIST}>
 				<EnrollView
 					loading={this.props.loading}
+					error={this.props.error}
 					updateEducationForm={this.updateEducationForm}
 					updatePersonForm={this.updatePersonForm}
 					updateContactsForm={this.updateContactsForm}
 					updateRegisterForm={this.updateRegisterForm}
 					updateDocumentsForm={this.updateDocumentsForm}
-					createPersonError={this.props.createPersonError}
 					dictionaries={this.props.dictionaries}
 					registrationData={this.state.registrationData}
 					contactsData={this.state.contactsData}
@@ -150,13 +147,11 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	const dictionaries = dictionariesSelector(state);
 
 	return {
+		error: createPersonError || checkPersonError || verifyPersonError || checkLoginError,
 		loading: checkPersonFetching || createPersonFetching || verifyPersonFetching,
 		registrationCompleted,
 		createPersonError,
 		npId,
-		checkPersonError,
-		checkLoginError,
-		verifyPersonError,
 		dictionaries,
 	};
 };

@@ -34,7 +34,7 @@ const localStyles = {
 };
 
 interface IProps extends IEnrollForm {
-	createPersonError: IServerError | null;
+	error: IServerError | null;
 	steps: string[];
 	activeStep: number;
 	passedStep: number;
@@ -67,13 +67,6 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return 'Далее';
 			}
 		}
-	};
-	renderError = () => {
-		if (this.props.createPersonError) {
-			return <H2 color="red">{this.props.createPersonError.message}</H2>;
-		}
-
-		return null;
 	};
 	renderForm = () => {
 		switch (this.props.activeStep) {
@@ -169,7 +162,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 								</StepButton>
 								<StepContent>
 									{this.renderForm()}
-									{this.renderError()}
+									{this.props.error && <H2 color="red">{this.props.error.message}</H2>}
 									<LoadingButton
 										loading={this.props.loading}
 										onClick={this.props.submit}
