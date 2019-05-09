@@ -26,11 +26,9 @@ import { IEnrollForm } from './models';
 import { IRootState } from '$store';
 
 interface IDispatchToProps {
-	registerNewPerson: (login: string, password: string) => Promise<number>;
-	checkLogin(login: string): Promise<boolean>;
+	registerNewPerson: (data: IRegisterForm) => Promise<void>;
 	sendVerificationCode(email: string, mobPhone: string): Promise<void>;
-	createPerson(confirmCode: string, data: IEnrollForm): void;
-	checkPerson(data: IPerson): Promise<void>;
+	createPerson(confirmCode: string, data: IEnrollForm): Promise<void>;
 }
 interface IStateToProps {
 	loading: boolean;
@@ -70,15 +68,31 @@ class EnrollContainer extends React.Component<IProps, IState> {
 			activeStep: step,
 		});
 	};
-	onCheckPerson = () => {
-		const { lastName, middleName, birthday, firstName, gender } = this.state.registrationData;
-		this.props.checkPerson({ firstName, lastName, birthday, middleName, gender }).then(this.handleNext);
-	};
 	submit = () => {
 		switch (this.state.activeStep) {
 			case 0: {
 				const { registrationData } = this.state;
-				this.props.registerNewPerson(registrationData.login, registrationData.password).then(this.onCheckPerson);
+				this.props.registerNewPerson(registrationData).then(this.handleNext);
+			}
+			case 2: {
+				this.props
+					.sendVerificationCode(this.state.contactsData.email, this.state.contactsData.mobPhone)
+					.then(this.handleNext);
+			}
+			case 3: {
+				const { registrationData, contactsData, educationData, documents, personData } = this.state;
+				this.props
+					.createPerson(this.state.confirmCode, {
+						registrationData,
+						contactsData,
+						personData,
+						documents,
+						educationData,
+					})
+					.then(this.handleNext);
+			}
+			default: {
+				this.handleNext();
 			}
 		}
 	};
@@ -101,11 +115,10 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		this.setState({ documents });
 	};
 	render() {
+		const dictionaryList = this.props.npId ? FULL_DICTIONARY_LIST : SHORT_DICTIONARY_LIST;
+
 		return (
-			<Dictionary
-				version={2}
-				url={'/dev-bin/priem_api.fcgi'}
-				list={this.props.npId ? FULL_DICTIONARY_LIST : SHORT_DICTIONARY_LIST}>
+			<Dictionary version={2} url={'/dev-bin/priem_api.fcgi'} list={dictionaryList}>
 				<EnrollView
 					loading={this.props.loading}
 					error={this.props.error}
@@ -158,10 +171,8 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 
 const mapDispatchToProps = {
 	registerNewPerson,
-	checkLogin,
 	createPerson,
 	sendVerificationCode,
-	checkPerson,
 };
 
 export default connect(

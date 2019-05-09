@@ -61,7 +61,7 @@ const styles = {
 		display: 'flex',
 		paddingRight: 40,
 		flexDirection: 'column' as any,
-		width: '50',
+		width: '50%',
 	},
 	documentContainer: {
 		display: 'flex',

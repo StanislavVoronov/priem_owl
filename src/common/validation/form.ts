@@ -1,4 +1,5 @@
-import { Gender, IDocument, IRegisterForm } from '$common';
+import { Gender, IContactsForm, IDocument, IEducationForm, IPerson, IPersonForm, IRegisterForm } from '$common';
+import EducationForm from '../../components/Forms/EducationForm';
 
 export const validateDataForm = (data: Record<string, any>): boolean => {
 	return !Object.values(data).some(
@@ -43,7 +44,23 @@ export const validateDocument = (document: IDocument): boolean => {
 
 	return true;
 };
-
+export const validatePersonForm = (fields: IPersonForm): boolean => {
+	return (
+		validateDataForm(fields) &&
+		validateDocument(fields.document) &&
+		validateDocument(fields.photo) &&
+		fields.isApplyPersonData
+	);
+};
+export const validateContactsForm = (fields: IContactsForm): boolean => {
+	return validateDataForm(fields) && validateDocument(fields.document);
+};
+export const validateEducationForm = (fields: IEducationForm): boolean => {
+	return validateDataForm(fields) && validateDocument(fields.document);
+};
+export const validateDocumentsForm = (documents: IDocument[]): boolean => {
+	return documents.some((item: IDocument) => !validateDocument(item));
+};
 export const validateRegistrationForm = (fields: IRegisterForm): boolean => {
 	if (fields.gender === Gender.None) {
 		return false;
@@ -56,7 +73,7 @@ export const validateRegistrationForm = (fields: IRegisterForm): boolean => {
 	if (fields.password.length > 0 && fields.password.length < 7) {
 		return false;
 	}
-	if (fields.password.length > 0 && fields.repeatPassword.length > 0 && fields.password !== fields.repeatPassword) {
+	if (fields.password !== fields.repeatPassword) {
 		return false;
 	}
 

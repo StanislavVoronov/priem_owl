@@ -67,7 +67,9 @@ class RegisterForm extends React.PureComponent<IProps> {
 		const invalidPassword = this.props.data.password.length > 0 && this.props.data.password.length < 8;
 		const invalidLogin = this.props.data.login.length > 0 && this.props.data.login.length < 5;
 		const invalidRepeatPassword =
-			this.props.data.password.length > 0 && this.props.data.password !== this.props.data.repeatPassword;
+			this.props.data.password.length > 0 &&
+			this.props.data.repeatPassword.length > 0 &&
+			this.props.data.password !== this.props.data.repeatPassword;
 
 		const filteredDictionaryMiddleName = dictionaryMiddleNames
 			? this.props.data.gender
@@ -129,7 +131,7 @@ class RegisterForm extends React.PureComponent<IProps> {
 						disabled={this.props.disabled}
 						defaultValue={this.props.data.login}
 						label="Логин"
-						onChange={this.onChangeLogin}
+						onBlur={this.onChangeLogin}
 						hasError={invalidLogin}
 						helperText={'Логин должен быть не менее 5 символов'}
 					/>

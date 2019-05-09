@@ -69,24 +69,6 @@ class PersonForm extends React.PureComponent<IProps> {
 					placeholder={'Введите место рождения'}
 					onBlur={this.onChangeBirthPlace}
 				/>
-				<DocumentForm
-					document={data.document}
-					docTitle="Файл документа, удостоверяющего личность"
-					updateDocument={this.updateDocument}
-					dictionarySubTypes={dictionaryPersonDocTypes && dictionaryPersonDocTypes.values}
-					subTitle={'Тип документа удостоверяющего личность'}
-					extraFields={
-						data.document.docSubType && data.document.docSubType.id === 1 ? (
-							<TextInput
-								label="Код подразделения"
-								type="number"
-								defaultValue={data.codeDepartment}
-								placeholder={'Введите код подразделения'}
-								onChange={this.onChangeCodeDepartment}
-							/>
-						) : null
-					}
-				/>
 
 				<DropdownSelect
 					defaultValue={data.document.docGovernment}
@@ -96,11 +78,32 @@ class PersonForm extends React.PureComponent<IProps> {
 					onChange={this.onChangeGovernment}
 					title="Гражданство"
 				/>
-
-				<FormControlLabel
-					className={classes.checkFormControl}
-					control={<Checkbox color="primary" checked={data.isApplyPersonData} onChange={this.toggleAgreePersonData} />}
-					label="Согласие на обработку персональных данных"
+				<DocumentForm
+					document={data.document}
+					docTitle="Файл документа, удостоверяющего личность"
+					updateDocument={this.updateDocument}
+					dictionarySubTypes={dictionaryPersonDocTypes && dictionaryPersonDocTypes.values}
+					subTitle={'Тип документа удостоверяющего личность'}
+					extraFields={
+						<React.Fragment>
+							{data.document.docSubType && data.document.docSubType.id === 1 && (
+								<TextInput
+									label="Код подразделения"
+									type="number"
+									defaultValue={data.codeDepartment}
+									placeholder={'Введите код подразделения'}
+									onChange={this.onChangeCodeDepartment}
+								/>
+							)}
+							<FormControlLabel
+								className={classes.checkFormControl}
+								control={
+									<Checkbox color="primary" checked={data.isApplyPersonData} onChange={this.toggleAgreePersonData} />
+								}
+								label="Согласие на обработку персональных данных"
+							/>
+						</React.Fragment>
+					}
 				/>
 			</div>
 		);

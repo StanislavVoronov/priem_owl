@@ -10,20 +10,25 @@ import {
 	IServerError,
 	EnrollForms,
 	validateRegistrationForm,
+	validatePersonForm,
+	validateContactsForm,
+	validateEducationForm,
+	validateDocument,
+	validateDocumentsForm,
 } from '$common';
 import styles from './styles.module.css';
 import { ContactsForm, RegisterForm, PersonForm, EducationForm, DocumentsForm } from '$components';
 import BackgroundLogo from '$assets/logo.png';
 import Logo from '$assets/mgutm.png';
 import { ChangeEvent } from 'react';
-import { IDictionaryState } from '@mgutm-fcu/dictionary';
+import { IDictionary, IDictionaryState } from '@mgutm-fcu/dictionary';
 import LoadingButton from '../../components/Buttons/LoadingButtont';
 import { IEnrollForm } from './models';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const localStyles = {
 	logo: { height: window.innerHeight },
 	stepper: {
-		height: window.innerHeight,
 		marginBottom: 50,
 		marginRight: 50,
 		marginLeft: 50,
@@ -55,97 +60,153 @@ export class EnrollView extends React.PureComponent<IProps> {
 	static defaultProps = {
 		classes: {},
 	};
-	renderTitleButton = () => {
+	validateForm = () => {
+		switch (this.props.activeStep) {
+			case 0: {
+				return validateRegistrationForm(this.props.registrationData);
+			}
+			case 1: {
+				return validatePersonForm(this.props.personData);
+			}
+			case 2: {
+				return validateContactsForm(this.props.contactsData);
+			}
+			case 3: {
+				return validateEducationForm(this.props.educationData);
+			}
+			case 4: {
+				return validateEducationForm(this.props.educationData);
+			}
+			case 5: {
+				return validateDocumentsForm(this.props.documents);
+			}
+			default: {
+				return true;
+			}
+		}
+	};
+	getButtonTitle = () => {
 		switch (this.props.activeStep) {
 			case 0: {
 				return 'Зарегистрироваться';
 			}
 			case 5: {
-				return 'Отправить код';
+				return 'Отправить';
 			}
 			default: {
 				return 'Далее';
 			}
 		}
 	};
+	renderButton = () => {
+		return (
+			<LoadingButton loading={this.props.loading} onClick={this.props.submit} disabled={!this.validateForm()}>
+				{this.getButtonTitle()}
+			</LoadingButton>
+		);
+	};
+	renderError = () => {
+		return (
+			this.props.error && (
+				<div style={{ marginTop: 16, marginBottom: 4, display: 'flex', justifyContent: 'center' }}>
+					<H2 color="red">{this.props.error.message}</H2>
+				</div>
+			)
+		);
+	};
 	renderForm = () => {
 		switch (this.props.activeStep) {
 			case 0: {
 				return (
-					<RegisterForm
-						updateForm={this.props.updateRegisterForm}
-						dictionaries={this.props.dictionaries}
-						data={this.props.registrationData}
-					/>
+					<React.Fragment>
+						<RegisterForm
+							updateForm={this.props.updateRegisterForm}
+							dictionaries={this.props.dictionaries}
+							data={this.props.registrationData}
+						/>
+						{this.renderError()}
+						{this.renderButton()}
+					</React.Fragment>
 				);
 			}
 			case 1: {
 				return (
-					<PersonForm
-						dictionaries={this.props.dictionaries}
-						updateForm={this.props.updatePersonForm}
-						data={this.props.personData}
-					/>
+					<React.Fragment>
+						<PersonForm
+							dictionaries={this.props.dictionaries}
+							updateForm={this.props.updatePersonForm}
+							data={this.props.personData}
+						/>
+						{this.renderError()}
+						{this.renderButton()}
+					</React.Fragment>
 				);
 			}
 			case 2: {
 				return (
-					<ContactsForm
-						dictionaries={this.props.dictionaries}
-						data={this.props.contactsData}
-						updateForm={this.props.updateContactsForm}
-					/>
+					<React.Fragment>
+						<ContactsForm
+							dictionaries={this.props.dictionaries}
+							data={this.props.contactsData}
+							updateForm={this.props.updateContactsForm}
+						/>
+						{this.renderError()}
+						{this.renderButton()}
+					</React.Fragment>
 				);
 			}
 			case 3: {
 				return (
-					<EducationForm
-						updateForm={this.props.updateEducationForm}
-						dictionaries={this.props.dictionaries}
-						data={this.props.educationData}
-					/>
+					<React.Fragment>
+						<EducationForm
+							updateForm={this.props.updateEducationForm}
+							dictionaries={this.props.dictionaries}
+							data={this.props.educationData}
+						/>
+						{this.renderButton()}
+					</React.Fragment>
 				);
 			}
 			case 4: {
 				return (
-					<DocumentsForm
-						isForeigner={this.props.personData.document.docGovernment.id !== 1}
-						dictionaries={this.props.dictionaries}
-						documents={this.props.documents}
-						updateForm={this.props.updateDocumentsForm}
-					/>
+					<React.Fragment>
+						<DocumentsForm
+							isForeigner={this.props.personData.document.docGovernment.id !== 1}
+							dictionaries={this.props.dictionaries}
+							documents={this.props.documents}
+							updateForm={this.props.updateDocumentsForm}
+						/>
+						{this.renderButton()}
+					</React.Fragment>
 				);
 			}
 			case 5: {
 				return (
-					<TextInput
-						label="Код подтверждения"
-						type="number"
-						onBlur={this.props.onChangeConfirmCode}
-						helperText={`Введите код, отправленный на указанную в контактах электронную почту`}
-					/>
+					<React.Fragment>
+						<TextInput
+							label="Код подтверждения"
+							type="number"
+							onBlur={this.props.onChangeConfirmCode}
+							helperText={`Введите код, отправленный на указанную в контактах электронную почту`}
+						/>
+						{this.renderButton()}
+					</React.Fragment>
 				);
 			}
 			default: {
 				return (
-					<h2 style={{ textAlign: 'center' }}>
+					<h2 style={{ textAlign: 'center', color: 'green' }}>
 						Процесс подачи документов для поступления в Университет успешно завершен!
 					</h2>
 				);
 			}
 		}
 	};
-	validateForm = () => {
-		switch (this.props.activeStep) {
-			case 0: {
-				return !validateRegistrationForm(this.props.registrationData);
-			}
-			default: {
-				return false;
-			}
-		}
-	};
 	render() {
+		const loading =
+			Object.keys(this.props.dictionaries).length === 0 ||
+			Object.values(this.props.dictionaries).find((item: IDictionary) => item.fetching) !== undefined;
+
 		return (
 			<React.Fragment>
 				<div className={styles.header}>
@@ -155,23 +216,30 @@ export class EnrollView extends React.PureComponent<IProps> {
 				<h2 className={styles.namePageTitle}>Электронная подача документов для поступления в Университет</h2>
 				<CardMedia className={this.props.classes.logo} image={BackgroundLogo}>
 					<Stepper className={this.props.classes.stepper} activeStep={this.props.activeStep} orientation={'vertical'}>
-						{this.props.steps.map((label, index) => (
-							<Step key={label}>
-								<StepButton onClick={this.props.handleStep(index)} disabled={index >= this.props.passedStep}>
-									<span className={index === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
-								</StepButton>
-								<StepContent>
-									{this.renderForm()}
-									{this.props.error && <H2 color="red">{this.props.error.message}</H2>}
-									<LoadingButton
-										loading={this.props.loading}
-										onClick={this.props.submit}
-										disabled={this.validateForm()}>
-										{this.renderTitleButton()}
-									</LoadingButton>
-								</StepContent>
-							</Step>
-						))}
+						{!loading ? (
+							this.props.steps.map((label, index) => (
+								<Step key={label}>
+									<StepButton onClick={this.props.handleStep(index)} disabled={index >= this.props.passedStep}>
+										<span className={index === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
+									</StepButton>
+									<StepContent>{this.renderForm()}</StepContent>
+								</Step>
+							))
+						) : (
+							<React.Fragment>
+								<div
+									style={{
+										height: 150,
+										display: 'flex',
+										flexDirection: 'column',
+										justifyContent: 'center',
+										alignItems: 'center',
+									}}>
+									<CircularProgress />
+									<h3>Загрузка справочников</h3>
+								</div>
+							</React.Fragment>
+						)}
 					</Stepper>
 				</CardMedia>
 			</React.Fragment>

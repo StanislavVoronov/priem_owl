@@ -1,4 +1,4 @@
-import { IDocument, ServerBoolean, IServerError, IPerson } from '$common';
+import { IDocument, ServerBoolean, IServerError, IPerson, IRegisterForm } from '$common';
 import PriemApi from '../../services/PriemApi';
 import {
 	checkPersonFailure,
@@ -17,6 +17,8 @@ import {
 	sendVerificationCodeFetching,
 	sendVerificationCodeSuccess,
 	uploadDocsFetching,
+	uploadDocsSuccess,
+	uploadDocsFailure,
 } from './actions';
 import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
@@ -41,24 +43,28 @@ import { IRootState } from '$store';
 import { IEnrollForm } from './models';
 
 export const registerNewPerson = (
-	login: string,
-	password: string,
-): ThunkAction<Promise<number>, IRootState, void, Action> => dispatch => {
-	const payload = { login, password };
+	data: IRegisterForm,
+): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
+	const { login, password, birthday, firstName, lastName, middleName, gender } = data;
 
 	dispatch(registerPersonFetching());
 
-	return PriemApi.post<IRegisterNewPersonRequest, IRegisterNewPersonResponse>(PriemRestApi.AddEnroll, payload)
-		.then(response => {
-			dispatch(registerNewPersonSuccess(response.id));
-
-			return response.id;
+	return dispatch(checkLogin(login)).then(() => {
+		return PriemApi.post<IRegisterNewPersonRequest, IRegisterNewPersonResponse>(PriemRestApi.AddEnroll, {
+			login,
+			password,
 		})
-		.catch(error => {
-			dispatch(registerNewPersonFailure(error));
+			.then(response => {
+				dispatch(registerNewPersonSuccess(response.id));
 
-			return Promise.reject();
-		});
+				return dispatch(checkPerson({ firstName, middleName, lastName, birthday, gender }));
+			})
+			.catch(error => {
+				dispatch(registerNewPersonFailure(error));
+
+				return Promise.reject();
+			});
+	});
 };
 export const checkPerson = (data: IPerson): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	const { firstName, birthday, lastName, middleName = '' } = data;
@@ -141,74 +147,85 @@ export const createPerson = (
 	confirmCode: string,
 	data: IEnrollForm,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
-	if (data.contactsData && data.registrationData && data.personData && data.educationData) {
-		dispatch(createPersonFetching());
+	dispatch(createPersonFetching());
 
-		const passport = data.personData.document;
+	const passport = data.personData.document;
 
-		const education = data.educationData.document;
+	const education = data.educationData.document;
 
-		const registration = data.contactsData.document;
+	const registration = data.contactsData.document;
 
-		const photo = data.personData.photo;
+	const photo = data.personData.photo;
 
-		const payload = {
-			email_code: confirmCode,
-			phone_code: '000000',
-			email: data.contactsData.email,
-			lname: data.registrationData.lastName,
-			fname: data.registrationData.firstName,
-			mname: data.registrationData.middleName,
-			birthdate: moment(data.registrationData.birthday).format('DD-MM-YYYY'),
-			birthplace: data.personData.birthPlace,
-			need_hostel: data.contactsData.needDormitory ? ServerBoolean.True : ServerBoolean.False,
-			sex: data.registrationData.gender,
-			hight_first: data.educationData.firstHighEducation ? ServerBoolean.True : ServerBoolean.False,
-			best_prev_edu: data.educationData.prevEducation,
-			cheat_type: 0,
-		};
+	const payload = {
+		email_code: confirmCode,
+		phone_code: '000000',
+		email: data.contactsData.email,
+		lname: data.registrationData.lastName,
+		fname: data.registrationData.firstName,
+		mname: data.registrationData.middleName,
+		birthdate: moment(data.registrationData.birthday).format('DD-MM-YYYY'),
+		birthplace: data.personData.birthPlace,
+		need_hostel: data.contactsData.needDormitory ? ServerBoolean.True : ServerBoolean.False,
+		sex: data.registrationData.gender,
+		hight_first: data.educationData.firstHighEducation ? ServerBoolean.True : ServerBoolean.False,
+		best_prev_edu: data.educationData.prevEducation,
+		cheat_type: 0,
+	};
 
-		PriemEnroll.post<INewPersonDataRequest, INewPersonDataResponse>(EnrollRestApi.SetNewNp, payload)
-			.then(response => {
-				dispatch(createPersonSuccess(response.np_uid));
+	return PriemEnroll.post<INewPersonDataRequest, INewPersonDataResponse>(EnrollRestApi.SetNewNp, payload)
+		.then(response => {
+			dispatch(createPersonSuccess(response.np_uid));
 
-				dispatch(uploadDocList([passport, photo, education, registration, ...(data.documents || [])]));
-			})
-			.catch((error: any) => {
-				console.log('error', error);
-				dispatch(createPersonFailure(error));
+			return dispatch(uploadDocList([passport, photo, education, registration, ...(data.documents || [])]));
+		})
+		.catch((error: any) => {
+			console.log('error', error);
+			dispatch(createPersonFailure(error));
 
-				return Promise.reject();
-			});
-	}
-
-	return Promise.reject();
+			return Promise.reject();
+		});
 };
 
-const uploadDocList = (docList: IDocument[]): ThunkAction<void, IRootState, void, Action> => dispatch => {
+const uploadDocList = (docList: IDocument[]): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	dispatch(uploadDocsFetching());
-	console.log('documents', docList);
-	docList.forEach((item: IDocument) => {
-		console.log(item.docFile);
-		const document: IUploadDocPayload = {
-			mime: item.docFile ? item.docFile.type : null,
-			type: item.docType ? item.docType.id : 0,
-			stype: item.docSubType ? item.docSubType.id : null,
-			seria: item.docSeries || '-',
-			num: item.docNumber || '-',
-			iss_org: item.docIssieBy ? `${item.docIssieBy}${item.codeDepartment ? ' ' + item.codeDepartment : ''}` : '-',
-			iss_date: item.docDate ? moment(item.docDate).format('DD-MM-YYYY') : '01-01-1970',
-			iss_gov: item.docGovernment ? item.docGovernment.id : 1,
-		};
 
-		PriemApi.post(PriemRestApi.AddDocuments, omitBy(document, isNull), {
-			page: { value: item.docFile, name: item.docFile ? item.docFile.name : '-' },
-		})
-			.then(response => {
-				console.log('successDocuments', response);
+	return Promise.all(
+		docList.map((item: IDocument) => {
+			const document: IUploadDocPayload = {
+				mime: item.docFile ? item.docFile.type : null,
+				type: item.docType ? item.docType.id : 0,
+				stype: item.docSubType ? item.docSubType.id : null,
+				seria: item.docSeries || '-',
+				num: item.docNumber || '-',
+				iss_org: item.docIssieBy ? `${item.docIssieBy}${item.codeDepartment ? ' ' + item.codeDepartment : ''}` : '-',
+				iss_date: item.docDate ? moment(item.docDate).format('DD-MM-YYYY') : '01-01-1970',
+				iss_gov: item.docGovernment ? item.docGovernment.id : 1,
+			};
+
+			return PriemApi.post(PriemRestApi.AddDocuments, omitBy(document, isNull), {
+				page: { value: item.docFile, name: item.docFile ? item.docFile.name : '-' },
 			})
-			.catch(error => {
-				console.log('errorDocuments', error);
-			});
-	});
+				.then(response => {
+					console.log('successDocuments', response);
+
+					return Promise.resolve();
+				})
+				.catch(error => {
+					console.log('errorDocuments', error);
+
+					return Promise.reject();
+				});
+		}),
+	)
+		.then(() => {
+			dispatch(uploadDocsSuccess());
+
+			return Promise.resolve();
+		})
+		.catch((error: IServerError) => {
+			dispatch(uploadDocsFailure(error));
+
+			return Promise.reject();
+		});
 };
