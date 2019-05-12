@@ -8,7 +8,6 @@ interface IProps {
 	margin: number;
 	loading: boolean;
 	disabled: boolean;
-	onClick: () => void;
 	classes: {
 		buttonWrapper: string;
 		container: string;
@@ -38,12 +37,12 @@ class LoadingButton extends React.Component<IProps> {
 		classes: { buttonWrapper: '', buttonProgress: '', container: '' },
 	};
 	render() {
-		const { loading, onClick, classes, children } = this.props;
+		const { loading, classes, children } = this.props;
 
 		return (
 			<div className={classes.container} style={{ margin: this.props.margin }}>
 				<div className={classes.buttonWrapper}>
-					<Button variant="contained" color="primary" disabled={loading || this.props.disabled} onClick={onClick}>
+					<Button type="submit" variant="contained" color="primary" disabled={loading || this.props.disabled}>
 						{children}
 					</Button>
 					{loading && <CircularProgress size={24} className={classes.buttonProgress} />}

@@ -1,30 +1,41 @@
 import * as React from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 
-import { Stepper, StepContent, Step, TextInput, Button, StepButton, CardMedia, withStyles, H2 } from '$components';
+import {
+	CardMedia,
+	ContactsForm,
+	DocumentsForm,
+	EducationForm,
+	H2,
+	PersonForm,
+	RegisterForm,
+	Step,
+	StepButton,
+	StepContent,
+	Stepper,
+	TextInput,
+	withStyles,
+} from '$components';
 import {
 	IContactsForm,
+	IDocument,
 	IEducationForm,
 	IPersonForm,
 	IRegisterForm,
-	IDocument,
 	IServerError,
-	EnrollForms,
-	validateRegistrationForm,
-	validatePersonForm,
 	validateContactsForm,
-	validateEducationForm,
-	validateDocument,
 	validateDocumentsForm,
+	validateEducationForm,
+	validatePersonForm,
+	validateRegistrationForm,
 } from '$common';
 import styles from './styles.module.css';
-import { ContactsForm, RegisterForm, PersonForm, EducationForm, DocumentsForm } from '$components';
-import BackgroundLogo from '$assets/logo.png';
 import Logo from '$assets/mgutm.png';
-import { ChangeEvent } from 'react';
 import { IDictionary, IDictionaryState } from '@mgutm-fcu/dictionary';
 import LoadingButton from '../../components/Buttons/LoadingButtont';
-import { IEnrollForm } from './models';
+import { EnrollForm, IEnrollForm } from './models';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Title } from '../../components/Typography/Title';
 
 const localStyles = {
 	logo: { height: window.innerHeight },
@@ -40,20 +51,21 @@ const localStyles = {
 
 interface IProps extends IEnrollForm {
 	error: IServerError | null;
-	steps: string[];
-	activeStep: number;
+	steps: EnrollForm[];
+	activeStep: EnrollForm;
 	passedStep: number;
 	onChangeConfirmCode: (event: ChangeEvent<HTMLInputElement>) => void;
-	handleStep: (step: number) => any;
+	handleStep: (step: EnrollForm) => any;
 	classes: Record<string, string>;
 	dictionaries: IDictionaryState;
 	loading: boolean;
-	submit: () => void;
+	submit: (event: FormEvent<HTMLFormElement>) => void;
 	updateEducationForm: (data: Partial<IEducationForm>) => void;
 	updatePersonForm: (data: Partial<IPersonForm>) => void;
 	updateContactsForm: (data: Partial<IContactsForm>) => void;
 	updateRegisterForm: (data: Partial<IRegisterForm>) => void;
 	updateDocumentsForm: (data: IDocument[]) => void;
+	registrationCompleted: boolean;
 }
 
 export class EnrollView extends React.PureComponent<IProps> {
@@ -62,22 +74,24 @@ export class EnrollView extends React.PureComponent<IProps> {
 	};
 	validateForm = () => {
 		switch (this.props.activeStep) {
-			case 0: {
+			case EnrollForm.Registration: {
 				return validateRegistrationForm(this.props.registrationData);
 			}
-			case 1: {
+			case EnrollForm.Person: {
 				return validatePersonForm(this.props.personData);
 			}
-			case 2: {
-				return validateContactsForm(this.props.contactsData);
+			case EnrollForm.Contacts: {
+				const { homePhone, ...rest } = this.props.contactsData;
+
+				return validateContactsForm(rest);
 			}
-			case 3: {
+			case EnrollForm.Education: {
 				return validateEducationForm(this.props.educationData);
 			}
-			case 4: {
+			case EnrollForm.Documents: {
 				return validateEducationForm(this.props.educationData);
 			}
-			case 5: {
+			case EnrollForm.ConfirmEmail: {
 				return validateDocumentsForm(this.props.documents);
 			}
 			default: {
@@ -87,10 +101,10 @@ export class EnrollView extends React.PureComponent<IProps> {
 	};
 	getButtonTitle = () => {
 		switch (this.props.activeStep) {
-			case 0: {
+			case EnrollForm.Registration: {
 				return 'Зарегистрироваться';
 			}
-			case 5: {
+			case EnrollForm.ConfirmEmail: {
 				return 'Отправить';
 			}
 			default: {
@@ -100,7 +114,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 	};
 	renderButton = () => {
 		return (
-			<LoadingButton loading={this.props.loading} onClick={this.props.submit} disabled={!this.validateForm()}>
+			<LoadingButton disabled={!this.validateForm()} loading={this.props.loading}>
 				{this.getButtonTitle()}
 			</LoadingButton>
 		);
@@ -108,7 +122,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 	renderError = () => {
 		return (
 			this.props.error && (
-				<div style={{ marginTop: 16, marginBottom: 4, display: 'flex', justifyContent: 'center' }}>
+				<div className={styles.errorContainer}>
 					<H2 color="red">{this.props.error.message}</H2>
 				</div>
 			)
@@ -116,7 +130,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 	};
 	renderForm = () => {
 		switch (this.props.activeStep) {
-			case 0: {
+			case EnrollForm.Registration: {
 				return (
 					<React.Fragment>
 						<RegisterForm
@@ -129,7 +143,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 					</React.Fragment>
 				);
 			}
-			case 1: {
+			case EnrollForm.Person: {
 				return (
 					<React.Fragment>
 						<PersonForm
@@ -142,7 +156,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 					</React.Fragment>
 				);
 			}
-			case 2: {
+			case EnrollForm.Contacts: {
 				return (
 					<React.Fragment>
 						<ContactsForm
@@ -155,7 +169,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 					</React.Fragment>
 				);
 			}
-			case 3: {
+			case EnrollForm.Education: {
 				return (
 					<React.Fragment>
 						<EducationForm
@@ -167,7 +181,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 					</React.Fragment>
 				);
 			}
-			case 4: {
+			case EnrollForm.Documents: {
 				return (
 					<React.Fragment>
 						<DocumentsForm
@@ -180,7 +194,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 					</React.Fragment>
 				);
 			}
-			case 5: {
+			case EnrollForm.ConfirmEmail: {
 				return (
 					<React.Fragment>
 						<TextInput
@@ -194,11 +208,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				);
 			}
 			default: {
-				return (
-					<h2 style={{ textAlign: 'center', color: 'green' }}>
-						Процесс подачи документов для поступления в Университет успешно завершен!
-					</h2>
-				);
+				return null;
 			}
 		}
 	};
@@ -214,31 +224,34 @@ export class EnrollView extends React.PureComponent<IProps> {
 					<h2 className={styles.pkTitle}>Приемная компания {new Date().getFullYear()}</h2>
 				</div>
 				<h2 className={styles.namePageTitle}>Электронная подача документов для поступления в Университет</h2>
-				<CardMedia className={this.props.classes.logo} image={BackgroundLogo}>
-					<Stepper className={this.props.classes.stepper} activeStep={this.props.activeStep} orientation={'vertical'}>
+				<CardMedia className={this.props.classes.logo}>
+					<Stepper
+						className={this.props.classes.stepper}
+						activeStep={this.props.steps.findIndex(item => item === this.props.activeStep)}
+						orientation={'vertical'}>
 						{!loading ? (
-							this.props.steps.map((label, index) => (
+							this.props.steps.map((label: EnrollForm, index: number) => (
 								<Step key={label}>
-									<StepButton onClick={this.props.handleStep(index)} disabled={index >= this.props.passedStep}>
-										<span className={index === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
+									<StepButton onClick={this.props.handleStep(label)} disabled={index >= this.props.passedStep}>
+										<span className={label === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
 									</StepButton>
-									<StepContent>{this.renderForm()}</StepContent>
+									{this.props.activeStep === this.props.steps[index] && (
+										<StepContent>
+											<form onSubmit={this.props.submit}>{this.renderForm()}</form>
+										</StepContent>
+									)}
 								</Step>
 							))
 						) : (
 							<React.Fragment>
-								<div
-									style={{
-										height: 150,
-										display: 'flex',
-										flexDirection: 'column',
-										justifyContent: 'center',
-										alignItems: 'center',
-									}}>
+								<div className={styles.loading}>
 									<CircularProgress />
 									<h3>Загрузка справочников</h3>
 								</div>
 							</React.Fragment>
+						)}
+						{this.props.registrationCompleted && (
+							<Title color="green">Процесс подачи документов для поступления в Университет успешно завершен!</Title>
 						)}
 					</Stepper>
 				</CardMedia>

@@ -44,7 +44,7 @@ class DocumentsForm extends React.PureComponent<IProps> {
 	};
 	updateDocument = (index: number) => (document: IDocument) => {
 		const documents = this.props.documents.filter((_: IDocument, key: number) => key !== index);
-		this.props.updateForm(documents);
+		this.props.updateForm([...documents, document]);
 	};
 	onChangeCodeDepartment = (index: number): React.ChangeEventHandler<HTMLInputElement> => event => {
 		const document = this.props.documents[index];

@@ -42,3 +42,16 @@
 	font-weight: bold;
 }
 
+.loading {
+	height: 150px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.errorContainer {
+	margin-top: 16px;
+	margin-bottom: 4px;
+	display: flex;
+	justify-content: center;
+}

@@ -115,14 +115,15 @@ class ContactsForm extends React.PureComponent<IProps> {
 							/>
 							<TextInput label={'Корпус'} defaultValue={this.props.data.regBlock} onBlur={this.onChange('regBlock')} />
 							<TextInput label={'Квартира'} defaultValue={this.props.data.regFlat} onBlur={this.onChange('regFlat')} />
+							<FormControlLabel
+								className={this.props.classes.checkFormControl}
+								control={<Checkbox color="primary" onChange={this.toggleNeedDormitoryStatus} />}
+								label="Нуждаюсь в предоставлении общежития"
+							/>
 						</React.Fragment>
 					}
 				/>
-				<FormControlLabel
-					className={this.props.classes.checkFormControl}
-					control={<Checkbox color="primary" onChange={this.toggleNeedDormitoryStatus} />}
-					label="Нуждаюсь в предоставлении общежития"
-				/>
+
 				<FormControlLabel
 					className={this.props.classes.checkFormControl}
 					control={

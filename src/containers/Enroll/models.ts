@@ -26,3 +26,19 @@ export interface IEnrollForm {
 	educationData: IEducationForm;
 	documents: IDocument[];
 }
+export enum EnrollForm {
+	Registration = 'Регистрация абитуриента',
+	Person = 'Персональные данные',
+	Contacts = 'Контактные данные',
+	Education = 'Обрзование',
+	Documents = 'Документы',
+	ConfirmEmail = 'Подтверждение учетной записи',
+}
+export const EnrollSteps = [
+	EnrollForm.Registration,
+	EnrollForm.Person,
+	EnrollForm.Contacts,
+	EnrollForm.Education,
+	EnrollForm.Documents,
+	EnrollForm.ConfirmEmail,
+];

@@ -50,7 +50,11 @@ class EducationForm extends React.PureComponent<IProps> {
 				<FormControlLabel
 					className={classes.checkFormControl}
 					control={
-						<Checkbox value={data.firstHighEducation} color="primary" onChange={this.toggleFirstHighEducationStatus} />
+						<Checkbox
+							checked={data.firstHighEducation}
+							color="primary"
+							onChange={this.toggleFirstHighEducationStatus}
+						/>
 					}
 					label="Получение высшего образования впервые"
 				/>
@@ -72,7 +76,7 @@ class EducationForm extends React.PureComponent<IProps> {
 					extraFields={
 						<FormControlLabel
 							className={classes.checkFormControl}
-							control={<Checkbox color="primary" value={data.hasEge} onChange={this.toggleHasEgeStatus} />}
+							control={<Checkbox color="primary" checked={data.hasEge} onChange={this.toggleHasEgeStatus} />}
 							label="Имею результаты ЕГЭ"
 						/>
 					}

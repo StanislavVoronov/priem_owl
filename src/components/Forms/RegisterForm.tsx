@@ -127,18 +127,21 @@ class RegisterForm extends React.PureComponent<IProps> {
 				<React.Fragment>
 					<TextInput
 						required
-						regExp={'[a-zA-z0-9]'}
+						pattern={'[a-z0-9_-]'}
 						disabled={this.props.disabled}
 						defaultValue={this.props.data.login}
 						label="Логин"
 						onBlur={this.onChangeLogin}
 						hasError={invalidLogin}
+						title="Логин может содержать только латинские строчные буквы, цифры, подчеркивание и тире"
 						helperText={'Логин должен быть не менее 5 символов'}
 					/>
 
 					<TextInput
 						required
 						label="Пароль"
+						pattern="[A-Za-z0-9]"
+						title="Логин может содержать только латинские буквы и цифры"
 						disabled={this.props.disabled}
 						type="password"
 						defaultValue={this.props.data.password}

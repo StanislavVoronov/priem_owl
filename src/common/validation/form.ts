@@ -31,15 +31,11 @@ export const validateDocument = (document: IDocument): boolean => {
 	if (document.docType && (document.docType.id === 1 || document.docType.id === 2) && !document.docSubType) {
 		return false;
 	}
+	if (document.docType && document.docType.has_number) {
+		return document.docNumber !== '';
+	}
 	if (document.docType && document.docType.need_info) {
-		return (
-			(document.docIssieBy &&
-				document.docIssieBy.length > 0 &&
-				(document.docDate && document.docDate.length > 0) &&
-				(document.docType && document.docType.has_number && document.docNumber && document.docNumber.length > 0) &&
-				(document.docSeries && document.docSeries.length > 0)) ||
-			false
-		);
+		return document.docIssieBy !== '' && document.docDate !== '' && document.docSeries !== '';
 	}
 
 	return true;

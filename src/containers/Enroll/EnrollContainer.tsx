@@ -1,4 +1,8 @@
 import {
+	defaultContactsDataForm,
+	defaultEducationDataForm,
+	defaultPersonDataForm,
+	defaultRegisterDataForm,
 	IContactsForm,
 	IDocument,
 	IEducationForm,
@@ -6,24 +10,18 @@ import {
 	IPersonForm,
 	IRegisterForm,
 	IServerError,
-	IPerson,
-	defaultContactsDataForm,
-	defaultEducationDataForm,
-	defaultPersonDataForm,
-	defaultRegisterDataForm,
-	validateRegistrationForm,
-	EnrollForms,
 } from '$common';
 import EnrollView from './EnrollView';
 import Dictionary, { IDictionary } from '@mgutm-fcu/dictionary';
 import * as React from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 import { connect, MapStateToProps } from 'react-redux';
 import { dictionariesSelector, enrollStateSelector } from './selectors';
-import { checkPerson, checkLogin, registerNewPerson, createPerson, sendVerificationCode } from './operations';
-import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
-import { ChangeEvent } from 'react';
-import { IEnrollForm } from './models';
+import { createPerson, registerNewPerson, sendVerificationCode } from './operations';
+import { FULL_DICTIONARY_LIST, SHORT_DICTIONARY_LIST } from './constants';
+import { EnrollForm, EnrollSteps, IEnrollForm } from './models';
 import { IRootState } from '$store';
+import { MouseEventHandler } from 'react';
 
 interface IDispatchToProps {
 	registerNewPerson: (data: IRegisterForm) => Promise<void>;
@@ -41,14 +39,14 @@ type IProps = IDispatchToProps & IStateToProps;
 
 interface IState extends IEnrollForm {
 	passedStep: number;
-	activeStep: number;
+	activeStep: EnrollForm;
 	confirmCode: string;
 }
 
 class EnrollContainer extends React.Component<IProps, IState> {
 	state: IState = {
 		passedStep: 0,
-		activeStep: 0,
+		activeStep: EnrollForm.Registration,
 		confirmCode: '',
 		registrationData: defaultRegisterDataForm,
 		personData: defaultPersonDataForm,
@@ -60,26 +58,28 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		// You can also log the error to an error reporting service
 	}
 	public handleNext = () => {
-		const nextStep = this.state.activeStep + 1;
-		this.setState({ activeStep: nextStep, passedStep: nextStep });
+		const nextStep = EnrollSteps.findIndex(item => item === this.state.activeStep) + 1;
+		this.setState({ activeStep: EnrollSteps[nextStep], passedStep: nextStep });
 	};
-	handleStep = (step: number) => () => {
+	handleStep = (step: EnrollForm) => () => {
 		this.setState({
 			activeStep: step,
 		});
 	};
-	submit = () => {
+	submit = (event: FormEvent<HTMLFormElement>) => {
 		switch (this.state.activeStep) {
-			case 0: {
+			case EnrollForm.Registration: {
 				const { registrationData } = this.state;
 				this.props.registerNewPerson(registrationData).then(this.handleNext);
+				break;
 			}
-			case 2: {
+			case EnrollForm.Contacts: {
 				this.props
 					.sendVerificationCode(this.state.contactsData.email, this.state.contactsData.mobPhone)
 					.then(this.handleNext);
+				break;
 			}
-			case 3: {
+			case EnrollForm.ConfirmEmail: {
 				const { registrationData, contactsData, educationData, documents, personData } = this.state;
 				this.props
 					.createPerson(this.state.confirmCode, {
@@ -90,6 +90,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 						educationData,
 					})
 					.then(this.handleNext);
+				break;
 			}
 			default: {
 				this.handleNext();
@@ -120,6 +121,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		return (
 			<Dictionary version={2} url={'/dev-bin/priem_api.fcgi'} list={dictionaryList}>
 				<EnrollView
+					registrationCompleted={this.props.registrationCompleted}
 					loading={this.props.loading}
 					error={this.props.error}
 					updateEducationForm={this.updateEducationForm}
@@ -137,7 +139,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 					passedStep={this.state.passedStep}
 					handleStep={this.handleStep}
 					submit={this.submit}
-					steps={NEW_PERSON_STEPS}
+					steps={EnrollSteps}
 					onChangeConfirmCode={this.onChangeConfirmCode}
 				/>
 			</Dictionary>

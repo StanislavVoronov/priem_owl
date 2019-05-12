@@ -18,8 +18,9 @@ export interface IInputProps extends IHasError, IHelperText, IDisabled {
 	value?: string;
 	prefix?: string | number;
 	postfix?: string | number;
-	regExp?: string;
+	pattern?: string;
 	placeholder?: string;
+	title: string;
 }
 
 interface IState {
@@ -33,6 +34,8 @@ class TextInput<T> extends React.PureComponent<IInputProps, IState> {
 		type: 'text',
 		isTopLabel: true,
 		classes: {},
+		value: '',
+		title: '',
 	};
 
 	state = {
@@ -41,12 +44,6 @@ class TextInput<T> extends React.PureComponent<IInputProps, IState> {
 	};
 
 	public onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
-		if (event.target.value.length && this.props.regExp && !new RegExp(this.props.regExp).test(event.target.value)) {
-			return;
-		}
-		if (!this.state.isControlled) {
-			this.setState({ value: event.target.value });
-		}
 		this.props.onChange(event);
 	};
 	onBlur: React.ChangeEventHandler<HTMLInputElement> = event => {
@@ -58,7 +55,6 @@ class TextInput<T> extends React.PureComponent<IInputProps, IState> {
 				{this.props.prefix && <FormLabel>{this.props.prefix}</FormLabel>}
 				<TextField
 					margin="normal"
-					value={this.state.isControlled ? this.props.value : this.state.value}
 					error={this.props.hasError}
 					helperText={this.props.helperText}
 					required={this.props.required}
@@ -70,6 +66,8 @@ class TextInput<T> extends React.PureComponent<IInputProps, IState> {
 					onChange={this.onChange}
 					defaultValue={this.props.defaultValue}
 					InputLabelProps={{
+						pattern: this.props.pattern,
+						title: this.props.title,
 						FormLabelClasses: { asterisk: this.props.classes.asterisk },
 						shrink: this.props.isTopLabel,
 					}}
