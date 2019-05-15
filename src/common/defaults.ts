@@ -36,7 +36,7 @@ export const defaultRegisterDataForm: IRegisterForm = {
 
 export const defaultPersonDataForm: IPersonForm = {
 	isApplyPersonData: false,
-	photo: { ...defaultDocument, docType: { id: 14, name: 'Фотография' } },
+	photo: { ...defaultDocument, docType: { id: 35, name: 'Фотография' } },
 	birthPlace: '',
 	document: {
 		...defaultDocument,

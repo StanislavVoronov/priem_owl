@@ -1,5 +1,6 @@
 import { Gender, IContactsForm, IDocument, IEducationForm, IPerson, IPersonForm, IRegisterForm } from '$common';
 import EducationForm from '../../components/Forms/EducationForm';
+import { RUS_ALPFABET } from '../constants';
 
 export const validateDataForm = (data: Record<string, any>): boolean => {
 	return !Object.values(data).some(
@@ -74,4 +75,20 @@ export const validateRegistrationForm = (fields: IRegisterForm): boolean => {
 	}
 
 	return validateDataForm(fields);
+};
+
+export const validateEmptyTextField = (text: string): void | string => {
+	if (text.length === 0) {
+		return 'Поле не должно быть пустым';
+	}
+};
+
+export const validateRusTextField = (text: string): void | string => {
+	if (!RUS_ALPFABET.test(text)) {
+		return 'Поле может содержать только русские буквы';
+	}
+};
+
+export const validateField = (text: string, ...checkList: Function[]): undefined | string => {
+	return checkList.map(fn => fn(text)).find(Boolean);
 };

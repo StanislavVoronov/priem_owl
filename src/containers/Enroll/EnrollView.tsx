@@ -132,15 +132,11 @@ export class EnrollView extends React.PureComponent<IProps> {
 		switch (this.props.activeStep) {
 			case EnrollForm.Registration: {
 				return (
-					<React.Fragment>
-						<RegisterForm
-							updateForm={this.props.updateRegisterForm}
-							dictionaries={this.props.dictionaries}
-							data={this.props.registrationData}
-						/>
-						{this.renderError()}
-						{this.renderButton()}
-					</React.Fragment>
+					<RegisterForm
+						updateForm={this.props.updateRegisterForm}
+						dictionaries={this.props.dictionaries}
+						data={this.props.registrationData}
+					/>
 				);
 			}
 			case EnrollForm.Person: {
@@ -187,7 +183,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 						<DocumentsForm
 							isForeigner={this.props.personData.document.docGovernment.id !== 1}
 							dictionaries={this.props.dictionaries}
-							documents={this.props.documents}
+							defaultData={{ documents: this.props.documents, cheatType: { id: 0, name: 'Нет преимуществ' } }}
 							updateForm={this.props.updateDocumentsForm}
 						/>
 						{this.renderButton()}
@@ -235,11 +231,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 									<StepButton onClick={this.props.handleStep(label)} disabled={index >= this.props.passedStep}>
 										<span className={label === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
 									</StepButton>
-									{this.props.activeStep === this.props.steps[index] && (
-										<StepContent>
-											<form onSubmit={this.props.submit}>{this.renderForm()}</form>
-										</StepContent>
-									)}
+									{this.props.activeStep === this.props.steps[index] && <StepContent>{this.renderForm()}</StepContent>}
 								</Step>
 							))
 						) : (

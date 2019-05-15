@@ -45,9 +45,12 @@ export const FULL_DICTIONARY_LIST = [
 		columns: ['id', 'name', 'type', 'sex'],
 		filter: (item: IDictionaryTypeFilter) => item.type === 0,
 	},
-
 	{
 		dictionary: EDictionaryNameList.PreviousEducation,
+		columns: ['id', 'name'],
+	},
+	{
+		dictionary: EDictionaryNameList.PriemSpecialCategories,
 		columns: ['id', 'name'],
 	},
 ];

@@ -46,5 +46,9 @@ export interface IPersonForm {
 	birthPlace: string;
 	document: IDocument;
 }
+export interface IDocumentsForm {
+	documents: IDocument[];
+	cheatType: ISelectItem;
+}
 
 export type EnrollForms = IRegisterForm & IContactsForm & IEducationForm & IPersonForm & IDocument;
