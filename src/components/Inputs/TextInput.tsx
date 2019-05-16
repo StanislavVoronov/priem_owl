@@ -21,6 +21,7 @@ export interface IInputProps extends IHasError, IHelperText, IDisabled {
 	pattern?: string;
 	placeholder?: string;
 	title: string;
+	name: string;
 }
 
 interface IState {
@@ -36,6 +37,7 @@ class TextInput<T> extends React.PureComponent<IInputProps, IState> {
 		classes: {},
 		value: '',
 		title: '',
+		name: '',
 	};
 
 	state = {
@@ -66,6 +68,7 @@ class TextInput<T> extends React.PureComponent<IInputProps, IState> {
 					onChange={this.onChange}
 					defaultValue={this.props.defaultValue}
 					InputLabelProps={{
+						name: this.props.name,
 						pattern: this.props.pattern,
 						title: this.props.title,
 						FormLabelClasses: { asterisk: this.props.classes.asterisk },
