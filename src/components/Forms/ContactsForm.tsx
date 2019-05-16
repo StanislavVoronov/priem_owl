@@ -26,8 +26,9 @@ class ContactsForm extends React.PureComponent<IProps> {
 		classes: {},
 	};
 
-	onChange = (field: keyof IContactsForm): React.ChangeEventHandler<HTMLInputElement> => event => {
-		this.props.updateForm({ [field]: inputValueAsString(event) });
+	onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
+		const name = event.target.name;
+		this.setState({ [name]: inputValueAsString(event) });
 	};
 
 	toggleLiveAddressStatus = (_: any, checked: boolean) => {
@@ -63,13 +64,13 @@ class ContactsForm extends React.PureComponent<IProps> {
 		this.props.updateForm({ mobPhone: maskMobPhone });
 	};
 	updateDocument = (document: IDocument) => {
-		this.props.updateForm({ document });
+		this.setState({ document });
 	};
 	render() {
 		const governmentDictionary = this.props.dictionaries[EDictionaryNameList.Governments];
 
 		return (
-			<div className="flexColumn">
+			<form className="flexColumn">
 				<H2>Адрес регистрации</H2>
 				<DocumentForm
 					document={this.props.data.document}
@@ -83,38 +84,53 @@ class ContactsForm extends React.PureComponent<IProps> {
 								type="number"
 								placeholder={'Введите индекс'}
 								required={true}
-								onBlur={this.onChange('regIndex')}
+								name="regIndex"
+								onBlur={this.onChange}
 							/>
 							<TextInput
 								label={'Область'}
 								defaultValue={this.props.data.regRegion}
 								placeholder={'Введите область'}
 								required={true}
-								onBlur={this.onChange('regRegion')}
+								name="regRegion"
+								onBlur={this.onChange}
 							/>
 							<TextInput
 								label={'Населенный пункт'}
 								defaultValue={this.props.data.regLocality}
 								placeholder={'Введите населенный пункт'}
 								required={true}
-								onBlur={this.onChange('regLocality')}
+								name="regLocality"
+								onBlur={this.onChange}
 							/>
 							<TextInput
 								label={'Улица'}
 								defaultValue={this.props.data.regStreet}
 								placeholder={'Введите улицу'}
 								required={true}
-								onBlur={this.onChange('regStreet')}
+								name="regStreet"
+								onBlur={this.onChange}
 							/>
 							<TextInput
 								label={'Дом'}
 								defaultValue={this.props.data.regHome}
 								placeholder={'Введите дом'}
+								name="regHome"
 								required={true}
-								onBlur={this.onChange('regHome')}
+								onBlur={this.onChange}
 							/>
-							<TextInput label={'Корпус'} defaultValue={this.props.data.regBlock} onBlur={this.onChange('regBlock')} />
-							<TextInput label={'Квартира'} defaultValue={this.props.data.regFlat} onBlur={this.onChange('regFlat')} />
+							<TextInput
+								label={'Корпус'}
+								defaultValue={this.props.data.regBlock}
+								name="regBlock"
+								onBlur={this.onChange}
+							/>
+							<TextInput
+								label={'Квартира'}
+								defaultValue={this.props.data.regFlat}
+								name="regFlat"
+								onBlur={this.onChange}
+							/>
 							<FormControlLabel
 								className={this.props.classes.checkFormControl}
 								control={<Checkbox color="primary" onChange={this.toggleNeedDormitoryStatus} />}
@@ -142,39 +158,54 @@ class ContactsForm extends React.PureComponent<IProps> {
 							label={'Индекс'}
 							defaultValue={this.props.data.liveIndex}
 							placeholder={'Введите индекс'}
+							name="liveIndex"
 							required={true}
-							onBlur={this.onChange('liveIndex')}
+							onBlur={this.onChange}
 						/>
 						<TextInput
 							label={'Область'}
 							defaultValue={this.props.data.liveRegion}
 							placeholder={'Введите область'}
+							name="liveRegion"
 							required={true}
-							onBlur={this.onChange('liveRegion')}
+							onBlur={this.onChange}
 						/>
 						<TextInput
 							label={'Населенный пункт'}
 							defaultValue={this.props.data.liveLocality}
 							placeholder={'Введите населенный пункт'}
+							name="liveLocality"
 							required={true}
-							onBlur={this.onChange('liveLocality')}
+							onBlur={this.onChange}
 						/>
 						<TextInput
 							defaultValue={this.props.data.liveStreet}
 							label={'Улица'}
 							required={true}
+							name="liveStreet"
 							placeholder={'Введите улицу'}
-							onBlur={this.onChange('liveStreet')}
+							onBlur={this.onChange}
 						/>
 						<TextInput
 							defaultValue={this.props.data.liveHome}
 							label={'Дом'}
+							name="liveHome"
 							placeholder={'Введите дом'}
 							required
-							onBlur={this.onChange('liveHome')}
+							onBlur={this.onChange}
 						/>
-						<TextInput defaultValue={this.props.data.liveBlock} label={'Корпус'} onBlur={this.onChange('liveBlock')} />
-						<TextInput defaultValue={this.props.data.liveFlat} label={'Квартира'} onBlur={this.onChange('liveFlat')} />
+						<TextInput
+							defaultValue={this.props.data.liveBlock}
+							name="liveBlock"
+							label={'Корпус'}
+							onBlur={this.onChange}
+						/>
+						<TextInput
+							defaultValue={this.props.data.liveFlat}
+							name="liveFlat"
+							label={'Квартира'}
+							onBlur={this.onChange}
+						/>
 					</div>
 				)}
 
@@ -182,9 +213,10 @@ class ContactsForm extends React.PureComponent<IProps> {
 					disabled={this.props.disabled}
 					label={'Электронная почта'}
 					defaultValue={this.props.data.email}
+					name="email"
 					helperText={'Необходимо для подтверждения учетной записи'}
 					required
-					onBlur={this.onChange('email')}
+					onBlur={this.onChange}
 				/>
 				<DropdownSelect
 					isCleanable={false}
@@ -202,11 +234,12 @@ class ContactsForm extends React.PureComponent<IProps> {
 					onChange={this.onChangeMobPhone}
 				/>
 				<TextInput
+					name="homePhone"
 					label={'Домашний телефон'}
 					defaultValue={this.props.data.homePhone}
-					onBlur={this.onChange('homePhone')}
+					onBlur={this.onChange}
 				/>
-			</div>
+			</form>
 		);
 	}
 }
