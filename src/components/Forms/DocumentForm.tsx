@@ -65,11 +65,11 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 		this.props.updateDocument(document);
 	};
 	validateForm = (text?: string) => {
-		if (this.props.validation && text) {
-			return text.length === 0 ? 'Поле не должно быть пустым' : undefined;
+		if (this.props.validation) {
+			return text ? void 0 : 'Поле не должно быть пустым';
 		}
 
-		return;
+		return void 0;
 	};
 	render() {
 		const { classes } = this.props;
