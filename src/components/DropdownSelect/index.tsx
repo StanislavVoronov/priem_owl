@@ -61,7 +61,7 @@ class DropdownSelect extends React.PureComponent<ISelectProps, IState> {
 					getOptionValue={this.getOptionValue}
 					options={this.props.options}
 				/>
-				{this.props.hasError && <FormLabel classes={{ root: 'requiredLabel' }}>{this.props.helperText}</FormLabel>}
+				{this.props.error && <FormLabel classes={{ root: 'requiredLabel' }}>{this.props.helperText}</FormLabel>}
 			</FormControl>
 		);
 	}

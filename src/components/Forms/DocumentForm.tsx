@@ -111,7 +111,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 								<TextInput
 									required
 									onChange={this.onChange}
-									hasError={!!this.validateForm(this.props.document.docSeries)}
+									error={!!this.validateForm(this.props.document.docSeries)}
 									helperText={this.validateForm(this.props.document.docSeries)}
 									name="docSeries"
 									defaultValue={this.props.document.docSeries}
@@ -126,7 +126,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 									defaultValue={this.props.document.docNumber}
 									required
 									name="docNumber"
-									hasError={!!this.validateForm(this.props.document.docNumber)}
+									error={!!this.validateForm(this.props.document.docNumber)}
 									helperText={this.validateForm(this.props.document.docNumber)}
 									placeholder="Введите номер документа"
 									label="Номер"
@@ -139,7 +139,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 									<TextInput
 										onChange={this.onChange}
 										required
-										hasError={!!this.validateForm(this.props.document.docDate)}
+										error={!!this.validateForm(this.props.document.docDate)}
 										helperText={this.validateForm(this.props.document.docDate)}
 										type="date"
 										defaultValue={this.props.document.docDate}
@@ -150,7 +150,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 									<TextInput
 										required
 										onChange={this.onChange}
-										hasError={!!this.validateForm(this.props.document.docIssieBy)}
+										error={!!this.validateForm(this.props.document.docIssieBy)}
 										helperText={this.validateForm(this.props.document.docIssieBy)}
 										defaultValue={this.props.document.docIssieBy}
 										placeholder="Введите кем выдан документ"

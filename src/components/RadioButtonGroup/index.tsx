@@ -72,7 +72,7 @@ class RadioButtonGroup extends React.PureComponent<IRadioGroupButton> {
 					))}
 				</RadioGroup>
 				{this.props.helperText && (
-					<FormHelperText className={this.props.hasError && this.props.classes.helperText}>
+					<FormHelperText className={this.props.error && this.props.classes.helperText}>
 						{this.props.helperText}
 					</FormHelperText>
 				)}

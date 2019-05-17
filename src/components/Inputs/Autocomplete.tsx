@@ -155,7 +155,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 						value: this.state.value as string,
 						onChange: this.handleChange,
 						helperText: this.props.helperText,
-						error: this.props.hasError,
+						error: this.props.error,
 						disabled: this.props.disabled,
 					}}
 					// @ts-ignore
