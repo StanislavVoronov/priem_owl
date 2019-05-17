@@ -44,7 +44,7 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 		const minLength = event.target.minLength;
 		const lang = event.target.lang;
 		console.log(name, isRequired, maxLength, minLength, lang);
-		console.log('event', event);
+		console.log('event', event.target);
 	};
 	onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
 		const name = event.target.name;

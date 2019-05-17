@@ -72,11 +72,13 @@ class TextInput<T> extends React.PureComponent<IInputProps, IState> {
 					onBlur={this.onBlur}
 					onChange={this.onChange}
 					defaultValue={this.props.defaultValue}
+					inputProps={{
+						maxLength: this.props.maxLength,
+						minLength: this.props.minLength,
+					}}
 					name={this.props.name}
 					lang={this.props.lang}
 					InputLabelProps={{
-						maxLength: this.props.maxLength,
-						minLength: this.props.minLength,
 						pattern: this.props.pattern,
 						title: this.props.title,
 						FormLabelClasses: { asterisk: this.props.classes.asterisk },
