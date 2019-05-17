@@ -3,19 +3,13 @@ import deburr from 'lodash/deburr';
 import Autosuggest, { SuggestionSelectedEventData } from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
-import TextField from '@material-ui/core/TextField';
+import TextField, { BaseTextFieldProps } from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { IHasError, IHelperText } from '../models';
-import { withStyles } from '@material-ui/core';
+import { Omit, withStyles } from '@material-ui/core';
 import styles from './styles';
 
-interface IInputProps {
-	label?: string;
-	placeholder?: string;
-	onChange: (data: string, index?: number) => void;
-	classes: any;
-}
 function renderInputComponent(inputProps: any) {
 	return (
 		<TextField
@@ -75,11 +69,19 @@ function getSuggestionValue(suggestion: string) {
 	return suggestion;
 }
 
-interface IAutoCompleteProps extends IInputProps, IHasError, IHelperText {
+interface IAutoCompleteProps {
 	suggestions: string[];
 	required?: boolean;
 	defaultValue: ReactText;
 	disabled: boolean;
+	classes: any;
+	label: string;
+	placeholder: string;
+	onChange: (value: string, index?: number) => void;
+	helperText?: string;
+	error?: boolean;
+	name?: string;
+	maxLength?: number;
 }
 
 interface IAutoCompleteState {
@@ -101,6 +103,12 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 		classes: {},
 		defaultValue: '',
 		disabled: false,
+		name: '',
+		label: '',
+		placeholder: '',
+		error: false,
+		helperText: '',
+		maxLength: -1,
 	};
 	public state = {
 		value: this.props.defaultValue,
@@ -148,6 +156,9 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 				<Autosuggest
 					{...autosuggestProps}
 					inputProps={{
+						name: this.props.name,
+						maxLength: this.props.maxLength,
+
 						required: inputProps.required,
 						styles: this.props.classes,
 						label: inputProps.label,

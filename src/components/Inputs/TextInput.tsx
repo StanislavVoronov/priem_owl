@@ -4,8 +4,6 @@ import React, { ChangeEvent, ReactText } from 'react';
 import { FormLabel, withStyles } from '@material-ui/core';
 import { noop } from 'lodash';
 import styles from './styles';
-import { TextFieldProps } from '../../../node_modules/@material-ui/core/TextField/TextField';
-import { lang } from 'moment';
 
 export interface IInputProps extends BaseTextFieldProps {
 	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -24,6 +22,8 @@ export interface IInputProps extends BaseTextFieldProps {
 	title: string;
 	name: string;
 	lang: string;
+	minLength: number;
+	maxLength: number;
 }
 
 interface IState {
@@ -41,6 +41,8 @@ class TextInput<T> extends React.PureComponent<IInputProps, IState> {
 		title: '',
 		name: '',
 		lang: 'rus',
+		minLength: -1,
+		maxLength: -1,
 	};
 
 	state = {
@@ -71,9 +73,10 @@ class TextInput<T> extends React.PureComponent<IInputProps, IState> {
 					onChange={this.onChange}
 					defaultValue={this.props.defaultValue}
 					name={this.props.name}
-					inputProps={{ lang: this.props.lang }}
-					lang="rus"
+					lang={this.props.lang}
 					InputLabelProps={{
+						maxLength: this.props.maxLength,
+						minLength: this.props.minLength,
 						pattern: this.props.pattern,
 						title: this.props.title,
 						FormLabelClasses: { asterisk: this.props.classes.asterisk },

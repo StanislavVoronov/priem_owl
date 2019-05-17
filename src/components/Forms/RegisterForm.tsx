@@ -113,6 +113,7 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					placeholder={'Введите фамилию'}
 					label="Фамилия"
 					onBlur={this.onChange}
+					minLength={10}
 				/>
 				<Autocomplete
 					disabled={this.props.disabled}
