@@ -89,6 +89,6 @@ export const validateRusTextField = (text: string): void | string => {
 	}
 };
 
-export const validateField = (text: string, ...checkList: Function[]): undefined | string => {
+export const validateField = (text: string, ...checkList: any[]): undefined | string => {
 	return checkList.map(fn => fn(text)).find(Boolean);
 };
