@@ -26,8 +26,8 @@ interface IProps {
 	data: IRegisterForm;
 	disabled: boolean;
 }
-interface IState {
-	invalidData: any;
+interface IState extends IRegisterForm {
+	invalidData: Record<keyof IRegisterForm, string>;
 	validation: boolean;
 }
 
@@ -35,10 +35,19 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 	static defaultProps = {
 		disabled: false,
 	};
-	// @ts-ignore
+
 	state = {
 		...this.props.data,
-		invalidData: {},
+		invalidData: {
+			lastName: '',
+			middleName: '',
+			firstName: '',
+			birthday: '',
+			gender: '',
+			login: '',
+			password: '',
+			repeatPassword: '',
+		},
 		validation: false,
 	};
 	validateField: React.ChangeEventHandler<HTMLInputElement> = event => {
@@ -58,23 +67,6 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 		this.setState({ ...this.state, [name]: inputValueAsString(event) });
 	};
 
-	onChangeLogin: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.props.updateForm({ login: inputValueAsString(event) });
-	};
-
-	onChangePassword: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.props.updateForm({ password: inputValueAsString(event) });
-	};
-	onChangeRepeatPassword: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.props.updateForm({ repeatPassword: inputValueAsString(event) });
-	};
-	onChangeMiddleName = (middleName: string) => {
-		this.props.updateForm({ middleName });
-	};
-
-	onChangeLastName: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.props.updateForm({ lastName: inputValueAsString(event) });
-	};
 	onChangeFirstName: React.ChangeEventHandler<HTMLInputElement> = event => {
 		const firstNamesDictionary = this.props.dictionaries[EDictionaryNameList.FirstNames];
 		// const gender =
@@ -83,6 +75,16 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 	};
 	onChangeGender = (_: any, gender: string) => {
 		this.props.updateForm({ gender: gender === '1' ? Gender.Male : Gender.Female });
+	};
+	onBlurRepeatPassword: React.ChangeEventHandler<HTMLInputElement> = event => {
+		let repeatPassword = '';
+		if (this.state.validation) {
+			repeatPassword = inputValueAsString(event) !== this.state.password ? 'Пароли не совпадают' : '';
+		}
+		this.setState({
+			repeatPassword: inputValueAsString(event),
+			invalidData: { ...this.state.invalidData, repeatPassword },
+		});
 	};
 	onSubmit = () => {
 		this.setState({ validation: true });
@@ -117,6 +119,8 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					defaultValue={this.props.data.lastName}
 					placeholder={'Введите фамилию'}
 					label="Фамилия"
+					helperText={this.state.invalidData.lastName}
+					error={!!this.state.invalidData.lastName}
 					onBlur={this.onChange}
 				/>
 				<Autocomplete
@@ -124,6 +128,8 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					label={'Имя'}
 					defaultValue={this.props.data.firstName}
 					required
+					helperText={this.state.invalidData.firstName}
+					error={!!this.state.invalidData.firstName}
 					onChange={this.onChangeFirstName}
 					placeholder={'Введите имя'}
 					suggestions={prepareDictionarySuggestions(dictionaryFirstNames)}
@@ -134,6 +140,8 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					name="middleName"
 					placeholder={'Введите отчество'}
 					defaultValue={this.props.data.middleName}
+					helperText={this.state.invalidData.middleName}
+					error={!!this.state.invalidData.middleName}
 					onChange={this.onChange}
 					suggestions={prepareDictionarySuggestions(filteredDictionaryMiddleName)}
 				/>
@@ -152,6 +160,8 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					disabled={this.props.disabled}
 					defaultValue={this.props.data.birthday}
 					type="date"
+					error={!!this.state.invalidData.birthday}
+					helperText={this.state.invalidData.birthday}
 					onBlur={this.onChange}
 				/>
 
@@ -164,8 +174,8 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 						defaultValue={this.props.data.login}
 						label="Логин"
 						onBlur={this.onChange}
-						error={invalidLogin}
-						helperText={'Логин должен быть не менее 5 символов'}
+						error={!!this.state.invalidData.login}
+						helperText={this.state.invalidData.login || 'Логин должен быть не менее 5 символов'}
 					/>
 
 					<TextInput
@@ -177,9 +187,9 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 						disabled={this.props.disabled}
 						type="password"
 						defaultValue={this.props.data.password}
-						onBlur={this.onChangePassword}
-						error={invalidPassword}
-						helperText={'Пароль должен быть не менее 8 символов'}
+						onBlur={this.onChange}
+						error={!!this.state.invalidData.password}
+						helperText={this.state.invalidData.password || 'Пароль должен быть не менее 8 символов'}
 					/>
 					<TextInput
 						required
@@ -187,9 +197,9 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 						type="password"
 						label="Подтвердить пароль"
 						defaultValue={this.props.data.repeatPassword}
-						onBlur={this.onChangeRepeatPassword}
-						error={invalidRepeatPassword}
-						helperText={invalidRepeatPassword ? 'Пароли не совпадают' : ''}
+						onBlur={this.onBlurRepeatPassword}
+						error={!!this.state.invalidData.repeatPassword}
+						helperText={this.state.invalidData.repeatPassword}
 					/>
 				</React.Fragment>
 				<LoadingButton>Зарегистрироваться</LoadingButton>
