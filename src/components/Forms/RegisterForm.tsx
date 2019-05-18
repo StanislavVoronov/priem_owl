@@ -87,7 +87,14 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 		});
 	};
 	onSubmit = () => {
-		this.setState({ validation: true });
+		const { invalidData, validation, ...formData } = this.state;
+		const checkValidation = Object.values(invalidData).some(Boolean);
+
+		if (checkValidation) {
+			this.props.updateForm(formData);
+		} else {
+			this.setState({ validation: true });
+		}
 	};
 	render() {
 		const { dictionaries } = this.props;
