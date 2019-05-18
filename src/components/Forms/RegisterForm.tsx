@@ -75,10 +75,11 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 	onChangeLastName: React.ChangeEventHandler<HTMLInputElement> = event => {
 		this.props.updateForm({ lastName: inputValueAsString(event) });
 	};
-	onChangeFirstName = (dictionaryFirstNames: IDictionary) => (value: string, index?: number) => {
-		const gender =
-			index !== undefined ? (dictionaryFirstNames.values[index].sex === 1 ? Gender.Male : Gender.Female) : Gender.None;
-		this.props.updateForm({ firstName: value.trim(), gender });
+	onChangeFirstName: React.ChangeEventHandler<HTMLInputElement> = event => {
+		const firstNamesDictionary = this.props.dictionaries[EDictionaryNameList.FirstNames];
+		// const gender =
+		// index !== undefined ? (firstNamesDictionary.values[index].sex === 1 ? Gender.Male : Gender.Female) : Gender.None;
+		this.props.updateForm({ firstName: inputValueAsString(event) });
 	};
 	onChangeGender = (_: any, gender: string) => {
 		this.props.updateForm({ gender: gender === '1' ? Gender.Male : Gender.Female });
@@ -122,18 +123,18 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					disabled={this.props.disabled}
 					label={'Имя'}
 					defaultValue={this.props.data.firstName}
-					required={true}
-					onChange={this.onChangeFirstName(dictionaryFirstNames)}
+					required
+					onChange={this.onChangeFirstName}
 					placeholder={'Введите имя'}
 					suggestions={prepareDictionarySuggestions(dictionaryFirstNames)}
 				/>
 
 				<Autocomplete
-					disabled={this.props.disabled}
 					label={'Отчество'}
+					name="middleName"
 					placeholder={'Введите отчество'}
 					defaultValue={this.props.data.middleName}
-					onChange={this.onChangeMiddleName}
+					onChange={this.onChange}
 					suggestions={prepareDictionarySuggestions(filteredDictionaryMiddleName)}
 				/>
 

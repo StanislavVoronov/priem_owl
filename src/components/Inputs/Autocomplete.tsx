@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from 'react';
+import React, { BaseSyntheticEvent, ChangeEvent } from 'react';
 import deburr from 'lodash/deburr';
-import Autosuggest, { SuggestionSelectedEventData } from 'react-autosuggest';
+import Autosuggest, { OnSuggestionSelected, SuggestionSelectedEventData } from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import TextField, { BaseTextFieldProps } from '@material-ui/core/TextField';
@@ -78,7 +78,7 @@ interface IAutoCompleteProps {
 	classes: any;
 	label: string;
 	placeholder: string;
-	onChange: (value: string, index?: number) => void;
+	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 	onBlur: (event: ChangeEvent<HTMLInputElement>) => void;
 	helperText?: string;
 	error?: boolean;
@@ -104,6 +104,8 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 		suggestions: [],
 		classes: {},
 		onBlur: noop,
+		required: false,
+		disabled: false,
 	};
 	state = {
 		value: this.props.defaultValue,
@@ -121,21 +123,20 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 			suggestions: [],
 		});
 	};
-	handleChange = (event: any, { newValue }: { newValue: string }) => {
+	handleChange = (event: ChangeEvent<HTMLInputElement>, { newValue }: { newValue: string }) => {
 		this.setState({
 			value: newValue,
 		});
-		this.props.onChange(newValue);
+		this.props.onChange(event);
 	};
 	onBlur: React.ChangeEventHandler<HTMLInputElement> = event => {
 		this.props.onBlur(event);
 	};
-	onSelectSuggestion = (event: any, data: SuggestionSelectedEventData<string>) => {
-		const index = this.props.suggestions.findIndex(item => item === data.suggestion) || 0;
+
+	onSelectSuggestion = (formEvent: React.FormEvent<HTMLInputElement>, data: SuggestionSelectedEventData<string>) => {
 		this.setState(state => {
 			return { ...state, value: data.suggestion };
 		});
-		this.props.onChange(data.suggestion, index);
 	};
 	render() {
 		const autosuggestProps = {
