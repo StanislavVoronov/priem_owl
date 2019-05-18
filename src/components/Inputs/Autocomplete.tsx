@@ -1,4 +1,4 @@
-import React, { ReactText } from 'react';
+import React, { ChangeEvent } from 'react';
 import deburr from 'lodash/deburr';
 import Autosuggest, { SuggestionSelectedEventData } from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
@@ -9,6 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { IHasError, IHelperText } from '../models';
 import { Omit, withStyles } from '@material-ui/core';
 import styles from './styles';
+import { noop } from '../../../node_modules/@types/react-select/lib/utils';
 
 function renderInputComponent(inputProps: any) {
 	return (
@@ -72,12 +73,13 @@ function getSuggestionValue(suggestion: string) {
 interface IAutoCompleteProps {
 	suggestions: string[];
 	required?: boolean;
-	defaultValue: ReactText;
+	defaultValue: string;
 	disabled: boolean;
 	classes: any;
 	label: string;
 	placeholder: string;
 	onChange: (value: string, index?: number) => void;
+	onBlur: (event: ChangeEvent<HTMLInputElement>) => void;
 	helperText?: string;
 	error?: boolean;
 	name?: string;
@@ -85,7 +87,7 @@ interface IAutoCompleteProps {
 }
 
 interface IAutoCompleteState {
-	value: ReactText;
+	value: string;
 	suggestions: string[];
 }
 
@@ -98,49 +100,44 @@ const renderSuggestionsContainer = (options: any) => {
 };
 
 class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoCompleteState> {
-	public defaultProps = {
+	static defaultProps = {
 		suggestions: [],
 		classes: {},
-		defaultValue: '',
-		disabled: false,
-		name: '',
-		label: '',
-		placeholder: '',
-		error: false,
-		helperText: '',
-		maxLength: -1,
+		onBlur: noop,
 	};
-	public state = {
+	state = {
 		value: this.props.defaultValue,
 		suggestions: [],
 	};
 
-	public handleSuggestionsFetchRequested = ({ value }: { value: string }) => {
+	handleSuggestionsFetchRequested = ({ value }: { value: string }) => {
 		this.setState({
 			suggestions: getSuggestions(value, this.props.suggestions),
 		});
 	};
 
-	public handleSuggestionsClearRequested = () => {
+	handleSuggestionsClearRequested = () => {
 		this.setState({
 			suggestions: [],
 		});
 	};
-	public handleChange = (event: any, { newValue }: { newValue: string }) => {
+	handleChange = (event: any, { newValue }: { newValue: string }) => {
 		this.setState({
 			value: newValue,
 		});
 		this.props.onChange(newValue);
 	};
-
-	public onSelectSuggestion = (event: any, data: SuggestionSelectedEventData<string>) => {
+	onBlur: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.props.onBlur(event);
+	};
+	onSelectSuggestion = (event: any, data: SuggestionSelectedEventData<string>) => {
 		const index = this.props.suggestions.findIndex(item => item === data.suggestion) || 0;
 		this.setState(state => {
 			return { ...state, value: data.suggestion };
 		});
 		this.props.onChange(data.suggestion, index);
 	};
-	public render() {
+	render() {
 		const autosuggestProps = {
 			renderInputComponent,
 			suggestions: this.state.suggestions,
@@ -158,13 +155,13 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 					inputProps={{
 						name: this.props.name,
 						maxLength: this.props.maxLength,
-
 						required: inputProps.required,
 						styles: this.props.classes,
 						label: inputProps.label,
 						placeholder: inputProps.placeholder,
-						value: this.state.value as string,
+						value: this.state.value,
 						onChange: this.handleChange,
+						onBlur: this.onBlur,
 						helperText: this.props.helperText,
 						error: this.props.error,
 						disabled: this.props.disabled,

@@ -1,4 +1,4 @@
-import React, { ReactText } from 'react';
+import React, { ChangeEvent, ReactText } from 'react';
 import { Autocomplete, Button, H2, RadioButtonGroup, TextInput, LoadingButton } from '$components';
 import {
 	EDictionaryNameList,
@@ -10,11 +10,13 @@ import {
 	prepareDictionarySuggestions,
 	EnrollForms,
 	IStylable,
+	validateField,
+	validateRequireTextField,
+	validateMinMaxLengthField,
 } from '$common';
 import { IDictionary, IDictionaryState } from '@mgutm-fcu/dictionary';
 
 import styles from './styles.module.css';
-import { max } from 'moment';
 
 export const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { value: 2, label: 'Жен.' }];
 
@@ -24,34 +26,36 @@ interface IProps {
 	data: IRegisterForm;
 	disabled: boolean;
 }
-interface IState extends IRegisterForm {
+interface IState {
 	invalidData: any;
 	validation: boolean;
 }
+
 class RegisterForm extends React.PureComponent<IProps, IState> {
 	static defaultProps = {
 		disabled: false,
 	};
+	// @ts-ignore
 	state = {
 		...this.props.data,
 		invalidData: {},
 		validation: false,
 	};
 	validateField: React.ChangeEventHandler<HTMLInputElement> = event => {
+		const { validation } = this.state;
 		const name = event.target.name;
-		const isRequired = event.target.required;
+		const value = inputValueAsString(event);
+		const required = event.target.required;
 		const maxLength = event.target.maxLength;
 		const minLength = event.target.minLength;
 		const lang = event.target.lang;
-		console.log(name, isRequired, maxLength, minLength, lang);
-		console.log('event', event.target);
+		if (validation) {
+			const errorMessage = validateField(event, validateRequireTextField, validateMinMaxLengthField);
+		}
 	};
 	onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
 		const name = event.target.name;
 		this.setState({ ...this.state, [name]: inputValueAsString(event) });
-	};
-	onChangeBirthday: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.props.updateForm({ birthday: inputValueAsString(event) });
 	};
 
 	onChangeLogin: React.ChangeEventHandler<HTMLInputElement> = event => {
@@ -113,7 +117,6 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					placeholder={'Введите фамилию'}
 					label="Фамилия"
 					onBlur={this.onChange}
-					minLength={10}
 				/>
 				<Autocomplete
 					disabled={this.props.disabled}
@@ -142,29 +145,31 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					onChange={this.onChangeGender}
 				/>
 				<TextInput
-					required={true}
+					required
+					name="birthday"
 					label="Дата рождения"
 					disabled={this.props.disabled}
 					defaultValue={this.props.data.birthday}
 					type="date"
-					onBlur={this.onChangeBirthday}
+					onBlur={this.onChange}
 				/>
 
 				<React.Fragment>
 					<TextInput
 						required
+						name="login"
 						pattern={'[a-z0-9_-]'}
 						disabled={this.props.disabled}
 						defaultValue={this.props.data.login}
 						label="Логин"
-						onBlur={this.onChangeLogin}
+						onBlur={this.onChange}
 						error={invalidLogin}
-						title="Логин может содержать только латинские строчные буквы, цифры, подчеркивание и тире"
 						helperText={'Логин должен быть не менее 5 символов'}
 					/>
 
 					<TextInput
 						required
+						name="password"
 						label="Пароль"
 						pattern="[A-Za-z0-9]"
 						title="Логин может содержать только латинские буквы и цифры"

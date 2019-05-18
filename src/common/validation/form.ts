@@ -1,6 +1,16 @@
-import { Gender, IContactsForm, IDocument, IEducationForm, IPerson, IPersonForm, IRegisterForm } from '$common';
-import EducationForm from '../../components/Forms/EducationForm';
+import {
+	Gender,
+	IContactsForm,
+	IDocument,
+	IEducationForm,
+	inputValueAsNumber,
+	inputValueAsString,
+	IPerson,
+	IPersonForm,
+	IRegisterForm,
+} from '$common';
 import { RUS_ALPFABET } from '../constants';
+import React, { ChangeEvent } from 'react';
 
 export const validateDataForm = (data: Record<string, any>): boolean => {
 	return !Object.values(data).some(
@@ -77,8 +87,8 @@ export const validateRegistrationForm = (fields: IRegisterForm): boolean => {
 	return validateDataForm(fields);
 };
 
-export const validateEmptyTextField = (text: string): void | string => {
-	if (text.length === 0) {
+export const validateRequireTextField: React.ChangeEventHandler<HTMLInputElement> = (event): string | void => {
+	if (event.target.required && inputValueAsString(event).length > 0) {
 		return 'Поле не должно быть пустым';
 	}
 };
@@ -89,6 +99,22 @@ export const validateRusTextField = (text: string): void | string => {
 	}
 };
 
-export const validateField = (text: string, ...checkList: any[]): undefined | string => {
-	return checkList.map(fn => fn(text)).find(Boolean);
+export const validateField = (
+	event: ChangeEvent<HTMLInputElement>,
+	...args: Array<(event: any) => string | void>
+): void | string => {
+	return args.map(fn => fn(event)).find(Boolean);
+};
+
+export const validateMinMaxLengthField: React.ChangeEventHandler<HTMLInputElement> = (event): void | string => {
+	const valueLength = inputValueAsString(event).length;
+	const minLength = event.target.minLength;
+	const maxLength = event.target.maxLength;
+
+	if (valueLength < event.target.minLength) {
+		return `Поле должно содержать минимум ${minLength} символов`;
+	}
+	if (maxLength > -1 && valueLength > maxLength) {
+		return `Поле может содержать только ${maxLength} символов`;
+	}
 };

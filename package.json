@@ -4,7 +4,7 @@
   "description": "owl",
   "main": "index.js",
   "scripts": {
-    "tsc": "rm -rf build/dist && tsc",
+    "tsc": "rm -rf build/dist && tsc --watch",
     "lint": "tslint src/**/*.{tsx,ts} --fix",
     "build": "node scripts/build.js",
     "delivery": "sh ./scripts/delivery.sh",

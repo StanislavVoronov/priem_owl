@@ -1,11 +1,12 @@
 import { IDisabled, IHasError, IHelperText } from '../models';
 import TextField, { BaseTextFieldProps } from '@material-ui/core/TextField';
 import React, { ChangeEvent, ReactText } from 'react';
-import { FormLabel, withStyles } from '@material-ui/core';
+import { FormLabel, Omit, withStyles } from '@material-ui/core';
 import { noop } from 'lodash';
 import styles from './styles';
+import { IRegisterForm } from '$common';
 
-export interface IInputProps extends BaseTextFieldProps {
+export interface IInputProps<T> extends BaseTextFieldProps {
 	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 	classes: any;
 	type: string;
@@ -30,7 +31,8 @@ interface IState {
 	value?: string;
 	isControlled: boolean;
 }
-class TextInput<T> extends React.PureComponent<IInputProps, IState> {
+
+class TextInput<T> extends React.PureComponent<IInputProps<T>, IState> {
 	static defaultProps = {
 		onBlur: noop,
 		onChange: noop,
@@ -53,7 +55,7 @@ class TextInput<T> extends React.PureComponent<IInputProps, IState> {
 	public onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
 		this.props.onChange(event);
 	};
-	onBlur: React.ChangeEventHandler<HTMLInputElement> = event => {
+	onBlur = (event: any) => {
 		this.props.onBlur(event);
 	};
 	public render() {
