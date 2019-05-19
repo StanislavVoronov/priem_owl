@@ -15,6 +15,7 @@ import {
 	validateMinMaxLengthField,
 	isUndefined,
 	validateTextFieldLang,
+	validateTextFieldPattern,
 } from '$common';
 import { IDictionary, IDictionaryState } from '@mgutm-fcu/dictionary';
 
@@ -78,6 +79,7 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 			validateRequireTextField,
 			validateMinMaxLengthField,
 			validateTextFieldLang,
+			validateTextFieldPattern,
 		);
 
 		this.setState({
