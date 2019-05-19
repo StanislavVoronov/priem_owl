@@ -88,6 +88,8 @@ export const validateRegistrationForm = (fields: IRegisterForm): boolean => {
 };
 
 export const validateRequireTextField: React.ChangeEventHandler<HTMLInputElement> = (event): string | void => {
+	console.log(event.target.required, inputValueAsString(event), inputValueAsString(event).length);
+
 	if (event.target.required && inputValueAsString(event).length === 0) {
 		return 'Поле не должно быть пустым';
 	}
