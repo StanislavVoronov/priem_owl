@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "tsc": "rm -rf build/dist && tsc --watch",
+    "update": "git pull origin",
     "lint": "tslint src/**/*.{tsx,ts} --fix",
     "build": "node scripts/build.js",
     "delivery": "sh ./scripts/delivery.sh",

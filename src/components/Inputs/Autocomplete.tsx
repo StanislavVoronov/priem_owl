@@ -1,15 +1,14 @@
-import React, { BaseSyntheticEvent, ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 import deburr from 'lodash/deburr';
-import Autosuggest, { OnSuggestionSelected, SuggestionSelectedEventData } from 'react-autosuggest';
+import Autosuggest, { SuggestionSelectedEventData } from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import TextField, { BaseTextFieldProps } from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
-import { IHasError, IHelperText } from '../models';
-import { Omit, withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
 import styles from './styles';
-import { noop } from '../../../node_modules/@types/react-select/lib/utils';
+import { noop } from 'react-select/lib/utils';
 
 function renderInputComponent(inputProps: any) {
 	return (
