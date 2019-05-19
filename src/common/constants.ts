@@ -1,2 +1,2 @@
-export const RUS_ALPFABET = /^[аАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ]+$/;
-export const ENG_ALPFABET = /^[A-Za-z]+$/;
+export const RUS_ALPHABET = /^[аАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ]+$/;
+export const ENG_ALPHABET = /^[A-Za-z]+$/;

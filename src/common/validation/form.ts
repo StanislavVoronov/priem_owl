@@ -9,7 +9,7 @@ import {
 	IPersonForm,
 	IRegisterForm,
 } from '$common';
-import { ENG_ALPFABET, RUS_ALPFABET } from '../constants';
+import { ENG_ALPHABET, RUS_ALPHABET } from '../constants';
 import React, { ChangeEvent } from 'react';
 
 export const validateDataForm = (data: Record<string, any>): boolean => {
@@ -94,7 +94,7 @@ export const validateRequireTextField: React.ChangeEventHandler<HTMLInputElement
 };
 
 export const validateRusTextField = (text: string): void | string => {
-	if (!RUS_ALPFABET.test(text)) {
+	if (!RUS_ALPHABET.test(text)) {
 		return 'Поле может содержать только русские буквы';
 	}
 };
@@ -124,10 +124,10 @@ export const validateTextFieldLang: React.ChangeEventHandler<HTMLInputElement> =
 	const value = inputValueAsString(event);
 	switch (lang) {
 		case 'rus': {
-			return !RUS_ALPFABET.test(value) && 'Поле может содержать только русские буквы';
+			return !RUS_ALPHABET.test(value) && 'Поле может содержать только русские буквы';
 		}
 		case 'eng': {
-			return !ENG_ALPFABET.test(value) && 'Поле может содержать только русские буквы';
+			return !ENG_ALPHABET.test(value) && 'Поле может содержать только русские буквы';
 		}
 		default: {
 			return '';
