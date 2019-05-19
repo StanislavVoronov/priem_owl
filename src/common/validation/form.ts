@@ -9,7 +9,7 @@ import {
 	IPersonForm,
 	IRegisterForm,
 } from '$common';
-import { RUS_ALPFABET } from '../constants';
+import { ENG_ALPFABET, RUS_ALPFABET } from '../constants';
 import React, { ChangeEvent } from 'react';
 
 export const validateDataForm = (data: Record<string, any>): boolean => {
@@ -117,4 +117,30 @@ export const validateMinMaxLengthField: React.ChangeEventHandler<HTMLInputElemen
 	if (maxLength > -1 && valueLength > maxLength) {
 		return `Поле может содержать только ${maxLength} символов`;
 	}
+};
+
+export const validateTextFieldLang: React.ChangeEventHandler<HTMLInputElement> = event => {
+	const lang = event.target.lang.toLowerCase();
+	const value = inputValueAsString(event);
+	switch (lang) {
+		case 'rus': {
+			return !RUS_ALPFABET.test(value) && 'Поле может содержать только русские буквы';
+		}
+		case 'eng': {
+			return !ENG_ALPFABET.test(value) && 'Поле может содержать только русские буквы';
+		}
+		default: {
+			return '';
+		}
+	}
+};
+const patternErrorMessage = (pattern: string) => {
+	return `Поле не соответствует шаблону ${pattern}`;
+};
+export const validateTextFieldPattern: React.ChangeEventHandler<HTMLInputElement> = event => {
+	const pattern = event.target.pattern;
+	const regExpPattern = new RegExp(event.target.pattern);
+	const value = inputValueAsString(event);
+
+	return !regExpPattern.test(value) && patternErrorMessage(pattern);
 };

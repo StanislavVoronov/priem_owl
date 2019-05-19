@@ -1,5 +1,5 @@
 import { Action } from 'redux-actions';
-import { IDictionaryItem } from './models/common';
+import { IDictionaryItem } from '$common';
 import { ChangeEvent } from 'react';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 import { IRegisterForm } from '$common';

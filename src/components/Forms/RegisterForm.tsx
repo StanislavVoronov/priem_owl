@@ -13,6 +13,8 @@ import {
 	validateField,
 	validateRequireTextField,
 	validateMinMaxLengthField,
+	isUndefined,
+	validateTextFieldLang,
 } from '$common';
 import { IDictionary, IDictionaryState } from '@mgutm-fcu/dictionary';
 
@@ -60,11 +62,32 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 		const lang = event.target.lang;
 		if (validation) {
 			const errorMessage = validateField(event, validateRequireTextField, validateMinMaxLengthField);
+
+			this.setState({
+				invalidData: {
+					...this.state.invalidData,
+					[name]: isUndefined(errorMessage) ? void 0 : errorMessage,
+				},
+			});
 		}
 	};
 	onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
 		const name = event.target.name;
-		this.setState({ ...this.state, [name]: inputValueAsString(event) });
+		const errorMessage = validateField(
+			event,
+			validateRequireTextField,
+			validateMinMaxLengthField,
+			validateTextFieldLang,
+		);
+
+		this.setState({
+			...this.state,
+			[name]: inputValueAsString(event),
+			invalidData: {
+				...this.state.invalidData,
+				[name]: errorMessage,
+			},
+		});
 	};
 
 	onChangeFirstName: React.ChangeEventHandler<HTMLInputElement> = event => {
@@ -83,7 +106,10 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 		}
 		this.setState({
 			repeatPassword: inputValueAsString(event),
-			invalidData: { ...this.state.invalidData, repeatPassword },
+			invalidData: {
+				...this.state.invalidData,
+				repeatPassword,
+			},
 		});
 	};
 	onSubmit = () => {
@@ -101,13 +127,6 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 		const dictionaryFirstNames = dictionaries[EDictionaryNameList.FirstNames];
 		const dictionaryMiddleNames = dictionaries[EDictionaryNameList.MiddleNames];
 
-		const invalidPassword = this.props.data.password.length > 0 && this.props.data.password.length < 8;
-		const invalidLogin = this.props.data.login.length > 0 && this.props.data.login.length < 5;
-		const invalidRepeatPassword =
-			this.props.data.password.length > 0 &&
-			this.props.data.repeatPassword.length > 0 &&
-			this.props.data.password !== this.props.data.repeatPassword;
-
 		const filteredDictionaryMiddleName = dictionaryMiddleNames
 			? this.props.data.gender
 				? {
@@ -115,6 +134,7 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 				  }
 				: dictionaryMiddleNames
 			: { values: [] };
+		console.log('state', this.state);
 
 		return (
 			<form onSubmit={this.onSubmit} className="flexColumn">
@@ -187,16 +207,15 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 
 					<TextInput
 						required
+						minLength={5}
 						name="password"
 						label="Пароль"
-						pattern="[A-Za-z0-9]"
-						title="Логин может содержать только латинские буквы и цифры"
 						disabled={this.props.disabled}
 						type="password"
 						defaultValue={this.props.data.password}
 						onBlur={this.onChange}
 						error={!!this.state.invalidData.password}
-						helperText={this.state.invalidData.password || 'Пароль должен быть не менее 8 символов'}
+						helperText={this.state.invalidData.password || 'Пароль должен быть не менее 5 символов'}
 					/>
 					<TextInput
 						required
