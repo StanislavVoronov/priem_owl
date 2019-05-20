@@ -145,7 +145,9 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 		}
 	};
 	onChangeLogin: React.ChangeEventHandler<HTMLInputElement> = event => {
-		const login = validateTextInput(event);
+		const login =
+			validateTextInput(event) ||
+			validateMinMaxLengthField(inputValueAsString(event), event.target.minLength, event.target.maxLength);
 		this.setState({
 			login: inputValueAsString(event),
 			invalidData: {
@@ -228,14 +230,12 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 						required
 						name="login"
 						minLength={5}
-						maxLength={18}
-						lang="eng"
+						maxLength={20}
 						pattern={'[a-z0-9_-]'}
 						disabled={this.props.disabled}
 						defaultValue={this.props.data.login}
 						label="Логин"
 						onChange={this.onChangeLogin}
-						onBlur={this.onChange}
 						error={!!this.state.invalidData.login}
 						helperText={this.state.invalidData.login || 'Логин должен быть не менее 5 символов'}
 					/>
@@ -243,13 +243,13 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					<TextInput
 						required
 						minLength={5}
-						lang="eng"
+						pattern={'[a-z0-9_-]'}
 						name="password"
 						label="Пароль"
 						disabled={this.props.disabled}
 						type="password"
 						defaultValue={this.props.data.password}
-						onBlur={this.onChange}
+						onChange={this.onChange}
 						error={!!this.state.invalidData.password}
 						helperText={this.state.invalidData.password || 'Пароль должен быть не менее 5 символов'}
 					/>

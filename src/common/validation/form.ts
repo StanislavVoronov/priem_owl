@@ -78,11 +78,7 @@ export const validateRequireTextField = (value: string, required: boolean): stri
 export const validateTextInput = (event: ChangeEvent<HTMLInputElement>): void | string => {
 	const value = inputValueAsString(event);
 	const { required, minLength, maxLength, lang } = event.target;
-	return (
-		validateRequireTextField(value, required) ||
-		validateMinMaxLengthField(value, minLength, maxLength) ||
-		validateTextFieldLang(value, lang)
-	);
+	return validateRequireTextField(value, required) || validateTextFieldLang(value, lang);
 };
 
 export const validateMinMaxLengthField = (value: string, minLength: number, maxLength: number): void | string => {
@@ -100,7 +96,7 @@ export const validateTextFieldLang = (value: string, lang: string): string | voi
 			return !RUS_ALPHABET.test(value) ? 'Поле может содержать только русские буквы' : '';
 		}
 		case 'eng': {
-			return !ENG_ALPHABET.test(value) ? 'Поле может содержать только русские буквы' : '';
+			return !ENG_ALPHABET.test(value) ? 'Поле может содержать только латинские буквы' : '';
 		}
 		default: {
 			return '';
