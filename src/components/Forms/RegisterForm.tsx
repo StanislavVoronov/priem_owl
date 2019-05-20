@@ -88,7 +88,7 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 		this.setState({ middleName: value, invalidData: { ...this.state.invalidData, middleName: errorMessage } });
 	};
 	onChangeFirstName = (firstName: string) => {
-		let firstNameError = validateRequireTextField(firstName, true) || validateTextFieldLang(firstName, 'rus');
+		const firstNameError = validateRequireTextField(firstName, true) || validateTextFieldLang(firstName, 'rus');
 
 		const firstNamesDictionary = this.props.dictionaries[EDictionaryNameList.FirstNames];
 		const person = firstNamesDictionary.values.find(item => item.name === firstName);
@@ -107,7 +107,7 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 		this.props.updateForm({ gender: gender === '1' ? Gender.Male : Gender.Female });
 	};
 	onBlurRepeatPassword: React.ChangeEventHandler<HTMLInputElement> = event => {
-		let repeatPassword =
+		const repeatPassword =
 			validateTextInput(event) || inputValueAsString(event) !== this.state.password ? 'Пароли не совпадают' : '';
 
 		this.setState({

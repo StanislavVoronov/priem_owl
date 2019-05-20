@@ -78,6 +78,7 @@ export const validateRequireTextField = (value: string, required: boolean): stri
 export const validateTextInput = (event: ChangeEvent<HTMLInputElement>): void | string => {
 	const value = inputValueAsString(event);
 	const { required, minLength, maxLength, lang } = event.target;
+
 	return validateRequireTextField(value, required) || validateTextFieldLang(value, lang);
 };
 
