@@ -27,7 +27,6 @@ import {
 	validateDocumentsForm,
 	validateEducationForm,
 	validatePersonForm,
-	validateRegistrationForm,
 } from '$common';
 import styles from './styles.module.css';
 import Logo from '$assets/mgutm.png';
@@ -74,9 +73,6 @@ export class EnrollView extends React.PureComponent<IProps> {
 	};
 	validateForm = () => {
 		switch (this.props.activeStep) {
-			case EnrollForm.Registration: {
-				return validateRegistrationForm(this.props.registrationData);
-			}
 			case EnrollForm.Person: {
 				return validatePersonForm(this.props.personData);
 			}

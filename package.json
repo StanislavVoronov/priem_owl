@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "tsc": "rm -rf build/dist && tsc --watch",
+    "pipeline": "npm run update && npm run build && npm run delivery",
     "update": "git pull origin",
     "lint": "tslint src/**/*.{tsx,ts} --fix",
     "build": "node scripts/build.js",

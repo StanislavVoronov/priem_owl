@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactText } from 'react';
+import React, { ChangeEvent, FormEvent, FormEventHandler, ReactText } from 'react';
 import { Autocomplete, Button, H2, RadioButtonGroup, TextInput, LoadingButton } from '$components';
 import {
 	EDictionaryNameList,
@@ -10,7 +10,7 @@ import {
 	prepareDictionarySuggestions,
 	EnrollForms,
 	IStylable,
-	validateField,
+	validateTextInput,
 	validateRequireTextField,
 	validateMinMaxLengthField,
 	isUndefined,
@@ -20,6 +20,7 @@ import {
 import { IDictionary, IDictionaryState } from '@mgutm-fcu/dictionary';
 
 import styles from './styles.module.css';
+import { RUS_ALPHABET } from '../../common/constants';
 
 export const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { value: 2, label: 'Жен.' }];
 
@@ -29,8 +30,9 @@ interface IProps {
 	data: IRegisterForm;
 	disabled: boolean;
 }
+
 interface IState extends IRegisterForm {
-	invalidData: Record<keyof IRegisterForm, string>;
+	invalidData: Record<keyof IRegisterForm, string | void>;
 	validation: boolean;
 }
 
@@ -53,34 +55,9 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 		},
 		validation: false,
 	};
-	validateField: React.ChangeEventHandler<HTMLInputElement> = event => {
-		const { validation } = this.state;
+	onBlur: React.ChangeEventHandler<HTMLInputElement> = event => {
 		const name = event.target.name;
-		const value = inputValueAsString(event);
-		const required = event.target.required;
-		const maxLength = event.target.maxLength;
-		const minLength = event.target.minLength;
-		const lang = event.target.lang;
-		if (validation) {
-			const errorMessage = validateField(event, validateRequireTextField, validateMinMaxLengthField);
-
-			this.setState({
-				invalidData: {
-					...this.state.invalidData,
-					[name]: isUndefined(errorMessage) ? void 0 : errorMessage,
-				},
-			});
-		}
-	};
-	onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
-		const name = event.target.name;
-		const errorMessage = validateField(
-			event,
-			validateRequireTextField,
-			validateMinMaxLengthField,
-			validateTextFieldLang,
-			validateTextFieldPattern,
-		);
+		const errorMessage = validateTextInput(event);
 
 		this.setState({
 			...this.state,
@@ -91,21 +68,48 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 			},
 		});
 	};
+	onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
+		const name = event.target.name;
+		const errorMessage = validateTextInput(event);
+		if (this.state.validation) {
+			this.setState({
+				...this.state,
+				[name]: inputValueAsString(event),
+				invalidData: {
+					...this.state.invalidData,
+					[name]: errorMessage,
+				},
+			});
+		}
+	};
+	onChangeMiddleName = (value: string) => {
+		const errorMessage = !RUS_ALPHABET.test(value) ? 'Поле может содержать только русские буквы' : '';
 
-	onChangeFirstName: React.ChangeEventHandler<HTMLInputElement> = event => {
+		this.setState({ middleName: value, invalidData: { ...this.state.invalidData, middleName: errorMessage } });
+	};
+	onChangeFirstName = (firstName: string) => {
+		let firstNameError = validateRequireTextField(firstName, true) || validateTextFieldLang(firstName, 'rus');
+
 		const firstNamesDictionary = this.props.dictionaries[EDictionaryNameList.FirstNames];
-		// const gender =
-		// index !== undefined ? (firstNamesDictionary.values[index].sex === 1 ? Gender.Male : Gender.Female) : Gender.None;
-		this.props.updateForm({ firstName: inputValueAsString(event) });
+		const person = firstNamesDictionary.values.find(item => item.name === firstName);
+		const gender = person ? (person.sex === '1' ? Gender.Male : Gender.Female) : Gender.None;
+		console.log('firstNamesDictionary', firstNamesDictionary);
+		this.setState({
+			firstName,
+			gender,
+			invalidData: {
+				...this.state.invalidData,
+				firstNameError,
+			},
+		});
 	};
 	onChangeGender = (_: any, gender: string) => {
 		this.props.updateForm({ gender: gender === '1' ? Gender.Male : Gender.Female });
 	};
 	onBlurRepeatPassword: React.ChangeEventHandler<HTMLInputElement> = event => {
-		let repeatPassword = '';
-		if (this.state.validation) {
-			repeatPassword = inputValueAsString(event) !== this.state.password ? 'Пароли не совпадают' : '';
-		}
+		let repeatPassword =
+			validateTextInput(event) || inputValueAsString(event) !== this.state.password ? 'Пароли не совпадают' : '';
+
 		this.setState({
 			repeatPassword: inputValueAsString(event),
 			invalidData: {
@@ -114,20 +118,47 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 			},
 		});
 	};
-	onSubmit = () => {
-		const { invalidData, validation, ...formData } = this.state;
-		const checkValidation = Object.values(invalidData).some(Boolean);
+	onSubmit: FormEventHandler<HTMLFormElement> = event => {
+		event.preventDefault();
+		const { invalidData, validation, middleName, ...requiredFields } = this.state;
+		let validationFields: Record<keyof IRegisterForm, string> = {
+			lastName: '',
+			middleName: '',
+			firstName: '',
+			birthday: '',
+			gender: '',
+			login: '',
+			password: '',
+			repeatPassword: '',
+		};
+		Object.entries(requiredFields).forEach((values: string[]) => {
+			validationFields = {
+				...validationFields,
+				[values[0]]: validateRequireTextField(values[1], true),
+			};
+		});
 
-		if (checkValidation) {
-			this.props.updateForm(formData);
+		if (Object.values(validationFields).some(Boolean)) {
+			this.setState({ validation: true, invalidData: validationFields });
 		} else {
-			this.setState({ validation: true });
+			this.props.updateForm({ middleName, ...requiredFields });
 		}
+	};
+	onChangeLogin: React.ChangeEventHandler<HTMLInputElement> = event => {
+		const login = validateTextInput(event);
+		this.setState({
+			login: inputValueAsString(event),
+			invalidData: {
+				...this.state.invalidData,
+				login,
+			},
+		});
 	};
 	render() {
 		const { dictionaries } = this.props;
 		const dictionaryFirstNames = dictionaries[EDictionaryNameList.FirstNames];
 		const dictionaryMiddleNames = dictionaries[EDictionaryNameList.MiddleNames];
+		const { middleName, ...requiredFields } = this.state.invalidData;
 
 		const filteredDictionaryMiddleName = dictionaryMiddleNames
 			? this.props.data.gender
@@ -136,21 +167,20 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 				  }
 				: dictionaryMiddleNames
 			: { values: [] };
-		console.log('state', this.state);
 
 		return (
-			<form onSubmit={this.onSubmit} className="flexColumn">
+			<form onSubmit={this.onSubmit} className="flexColumn" noValidate={true}>
 				<TextInput
 					disabled={this.props.disabled}
 					name="lastName"
-					onChange={this.validateField}
+					onChange={this.onChange}
 					required
 					defaultValue={this.props.data.lastName}
 					placeholder={'Введите фамилию'}
 					label="Фамилия"
 					helperText={this.state.invalidData.lastName}
 					error={!!this.state.invalidData.lastName}
-					onBlur={this.onChange}
+					onBlur={this.onBlur}
 				/>
 				<Autocomplete
 					disabled={this.props.disabled}
@@ -171,10 +201,9 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					defaultValue={this.props.data.middleName}
 					helperText={this.state.invalidData.middleName}
 					error={!!this.state.invalidData.middleName}
-					onChange={this.onChange}
+					onChange={this.onChangeMiddleName}
 					suggestions={prepareDictionarySuggestions(filteredDictionaryMiddleName)}
 				/>
-
 				<RadioButtonGroup
 					title="Пол"
 					required={true}
@@ -198,10 +227,14 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					<TextInput
 						required
 						name="login"
+						minLength={5}
+						maxLength={18}
+						lang="eng"
 						pattern={'[a-z0-9_-]'}
 						disabled={this.props.disabled}
 						defaultValue={this.props.data.login}
 						label="Логин"
+						onChange={this.onChangeLogin}
 						onBlur={this.onChange}
 						error={!!this.state.invalidData.login}
 						helperText={this.state.invalidData.login || 'Логин должен быть не менее 5 символов'}
@@ -210,6 +243,7 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					<TextInput
 						required
 						minLength={5}
+						lang="eng"
 						name="password"
 						label="Пароль"
 						disabled={this.props.disabled}
@@ -221,6 +255,7 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 					/>
 					<TextInput
 						required
+						lang="eng"
 						disabled={this.props.disabled}
 						type="password"
 						label="Подтвердить пароль"
@@ -230,7 +265,7 @@ class RegisterForm extends React.PureComponent<IProps, IState> {
 						helperText={this.state.invalidData.repeatPassword}
 					/>
 				</React.Fragment>
-				<LoadingButton>Зарегистрироваться</LoadingButton>
+				<LoadingButton disabled={Object.values(requiredFields).some(Boolean)}>Зарегистрироваться</LoadingButton>
 			</form>
 		);
 	}

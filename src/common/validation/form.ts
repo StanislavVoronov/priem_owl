@@ -68,68 +68,39 @@ export const validateEducationForm = (fields: IEducationForm): boolean => {
 export const validateDocumentsForm = (documents: IDocument[]): boolean => {
 	return documents.some((item: IDocument) => !validateDocument(item));
 };
-export const validateRegistrationForm = (fields: IRegisterForm): boolean => {
-	if (fields.gender === Gender.None) {
-		return false;
-	}
 
-	if (fields.login.length > 0 && fields.login.length < 8) {
-		return false;
-	}
-
-	if (fields.password.length > 0 && fields.password.length < 7) {
-		return false;
-	}
-	if (fields.password !== fields.repeatPassword) {
-		return false;
-	}
-
-	return validateDataForm(fields);
-};
-
-export const validateRequireTextField: React.ChangeEventHandler<HTMLInputElement> = (event): string | void => {
-	console.log(event.target.required, inputValueAsString(event), inputValueAsString(event).length);
-
-	if (event.target.required && inputValueAsString(event).length === 0) {
+export const validateRequireTextField = (value: string, required: boolean): string | void => {
+	if (required && value.length === 0) {
 		return 'Поле не должно быть пустым';
 	}
 };
 
-export const validateRusTextField = (text: string): void | string => {
-	if (!RUS_ALPHABET.test(text)) {
-		return 'Поле может содержать только русские буквы';
-	}
+export const validateTextInput = (event: ChangeEvent<HTMLInputElement>): void | string => {
+	const value = inputValueAsString(event);
+	const { required, minLength, maxLength, lang } = event.target;
+	return (
+		validateRequireTextField(value, required) ||
+		validateMinMaxLengthField(value, minLength, maxLength) ||
+		validateTextFieldLang(value, lang)
+	);
 };
 
-export const validateField = (
-	event: ChangeEvent<HTMLInputElement>,
-	...args: Array<(event: any) => string | void>
-): void | string => {
-	return args.map(fn => fn(event)).find(Boolean);
-};
-
-export const validateMinMaxLengthField: React.ChangeEventHandler<HTMLInputElement> = (event): void | string => {
-	const valueLength = inputValueAsString(event).length;
-	const minLength = event.target.minLength;
-	const maxLength = event.target.maxLength;
-
-	if (valueLength < event.target.minLength) {
+export const validateMinMaxLengthField = (value: string, minLength: number, maxLength: number): void | string => {
+	if (value.length < minLength) {
 		return `Поле должно содержать минимум ${minLength} символов`;
 	}
-	if (maxLength > -1 && valueLength > maxLength) {
+	if (maxLength > -1 && value.length > maxLength) {
 		return `Поле может содержать только ${maxLength} символов`;
 	}
 };
 
-export const validateTextFieldLang: React.ChangeEventHandler<HTMLInputElement> = event => {
-	const lang = event.target.lang.toLowerCase();
-	const value = inputValueAsString(event);
+export const validateTextFieldLang = (value: string, lang: string): string | void => {
 	switch (lang) {
 		case 'rus': {
-			return !RUS_ALPHABET.test(value) && 'Поле может содержать только русские буквы';
+			return !RUS_ALPHABET.test(value) ? 'Поле может содержать только русские буквы' : '';
 		}
 		case 'eng': {
-			return !ENG_ALPHABET.test(value) && 'Поле может содержать только русские буквы';
+			return !ENG_ALPHABET.test(value) ? 'Поле может содержать только русские буквы' : '';
 		}
 		default: {
 			return '';
@@ -139,10 +110,9 @@ export const validateTextFieldLang: React.ChangeEventHandler<HTMLInputElement> =
 const patternErrorMessage = (pattern: string) => {
 	return `Поле не соответствует шаблону ${pattern}`;
 };
-export const validateTextFieldPattern: React.ChangeEventHandler<HTMLInputElement> = event => {
-	const pattern = event.target.pattern;
-	const regExpPattern = new RegExp(event.target.pattern);
-	const value = inputValueAsString(event);
-
-	return !regExpPattern.test(value) && patternErrorMessage(pattern);
+export const validateTextFieldPattern = (value: string, pattern: string): string | void => {
+	const regExpPattern = new RegExp(pattern);
+	if (!regExpPattern.test(value)) {
+		return patternErrorMessage(pattern);
+	}
 };

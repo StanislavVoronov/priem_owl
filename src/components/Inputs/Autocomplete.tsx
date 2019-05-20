@@ -8,7 +8,6 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core';
 import styles from './styles';
-import { noop } from 'react-select/lib/utils';
 
 function renderInputComponent(inputProps: any) {
 	return (
@@ -77,8 +76,7 @@ interface IAutoCompleteProps {
 	classes: any;
 	label: string;
 	placeholder: string;
-	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-	onBlur: (event: ChangeEvent<HTMLInputElement>) => void;
+	onChange: (value: string) => void;
 	helperText?: string;
 	error?: boolean;
 	name?: string;
@@ -102,7 +100,6 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 	static defaultProps = {
 		suggestions: [],
 		classes: {},
-		onBlur: noop,
 		required: false,
 		disabled: false,
 	};
@@ -126,10 +123,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 		this.setState({
 			value: newValue,
 		});
-		this.props.onChange(event);
-	};
-	onBlur: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.props.onBlur(event);
+		this.props.onChange(newValue);
 	};
 
 	onSelectSuggestion = (formEvent: React.FormEvent<HTMLInputElement>, data: SuggestionSelectedEventData<string>) => {
@@ -161,7 +155,6 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 						placeholder: inputProps.placeholder,
 						value: this.state.value,
 						onChange: this.handleChange,
-						onBlur: this.onBlur,
 						helperText: this.props.helperText,
 						error: this.props.error,
 						disabled: this.props.disabled,
