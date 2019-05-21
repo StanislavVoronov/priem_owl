@@ -1,11 +1,11 @@
 body {
-   margin: 0;
+	margin: 0;
 }
 .flexRow {
-   display: flex;
-   flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 .flexColumn {
-   display: flex;
-   flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }

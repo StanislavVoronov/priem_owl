@@ -1,4 +1,4 @@
-import { IDocument, IGovernmentSelectItem, ISelectItem } from '$common';
+import { IDocument, IGovernmentSelectItem, IInvalidData, ISelectItem } from '$common';
 import { IPerson } from '$common';
 
 export interface IContactsForm {
@@ -25,6 +25,11 @@ export interface IContactsForm {
 	document: IDocument;
 }
 
+export interface IUpdateTextInputAction {
+	field: {
+		[key: string]: string;
+	};
+}
 export interface IEducationForm {
 	firstHighEducation: boolean;
 	coolnessTypes: ISelectItem[];
@@ -32,11 +37,16 @@ export interface IEducationForm {
 	hasEge: boolean;
 	document: IDocument;
 }
-
-export interface IRegisterForm extends IPerson {
+export interface IEnrollRegistration extends IPerson {
 	login: string;
 	password: string;
 	repeatPassword: string;
+}
+
+export interface IEnrollRegisterForm {
+	data: IEnrollRegistration;
+	validation: IInvalidData<IEnrollRegistration>;
+	statusValidation: boolean;
 }
 
 export interface IPersonForm {
@@ -51,4 +61,4 @@ export interface IDocumentsForm {
 	cheatType: ISelectItem;
 }
 
-export type EnrollForms = IRegisterForm & IContactsForm & IEducationForm & IPersonForm & IDocument;
+export type EnrollForms = IEnrollRegisterForm & IContactsForm & IEducationForm & IPersonForm & IDocument;

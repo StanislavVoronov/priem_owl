@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocumentForm, LoadingButton } from '$components';
+import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocumentForm } from '$components';
 import {
 	EDictionaryNameList,
 	IGovernmentSelectItem,
@@ -10,12 +10,12 @@ import {
 } from '$common';
 
 import styles from './styles';
-import { IDictionaryState } from '@mgutm-fcu/dictionary';
+import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { withStyles } from '@material-ui/core';
 
 interface IProps extends IStylable {
 	disabled: boolean;
-	dictionaries: IDictionaryState;
+	dictionaries: DictionaryState;
 	data: IContactsForm;
 	updateForm: (data: Partial<IContactsForm>) => void;
 }

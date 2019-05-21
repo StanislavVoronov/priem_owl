@@ -1,10 +1,7 @@
-import { IEnrollState } from '../containers/Enroll';
-import { IDictionaryState } from '@mgutm-fcu/dictionary/models';
+import { DictionaryState } from '@mgutm-fcu/dictionary';
+import { IInvalidData, IEnrollRegisterForm } from '$common';
 
-export interface IPagesState {
-	enroll: IEnrollState;
-}
 export interface IRootState {
-	dictionaries: IDictionaryState;
-	enroll: IEnrollState;
+	dictionaries: DictionaryState;
+	enrollRegistration: IEnrollRegisterForm;
 }

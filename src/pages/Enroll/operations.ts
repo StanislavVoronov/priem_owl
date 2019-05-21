@@ -1,4 +1,4 @@
-import { IDocument, ServerBoolean, IServerError, IPerson, IRegisterForm } from '$common';
+import { IDocument, ServerBoolean, IServerError, IPerson, IEnrollRegisterForm } from '$common';
 import PriemApi from '../../services/PriemApi';
 import {
 	checkPersonFailure,
@@ -43,9 +43,9 @@ import { IRootState } from '$store';
 import { IEnrollForm } from './models';
 
 export const registerNewPerson = (
-	data: IRegisterForm,
+	form: IEnrollRegisterForm,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
-	const { login, password, birthday, firstName, lastName, middleName, gender } = data;
+	const { login, password, birthday, firstName, lastName, middleName, gender } = form.data;
 
 	dispatch(registerPersonFetching());
 
@@ -161,13 +161,13 @@ export const createPerson = (
 		email_code: confirmCode,
 		phone_code: '000000',
 		email: data.contactsData.email,
-		lname: data.registrationData.lastName,
-		fname: data.registrationData.firstName,
-		mname: data.registrationData.middleName,
-		birthdate: moment(data.registrationData.birthday).format('DD-MM-YYYY'),
+		lname: data.registrationForm.data.lastName,
+		fname: data.registrationForm.data.firstName,
+		mname: data.registrationForm.data.middleName,
+		birthdate: moment(data.registrationForm.data.birthday).format('DD-MM-YYYY'),
 		birthplace: data.personData.birthPlace,
 		need_hostel: data.contactsData.needDormitory ? ServerBoolean.True : ServerBoolean.False,
-		sex: data.registrationData.gender,
+		sex: data.registrationForm.data.gender,
 		hight_first: data.educationData.firstHighEducation ? ServerBoolean.True : ServerBoolean.False,
 		best_prev_edu: data.educationData.prevEducation,
 		cheat_type: 0,

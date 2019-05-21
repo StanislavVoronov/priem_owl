@@ -3,7 +3,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import React from 'react';
 import Select from 'react-select';
 import styles from './styles.module.css';
-import { IHasError, IHelperText } from '../models';
+import { IHasError, IHelperText } from '../../containers/models';
 import { ISelectItem } from '$common';
 
 interface ISelectProps extends IHasError, IHelperText {

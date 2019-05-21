@@ -2,7 +2,7 @@ import { Action } from 'redux-actions';
 import { IDictionaryItem } from '$common';
 import { ChangeEvent } from 'react';
 import { IDictionary } from '@mgutm-fcu/dictionary';
-import { IRegisterForm } from '$common';
+import { IEnrollRegisterForm } from '$common';
 
 export const checkPayload = <State, Payload>(action: Action<any>, callback: (data: Payload) => State) => {
 	const data = action.payload;

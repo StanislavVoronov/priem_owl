@@ -1,31 +1,13 @@
 import React from 'react';
-import {
-	DropdownSelect,
-	Checkbox,
-	LoadingButton,
-	WebPhoto,
-	DocumentForm,
-	TextInput,
-	FormControlLabel,
-} from '$components';
-import {
-	EDictionaryNameList,
-	IDocument,
-	inputValueAsString,
-	validateDataForm,
-	IPersonForm,
-	ISelectItem,
-	validateDocument,
-	IRegisterForm,
-	IStylable,
-} from '$common';
+import { DropdownSelect, Checkbox, WebPhoto, DocumentForm, TextInput, FormControlLabel } from '$components';
+import { EDictionaryNameList, IDocument, inputValueAsString, IPersonForm, ISelectItem, IStylable } from '$common';
 
 import styles from './styles';
-import { IDictionaryState } from '@mgutm-fcu/dictionary';
+import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { withStyles } from '@material-ui/core';
 
 interface IProps extends IStylable {
-	dictionaries: IDictionaryState;
+	dictionaries: DictionaryState;
 	data: IPersonForm;
 	updateForm: (data: Partial<IPersonForm>) => void;
 }

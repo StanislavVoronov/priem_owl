@@ -1,10 +1,10 @@
-import { IDisabled, IHasError, IHelperText } from '../models';
+import { IDisabled, IHasError, IHelperText } from '../../containers/models';
 import TextField, { BaseTextFieldProps } from '@material-ui/core/TextField';
 import React, { ChangeEvent, ReactText } from 'react';
 import { FormLabel, Omit, withStyles } from '@material-ui/core';
 import { noop } from 'lodash';
 import styles from './styles';
-import { IRegisterForm } from '$common';
+import { IEnrollRegisterForm } from '$common';
 
 export interface IInputProps<T> extends BaseTextFieldProps {
 	onChange: (event: ChangeEvent<HTMLInputElement>) => void;

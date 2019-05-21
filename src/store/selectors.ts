@@ -1,9 +1,9 @@
-import { createSelector } from 'reselect';
-import { IRootState } from './models';
+import { IRootState } from '$store';
 
-const dictionariesCreateSelector = (state: IRootState) => state.dictionaries;
+export const enrollRegistrationSelector = (state: IRootState) => {
+	return state.enrollRegistration;
+};
 
-export const dictionariesStateSelector = createSelector(
-	dictionariesCreateSelector,
-	(dictionaries): any => dictionaries,
-);
+export const dictionaryStateSelector = (state: IRootState) => {
+	return state.dictionaries;
+};

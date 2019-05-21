@@ -1,9 +1,7 @@
 import React from 'react';
-import classNames from 'classnames';
 import { TextInput, DocumentForm, Button, H2 } from '$components';
 import {
 	EDictionaryNameList,
-	validateDataForm,
 	inputValueAsString,
 	IDocument,
 	defaultDocument,
@@ -15,14 +13,13 @@ import {
 } from '$common';
 
 import styles from './styles';
-import { IDictionaryState } from '@mgutm-fcu/dictionary';
-import LoadingButton from '../Buttons/LoadingButtont';
+import { DictionaryState } from '@mgutm-fcu/dictionary';
 import withStyles from '@material-ui/core/styles/withStyles';
-import DropdownSelect from '../DropdownSelect';
+import DropdownSelect from '../../components/DropdownSelect';
 
 interface IProps extends IStylable {
 	isForeigner: boolean;
-	dictionaries: IDictionaryState;
+	dictionaries: DictionaryState;
 	defaultData: IDocumentsForm;
 	updateForm: (data: IDocument[]) => void;
 }

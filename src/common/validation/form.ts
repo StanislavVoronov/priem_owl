@@ -7,7 +7,7 @@ import {
 	inputValueAsString,
 	IPerson,
 	IPersonForm,
-	IRegisterForm,
+	IEnrollRegisterForm,
 } from '$common';
 import { ENG_ALPHABET, RUS_ALPHABET } from '../constants';
 import React, { ChangeEvent } from 'react';

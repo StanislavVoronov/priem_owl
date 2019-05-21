@@ -1,5 +1,5 @@
 import { IDocument } from '$common';
-import { IContactsForm, IEducationForm, IPersonForm, IRegisterForm, Gender } from '$common';
+import { IContactsForm, IEducationForm, IPersonForm, IEnrollRegisterForm, Gender } from '$common';
 
 export const defaultDocument: IDocument = {
 	docType: null,
@@ -21,17 +21,6 @@ export const defaultContactsDataForm: IContactsForm = {
 		docType: { id: 3, name: 'Регистрация места жительства' },
 	},
 	phoneGovernment: { id: 1, name: 'Россия', phone_code: '7' },
-};
-
-export const defaultRegisterDataForm: IRegisterForm = {
-	lastName: '',
-	firstName: '',
-	middleName: '',
-	birthday: '',
-	gender: Gender.None,
-	login: '',
-	password: '',
-	repeatPassword: '',
 };
 
 export const defaultPersonDataForm: IPersonForm = {

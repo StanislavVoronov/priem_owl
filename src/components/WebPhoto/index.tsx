@@ -1,7 +1,7 @@
 import React from 'react';
 // @ts-ignore
 import WebCamera from 'react-webcam';
-import Image from '../ImageEditor/';
+import Image from '../ImageEditor';
 import AvatarEditor from 'react-avatar-editor';
 
 import styles from './styles';

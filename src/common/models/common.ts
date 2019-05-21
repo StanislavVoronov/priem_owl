@@ -54,3 +54,5 @@ export interface IDocument {
 export interface IStylable {
 	classes: Record<string, string>;
 }
+
+export type IInvalidData<T> = Record<keyof T, string>;

@@ -1,5 +1,5 @@
 import { IServerResponseResult } from '../common';
-import { IPriemApiServerResponse } from '../containers/Enroll/serverModels';
+import { IPriemApiServerResponse } from '../pages/Enroll/serverModels';
 import { PriemRestApi } from './restApiNames';
 import { JsonRequest } from './JsonRequest';
 

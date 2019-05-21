@@ -159,7 +159,7 @@ module.exports = function(webpackEnv) {
 			alias: {
 				$common: srcPath('common'),
 				$components: srcPath('components'),
-				$containers: srcPath('containers'),
+				$containers: srcPath('pages'),
 				$services: srcPath('services'),
 				$assets: srcPath('assets'),
 				$store: srcPath('store'),
