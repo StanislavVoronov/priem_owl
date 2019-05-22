@@ -1,3 +1,7 @@
-import enroll, { IEnrollTransactionState, checkLoginTransaction } from './enroll';
+import { checkLoginTransaction } from './checkLogin';
+import transactions, { isUniqueLoginSelector, createLoginSelector } from './rootReducer';
 
-export { enroll, IEnrollTransactionState, checkLoginTransaction };
+export * from './models';
+export { checkLoginTransaction, createLoginSelector, isUniqueLoginSelector };
+
+export default transactions;

@@ -6,10 +6,6 @@ export interface ICheckPersonExistResponse {
 	ID: number;
 }
 
-export interface ICheckLoginResponse {
-	COUNT: number;
-}
-
 export interface IRegisterNewPersonResponse {
 	id: number;
 	count: number;

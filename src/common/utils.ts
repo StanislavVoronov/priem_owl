@@ -1,8 +1,6 @@
-import { Action, createAction } from 'redux-actions';
-import { IDictionaryItem, IServerError } from '$common';
+import { Action, createAction, handleActions } from 'redux-actions';
+import { IDictionaryItem, initialTransactionState, IServerError, ITransaction, ITransactionActions } from '$common';
 import { ChangeEvent } from 'react';
-import { IDictionary } from '@mgutm-fcu/dictionary';
-import { IEnrollRegisterStateForm } from '$common';
 
 export const checkPayload = <State, Payload>(action: Action<any>, callback: (data: Payload) => State) => {
 	const data = action.payload;
@@ -32,4 +30,24 @@ export const createTransactionActions = <T>(nameSpace: string) => {
 		success: createAction(`${nameSpace}/transactionSuccess`, (result: T[]) => result),
 		failure: createAction(`${nameSpace}/transactionFailure`, (error: IServerError) => error),
 	};
+};
+
+export const createTransactionReducer = <R, S, F>(actions: ITransactionActions<R, S, F>) => {
+	return handleActions<ITransaction<S>>(
+		{
+			[actions.request.toString()]: state => ({
+				...state,
+				loading: true,
+			}),
+			[actions.success.toString()]: (state, action) => {
+				return { ...state, loading: false, result: action.payload ? action.payload.result : [] };
+			},
+			[actions.failure.toString()]: (state, action) => ({
+				...state,
+				loading: false,
+				error: action.payload ? action.payload.error : null,
+			}),
+		},
+		initialTransactionState,
+	);
 };

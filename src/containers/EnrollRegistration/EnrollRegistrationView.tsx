@@ -21,6 +21,8 @@ interface IProps {
 	onChangeFirstName: (value: string) => void;
 	onBlurTextInput: (event: ChangeEvent<HTMLInputElement>) => void;
 	onChangeLogin: (event: ChangeEvent<HTMLInputElement>) => void;
+	isUniqueLogin: boolean;
+	submit: () => void;
 }
 
 class EnrollRegistrationView extends React.PureComponent<IProps> {
@@ -60,6 +62,16 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 		// 	this.props.updateForm({ middleName, ...requiredFields });
 		// }
 	};
+	loginHelperText = () => {
+		if (!this.props.isUniqueLogin) {
+			return 'Логин уже существует';
+		}
+
+		return this.props.validation.login || 'Логин должен быть не менее 5 символов';
+	};
+	hasLoginError = () => {
+		return !!this.props.validation.login || !this.props.isUniqueLogin;
+	};
 	render() {
 		const { dictionaries } = this.props;
 		const dictionaryFirstNames = dictionaries[EDictionaryNameList.FirstNames];
@@ -74,7 +86,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 			: { values: [] };
 
 		return (
-			<form onSubmit={this.onSubmit} className="flexColumn" noValidate={true}>
+			<form onSubmit={this.props.submit} className="flexColumn" noValidate={true}>
 				<TextInput
 					name="lastName"
 					onChange={this.props.onChangeTextInput}
@@ -135,8 +147,8 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 						defaultValue={this.props.data.login}
 						label="Логин"
 						onChange={this.props.onChangeLogin}
-						error={!!this.props.validation.login}
-						helperText={this.props.validation.login || 'Логин должен быть не менее 5 символов'}
+						error={this.hasLoginError()}
+						helperText={this.loginHelperText()}
 					/>
 
 					<TextInput
@@ -163,7 +175,9 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 						helperText={this.props.validation.repeatPassword}
 					/>
 				</React.Fragment>
-				<LoadingButton>Зарегистрироваться</LoadingButton>
+				<LoadingButton disabled={this.hasLoginError() || Object.values(this.props.validation).some(Boolean)}>
+					Зарегистрироваться
+				</LoadingButton>
 			</form>
 		);
 	}

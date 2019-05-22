@@ -1,4 +1,5 @@
 import { IServerError } from '$common';
+import { Action, ActionFunction1, ActionFunctionAny } from 'redux-actions';
 
 export interface IDictionaryTypeFilter {
 	type: number;
@@ -63,4 +64,10 @@ export interface ITransaction<T> {
 	loading: boolean;
 	result: T[];
 	error: IServerError | null;
+}
+
+export interface ITransactionActions<R, S, F> {
+	request: ActionFunctionAny<Action<R>>;
+	success: ActionFunctionAny<Action<S>>;
+	failure: ActionFunctionAny<Action<F>>;
 }

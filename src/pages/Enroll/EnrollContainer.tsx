@@ -5,9 +5,8 @@ import Dictionary from '@mgutm-fcu/dictionary';
 
 import { connect, MapStateToProps } from 'react-redux';
 import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
-import { EnrollForm, IEnrollForm } from './models';
+import { EnrollForm } from './models';
 import { IRootState } from '$store';
-import { checkLoginSelector } from '../../store/transactions/enroll/reducers';
 
 class EnrollContainer extends React.Component {
 	public componentDidCatch(error: any, info: any) {
@@ -33,8 +32,6 @@ class EnrollContainer extends React.Component {
 }
 
 const mapStateToProps: MapStateToProps<{}, {}, IRootState> = state => {
-	const checkLogin = checkLoginSelector(state);
-
 	return {};
 };
 
