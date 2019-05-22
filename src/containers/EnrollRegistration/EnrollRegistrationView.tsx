@@ -2,19 +2,25 @@ import React, { ChangeEvent, FormEventHandler } from 'react';
 import { Autocomplete, RadioButtonGroup, TextInput, LoadingButton } from '$components';
 import {
 	EDictionaryNameList,
-	Gender,
-	IEnrollRegisterForm,
+	IEnrollRegisterStateForm,
+	IEnrollRegistration,
+	IInvalidData,
 	prepareDictionarySuggestions,
-	validateRequireTextField,
-	validateTextFieldLang,
 } from '$common';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 
 export const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { value: 2, label: 'Жен.' }];
 
-interface IProps extends IEnrollRegisterForm {
-	updateTextInput: (event: ChangeEvent<HTMLInputElement>) => void;
+interface IProps {
+	data: IEnrollRegistration;
+	validation: IInvalidData<IEnrollRegistration>;
+	onChangeTextInput: (event: ChangeEvent<HTMLInputElement>) => void;
 	dictionaries: DictionaryState;
+	onChangeMiddleName: (value: string) => void;
+	onChangeGender: (value: number) => void;
+	onChangeFirstName: (value: string) => void;
+	onBlurTextInput: (event: ChangeEvent<HTMLInputElement>) => void;
+	onChangeLogin: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 class EnrollRegistrationView extends React.PureComponent<IProps> {
@@ -22,38 +28,20 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 		disabled: false,
 	};
 
-	onBlurTextInput: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.props.updateTextInput(event);
-	};
-	onChangeTextInput: React.ChangeEventHandler<HTMLInputElement> = event => {
-		if (this.props.statusValidation) {
-			this.onBlurTextInput(event);
-		}
-	};
-	onChangeMiddleName = (value: string) => {
-		return void 0;
-	};
-	onChangeFirstName = (firstName: string) => {
-		const firstNameError = validateRequireTextField(firstName, true) || validateTextFieldLang(firstName, 'rus');
-
-		const firstNamesDictionary = this.props.dictionaries[EDictionaryNameList.FirstNames];
-		const person = firstNamesDictionary.values.find(item => item.name === firstName);
-		const gender = person ? (person.sex === '1' ? Gender.Male : Gender.Female) : Gender.None;
-	};
 	onChangeGender = (_: any, gender: string) => {
-		return void 0;
+		this.props.onChangeGender(Number(gender));
 	};
 	onBlurRepeatPassword: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.props.updateTextInput(event);
+		this.props.onChangeTextInput(event);
 	};
 	onSubmit: FormEventHandler<HTMLFormElement> = event => {
-		// event.preventDefault();
-		// const { invalidData, validation, middleName, ...requiredFields } = this.state;
-		// let validationFields: Record<keyof IEnrollRegisterForm, string> = {
+		// estringvent.preventDefault();
+		// const { invalidData, valupdateEnrollRegistrationTextInputidation, middleName, ...requiredFields } = this.state;
+		// let validationFields: Record<keyof IEnrollRegisterStateForm, string> = {
 		// 	lastName: '',
 		// 	middleName: '',
 		// 	firstName: '',
-		// 	birthday: '',
+		// 	stringbirthday: '',
 		// 	gender: '',
 		// 	login: '',
 		// 	password: '',
@@ -62,7 +50,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 		// Object.entries(requiredFields).forEach((values: string[]) => {
 		// 	validationFields = {
 		// 		...validationFields,
-		// 		[values[0]]: validateRequireTextField(values[1], true),
+		// 	string	[values[0]]: validateRequireTextField(values[1], true),
 		// 	};
 		// });
 		//
@@ -71,18 +59,6 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 		// } else {
 		// 	this.props.updateForm({ middleName, ...requiredFields });
 		// }
-	};
-	onChangeTextInputLogin: React.ChangeEventHandler<HTMLInputElement> = event => {
-		// eventconst login =
-		// 	validateTextInput(event) ||
-		// 	validateMinMaxLengthField(inputValueAsString(event), event.target.minLength, event.target.maxLength);
-		// this.setState({
-		// 	login: inputValueAsString(event),
-		// 	invalidData: {
-		// 		...this.props.validation,
-		// 		login,
-		// 	},
-		// });
 	};
 	render() {
 		const { dictionaries } = this.props;
@@ -101,14 +77,14 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 			<form onSubmit={this.onSubmit} className="flexColumn" noValidate={true}>
 				<TextInput
 					name="lastName"
-					onChange={this.onChangeTextInput}
+					onChange={this.props.onChangeTextInput}
 					required
 					defaultValue={this.props.data.lastName}
 					placeholder={'Введите фамилию'}
 					label="Фамилия"
 					helperText={this.props.validation.lastName}
 					error={!!this.props.validation.lastName}
-					onBlur={this.onBlurTextInput}
+					onBlur={this.props.onBlurTextInput}
 				/>
 				<Autocomplete
 					label={'Имя'}
@@ -116,7 +92,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 					required
 					helperText={this.props.validation.firstName}
 					error={!!this.props.validation.firstName}
-					onChange={this.onChangeFirstName}
+					onChange={this.props.onChangeFirstName}
 					placeholder={'Введите имя'}
 					suggestions={prepareDictionarySuggestions(dictionaryFirstNames)}
 				/>
@@ -128,7 +104,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 					defaultValue={this.props.data.middleName}
 					helperText={this.props.validation.middleName}
 					error={!!this.props.validation.middleName}
-					onChange={this.onChangeMiddleName}
+					onChange={this.props.onChangeMiddleName}
 					suggestions={prepareDictionarySuggestions(filteredDictionaryMiddleName)}
 				/>
 				<RadioButtonGroup
@@ -146,7 +122,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 					type="date"
 					error={!!this.props.validation.birthday}
 					helperText={this.props.validation.birthday}
-					onBlur={this.onChangeTextInput}
+					onBlur={this.props.onChangeTextInput}
 				/>
 
 				<React.Fragment>
@@ -158,7 +134,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 						pattern={'[a-z0-9_-]'}
 						defaultValue={this.props.data.login}
 						label="Логин"
-						onChange={this.onChangeTextInputLogin}
+						onChange={this.props.onChangeLogin}
 						error={!!this.props.validation.login}
 						helperText={this.props.validation.login || 'Логин должен быть не менее 5 символов'}
 					/>
@@ -171,7 +147,8 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 						label="Пароль"
 						type="password"
 						defaultValue={this.props.data.password}
-						onChange={this.onChangeTextInput}
+						onBlur={this.props.onBlurTextInput}
+						onChange={this.props.onChangeTextInput}
 						error={!!this.props.validation.password}
 						helperText={this.props.validation.password || 'Пароль должен быть не менее 5 символов'}
 					/>

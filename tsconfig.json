@@ -29,6 +29,7 @@
 			"$components": ["components"],
 			"$containers": ["containers"],
 			"$store": ["store"],
+			"$services": ["services"],
 			"$common": ["common"]
 		}
 	},

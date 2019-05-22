@@ -1,5 +1,5 @@
 import { IDocument } from '$common';
-import { IContactsForm, IEducationForm, IPersonForm, IEnrollRegisterForm, Gender } from '$common';
+import { IContactsForm, IEducationForm, IPersonForm, IEnrollRegisterStateForm, Gender } from '$common';
 
 export const defaultDocument: IDocument = {
 	docType: null,

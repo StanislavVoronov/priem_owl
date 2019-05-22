@@ -43,7 +43,7 @@ export interface IEnrollRegistration extends IPerson {
 	repeatPassword: string;
 }
 
-export interface IEnrollRegisterForm {
+export interface IEnrollRegisterStateForm {
 	data: IEnrollRegistration;
 	validation: IInvalidData<IEnrollRegistration>;
 	statusValidation: boolean;
@@ -61,4 +61,4 @@ export interface IDocumentsForm {
 	cheatType: ISelectItem;
 }
 
-export type EnrollForms = IEnrollRegisterForm & IContactsForm & IEducationForm & IPersonForm & IDocument;
+export type EnrollForms = IEnrollRegisterStateForm & IContactsForm & IEducationForm & IPersonForm & IDocument;

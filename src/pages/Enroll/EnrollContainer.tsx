@@ -1,23 +1,15 @@
-import { IDocument, IEnrollRegisterForm } from '$common';
+import * as React from 'react';
+import { IEnrollRegisterStateForm } from '$common';
 import EnrollView from './EnrollView';
 import Dictionary from '@mgutm-fcu/dictionary';
-import * as React from 'react';
-import { FormEvent } from 'react';
+
 import { connect, MapStateToProps } from 'react-redux';
-import { createPerson, registerNewPerson, sendVerificationCode } from './operations';
 import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
 import { EnrollForm, IEnrollForm } from './models';
 import { IRootState } from '$store';
+import { checkLoginSelector } from '../../store/transactions/enroll/reducers';
 
-interface IDispatchToProps {
-	registerNewPerson: (data: IEnrollRegisterForm) => Promise<void>;
-	sendVerificationCode(email: string, mobPhone: string): Promise<void>;
-	createPerson(confirmCode: string, data: IEnrollForm): Promise<void>;
-}
-
-type IProps = IDispatchToProps;
-
-class EnrollContainer extends React.Component<IProps> {
+class EnrollContainer extends React.Component {
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
 	}
@@ -26,7 +18,7 @@ class EnrollContainer extends React.Component<IProps> {
 			activeStep: step,
 		});
 	};
-	submit = (event: FormEvent<HTMLFormElement>) => {
+	submit = (event: React.FormEvent<HTMLFormElement>) => {
 		return void 0;
 	};
 	render() {
@@ -41,16 +33,12 @@ class EnrollContainer extends React.Component<IProps> {
 }
 
 const mapStateToProps: MapStateToProps<{}, {}, IRootState> = state => {
-	return {};
-};
+	const checkLogin = checkLoginSelector(state);
 
-const mapDispatchToProps = {
-	registerNewPerson,
-	createPerson,
-	sendVerificationCode,
+	return {};
 };
 
 export default connect(
 	mapStateToProps,
-	mapDispatchToProps,
+	() => ({}),
 )(EnrollContainer);

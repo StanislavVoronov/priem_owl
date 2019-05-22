@@ -1,31 +1,28 @@
-import { IServerResponseResult } from '../common';
-import { IPriemApiServerResponse } from '../pages/Enroll/serverModels';
-import { PriemRestApi } from './restApiNames';
-import { JsonRequest } from './JsonRequest';
+import { JsonRequest, PriemRestApi } from '$services';
 
-interface IPriemApiResponse {
-	result: any[];
+interface IPriemApiResponse<R> {
+	result: R;
 	error: any;
 }
 class PriemApi {
 	static root: string = '/dev-bin';
 	static path: string = '/priem_api.fcgi';
-	static checkData = <Q, R>(api: string, payload: Q, extraData: object = {}): Promise<R> => {
+	static checkData = <Q, R>(api: string, payload: Q, extraData: object = {}): Promise<R[]> => {
 		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, payload, extraData);
 
-		return Request.send<IPriemApiResponse>().then(response => {
-			return Promise.resolve(response.result[0]);
+		return Request.send<IPriemApiResponse<R[]>>().then(response => {
+			return Promise.resolve(response.result);
 		});
 	};
-	static post = <Q, R>(api: PriemRestApi, payload: Q, extraData: object = {}): Promise<any> => {
+	static post = <Q, R>(api: PriemRestApi, payload: Q, extraData: object = {}): Promise<R> => {
 		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, payload, extraData);
 
-		return Request.send<IPriemApiResponse>().then(response => {
+		return Request.send<IPriemApiResponse<R>>().then(response => {
 			if (response.error) {
 				return Promise.reject({ message: response.error.string, type: response.error.id });
 			}
 
-			return Promise.resolve(response);
+			return Promise.resolve(response.result);
 		});
 	};
 }

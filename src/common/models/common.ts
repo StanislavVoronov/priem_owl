@@ -1,3 +1,5 @@
+import { IServerError } from '$common';
+
 export interface IDictionaryTypeFilter {
 	type: number;
 }
@@ -56,3 +58,9 @@ export interface IStylable {
 }
 
 export type IInvalidData<T> = Record<keyof T, string>;
+
+export interface ITransaction<T> {
+	loading: boolean;
+	result: T;
+	error: IServerError | null;
+}

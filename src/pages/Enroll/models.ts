@@ -1,5 +1,5 @@
 import { IDocument, IServerError } from '$common';
-import { IContactsForm, IEducationForm, IPersonForm, IEnrollRegisterForm } from '$common';
+import { IContactsForm, IEducationForm, IPersonForm, IEnrollRegisterStateForm } from '$common';
 
 export interface IEnrollState {
 	registrationCompleted: boolean;
@@ -20,7 +20,7 @@ export interface IEnrollState {
 }
 
 export interface IEnrollForm {
-	registrationForm: IEnrollRegisterForm;
+	registrationForm: IEnrollRegisterStateForm;
 	personData: IPersonForm;
 	contactsData: IContactsForm;
 	educationData: IEducationForm;

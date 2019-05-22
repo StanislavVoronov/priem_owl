@@ -1,28 +1,54 @@
 import * as React from 'react';
 import EnrollRegistrationView from './EnrollRegistrationView';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { IRootState, enrollRegistrationSelector, dictionaryStateSelector } from '$store';
+import {
+	IRootState,
+	enrollRegistrationSelector,
+	dictionaryStateSelector,
+	onChangeMiddleName,
+	onChangeGender,
+	changeFirstName,
+	changeLogin,
+} from '$store';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
-import { updateEnrollRegistrationTextInput } from '$store';
-import { IEnrollRegisterForm, IEnrollRegistration } from '$common';
-import { ChangeEvent } from 'react';
+import { onChangeTextInput, checkLoginTransaction } from '$store';
+import { EDictionaryNameList, IEnrollRegisterStateForm } from '$common';
 
-interface IStateToProps extends IEnrollRegisterForm {
+interface IStateToProps extends IEnrollRegisterStateForm {
 	dictionaries: DictionaryState;
 }
 interface IDispatchToProps {
-	updateTextInput: (event: ChangeEvent<HTMLInputElement>) => void;
+	onChangeTextInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	changeMiddleName: (value: string) => void;
+	changeGender: (value: number) => void;
+	changeFirstName: (value: string, gender: number) => void;
+	changeLogin: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 type Props = IStateToProps & IDispatchToProps;
 class EnrollRegistrationContainer extends React.Component<Props> {
+	onChangeFirstName = (firstName: string) => {
+		const firstNamesDictionary = this.props.dictionaries[EDictionaryNameList.FirstNames];
+		const person = firstNamesDictionary.values.find(item => item.name === firstName);
+
+		this.props.changeFirstName(firstName, person ? person.sex : 0);
+	};
+	onChangeTextInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (this.props.statusValidation) {
+			this.props.onChangeTextInput(event);
+		}
+	};
 	render() {
 		return (
 			<EnrollRegistrationView
-				updateTextInput={this.props.updateTextInput}
+				onBlurTextInput={this.props.onChangeTextInput}
 				data={this.props.data}
 				validation={this.props.validation}
+				onChangeMiddleName={this.props.changeMiddleName}
+				onChangeGender={this.props.changeGender}
+				onChangeFirstName={this.onChangeFirstName}
 				dictionaries={this.props.dictionaries}
-				statusValidation={this.props.statusValidation}
+				onChangeTextInput={this.onChangeTextInput}
+				onChangeLogin={this.props.changeLogin}
 			/>
 		);
 	}
@@ -36,8 +62,21 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = (dispatch: any) => {
 	return {
-		updateTextInput: (event: ChangeEvent<HTMLInputElement>) => {
-			dispatch(updateEnrollRegistrationTextInput(event));
+		onChangeTextInput: (event: React.ChangeEvent<HTMLInputElement>) => {
+			dispatch(onChangeTextInput(event));
+		},
+		changeMiddleName: (value: string) => {
+			dispatch(onChangeMiddleName(value));
+		},
+		changeGender: (value: number) => {
+			dispatch(onChangeGender(value));
+		},
+		changeFirstName: (value: string, gender: number) => {
+			dispatch(changeFirstName(value, gender));
+		},
+		changeLogin: (event: React.ChangeEvent<HTMLInputElement>) => {
+			dispatch(changeLogin(event));
+			dispatch(checkLoginTransaction(event.target.value));
 		},
 	};
 };

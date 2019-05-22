@@ -52,7 +52,7 @@ export interface INewPersonDataRequest {
 	birthdate: ReactText;
 	birthplace: ReactText;
 	need_hostel: ServerBoolean;
-	sex: Gender;
+	sex: number;
 	hight_first: ServerBoolean;
 	best_prev_edu: number;
 	cheat_type: number;

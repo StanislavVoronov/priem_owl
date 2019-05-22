@@ -1,8 +1,8 @@
-import { Action } from 'redux-actions';
-import { IDictionaryItem } from '$common';
+import { Action, createAction } from 'redux-actions';
+import { IDictionaryItem, IServerError } from '$common';
 import { ChangeEvent } from 'react';
 import { IDictionary } from '@mgutm-fcu/dictionary';
-import { IEnrollRegisterForm } from '$common';
+import { IEnrollRegisterStateForm } from '$common';
 
 export const checkPayload = <State, Payload>(action: Action<any>, callback: (data: Payload) => State) => {
 	const data = action.payload;
@@ -24,4 +24,12 @@ export const inputValueAsNumber = (event: ChangeEvent<HTMLInputElement>): number
 
 export const inputValueAsString = (event: ChangeEvent<HTMLInputElement>): string => {
 	return event.target.value.trim();
+};
+
+export const createTransactionActions = <T>(nameSpace: string) => {
+	return {
+		request: createAction(`${nameSpace}/transactionRequest`),
+		success: createAction(`${nameSpace}/transactionSuccess`, (result: T) => result),
+		failure: createAction(`${nameSpace}/transactionFailure`, (error: IServerError) => error),
+	};
 };

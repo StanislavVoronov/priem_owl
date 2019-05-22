@@ -1,6 +1,6 @@
 export enum PriemRestApi {
-	FindNpId = 'findNPUID',
-	TestUniqueEnroll = 'testUniqueEnroll',
+	FindPerson = 'findNPUID',
+	CheckUniqueLogin = 'testUniqueEnroll',
 	AddEnroll = 'addEnroll',
 	AddDocuments = 'iDATA_DOCUMENTS',
 }
