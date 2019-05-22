@@ -2,7 +2,7 @@ import { ITransaction } from '$common';
 import { ReactText } from 'react';
 
 export interface IEnrollTransactionState {
-	checkLogin: ITransaction<string>;
+	checkLogin: ITransaction<ICheckLoginResponse>;
 }
 
 export interface ICheckLoginRequest {

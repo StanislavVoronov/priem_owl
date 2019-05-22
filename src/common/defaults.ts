@@ -44,3 +44,9 @@ export const defaultEducationDataForm: IEducationForm = {
 	prevEducation: 3,
 	hasEge: false,
 };
+
+export const initialTransactionState = {
+	loading: false,
+	result: [],
+	error: null,
+};

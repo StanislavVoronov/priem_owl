@@ -29,7 +29,7 @@ export const inputValueAsString = (event: ChangeEvent<HTMLInputElement>): string
 export const createTransactionActions = <T>(nameSpace: string) => {
 	return {
 		request: createAction(`${nameSpace}/transactionRequest`),
-		success: createAction(`${nameSpace}/transactionSuccess`, (result: T) => result),
+		success: createAction(`${nameSpace}/transactionSuccess`, (result: T[]) => result),
 		failure: createAction(`${nameSpace}/transactionFailure`, (error: IServerError) => error),
 	};
 };
