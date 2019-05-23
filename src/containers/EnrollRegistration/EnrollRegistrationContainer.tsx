@@ -11,7 +11,7 @@ import {
 	changeLogin,
 } from '$store';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
-import { onChangeTextInput, checkLoginTransaction, isUniqueLoginSelector } from '$store';
+import { onChangeTextInput, checkLoginTransaction, fromTransaction } from '$store';
 import { EDictionaryNameList, IEnrollRegisterStateForm } from '$common';
 
 interface IStateToProps extends IEnrollRegisterStateForm {
@@ -61,11 +61,11 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 }
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
 	const dictionaries = dictionaryStateSelector(state);
-	const isUniqueLogin = isUniqueLoginSelector(state);
+	const checkLogin = fromTransaction.checkLoginSelector(state);
 
 	const { data, validation, statusValidation } = enrollRegistrationSelector(state);
 
-	return { dictionaries, data, validation, statusValidation, isUniqueLogin: isUniqueLogin.result };
+	return { dictionaries, data, validation, statusValidation, isUniqueLogin: checkLogin.result };
 };
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = (dispatch: any) => {

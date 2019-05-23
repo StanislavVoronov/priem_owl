@@ -1,7 +1,7 @@
 import { checkLoginTransaction } from './checkLogin';
-import transactions, { isUniqueLoginSelector, createLoginSelector } from './rootReducer';
+import transactions, * as fromTransaction from './rootReducer';
 
 export * from './models';
-export { checkLoginTransaction, createLoginSelector, isUniqueLoginSelector };
+export { checkLoginTransaction, fromTransaction };
 
 export default transactions;
