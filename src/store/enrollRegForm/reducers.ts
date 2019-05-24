@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 
-import { checkPayload, Gender, IEnrollRegisterStateForm, IServerError, IUpdateTextInputAction } from '$common';
+import { checkPayload, IEnrollRegisterStateForm, IUpdateTextInputAction } from '$common';
 import {
 	IChangeFirstNameAction,
 	changeFirstName,
@@ -8,6 +8,7 @@ import {
 	onChangeMiddleName,
 	onChangeTextInput,
 } from './actions';
+import { IRootState } from '$store';
 
 const enrollRegistration = handleActions<IEnrollRegisterStateForm, IUpdateTextInputAction>(
 	{
@@ -35,9 +36,6 @@ const enrollRegistration = handleActions<IEnrollRegisterStateForm, IUpdateTextIn
 			firstName: '',
 			birthday: '',
 			gender: 0,
-			login: '',
-			password: '',
-			repeatPassword: '',
 		},
 		statusValidation: false,
 		validation: {
@@ -46,11 +44,12 @@ const enrollRegistration = handleActions<IEnrollRegisterStateForm, IUpdateTextIn
 			firstName: '',
 			birthday: '',
 			gender: '',
-			login: '',
-			password: '',
-			repeatPassword: '',
 		},
 	},
 );
+
+export const enrollRegistrationSelector = (state: IRootState) => {
+	return state.enrollRegistration;
+};
 
 export default enrollRegistration;

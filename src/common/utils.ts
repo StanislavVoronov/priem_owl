@@ -1,6 +1,7 @@
 import { Action, createAction, handleActions } from 'redux-actions';
 import { IDictionaryItem, initialTransactionState, IServerError, ITransaction, ITransactionActions } from '$common';
 import { ChangeEvent } from 'react';
+import { ARRAY_ENG_ALPHABET, ARRAY_RUS_ALPHABET } from './constants';
 
 export const checkPayload = <State, Payload>(action: Action<any>, callback: (data: Payload) => State) => {
 	const data = action.payload;
@@ -27,8 +28,8 @@ export const inputValueAsString = (event: ChangeEvent<HTMLInputElement>): string
 export const createTransactionActions = <T>(nameSpace: string) => {
 	return {
 		request: createAction(`${nameSpace}/transactionRequest`),
-		success: createAction(`${nameSpace}/transactionSuccess`, (result: T[]) => result),
-		failure: createAction(`${nameSpace}/transactionFailure`, (error: IServerError) => error),
+		success: createAction(`${nameSpace}/transactionSuccess`, (result: T[]) => ({ result })),
+		failure: createAction(`${nameSpace}/transactionFailure`, (error: IServerError) => ({ error })),
 	};
 };
 
@@ -50,4 +51,19 @@ export const createTransactionReducer = <R, S, F>(actions: ITransactionActions<R
 		},
 		initialTransactionState,
 	);
+};
+
+export const cyrillToLatin = (text: string) => {
+	ARRAY_RUS_ALPHABET.forEach((letter, index) => {
+		const reg = new RegExp(ARRAY_RUS_ALPHABET[index], 'g');
+		text = text.replace(reg, ARRAY_ENG_ALPHABET[index]);
+	});
+
+	return text.toLowerCase();
+};
+
+export const generatePassword = () => {
+	return Math.random()
+		.toString(36)
+		.slice(-8);
 };

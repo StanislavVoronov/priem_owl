@@ -1,5 +1,5 @@
 export * from './actions';
 
-import enrollRegistration from './reducers';
+import enrollRegistration, * as fromEnrollRegistration from './reducers';
 
-export { enrollRegistration };
+export { enrollRegistration, fromEnrollRegistration };

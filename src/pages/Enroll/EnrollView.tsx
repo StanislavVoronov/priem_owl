@@ -20,80 +20,24 @@ const localStyles = {
 	},
 };
 
-export class EnrollView extends React.PureComponent<any> {
+interface IProps {
+	handleNext: () => void;
+	activeStep: number;
+	classes: any;
+	passedStep: number;
+	steps: string[];
+}
+export class EnrollView extends React.PureComponent<IProps> {
 	static defaultProps = {
 		classes: {},
+		passedStep: 0,
 	};
 
 	renderForm = () => {
 		switch (this.props.activeStep) {
 			case 0: {
-				return <EnrollRegistrationContainer />;
+				return <EnrollRegistrationContainer onComplete={this.props.handleNext} />;
 			}
-			// case EnrollForm.Person: {
-			// 	return (
-			// 		<React.Fragment>
-			// 			<PersonForm
-			// 				dictionaries={this.props.dictionaries}
-			// 				updateForm={this.props.updatePersonForm}
-			// 				data={this.props.personData}
-			// 			/>
-			// 			{this.renderError()}
-			// 			{this.renderButton()}
-			// 		</React.Fragment>
-			// 	);
-			// }
-			// case EnrollForm.Contacts: {
-			// 	return (
-			// 		<React.Fragment>
-			// 			<ContactsForm
-			// 				dictionaries={this.props.dictionaries}
-			// 				data={this.props.contactsData}
-			// 				updateForm={this.props.updateContactsForm}
-			// 			/>
-			// 			{this.renderError()}
-			// 			{this.renderButton()}
-			// 		</React.Fragment>
-			// 	);
-			// }
-			// case EnrollForm.Education: {
-			// 	return (
-			// 		<React.Fragment>
-			// 			<EducationForm
-			// 				updateForm={this.props.updateEducationForm}
-			// 				dictionaries={this.props.dictionaries}
-			// 				data={this.props.educationData}
-			// 			/>
-			// 			{this.renderButton()}
-			// 		</React.Fragment>
-			// 	);
-			// }
-			// case EnrollForm.Documents: {
-			// 	return (
-			// 		<React.Fragment>
-			// 			<DocumentsForm
-			// 				isForeigner={this.props.personData.document.docGovernment.id !== 1}
-			// 				dictionaries={this.props.dictionaries}
-			// 				defaultData={{ documents: this.props.documents, cheatType: { id: 0, name: 'Нет преимуществ' } }}
-			// 				updateForm={this.props.updateDocumentsForm}
-			// 			/>
-			// 			{this.renderButton()}
-			// 		</React.Fragment>
-			// 	);
-			// }
-			// case EnrollForm.ConfirmEmail: {
-			// 	return (
-			// 		<React.Fragment>
-			// 			<TextInput
-			// 				label="Код подтверждения"
-			// 				type="number"
-			// 				onBlur={this.props.onChangeConfirmCode}
-			// 				helperText={`Введите код, отправленный на указанную в контактах электронную почту`}
-			// 			/>
-			// 			{this.renderButton()}
-			// 		</React.Fragment>
-			// 	);
-			// }
 			default: {
 				return null;
 			}
@@ -106,16 +50,16 @@ export class EnrollView extends React.PureComponent<any> {
 			<React.Fragment>
 				<div className={styles.header}>
 					<img className={styles.logo} src={Logo} />
-					<h2 className={styles.pkTitle}>Приемная компания {new Date().getFullYear()}</h2>
+					<h2 className={styles.pkTitle}>Приемная компания</h2>
 				</div>
 				<h2 className={styles.namePageTitle}>Электронная подача документов для поступления в Университет</h2>
 				<CardMedia className={this.props.classes.logo}>
 					<Stepper className={this.props.classes.stepper} activeStep={0} orientation={'vertical'}>
 						{!loading ? (
-							this.props.steps.map((label: EnrollForm, index: number) => (
+							this.props.steps.map((label, index) => (
 								<Step key={label}>
 									<StepButton disabled={index >= this.props.passedStep}>
-										<span className={label === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
+										<span className={index === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
 									</StepButton>
 									<StepContent>{this.renderForm()}</StepContent>
 								</Step>
@@ -124,13 +68,12 @@ export class EnrollView extends React.PureComponent<any> {
 							<React.Fragment>
 								<div className={styles.loading}>
 									<CircularProgress />
-									<h3>Загрузка справочников</h3>
+									<h3>Подготовка формы</h3>
 								</div>
 							</React.Fragment>
 						)}
-						{this.props.registrationCompleted && (
-							<Title color="green">Процесс подачи документов для поступления в Университет успешно завершен!</Title>
-						)}
+
+						{/*<Title color="green">Процесс подачи документов для поступления в Университет успешно завершен!</Title>*/}
 					</Stepper>
 				</CardMedia>
 			</React.Fragment>

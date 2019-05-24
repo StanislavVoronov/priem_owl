@@ -13,9 +13,9 @@ import {
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { onChangeTextInput, checkLoginTransaction, fromTransaction } from '$store';
 import { EDictionaryNameList, IEnrollRegisterStateForm } from '$common';
+import { enrollCreateNewLogin } from '../../operations';
 
 interface IStateToProps extends IEnrollRegisterStateForm {
-	isUniqueLogin: boolean;
 	dictionaries: DictionaryState;
 }
 interface IDispatchToProps {
@@ -23,9 +23,12 @@ interface IDispatchToProps {
 	changeMiddleName: (value: string) => void;
 	changeGender: (value: number) => void;
 	changeFirstName: (value: string, gender: number) => void;
-	changeLogin: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	submit: () => void;
 }
-type Props = IStateToProps & IDispatchToProps;
+interface IOwnProps {
+	onComplete: () => void;
+}
+type Props = IStateToProps & IDispatchToProps & IOwnProps;
 class EnrollRegistrationContainer extends React.Component<Props> {
 	onChangeFirstName = (firstName: string) => {
 		const firstNamesDictionary = this.props.dictionaries[EDictionaryNameList.FirstNames];
@@ -39,12 +42,11 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 		}
 	};
 	submit = () => {
-		return void 0;
+		this.props.submit();
 	};
 	render() {
 		return (
 			<EnrollRegistrationView
-				isUniqueLogin={this.props.isUniqueLogin}
 				onBlurTextInput={this.props.onChangeTextInput}
 				data={this.props.data}
 				validation={this.props.validation}
@@ -53,7 +55,6 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 				onChangeFirstName={this.onChangeFirstName}
 				dictionaries={this.props.dictionaries}
 				onChangeTextInput={this.onChangeTextInput}
-				onChangeLogin={this.props.changeLogin}
 				submit={this.submit}
 			/>
 		);
@@ -61,14 +62,13 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 }
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
 	const dictionaries = dictionaryStateSelector(state);
-	const checkLogin = fromTransaction.checkLoginSelector(state);
 
 	const { data, validation, statusValidation } = enrollRegistrationSelector(state);
 
-	return { dictionaries, data, validation, statusValidation, isUniqueLogin: checkLogin.result };
+	return { dictionaries, data, validation, statusValidation };
 };
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = (dispatch: any) => {
+const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => {
 	return {
 		onChangeTextInput: (event: React.ChangeEvent<HTMLInputElement>) => {
 			dispatch(onChangeTextInput(event));
@@ -82,9 +82,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = (dispatch: 
 		changeFirstName: (value: string, gender: number) => {
 			dispatch(changeFirstName(value, gender));
 		},
-		changeLogin: (event: React.ChangeEvent<HTMLInputElement>) => {
-			dispatch(changeLogin(event));
-			dispatch(checkLoginTransaction(event.target.value));
+		submit: () => {
+			dispatch<any>(enrollCreateNewLogin()).then(ownProps.onComplete);
 		},
 	};
 };

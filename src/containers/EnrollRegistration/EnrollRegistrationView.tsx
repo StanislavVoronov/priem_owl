@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEventHandler } from 'react';
-import { Autocomplete, RadioButtonGroup, TextInput, LoadingButton } from '$components';
+import { Autocomplete, RadioButtonGroup, TextInput, LoadingButton, Button } from '$components';
 import {
 	EDictionaryNameList,
 	IEnrollRegisterStateForm,
@@ -20,8 +20,6 @@ interface IProps {
 	onChangeGender: (value: number) => void;
 	onChangeFirstName: (value: string) => void;
 	onBlurTextInput: (event: ChangeEvent<HTMLInputElement>) => void;
-	onChangeLogin: (event: ChangeEvent<HTMLInputElement>) => void;
-	isUniqueLogin: boolean;
 	submit: () => void;
 }
 
@@ -32,9 +30,6 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 
 	onChangeGender = (_: any, gender: string) => {
 		this.props.onChangeGender(Number(gender));
-	};
-	onBlurRepeatPassword: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.props.onChangeTextInput(event);
 	};
 	onSubmit: FormEventHandler<HTMLFormElement> = event => {
 		// estringvent.preventDefault();
@@ -62,16 +57,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 		// 	this.props.updateForm({ middleName, ...requiredFields });
 		// }
 	};
-	loginHelperText = () => {
-		if (!this.props.isUniqueLogin) {
-			return 'Логин уже существует';
-		}
 
-		return this.props.validation.login || 'Логин должен быть не менее 5 символов';
-	};
-	hasLoginError = () => {
-		return !!this.props.validation.login || !this.props.isUniqueLogin;
-	};
 	render() {
 		const { dictionaries } = this.props;
 		const dictionaryFirstNames = dictionaries[EDictionaryNameList.FirstNames];
@@ -119,13 +105,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 					onChange={this.props.onChangeMiddleName}
 					suggestions={prepareDictionarySuggestions(filteredDictionaryMiddleName)}
 				/>
-				<RadioButtonGroup
-					title="Пол"
-					required={true}
-					value={String(this.props.data.gender)}
-					values={GENDERS}
-					onChange={this.onChangeGender}
-				/>
+
 				<TextInput
 					required
 					name="birthday"
@@ -137,47 +117,18 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 					onBlur={this.props.onChangeTextInput}
 				/>
 
-				<React.Fragment>
-					<TextInput
-						required
-						name="login"
-						minLength={5}
-						maxLength={20}
-						pattern={'[a-z0-9_-]'}
-						defaultValue={this.props.data.login}
-						label="Логин"
-						onChange={this.props.onChangeLogin}
-						error={this.hasLoginError()}
-						helperText={this.loginHelperText()}
-					/>
-
-					<TextInput
-						required
-						minLength={5}
-						pattern={'[a-z0-9_-]'}
-						name="password"
-						label="Пароль"
-						type="password"
-						defaultValue={this.props.data.password}
-						onBlur={this.props.onBlurTextInput}
-						onChange={this.props.onChangeTextInput}
-						error={!!this.props.validation.password}
-						helperText={this.props.validation.password || 'Пароль должен быть не менее 5 символов'}
-					/>
-					<TextInput
-						required
-						lang="eng"
-						type="password"
-						label="Подтвердить пароль"
-						defaultValue={this.props.data.repeatPassword}
-						onBlur={this.onBlurRepeatPassword}
-						error={!!this.props.validation.repeatPassword}
-						helperText={this.props.validation.repeatPassword}
-					/>
-				</React.Fragment>
-				<LoadingButton disabled={this.hasLoginError() || Object.values(this.props.validation).some(Boolean)}>
-					Зарегистрироваться
-				</LoadingButton>
+				<RadioButtonGroup
+					title="Пол"
+					required={true}
+					value={String(this.props.data.gender)}
+					values={GENDERS}
+					onChange={this.onChangeGender}
+				/>
+				<div style={{ marginTop: 24 }}>
+					<Button onClick={this.props.submit} disabled={Object.values(this.props.validation).some(Boolean)}>
+						Проверить
+					</Button>
+				</div>
 			</form>
 		);
 	}

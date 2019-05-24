@@ -37,10 +37,12 @@ export interface IEducationForm {
 	hasEge: boolean;
 	document: IDocument;
 }
-export interface IEnrollRegistration extends IPerson {
-	login: string;
-	password: string;
-	repeatPassword: string;
+export interface IEnrollRegistration {
+	lastName: string;
+	firstName: string;
+	middleName: string;
+	birthday: string;
+	gender: number;
 }
 
 export interface IEnrollRegisterStateForm {

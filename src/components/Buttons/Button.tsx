@@ -6,20 +6,23 @@ interface IProps {
 	disabled: boolean;
 	children: string;
 	fullWidth: boolean;
-	className: string;
+	className?: string;
 	onClick: () => void;
 	primary: boolean;
+	submit: boolean;
 }
 class Button extends React.Component<IProps> {
 	static defaultProps = {
 		disabled: false,
 		onClick: noop,
-		primary: false,
+		primary: true,
 		fullWidth: false,
+		submit: false,
 	};
 	render() {
 		return (
 			<MaterialButton
+				type={this.props.submit ? 'submit' : ''}
 				fullWidth={this.props.fullWidth}
 				variant="contained"
 				className={this.props.className}

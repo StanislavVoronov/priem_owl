@@ -8,14 +8,23 @@ import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from '.
 import { EnrollForm } from './models';
 import { IRootState } from '$store';
 
-class EnrollContainer extends React.Component {
+interface IState {
+	activeStep: number;
+}
+class EnrollContainer extends React.Component<never, IState> {
+	state = {
+		activeStep: 0,
+	};
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
 	}
-	handleStep = (step: EnrollForm) => () => {
+	handleStep = (step: number) => () => {
 		this.setState({
 			activeStep: step,
 		});
+	};
+	handleNext = () => {
+		this.setState({ activeStep: this.state.activeStep + 1 });
 	};
 	submit = (event: React.FormEvent<HTMLFormElement>) => {
 		return void 0;
@@ -25,7 +34,7 @@ class EnrollContainer extends React.Component {
 
 		return (
 			<Dictionary version={2} url={'/dev-bin/priem_api.fcgi'} list={dictionaryList}>
-				<EnrollView steps={NEW_PERSON_STEPS} activeStep={0} />
+				<EnrollView steps={NEW_PERSON_STEPS} handleNext={this.handleNext} activeStep={this.state.activeStep} />
 			</Dictionary>
 		);
 	}

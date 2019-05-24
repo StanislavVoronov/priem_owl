@@ -25,6 +25,8 @@ export const checkLoginTransaction = (
 	return PriemApi.checkData<ICheckLoginRequest, ICheckLoginResponse>(PriemRestApi.CheckUniqueLogin, payload)
 		.then(data => {
 			dispatch(checkLoginActions.success(data));
+
+			return Promise.resolve();
 		})
 		.catch((error: IServerError) => {
 			dispatch(checkLoginActions.failure(error));
