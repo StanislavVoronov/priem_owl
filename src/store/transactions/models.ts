@@ -5,4 +5,5 @@ import { ICreateLoginResponse } from './createLogin';
 export interface ITransactionState {
 	checkLogin: ITransaction<ICheckLoginResponse>;
 	createLogin: ITransaction<ICreateLoginResponse>;
+	findPerson: ITransaction<ICreateLoginResponse>;
 }

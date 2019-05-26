@@ -30,11 +30,11 @@
 			"$containers": ["containers"],
 			"$store": ["store"],
 			"$services": ["services"],
+			"$operations": ["operations"],
+			"$actions": ["actions"],
 			"$common": ["common"]
 		}
 	},
-	"include": [
-		"src"
-	],
+	"include": ["src"],
 	"exclude": ["node_modules", "build", "./src/main.tsx"]
 }

@@ -8,12 +8,12 @@ import {
 	onChangeMiddleName,
 	onChangeGender,
 	changeFirstName,
-	changeLogin,
 } from '$store';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
-import { onChangeTextInput, checkLoginTransaction, fromTransaction } from '$store';
+import { onChangeTextInput } from '$store';
 import { EDictionaryNameList, IEnrollRegisterStateForm } from '$common';
-import { enrollCreateNewLogin } from '../../operations';
+import { enrollCreateNewLogin, findPerson } from '$operations';
+import { IFindPersonResponse } from '../../store/transactions/findPerson';
 
 interface IStateToProps extends IEnrollRegisterStateForm {
 	dictionaries: DictionaryState;
@@ -83,7 +83,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dis
 			dispatch(changeFirstName(value, gender));
 		},
 		submit: () => {
-			dispatch<any>(enrollCreateNewLogin()).then(ownProps.onComplete);
+			dispatch<any>(enrollCreateNewLogin()).then(() => {
+				dispatch<any>(findPerson()).then(ownProps.onComplete);
+			});
 		},
 	};
 };

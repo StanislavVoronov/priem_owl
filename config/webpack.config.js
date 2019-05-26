@@ -163,6 +163,8 @@ module.exports = function(webpackEnv) {
 				$services: srcPath('services'),
 				$assets: srcPath('assets'),
 				$store: srcPath('store'),
+				$operations: srcPath('operations'),
+				$acions: srcPath('actions'),
 				$platform: srcPath('platform'),
 			},
 			extensions: paths.moduleFileExtensions.map(ext => `.${ext}`).filter(ext => useTypeScript || !ext.includes('ts')),

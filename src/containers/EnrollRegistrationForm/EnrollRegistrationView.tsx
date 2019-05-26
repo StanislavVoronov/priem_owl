@@ -114,7 +114,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 					type="date"
 					error={!!this.props.validation.birthday}
 					helperText={this.props.validation.birthday}
-					onBlur={this.props.onChangeTextInput}
+					onBlur={this.props.onBlurTextInput}
 				/>
 
 				<RadioButtonGroup

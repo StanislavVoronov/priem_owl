@@ -13,7 +13,7 @@ interface IState {
 }
 class EnrollContainer extends React.Component<never, IState> {
 	state = {
-		activeStep: 0,
+		activeStep: 1,
 	};
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service

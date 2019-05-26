@@ -1,1 +1,1 @@
-export * from './EnrollRegistration';
+export * from './EnrollRegistrationForm';

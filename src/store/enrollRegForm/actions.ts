@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import { ChangeEvent } from 'react';
 
-const NAMESPACE = 'EnrollRegistration';
+const NAMESPACE = 'EnrollRegistrationForm';
 
 export const onChangeTextInput = createAction(
 	`${NAMESPACE}/updateFormInputField`,
