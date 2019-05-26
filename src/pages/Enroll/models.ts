@@ -1,5 +1,5 @@
-import { IDocument, IServerError } from '$common';
-import { IContactsForm, IEducationForm, IPersonForm, IEnrollRegisterStateForm } from '$common';
+import { IDocument, IEnrollRegForm, IForm, IServerError } from '$common';
+import { IEnrollContactsForm, IEducationForm, IEnrollPersonForm } from '$common';
 
 export interface IEnrollState {
 	registrationCompleted: boolean;
@@ -20,9 +20,9 @@ export interface IEnrollState {
 }
 
 export interface IEnrollForm {
-	registrationForm: IEnrollRegisterStateForm;
-	personData: IPersonForm;
-	contactsData: IContactsForm;
+	registrationForm: IForm<IEnrollRegForm>;
+	personData: IEnrollPersonForm;
+	contactsData: IEnrollContactsForm;
 	educationData: IEducationForm;
 	documents: IDocument[];
 }

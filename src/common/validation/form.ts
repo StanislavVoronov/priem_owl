@@ -1,13 +1,12 @@
 import {
 	Gender,
-	IContactsForm,
+	IEnrollContactsForm,
 	IDocument,
 	IEducationForm,
 	inputValueAsNumber,
 	inputValueAsString,
 	IPerson,
-	IPersonForm,
-	IEnrollRegisterStateForm,
+	IEnrollPersonForm,
 } from '$common';
 import { ENG_ALPHABET, RUS_ALPHABET } from '../constants';
 import React, { ChangeEvent } from 'react';
@@ -50,23 +49,6 @@ export const validateDocument = (document: IDocument): boolean => {
 	}
 
 	return true;
-};
-export const validatePersonForm = (fields: IPersonForm): boolean => {
-	return (
-		validateDataForm(fields) &&
-		validateDocument(fields.document) &&
-		validateDocument(fields.photo) &&
-		fields.isApplyPersonData
-	);
-};
-export const validateContactsForm = (fields: IContactsForm): boolean => {
-	return validateDataForm(fields) && validateDocument(fields.document);
-};
-export const validateEducationForm = (fields: IEducationForm): boolean => {
-	return validateDataForm(fields) && validateDocument(fields.document);
-};
-export const validateDocumentsForm = (documents: IDocument[]): boolean => {
-	return documents.some((item: IDocument) => !validateDocument(item));
 };
 
 export const validateRequireTextField = (value: string, required: boolean): string | void => {

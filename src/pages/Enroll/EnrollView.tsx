@@ -2,11 +2,9 @@ import * as React from 'react';
 
 import styles from './styles.module.css';
 import Logo from '$assets/mgutm.png';
-import { EnrollForm } from './models';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Title } from '../../components/Typography/Title';
-import EnrollRegistrationContainer from '../../containers/EnrollRegistrationForm/EnrollRegistrationContainer';
 import { CardMedia, Step, StepButton, StepContent, Stepper, withStyles } from '$components';
+import { EnrollRegForm, EnrollPersonForm } from '$containers';
 
 const localStyles = {
 	logo: { height: window.innerHeight },
@@ -21,6 +19,7 @@ const localStyles = {
 };
 
 interface IProps {
+	loading: boolean;
 	handleNext: () => void;
 	activeStep: number;
 	classes: any;
@@ -35,11 +34,11 @@ export class EnrollView extends React.PureComponent<IProps> {
 
 	renderForm = (step: number) => {
 		switch (step) {
-			case 0: {
-				return <EnrollRegistrationContainer onComplete={this.props.handleNext} />;
-			}
 			case 1: {
-				return <div>1111</div>;
+				return <EnrollRegForm submit={this.props.handleNext} />;
+			}
+			case 0: {
+				return <EnrollPersonForm submit={this.props.handleNext} />;
 			}
 			default: {
 				return null;
@@ -47,8 +46,6 @@ export class EnrollView extends React.PureComponent<IProps> {
 		}
 	};
 	render() {
-		const loading = false;
-
 		return (
 			<React.Fragment>
 				<div className={styles.header}>
@@ -58,7 +55,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				<h2 className={styles.namePageTitle}>Электронная подача документов для поступления в Университет</h2>
 				<CardMedia className={this.props.classes.logo}>
 					<Stepper className={this.props.classes.stepper} activeStep={this.props.activeStep} orientation={'vertical'}>
-						{!loading ? (
+						{!this.props.loading ? (
 							this.props.steps.map((label, index) => (
 								<Step key={label}>
 									<StepButton disabled={index >= this.props.passedStep}>

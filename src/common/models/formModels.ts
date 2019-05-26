@@ -1,7 +1,7 @@
 import { IDocument, IGovernmentSelectItem, IInvalidData, ISelectItem } from '$common';
 import { IPerson } from '$common';
 
-export interface IContactsForm {
+export interface IEnrollContactsForm {
 	needDormitory: boolean;
 	regIndex: string;
 	regRegion: string;
@@ -20,14 +20,14 @@ export interface IContactsForm {
 	homePhone?: string;
 	mobPhone: string;
 	isRegAddressEqualLive: boolean;
-	phoneGovernment: IGovernmentSelectItem;
+	mobileGovernment: IGovernmentSelectItem;
 	email: string;
-	document: IDocument;
+	regDocument: IDocument;
 }
 
-export interface IUpdateTextInputAction {
+export interface IChangeFieldAction {
 	field: {
-		[key: string]: string;
+		[key: string]: any;
 	};
 }
 export interface IEducationForm {
@@ -37,7 +37,7 @@ export interface IEducationForm {
 	hasEge: boolean;
 	document: IDocument;
 }
-export interface IEnrollRegistration {
+export interface IEnrollRegForm {
 	lastName: string;
 	firstName: string;
 	middleName: string;
@@ -45,22 +45,20 @@ export interface IEnrollRegistration {
 	gender: number;
 }
 
-export interface IEnrollRegisterStateForm {
-	data: IEnrollRegistration;
-	validation: IInvalidData<IEnrollRegistration>;
+export interface IForm<T extends object> {
+	data: T;
 	statusValidation: boolean;
 }
 
-export interface IPersonForm {
+export interface IEnrollPersonForm {
 	isApplyPersonData: boolean;
-	codeDepartment?: string;
 	photo: IDocument;
 	birthPlace: string;
-	document: IDocument;
+	personDocument: IDocument;
 }
 export interface IDocumentsForm {
 	documents: IDocument[];
 	cheatType: ISelectItem;
 }
 
-export type EnrollForms = IEnrollRegisterStateForm & IContactsForm & IEducationForm & IPersonForm & IDocument;
+export type EnrollForms = IEnrollContactsForm & IEducationForm & IEnrollPersonForm & IDocument;

@@ -1,17 +1,8 @@
 import ApplicationsForm from './ApplicationsForm';
 import EducationForm from './EducationForm';
-import EnrollRegistrationView from '../EnrollRegistrationForm/EnrollRegistrationView';
-import PersonForm from './PersonForm';
-import ContactsForm from './ContactsForm';
+import RegistrationView from '../RegistrationForm/RegistrationView';
+
 import DocumentsForm from './DocumentsForm';
 import DocumentForm from '../../components/DocumentForm';
 
-export {
-	EducationForm,
-	DocumentsForm,
-	PersonForm,
-	EnrollRegistrationView,
-	ApplicationsForm,
-	DocumentForm,
-	ContactsForm,
-};
+export { EducationForm, DocumentsForm, RegistrationView, ApplicationsForm, DocumentForm };

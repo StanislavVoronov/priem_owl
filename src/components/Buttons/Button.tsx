@@ -22,7 +22,6 @@ class Button extends React.Component<IProps> {
 	render() {
 		return (
 			<MaterialButton
-				type={this.props.submit ? 'submit' : ''}
 				fullWidth={this.props.fullWidth}
 				variant="contained"
 				className={this.props.className}

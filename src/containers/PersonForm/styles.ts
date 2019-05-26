@@ -31,6 +31,24 @@ const styles = {
 		marginBottom: 4,
 		fontSize: '1em',
 	},
+
+	docDataForm: {
+		display: 'flex',
+		flexDirection: 'row' as any,
+		flexWrap: 'wrap' as any,
+	},
+	dataContainer: {
+		display: 'flex',
+		paddingRight: 40,
+		flexDirection: 'column' as any,
+		width: '50%',
+	},
+	documentContainer: {
+		display: 'flex',
+		width: '40%',
+		alignItems: 'center',
+		flexDirection: 'column' as any,
+	},
 };
 
 export default styles;

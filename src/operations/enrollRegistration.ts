@@ -1,6 +1,5 @@
 import {
 	checkLoginTransaction,
-	fromEnrollRegistration,
 	createLoginTransaction,
 	fromTransaction,
 	IRootState,
@@ -16,7 +15,7 @@ export const enrollCreateNewLogin = (): ThunkAction<Promise<void>, IRootState, v
 	getState,
 ) => {
 	const state = getState();
-	const { data } = fromEnrollRegistration.enrollRegistrationSelector(state);
+	const { data } = enrollRegistrationSelector(state);
 	const lastName = cyrillToLatin(data.lastName);
 	const firstName = cyrillToLatin(data.firstName);
 	const middleName = cyrillToLatin(data.middleName);

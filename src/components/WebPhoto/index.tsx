@@ -14,7 +14,7 @@ interface IState {
 	photo: File | null;
 }
 interface IProps {
-	downloadPhoto: (file: File) => void;
+	addPhoto: (file: File) => void;
 	removePhoto: () => void;
 	classes: any;
 }
@@ -44,7 +44,7 @@ class WebPhoto extends React.Component<IProps, IState> {
 
 			const photo: File = new File([new Buffer(matches[2], 'base64')], 'photo', { type: matches[1] });
 			this.setState({ open: false, photo });
-			this.props.downloadPhoto(photo);
+			this.props.addPhoto(photo);
 		}
 	};
 	capture = () => {

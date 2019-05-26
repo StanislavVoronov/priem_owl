@@ -4,7 +4,6 @@ import React, { ChangeEvent, ReactText } from 'react';
 import { FormLabel, Omit, withStyles } from '@material-ui/core';
 import { noop } from 'lodash';
 import styles from './styles';
-import { IEnrollRegisterStateForm } from '$common';
 
 export interface IInputProps<T> extends BaseTextFieldProps {
 	onChange: (event: ChangeEvent<HTMLInputElement>) => void;

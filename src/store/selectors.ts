@@ -7,3 +7,11 @@ export const enrollRegistrationSelector = (state: IRootState) => {
 export const dictionaryStateSelector = (state: IRootState) => {
 	return state.dictionaries;
 };
+
+export const enrollPersonFormSelector = (state: IRootState) => {
+	return state.enrollPersonForm;
+};
+
+export const enrollContactsFormSelector = (state: IRootState) => {
+	return state.enrollContactsForm;
+};

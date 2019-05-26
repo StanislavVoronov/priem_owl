@@ -1,5 +1,5 @@
 import { IDocument } from '$common';
-import { IContactsForm, IEducationForm, IPersonForm, IEnrollRegisterStateForm, Gender } from '$common';
+import { IEnrollContactsForm, IEducationForm, IEnrollPersonForm, Gender } from '$common';
 
 export const defaultDocument: IDocument = {
 	docType: null,
@@ -7,7 +7,7 @@ export const defaultDocument: IDocument = {
 	docGovernment: { id: 1, name: 'Россия' },
 };
 
-export const defaultContactsDataForm: IContactsForm = {
+export const defaultEnrollContactsForm: IEnrollContactsForm = {
 	needDormitory: false,
 	regLocality: '',
 	regIndex: '',
@@ -16,18 +16,18 @@ export const defaultContactsDataForm: IContactsForm = {
 	email: '',
 	mobPhone: '+7',
 	isRegAddressEqualLive: true,
-	document: {
+	regDocument: {
 		...defaultDocument,
 		docType: { id: 3, name: 'Регистрация места жительства' },
 	},
-	phoneGovernment: { id: 1, name: 'Россия', phone_code: '7' },
+	mobileGovernment: { id: 1, name: 'Россия', phone_code: '7' },
 };
 
-export const defaultPersonDataForm: IPersonForm = {
+export const defaultEnrollPersonForm: IEnrollPersonForm = {
 	isApplyPersonData: false,
 	photo: { ...defaultDocument, docType: { id: 35, name: 'Фотография' } },
 	birthPlace: '',
-	document: {
+	personDocument: {
 		...defaultDocument,
 		docSubType: { id: 1, name: 'Паспорт гражданина РФ' },
 		docType: { id: 1, name: 'Документ удостоверяющий личность', has_number: true, need_info: true },

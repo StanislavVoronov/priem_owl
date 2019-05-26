@@ -9,7 +9,6 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Visibility from '@material-ui/icons/Visibility';
 import RotateRight from '@material-ui/icons/RotateRight';
 import styles from './styles.module.css';
-import { red } from '@material-ui/core/colors';
 
 interface IProps {
 	file: File;

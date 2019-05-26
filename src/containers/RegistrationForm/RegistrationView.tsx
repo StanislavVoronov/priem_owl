@@ -1,19 +1,11 @@
 import React, { ChangeEvent, FormEventHandler } from 'react';
 import { Autocomplete, RadioButtonGroup, TextInput, LoadingButton, Button } from '$components';
-import {
-	EDictionaryNameList,
-	IEnrollRegisterStateForm,
-	IEnrollRegistration,
-	IInvalidData,
-	prepareDictionarySuggestions,
-} from '$common';
+import { EDictionaryNameList, IEnrollRegForm, IForm, IInvalidData, prepareDictionarySuggestions } from '$common';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 
 export const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { value: 2, label: 'Жен.' }];
 
-interface IProps {
-	data: IEnrollRegistration;
-	validation: IInvalidData<IEnrollRegistration>;
+interface IProps extends IEnrollRegForm, IInvalidData<IEnrollRegForm> {
 	onChangeTextInput: (event: ChangeEvent<HTMLInputElement>) => void;
 	dictionaries: DictionaryState;
 	onChangeMiddleName: (value: string) => void;
@@ -23,7 +15,7 @@ interface IProps {
 	submit: () => void;
 }
 
-class EnrollRegistrationView extends React.PureComponent<IProps> {
+class RegistrationView extends React.PureComponent<IProps> {
 	static defaultProps = {
 		disabled: false,
 	};
@@ -64,9 +56,9 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 		const dictionaryMiddleNames = dictionaries[EDictionaryNameList.MiddleNames];
 
 		const filteredDictionaryMiddleName = dictionaryMiddleNames
-			? this.props.data.gender
+			? this.props.gender
 				? {
-						values: dictionaryMiddleNames.values.filter((item: { sex: number }) => item.sex === this.props.data.gender),
+						values: dictionaryMiddleNames.values.filter((item: { sex: number }) => item.sex === this.props.gender),
 				  }
 				: dictionaryMiddleNames
 			: { values: [] };
@@ -77,7 +69,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 					name="lastName"
 					onChange={this.props.onChangeTextInput}
 					required
-					defaultValue={this.props.data.lastName}
+					defaultValue={this.props.lastName}
 					placeholder={'Введите фамилию'}
 					label="Фамилия"
 					helperText={this.props.validation.lastName}
@@ -86,7 +78,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 				/>
 				<Autocomplete
 					label={'Имя'}
-					defaultValue={this.props.data.firstName}
+					defaultValue={this.props.firstName}
 					required
 					helperText={this.props.validation.firstName}
 					error={!!this.props.validation.firstName}
@@ -99,7 +91,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 					label={'Отчество'}
 					name="middleName"
 					placeholder={'Введите отчество'}
-					defaultValue={this.props.data.middleName}
+					defaultValue={this.props.middleName}
 					helperText={this.props.validation.middleName}
 					error={!!this.props.validation.middleName}
 					onChange={this.props.onChangeMiddleName}
@@ -110,7 +102,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 					required
 					name="birthday"
 					label="Дата рождения"
-					defaultValue={this.props.data.birthday}
+					defaultValue={this.props.birthday}
 					type="date"
 					error={!!this.props.validation.birthday}
 					helperText={this.props.validation.birthday}
@@ -120,7 +112,7 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 				<RadioButtonGroup
 					title="Пол"
 					required={true}
-					value={String(this.props.data.gender)}
+					value={String(this.props.gender)}
 					values={GENDERS}
 					onChange={this.onChangeGender}
 				/>
@@ -134,4 +126,4 @@ class EnrollRegistrationView extends React.PureComponent<IProps> {
 	}
 }
 
-export default EnrollRegistrationView;
+export default RegistrationView;

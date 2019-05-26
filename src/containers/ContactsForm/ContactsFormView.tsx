@@ -1,53 +1,44 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocumentForm } from '$components';
 import {
 	EDictionaryNameList,
 	IGovernmentSelectItem,
 	inputValueAsString,
 	IDocument,
-	IContactsForm,
 	IStylable,
+	IEnrollContactsForm,
+	ISelectItem,
 } from '$common';
 
 import styles from './styles';
-import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { withStyles } from '@material-ui/core';
+import { DictionaryState } from '@mgutm-fcu/dictionary';
 
-interface IProps extends IStylable {
+interface IProps extends IStylable, IEnrollContactsForm {
 	disabled: boolean;
+	updateContactsForm: (event: ChangeEvent<HTMLInputElement>) => void;
+	updateRegDocument: (document: IDocument) => void;
+	toggleNeedDormitoryStatus: () => void;
+	toggleLiveAddressStatus: () => void;
+	selectMobileGovernment: (item: ISelectItem) => void;
 	dictionaries: DictionaryState;
-	data: IContactsForm;
-	updateForm: (data: Partial<IContactsForm>) => void;
 }
 
-class ContactsForm extends React.PureComponent<IProps> {
+class ContactsFormView extends React.PureComponent<IProps> {
 	static defaultProps = {
 		disabled: false,
 		classes: {},
 	};
 
 	onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
-		const name = event.target.name;
-		this.setState({ [name]: inputValueAsString(event) });
-	};
-
-	toggleLiveAddressStatus = (_: any, checked: boolean) => {
-		this.props.updateForm({ isRegAddressEqualLive: checked });
-	};
-	toggleNeedDormitoryStatus = (_: any, checked: boolean) => {
-		this.props.updateForm({ needDormitory: checked });
-	};
-	onChangeSelectItem = (item: IGovernmentSelectItem) => {
-		const phoneNumber = this.props.data.mobPhone.substr(this.props.data.phoneGovernment.phone_code.length + 1);
-		const maskedMobPhone = `+${item.phone_code}${phoneNumber}`;
-		this.props.updateForm({ mobPhone: maskedMobPhone, phoneGovernment: item });
+		this.props.updateContactsForm(event);
 	};
 	onChangeMobPhone: React.ChangeEventHandler<HTMLInputElement> = event => {
 		const mobPhoneValue: string[] | null = inputValueAsString(event)
 			.replace(/\D/g, '')
-			.substring(`${this.props.data.phoneGovernment.phone_code}`.length)
+			.substring(`${this.props.mobileGovernment.phone_code}`.length)
 			.match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-		const phoneCode = `+${this.props.data.phoneGovernment.phone_code}`;
+		const phoneCode = `+${this.props.mobileGovernment.phone_code}`;
 		const maskMobPhone =
 			phoneCode +
 			(mobPhoneValue
@@ -61,11 +52,9 @@ class ContactsForm extends React.PureComponent<IProps> {
 					  (mobPhoneValue[4] ? +`-${mobPhoneValue[4]}` : '')
 				: '');
 
-		this.props.updateForm({ mobPhone: maskMobPhone });
+		this.props.updateContactsForm({ ...event, target: { ...event.target, value: maskMobPhone } });
 	};
-	updateDocument = (document: IDocument) => {
-		this.setState({ document });
-	};
+
 	render() {
 		const governmentDictionary = this.props.dictionaries[EDictionaryNameList.Governments];
 
@@ -73,146 +62,130 @@ class ContactsForm extends React.PureComponent<IProps> {
 			<form className="flexColumn">
 				<H2>Адрес регистрации</H2>
 				<DocumentForm
-					document={this.props.data.document}
+					document={this.props.regDocument}
 					docTitle="Файл регистрации места жительства"
-					updateDocument={this.updateDocument}
+					updateDocument={this.props.updateRegDocument}
 					extraFields={
 						<React.Fragment>
 							<TextInput
 								label={'Индекс'}
-								defaultValue={this.props.data.regIndex}
+								defaultValue={this.props.regIndex}
 								type="number"
 								placeholder={'Введите индекс'}
-								required={true}
+								required
 								name="regIndex"
 								onBlur={this.onChange}
 							/>
 							<TextInput
 								label={'Область'}
-								defaultValue={this.props.data.regRegion}
+								defaultValue={this.props.regRegion}
 								placeholder={'Введите область'}
-								required={true}
+								required
 								name="regRegion"
 								onBlur={this.onChange}
 							/>
 							<TextInput
 								label={'Населенный пункт'}
-								defaultValue={this.props.data.regLocality}
+								defaultValue={this.props.regLocality}
 								placeholder={'Введите населенный пункт'}
-								required={true}
+								required
 								name="regLocality"
 								onBlur={this.onChange}
 							/>
 							<TextInput
 								label={'Улица'}
-								defaultValue={this.props.data.regStreet}
+								defaultValue={this.props.regStreet}
 								placeholder={'Введите улицу'}
-								required={true}
+								required
 								name="regStreet"
 								onBlur={this.onChange}
 							/>
 							<TextInput
 								label={'Дом'}
-								defaultValue={this.props.data.regHome}
+								defaultValue={this.props.regHome}
 								placeholder={'Введите дом'}
 								name="regHome"
-								required={true}
+								required
 								onBlur={this.onChange}
 							/>
-							<TextInput
-								label={'Корпус'}
-								defaultValue={this.props.data.regBlock}
-								name="regBlock"
-								onBlur={this.onChange}
-							/>
-							<TextInput
-								label={'Квартира'}
-								defaultValue={this.props.data.regFlat}
-								name="regFlat"
-								onBlur={this.onChange}
-							/>
+							<TextInput label={'Корпус'} defaultValue={this.props.regBlock} name="regBlock" onBlur={this.onChange} />
+							<TextInput label={'Квартира'} defaultValue={this.props.regFlat} name="regFlat" onBlur={this.onChange} />
 							<FormControlLabel
 								className={this.props.classes.checkFormControl}
-								control={<Checkbox color="primary" onChange={this.toggleNeedDormitoryStatus} />}
+								control={
+									<Checkbox
+										color="primary"
+										checked={this.props.needDormitory}
+										onChange={this.props.toggleNeedDormitoryStatus}
+									/>
+								}
 								label="Нуждаюсь в предоставлении общежития"
 							/>
 						</React.Fragment>
 					}
 				/>
-
 				<FormControlLabel
 					className={this.props.classes.checkFormControl}
 					control={
 						<Checkbox
 							color="primary"
-							checked={this.props.data.isRegAddressEqualLive}
-							onChange={this.toggleLiveAddressStatus}
+							checked={this.props.isRegAddressEqualLive}
+							onChange={this.props.toggleLiveAddressStatus}
 						/>
 					}
 					label="Фактический адрес проживания	совпадает с адресом регистрации"
 				/>
-				{!this.props.data.isRegAddressEqualLive && (
+				{!this.props.isRegAddressEqualLive && (
 					<div className="flexColumn">
 						<H2>Адрес проживания</H2>
 						<TextInput
 							label={'Индекс'}
-							defaultValue={this.props.data.liveIndex}
+							defaultValue={this.props.liveIndex}
 							placeholder={'Введите индекс'}
 							name="liveIndex"
-							required={true}
+							required={this.props.isRegAddressEqualLive}
 							onBlur={this.onChange}
 						/>
 						<TextInput
-							label={'Область'}
-							defaultValue={this.props.data.liveRegion}
+							label={'ОбласonChangeSelectItemть'}
+							defaultValue={this.props.liveRegion}
 							placeholder={'Введите область'}
 							name="liveRegion"
-							required={true}
+							required={this.props.isRegAddressEqualLive}
 							onBlur={this.onChange}
 						/>
 						<TextInput
 							label={'Населенный пункт'}
-							defaultValue={this.props.data.liveLocality}
+							defaultValue={this.props.liveLocality}
 							placeholder={'Введите населенный пункт'}
 							name="liveLocality"
-							required={true}
+							required={this.props.isRegAddressEqualLive}
 							onBlur={this.onChange}
 						/>
 						<TextInput
-							defaultValue={this.props.data.liveStreet}
+							defaultValue={this.props.liveStreet}
 							label={'Улица'}
-							required={true}
+							required={this.props.isRegAddressEqualLive}
 							name="liveStreet"
 							placeholder={'Введите улицу'}
 							onBlur={this.onChange}
 						/>
 						<TextInput
-							defaultValue={this.props.data.liveHome}
+							defaultValue={this.props.liveHome}
 							label={'Дом'}
 							name="liveHome"
 							placeholder={'Введите дом'}
-							required
+							required={this.props.isRegAddressEqualLive}
 							onBlur={this.onChange}
 						/>
-						<TextInput
-							defaultValue={this.props.data.liveBlock}
-							name="liveBlock"
-							label={'Корпус'}
-							onBlur={this.onChange}
-						/>
-						<TextInput
-							defaultValue={this.props.data.liveFlat}
-							name="liveFlat"
-							label={'Квартира'}
-							onBlur={this.onChange}
-						/>
+						<TextInput defaultValue={this.props.liveBlock} name="liveBlock" label={'Корпус'} onBlur={this.onChange} />
+						<TextInput defaultValue={this.props.liveFlat} name="liveFlat" label={'Квартира'} onBlur={this.onChange} />
 					</div>
 				)}
-
 				<TextInput
 					disabled={this.props.disabled}
 					label={'Электронная почта'}
-					defaultValue={this.props.data.email}
+					defaultValue={this.props.email}
 					name="email"
 					helperText={'Необходимо для подтверждения учетной записи'}
 					required
@@ -220,14 +193,14 @@ class ContactsForm extends React.PureComponent<IProps> {
 				/>
 				<DropdownSelect
 					isCleanable={false}
-					defaultValue={this.props.data.phoneGovernment}
-					onChange={this.onChangeSelectItem}
+					defaultValue={this.props.mobileGovernment}
+					onChange={this.props.selectMobileGovernment}
 					title={'Страна оператора сотовой связи'}
 					options={governmentDictionary ? governmentDictionary.values : []}
 				/>
 				<TextInput
-					value={this.props.data.mobPhone}
-					defaultValue={this.props.data.mobPhone}
+					value={this.props.mobPhone}
+					defaultValue={this.props.mobPhone}
 					helperText={'Формат: 999 999-99-99'}
 					label={'Мобильный телефон'}
 					required={true}
@@ -236,11 +209,11 @@ class ContactsForm extends React.PureComponent<IProps> {
 				<TextInput
 					name="homePhone"
 					label={'Домашний телефон'}
-					defaultValue={this.props.data.homePhone}
+					defaultValue={this.props.homePhone}
 					onBlur={this.onChange}
 				/>
 			</form>
 		);
 	}
 }
-export default withStyles(styles)(ContactsForm);
+export default withStyles(styles)(ContactsFormView);

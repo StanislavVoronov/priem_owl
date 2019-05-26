@@ -17,12 +17,8 @@ class PriemApi {
 	static post = <Q, R>(api: PriemRestApi, payload: Q, extraData: object = {}): Promise<R> => {
 		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, payload, extraData);
 
-		return Request.send<IPriemApiResponse<R>>().then(response => {
-			if (response.error) {
-				return Promise.reject({ message: response.error.string, type: response.error.id });
-			}
-
-			return Promise.resolve(response.result);
+		return Request.send<R>().then(response => {
+			return Promise.resolve(response);
 		});
 	};
 }

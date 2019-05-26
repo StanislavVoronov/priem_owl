@@ -25,6 +25,7 @@ export const createLoginTransaction = (
 		password,
 	})
 		.then(response => {
+			console.log('response', response);
 			dispatch(createLoginActions.success([response]));
 		})
 		.catch(error => {

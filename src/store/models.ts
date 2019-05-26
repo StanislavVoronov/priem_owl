@@ -1,9 +1,12 @@
 import { DictionaryState } from '@mgutm-fcu/dictionary';
-import { IEnrollRegisterStateForm } from '$common';
+
 import { ITransactionState } from '$store';
+import { IEnrollContactsForm, IEnrollPersonForm, IEnrollRegForm, IForm } from '$common';
 
 export interface IRootState {
 	dictionaries: DictionaryState;
-	enrollRegistration: IEnrollRegisterStateForm;
+	enrollRegistration: IForm<IEnrollRegForm>;
+	enrollContactsForm: IForm<IEnrollContactsForm>;
+	enrollPersonForm: IForm<IEnrollPersonForm>;
 	transactions: ITransactionState;
 }
