@@ -1,38 +1,29 @@
 import * as React from 'react';
-import { EDictionaryNameList, IDocument, IEducationForm, ISelectItem, IStylable } from '$common';
+import { EDictionaryNameList, IDocument, IEnrollEducationForm, ISelectItem, IStylable } from '$common';
 
 import styles from './styles';
 import { DocumentForm, DropdownSelect, FormControlLabel, Checkbox } from '$components';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { withStyles } from '@material-ui/core';
+import { toggleHasEgeStatus } from '../../store/educationForm';
+import Button from '../../components/Buttons/Button';
 
-interface IProps extends IStylable {
+interface IProps extends IStylable, IEnrollEducationForm {
 	dictionaries: DictionaryState;
-	data: IEducationForm;
-	updateForm: (data: Partial<IEducationForm>) => void;
+	updateEducationDocument: (document: IDocument) => void;
+	selectPersonCoolnessTypes: (coolnessTypes: ISelectItem[]) => void;
+	toggleHasEgeStatus: () => void;
+	toggleFirstHighEducationStatus: () => void;
+	submit: () => void;
 }
 
-class EducationForm extends React.PureComponent<IProps> {
+class EducationFormView extends React.PureComponent<IProps> {
 	static defaultProps = {
 		classes: {},
 	};
 
-	toggleFirstHighEducationStatus = (_: any, checked: boolean) => {
-		this.props.updateForm({ firstHighEducation: checked });
-	};
-	toggleHasEgeStatus = (_: any, checked: boolean) => {
-		this.props.updateForm({ hasEge: checked });
-	};
-
-	onChangePersonCoolnessTypes = (items: ISelectItem[]) => {
-		this.props.updateForm({ coolnessTypes: items });
-	};
-	updateDocument = (document: IDocument) => {
-		this.props.updateForm({ document });
-	};
-
 	render() {
-		const { dictionaries, classes, data } = this.props;
+		const { dictionaries, classes, firstHighEducation, coolnessTypes, educationDocument, hasEge } = this.props;
 		const coolnessTypeDictionary = dictionaries[EDictionaryNameList.CoolnessTypes];
 		const educationTypeDictionary = dictionaries[EDictionaryNameList.EducationDocTypes];
 
@@ -42,39 +33,42 @@ class EducationForm extends React.PureComponent<IProps> {
 					className={classes.checkFormControl}
 					control={
 						<Checkbox
-							checked={data.firstHighEducation}
+							checked={firstHighEducation}
 							color="primary"
-							onChange={this.toggleFirstHighEducationStatus}
+							onChange={this.props.toggleFirstHighEducationStatus}
 						/>
 					}
 					label="Получение высшего образования впервые"
 				/>
 				<DropdownSelect
-					defaultValue={data.coolnessTypes}
+					defaultValue={coolnessTypes}
 					placeholder={'Выберите достижения'}
-					onChange={this.onChangePersonCoolnessTypes}
+					onChange={this.props.selectPersonCoolnessTypes}
 					options={coolnessTypeDictionary && coolnessTypeDictionary.values}
 					isMulti={true}
 					title={'Индивидуальные достижения'}
 				/>
 				<DocumentForm
-					document={data.document}
+					document={educationDocument}
 					title={'Предыдущее образование'}
 					docTitle={'Документ о предыдущем образовании'}
-					updateDocument={this.updateDocument}
+					updateDocument={this.props.updateEducationDocument}
 					dictionarySubTypes={educationTypeDictionary && educationTypeDictionary.values}
 					subTitle={'Тип документа о предыдущем образовании'}
 					extraFields={
 						<FormControlLabel
 							className={classes.checkFormControl}
-							control={<Checkbox color="primary" checked={data.hasEge} onChange={this.toggleHasEgeStatus} />}
+							control={<Checkbox color="primary" checked={hasEge} onChange={this.props.toggleHasEgeStatus} />}
 							label="Имею результаты ЕГЭ"
 						/>
 					}
 				/>
+				<div style={{ marginTop: 24 }}>
+					<Button onClick={this.props.submit}>Далее</Button>
+				</div>
 			</div>
 		);
 	}
 }
 
-export default withStyles(styles)(EducationForm);
+export default withStyles(styles)(EducationFormView);

@@ -2,7 +2,7 @@ import {
 	Gender,
 	IEnrollContactsForm,
 	IDocument,
-	IEducationForm,
+	IEnrollEducationForm,
 	inputValueAsNumber,
 	inputValueAsString,
 	IPerson,

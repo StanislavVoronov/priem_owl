@@ -30,12 +30,12 @@ export interface IChangeFieldAction {
 		[key: string]: any;
 	};
 }
-export interface IEducationForm {
+export interface IEnrollEducationForm {
 	firstHighEducation: boolean;
 	coolnessTypes: ISelectItem[];
 	prevEducation: number;
 	hasEge: boolean;
-	document: IDocument;
+	educationDocument: IDocument;
 }
 export interface IEnrollRegForm {
 	lastName: string;
@@ -61,4 +61,4 @@ export interface IDocumentsForm {
 	cheatType: ISelectItem;
 }
 
-export type EnrollForms = IEnrollContactsForm & IEducationForm & IEnrollPersonForm & IDocument;
+export type EnrollForms = IEnrollContactsForm & IEnrollEducationForm & IEnrollPersonForm & IDocument;

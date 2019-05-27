@@ -15,3 +15,7 @@ export const enrollPersonFormSelector = (state: IRootState) => {
 export const enrollContactsFormSelector = (state: IRootState) => {
 	return state.enrollContactsForm;
 };
+
+export const enrollEducationFormSelector = (state: IRootState) => {
+	return state.enrollEducationForm;
+};

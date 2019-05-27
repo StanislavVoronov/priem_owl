@@ -1,5 +1,5 @@
 import { IDocument, IEnrollRegForm, IForm, IServerError } from '$common';
-import { IEnrollContactsForm, IEducationForm, IEnrollPersonForm } from '$common';
+import { IEnrollContactsForm, IEnrollEducationForm, IEnrollPersonForm } from '$common';
 
 export interface IEnrollState {
 	registrationCompleted: boolean;
@@ -23,7 +23,7 @@ export interface IEnrollForm {
 	registrationForm: IForm<IEnrollRegForm>;
 	personData: IEnrollPersonForm;
 	contactsData: IEnrollContactsForm;
-	educationData: IEducationForm;
+	educationData: IEnrollEducationForm;
 	documents: IDocument[];
 }
 export enum EnrollForm {

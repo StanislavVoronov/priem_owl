@@ -1,3 +1,3 @@
-import EnrollRegForm from './RegistrationContainer';
+import RegistrationForm from './RegistrationContainer';
 
-export { EnrollRegForm };
+export { RegistrationForm };

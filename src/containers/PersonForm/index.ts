@@ -1,3 +1,3 @@
-import EnrollPersonForm from './PersonFormContainer';
+import PersonForm from './PersonFormContainer';
 
-export { EnrollPersonForm };
+export { PersonForm };

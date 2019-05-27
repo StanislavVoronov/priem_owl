@@ -37,7 +37,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		return void 0;
 	};
 	render() {
-		const dictionaryList = true ? FULL_DICTIONARY_LIST : SHORT_DICTIONARY_LIST;
+		const dictionaryList = this.props.personId ? FULL_DICTIONARY_LIST : SHORT_DICTIONARY_LIST;
 		const loading =
 			Object.keys(this.props.dictionaries).length === 0 ||
 			Object.values(this.props.dictionaries).find((item: IDictionary) => item.fetching) !== undefined;

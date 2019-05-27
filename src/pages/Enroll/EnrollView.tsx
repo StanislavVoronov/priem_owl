@@ -4,7 +4,7 @@ import styles from './styles.module.css';
 import Logo from '$assets/mgutm.png';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { CardMedia, Step, StepButton, StepContent, Stepper, withStyles } from '$components';
-import { EnrollRegForm, EnrollPersonForm } from '$containers';
+import { RegistrationForm, PersonForm, ContactsForm, EducationForm } from '$containers';
 
 const localStyles = {
 	logo: { height: window.innerHeight },
@@ -34,11 +34,17 @@ export class EnrollView extends React.PureComponent<IProps> {
 
 	renderForm = (step: number) => {
 		switch (step) {
-			case 1: {
-				return <EnrollRegForm submit={this.props.handleNext} />;
-			}
 			case 0: {
-				return <EnrollPersonForm submit={this.props.handleNext} />;
+				return <RegistrationForm submit={this.props.handleNext} />;
+			}
+			case 1: {
+				return <PersonForm submit={this.props.handleNext} />;
+			}
+			case 2: {
+				return <ContactsForm submit={this.props.handleNext} />;
+			}
+			case 3: {
+				return <EducationForm submit={this.props.handleNext} />;
 			}
 			default: {
 				return null;

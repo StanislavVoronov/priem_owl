@@ -1,4 +1,6 @@
-import { EnrollRegForm } from './RegistrationForm';
-import { EnrollPersonForm } from './PersonForm';
+import { RegistrationForm } from './RegistrationForm';
+import { PersonForm } from './PersonForm';
+import { ContactsForm } from './ContactsForm';
+import { EducationForm } from './EducationForm';
 
-export { EnrollRegForm, EnrollPersonForm };
+export { RegistrationForm, PersonForm, ContactsForm, EducationForm };

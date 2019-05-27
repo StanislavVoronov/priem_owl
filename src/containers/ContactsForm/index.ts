@@ -1,3 +1,3 @@
-import EnrollContactsForm from './ContactsFormContainer';
+import ContactsForm from './ContactsFormContainer';
 
-export { EnrollContactsForm };
+export { ContactsForm };

@@ -2,7 +2,7 @@ import { createAction } from 'redux-actions';
 import { ChangeEvent } from 'react';
 import { IDocument, ISelectItem } from '$common';
 
-const NAMESPACE = 'EnrollPersonForm';
+const NAMESPACE = 'PersonForm';
 
 export const updatePersonDocument = createAction(`${NAMESPACE}/updatePersonDocument`, (document: IDocument) => ({
 	field: { value: document },
