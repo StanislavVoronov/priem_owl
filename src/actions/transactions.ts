@@ -5,3 +5,5 @@ export const checkLoginActions = createTransactionActions(TRANSACTION_NAMES.Chec
 export const createLoginActions = createTransactionActions(TRANSACTION_NAMES.CreateLogin);
 export const findPersonActions = createTransactionActions(TRANSACTION_NAMES.FindPerson);
 export const createVerificationCodeActions = createTransactionActions(TRANSACTION_NAMES.CreateVerificationCode);
+export const createPersonActions = createTransactionActions(TRANSACTION_NAMES.CreatePerson);
+export const uploadDocumentActions = createTransactionActions(TRANSACTION_NAMES.UploadDocument);

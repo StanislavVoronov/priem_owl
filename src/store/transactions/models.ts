@@ -7,5 +7,6 @@ export interface ITransactionState {
 	checkLogin: ITransaction<ICheckLoginResponse>;
 	createLogin: ITransaction<ICreateLoginResponse>;
 	findPerson: ITransaction<ICreateLoginResponse>;
+	createPerson: ITransaction<ICreateLoginResponse>;
 	createVerificationCode: ITransaction<ICreateVerificationCodeResponse>;
 }
