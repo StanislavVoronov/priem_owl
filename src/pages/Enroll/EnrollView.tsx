@@ -4,7 +4,15 @@ import styles from './styles.module.css';
 import Logo from '$assets/mgutm.png';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { CardMedia, Step, StepButton, StepContent, Stepper, withStyles } from '$components';
-import { RegistrationForm, PersonForm, ContactsForm, EducationForm } from '$containers';
+import {
+	RegistrationForm,
+	PersonForm,
+	ContactsForm,
+	EducationForm,
+	DocumentsForm,
+	AccountVerificationForm,
+} from '$containers';
+import AccountVerificationContainer from '../../containers/AccountVerificationForm/AccountVerificationContainer';
 
 const localStyles = {
 	logo: { height: window.innerHeight },
@@ -45,6 +53,12 @@ export class EnrollView extends React.PureComponent<IProps> {
 			}
 			case 3: {
 				return <EducationForm submit={this.props.handleNext} />;
+			}
+			case 4: {
+				return <DocumentsForm submit={this.props.handleNext} />;
+			}
+			case 4: {
+				return <AccountVerificationForm submit={this.props.handleNext} />;
 			}
 			default: {
 				return null;

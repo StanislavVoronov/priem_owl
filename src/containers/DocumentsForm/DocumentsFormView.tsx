@@ -7,9 +7,8 @@ import {
 	defaultDocument,
 	validateDocument,
 	IDocType,
-	IStylable,
 	ISelectItem,
-	IDocumentsForm,
+	IStylable,
 } from '$common';
 
 import styles from './styles';
@@ -18,56 +17,46 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import DropdownSelect from '../../components/DropdownSelect';
 
 interface IProps extends IStylable {
-	isForeigner: boolean;
-	dictionaries: DictionaryState;
-	defaultData: IDocumentsForm;
-	updateForm: (data: IDocument[]) => void;
-}
-
-interface IState {
-	cheatType: ISelectItem;
 	documents: IDocument[];
+	dictionaries: DictionaryState;
+	foreigner: boolean;
+	updateDocument: (key: number, document: IDocument) => void;
+	removeDocument: (key: number) => void;
+	addDocument: () => void;
+	selectCheatType: (value: ISelectItem) => void;
+	cheatType: ISelectItem | null;
+	submit: () => void;
 }
 
-class DocumentsForm extends React.PureComponent<IProps> {
+class DocumentsFormView extends React.PureComponent<IProps> {
 	static defaultProps = {
-		isForeigner: false,
 		classes: {},
 	};
-	state = this.props.defaultData;
-	deleteDoc = (index: number) => () => {
-		const documents = this.state.documents.filter((_: IDocument, key: number) => key !== index);
-		this.props.updateForm(documents);
-	};
-	addDoc = () => {
-		const documents = [...this.state.documents, { ...defaultDocument }];
-		this.props.updateForm(documents);
-	};
-	updateDocument = (index: number) => (document: IDocument) => {
-		const documents = this.state.documents.filter((_: IDocument, key: number) => key !== index);
-		this.props.updateForm([...documents, document]);
-	};
-	onChangeCodeDepartment = (index: number): React.ChangeEventHandler<HTMLInputElement> => event => {
-		const document = this.state.documents[index];
-		const documents = this.state.documents.filter((_: IDocument, key: number) => key !== index);
 
-		this.props.updateForm([...documents, { ...document, codeDepartment: inputValueAsString(event) }]);
+	updateDocument = (index: number) => (document: IDocument) => {
+		this.props.updateDocument(index, document);
 	};
-	selectCheatType = (cheatType: ISelectItem) => {
-		this.setState({ cheatType });
+	onChangeCodeDepartment = (
+		index: number,
+		document: IDocument,
+	): React.ChangeEventHandler<HTMLInputElement> => event => {
+		this.props.updateDocument(index, { ...document, codeDepartment: inputValueAsString(event) });
+	};
+	removeDocument = (index: number) => () => {
+		this.props.removeDocument(index);
 	};
 
 	render() {
 		const { dictionaries, classes } = this.props;
 		const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
-		const isDisabledAddButton = this.state.documents.map(validateDocument).includes(false);
+		const isDisabledAddButton = this.props.documents.map(validateDocument).includes(false);
 
 		return (
-			<div className="flexColumn">
+			<form noValidate={true} className="flexColumn">
 				<div>
 					<H2>Необходимые документы для поступления:</H2>
 					<ol>
-						{this.props.isForeigner &&
+						{this.props.foreigner &&
 							dictionaryDocTypes &&
 							dictionaryDocTypes.values
 								.map((item: IDocType) => {
@@ -81,7 +70,7 @@ class DocumentsForm extends React.PureComponent<IProps> {
 					</ol>
 				</div>
 				<div>
-					{this.state.documents.map((item: IDocument, index) => {
+					{this.props.documents.map((item, index) => {
 						const docTypeId = (item.docType && item.docType.id) || '';
 						const dictionarySubDocTypes =
 							docTypeId === 1
@@ -108,16 +97,16 @@ class DocumentsForm extends React.PureComponent<IProps> {
 													label="Код подразделения"
 													type="number"
 													placeholder={'Введите код подразделения'}
-													onChange={this.onChangeCodeDepartment(index)}
+													onChange={this.onChangeCodeDepartment(index, item)}
 												/>
 											) : null}
 											{docTypeId === 26 ? (
 												<DropdownSelect
 													required={true}
-													defaultValue={this.state.cheatType}
+													defaultValue={this.props.cheatType}
 													options={dictionaries[EDictionaryNameList.PriemSpecialCategories].values}
 													placeholder={`Выберите категорию поступления`}
-													onChange={this.selectCheatType}
+													onChange={this.props.selectCheatType}
 													title="Категория поступления"
 												/>
 											) : null}
@@ -125,7 +114,7 @@ class DocumentsForm extends React.PureComponent<IProps> {
 									}
 								/>
 								<div className={classes.deleteDocButtonContainer}>
-									<Button className={classes.deleteDocButton} primary onClick={this.deleteDoc(index)}>
+									<Button className={classes.deleteDocButton} primary onClick={this.removeDocument(index)}>
 										{'Удалить документ'}
 									</Button>
 								</div>
@@ -134,13 +123,20 @@ class DocumentsForm extends React.PureComponent<IProps> {
 					})}
 				</div>
 				<div className={classes.addDocButtonContainer}>
-					<Button primary className={classes.addDocButton} disabled={isDisabledAddButton} onClick={this.addDoc}>
+					<Button
+						primary
+						className={classes.addDocButton}
+						disabled={isDisabledAddButton}
+						onClick={this.props.addDocument}>
 						{'Добавить новый документ'}
 					</Button>
 				</div>
-			</div>
+				<div style={{ marginTop: 24 }}>
+					<Button onClick={this.props.submit}>Далее</Button>
+				</div>
+			</form>
 		);
 	}
 }
 
-export default withStyles(styles)(DocumentsForm);
+export default withStyles(styles)(DocumentsFormView);

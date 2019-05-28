@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import EnrollContactsFormView from './ContactsFormView';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { createVerificationCode } from '$operations';
 import {
 	dictionaryStateSelector,
 	enrollContactsFormSelector,
@@ -23,6 +24,7 @@ interface IDispatchToProps {
 	toggleNeedDormitoryStatus: () => void;
 	toggleLiveAddressStatus: () => void;
 	selectMobileGovernment: (item: ISelectItem) => void;
+	submit: () => void;
 }
 interface IOwnProps {
 	submit: () => void;
@@ -41,13 +43,17 @@ const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IRootState> = s
 
 	return { ...data, dictionaries };
 };
-
-const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = {
-	updateRegDocument,
-	toggleLiveAddressStatus,
-	toggleNeedDormitoryStatus,
-	updateContactsForm,
-	selectMobileGovernment,
+const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => {
+	return {
+		updateRegDocument,
+		toggleLiveAddressStatus,
+		toggleNeedDormitoryStatus,
+		updateContactsForm,
+		selectMobileGovernment,
+		submit: () => {
+			dispatch<any>(createVerificationCode()).then(ownProps.submit);
+		},
+	};
 };
 
 export default connect(

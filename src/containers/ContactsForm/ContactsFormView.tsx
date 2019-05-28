@@ -13,6 +13,7 @@ import {
 import styles from './styles';
 import { withStyles } from '@material-ui/core';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
+import Button from '../../components/Buttons/Button';
 
 interface IProps extends IStylable, IEnrollContactsForm {
 	disabled: boolean;
@@ -22,6 +23,7 @@ interface IProps extends IStylable, IEnrollContactsForm {
 	toggleLiveAddressStatus: () => void;
 	selectMobileGovernment: (item: ISelectItem) => void;
 	dictionaries: DictionaryState;
+	submit: () => void;
 }
 
 class ContactsFormView extends React.PureComponent<IProps> {
@@ -212,6 +214,9 @@ class ContactsFormView extends React.PureComponent<IProps> {
 					defaultValue={this.props.homePhone}
 					onBlur={this.onChange}
 				/>
+				<div style={{ marginTop: 24 }}>
+					<Button onClick={this.props.submit}>Далее</Button>
+				</div>
 			</form>
 		);
 	}

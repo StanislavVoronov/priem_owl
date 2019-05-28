@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import checkLogin, * as fromCheckLogin from './checkLogin';
 import createLogin, * as fromCreateLogin from './createLogin';
 import findPerson, * as fromFindPerson from './findPerson';
+import createVerificationCode, * as fromCreateVerificationCode from './createVerificationCode';
 import { IRootState } from '$store';
 import { createSelector } from 'reselect';
 
@@ -24,6 +25,11 @@ export const findPersonSelector = createSelector(
 	fromFindPerson.isPersonFound,
 );
 
-const transactions = combineReducers({ checkLogin, createLogin, findPerson });
+export const createVerificationCodeSelector = createSelector(
+	transactionSelector,
+	fromCreateVerificationCode.createVerificationCodeSelector,
+);
+
+const transactions = combineReducers({ checkLogin, createLogin, findPerson, createVerificationCode });
 
 export default transactions;

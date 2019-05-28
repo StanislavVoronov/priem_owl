@@ -18,11 +18,6 @@ export enum EDictionaryNameList {
 	PriemSpecialCategories = 'directory_cheat_types',
 }
 
-export enum ServerBoolean {
-	False = 0,
-	True = 1,
-}
-
 export enum Gender {
 	Male = 1,
 	Female = 2,

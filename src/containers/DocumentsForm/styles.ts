@@ -1,4 +1,9 @@
 const styles = {
+	docFormContainer: {
+		display: 'flex',
+		flexDirection: 'column' as any,
+		borderBottom: '2px solid #3f51b5',
+	},
 	addDocButton: {
 		color: 'white',
 		backgroundColor: '#64991e',
@@ -20,16 +25,6 @@ const styles = {
 		'&:hover': {
 			backgroundColor: '#902020',
 		},
-	},
-	docFormContainer: {
-		display: 'flex',
-		flexDirection: 'column' as any,
-		borderBottom: '2px solid #3f51b5',
-	},
-	checkFormControl: {
-		marginTop: 10,
-		marginBottom: 4,
-		fontSize: '1em',
 	},
 };
 

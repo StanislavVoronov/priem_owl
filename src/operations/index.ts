@@ -1,1 +1,1 @@
-export * from './enrollRegistration';
+export * from './enroll/enrollRegistration';

@@ -43,7 +43,7 @@ class RegistrationView extends React.PureComponent<IProps> {
 		// 	};
 		// });
 		//
-		// if (Object.values(validationFields).some(Boolean)) {
+		// if (ObjectconfirmationCode.values(validationFields).some(Boolean)) {
 		// 	this.setState({ validation: true, invalidData: validationFields });
 		// } else {
 		// 	this.props.updateForm({ middleName, ...requiredFields });
@@ -64,7 +64,7 @@ class RegistrationView extends React.PureComponent<IProps> {
 			: { values: [] };
 
 		return (
-			<form onSubmit={this.props.submit} className="flexColumn" noValidate={true}>
+			<form className="flexColumn" noValidate={true}>
 				<TextInput
 					name="lastName"
 					onChange={this.props.onChangeTextInput}

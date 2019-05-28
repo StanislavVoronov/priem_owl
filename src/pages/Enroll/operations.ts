@@ -31,8 +31,8 @@
 // 	INewPersonDataResponse,
 // 	IRegisterNewPersonRequest,
 // 	IRegisterNewPersonResponse,
-// 	IUploadDocPayload,
-// 	IVerifyPersonRequest,
+// 	IUploadDocRequest,
+// 	ICreateVerificationCodeRequest,
 // 	IVerifyPersonResponse,
 // } from './serverModels';
 // import { EnrollRestApi, PriemRestApi } from '../../services/restApiNames';
@@ -102,7 +102,7 @@
 //
 // 	dispatch(sendVerificationCodeFetching());
 //
-// 	return PriemEnroll.post<IVerifyPersonRequest, IVerifyPersonResponse>(EnrollRestApi.VerNewNp, payload)
+// 	return PriemEnroll.post<ICreateVerificationCodeRequest, IVerifyPersonResponse>(EnrollRestApi.VerNewNp, payload)
 // 		.then(response => {
 // 			console.log(response);
 // 			dispatch(sendVerificationCodeSuccess());
@@ -166,7 +166,7 @@
 //
 // 	return Promise.all(
 // 		docList.map((item: IDocument) => {
-// 			const document: IUploadDocPayload = {
+// 			const document: IUploadDocRequest = {
 // 				mime: item.docFile ? item.docFile.type : null,
 // 				type: item.docType ? item.docType.id : 0,
 // 				stype: item.docSubType ? item.docSubType.id : null,

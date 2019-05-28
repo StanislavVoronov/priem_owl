@@ -19,3 +19,15 @@ export const enrollContactsFormSelector = (state: IRootState) => {
 export const enrollEducationFormSelector = (state: IRootState) => {
 	return state.enrollEducationForm;
 };
+
+export const enrollDocumentsFormSelector = (state: IRootState) => {
+	return state.enrollDocumentsForm;
+};
+
+export const enrollIsForeignerSelector = (state: IRootState) => {
+	return state.enrollPersonForm.data.personDocument.docGovernment.id === 1;
+};
+
+export const enrollAccountVerificationFormSelector = (state: IRootState) => {
+	return state.enrollAccountVerificationForm;
+};

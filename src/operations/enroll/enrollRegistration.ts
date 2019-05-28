@@ -5,6 +5,8 @@ import {
 	IRootState,
 	enrollRegistrationSelector,
 	findPersonTransaction,
+	createVerificationCodeTransaction,
+	enrollContactsFormSelector,
 } from '$store';
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
@@ -62,4 +64,13 @@ export const findPerson = (): ThunkAction<Promise<void>, IRootState, void, Actio
 	} else {
 		return Promise.resolve();
 	}
+};
+
+export const createVerificationCode = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
+	dispatch,
+	getState,
+) => {
+	const { data } = enrollContactsFormSelector(getState());
+
+	return dispatch(createVerificationCodeTransaction(data.email, data.mobPhone, 1));
 };

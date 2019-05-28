@@ -58,7 +58,10 @@ export interface IEnrollPersonForm {
 }
 export interface IDocumentsForm {
 	documents: IDocument[];
-	cheatType: ISelectItem;
+	cheatType: ISelectItem | null;
 }
 
+export interface IAccountVerificationForm {
+	verificationCode: string;
+}
 export type EnrollForms = IEnrollContactsForm & IEnrollEducationForm & IEnrollPersonForm & IDocument;

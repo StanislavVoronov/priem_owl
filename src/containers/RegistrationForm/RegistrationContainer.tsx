@@ -29,7 +29,7 @@ interface IOwnProps {
 	submit: () => void;
 }
 type Props = IStateToProps & IDispatchToProps & IOwnProps;
-class RegistrationContainer extends React.Component<Props> {
+class EnrollRegistrationContainer extends React.Component<Props> {
 	onChangeFirstName = (firstName: string) => {
 		const firstNamesDictionary = this.props.dictionaries[EDictionaryNameList.FirstNames];
 		const person = firstNamesDictionary.values.find(item => item.name === firstName);
@@ -44,6 +44,7 @@ class RegistrationContainer extends React.Component<Props> {
 	onBlurTextInput = (event: React.ChangeEvent<HTMLInputElement>) => {
 		this.props.onChangeTextInput(event);
 	};
+
 	submit = () => {
 		this.props.submit();
 	};
@@ -93,4 +94,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dis
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(RegistrationContainer);
+)(EnrollRegistrationContainer);

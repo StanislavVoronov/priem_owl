@@ -1,3 +1,3 @@
-import EnrollContainer, { enrollReducer } from './Enroll';
+import EnrollContainer from './Enroll';
 
-export { EnrollContainer, enrollReducer };
+export { EnrollContainer };
