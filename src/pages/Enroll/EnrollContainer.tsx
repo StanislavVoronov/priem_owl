@@ -1,6 +1,6 @@
 import * as React from 'react';
 import EnrollView from './EnrollView';
-import Dictionary, { DictionaryState, IDictionary } from '@mgutm-fcu/dictionary';
+import Dictionary, { DictionaryState, IDictionary, IDictionaryConfig } from '@mgutm-fcu/dictionary';
 
 import { connect, MapStateToProps } from 'react-redux';
 import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
@@ -9,6 +9,7 @@ import { IRootState, fromTransaction, dictionaryStateSelector } from '$store';
 
 interface IState {
 	activeStep: number;
+	dictionaries: IDictionaryConfig[];
 }
 
 interface IStateToProps {
@@ -18,8 +19,9 @@ interface IStateToProps {
 type IProps = IStateToProps;
 
 class EnrollContainer extends React.Component<IProps, IState> {
-	state = {
+	state: IState = {
 		activeStep: 0,
+		dictionaries: SHORT_DICTIONARY_LIST,
 	};
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
@@ -29,6 +31,9 @@ class EnrollContainer extends React.Component<IProps, IState> {
 			activeStep: step,
 		});
 	};
+	onCompleteRegForm = () => {
+		this.setState({ dictionaries: FULL_DICTIONARY_LIST });
+	};
 	handleNext = () => {
 		this.setState({ activeStep: this.state.activeStep + 1 });
 	};
@@ -37,17 +42,17 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		return void 0;
 	};
 	render() {
-		const dictionaryList = this.props.personId ? FULL_DICTIONARY_LIST : SHORT_DICTIONARY_LIST;
 		const loading =
 			Object.keys(this.props.dictionaries).length === 0 ||
 			Object.values(this.props.dictionaries).find((item: IDictionary) => item.fetching) !== undefined;
 
 		return (
-			<Dictionary version={2} url={'/dev-bin/priem_api.fcgi'} list={dictionaryList}>
+			<Dictionary version={2} url={'/dev-bin/priem_api.fcgi'} list={this.state.dictionaries}>
 				<EnrollView
 					steps={NEW_PERSON_STEPS}
 					loading={loading}
 					handleNext={this.handleNext}
+					onCompleteRegForm={this.onCompleteRegForm}
 					activeStep={this.state.activeStep}
 				/>
 			</Dictionary>

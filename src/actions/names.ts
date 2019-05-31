@@ -4,5 +4,6 @@ export enum TRANSACTION_NAMES {
 	FindPerson = 'findPerson',
 	CreatePerson = 'CreatePerson',
 	UploadDocument = 'UploadDocument',
+	UploadDocumentsById = 'UploadDocumentsById',
 	CreateVerificationCode = 'CreateVerificationCode',
 }

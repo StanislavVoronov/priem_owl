@@ -73,3 +73,9 @@ export interface ITransactionActions<R, S, F> {
 	success: ActionFunctionAny<Action<S>>;
 	failure: ActionFunctionAny<Action<F>>;
 }
+
+export interface ITransactionActions<R, S, F> {
+	request: ActionFunctionAny<Action<R>>;
+	success: ActionFunctionAny<Action<S>>;
+	failure: ActionFunctionAny<Action<F>>;
+}

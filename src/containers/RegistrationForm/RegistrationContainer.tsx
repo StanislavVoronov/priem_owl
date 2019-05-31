@@ -9,14 +9,17 @@ import {
 	onChangeGender,
 	changeFirstName,
 	updateRegFormTextInput,
+	fromTransaction,
 } from '$store';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
-import { EDictionaryNameList, IEnrollRegForm, IForm, IInvalidData } from '$common';
+import { EDictionaryNameList, IEnrollRegForm, IForm, IInvalidData, IServerError } from '$common';
 import { enrollCreateNewLogin, findPerson } from '$operations';
 
 interface IStateToProps extends IEnrollRegForm, IInvalidData<IEnrollRegForm> {
 	dictionaries: DictionaryState;
 	statusValidation: boolean;
+	error: IServerError | null;
+	loading: boolean;
 }
 interface IDispatchToProps {
 	onChangeTextInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -26,7 +29,7 @@ interface IDispatchToProps {
 	submit: () => void;
 }
 interface IOwnProps {
-	submit: () => void;
+	onComplete: () => void;
 }
 type Props = IStateToProps & IDispatchToProps & IOwnProps;
 class EnrollRegistrationContainer extends React.Component<Props> {
@@ -44,17 +47,12 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 	onBlurTextInput = (event: React.ChangeEvent<HTMLInputElement>) => {
 		this.props.onChangeTextInput(event);
 	};
-
-	submit = () => {
-		this.props.submit();
-	};
 	render() {
 		return (
 			<RegistrationView
 				{...this.props}
 				onChangeFirstName={this.onChangeFirstName}
 				onChangeTextInput={this.onChangeTextInput}
-				submit={this.submit}
 				onBlurTextInput={this.onBlurTextInput}
 			/>
 		);
@@ -64,9 +62,18 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	const dictionaries = dictionaryStateSelector(state);
 
 	const { data, statusValidation } = enrollRegistrationSelector(state);
+	const { error, loading, result } = fromTransaction.findPersonSelector(state);
 	const validation = { lastName: '', middleName: '', firstName: '', birthday: '', gender: '' };
 
-	return { dictionaries, ...data, validation, statusValidation };
+	return {
+		dictionaries,
+		...data,
+		error: result ? { code: '', message: 'Абитуриент уже зарегистрирован в системе' } : error,
+		loading,
+		personExists: result,
+		validation,
+		statusValidation,
+	};
 };
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => {
@@ -85,7 +92,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dis
 		},
 		submit: () => {
 			dispatch<any>(enrollCreateNewLogin()).then(() => {
-				dispatch<any>(findPerson()).then(ownProps.submit);
+				dispatch<any>(findPerson()).then(ownProps.onComplete);
 			});
 		},
 	};

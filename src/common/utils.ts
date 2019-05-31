@@ -33,6 +33,14 @@ export const createTransactionActions = <T>(nameSpace: string) => {
 	};
 };
 
+export const createTransactionActionsById = <T>(nameSpace: string) => {
+	return {
+		request: createAction(`${nameSpace}/transactionRequest`, (id: string) => ({ id })),
+		success: createAction(`${nameSpace}/transactionSuccess`, (id: string, result: T[]) => ({ result, id })),
+		failure: createAction(`${nameSpace}/transactionFailure`, (id: string, error: IServerError) => ({ error, id })),
+	};
+};
+
 export const createTransactionReducer = <R, S, F>(actions: ITransactionActions<R, S, F>) => {
 	return handleActions<ITransaction<S>>(
 		{

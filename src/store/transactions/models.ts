@@ -9,4 +9,5 @@ export interface ITransactionState {
 	findPerson: ITransaction<ICreateLoginResponse>;
 	createPerson: ITransaction<ICreateLoginResponse>;
 	createVerificationCode: ITransaction<ICreateVerificationCodeResponse>;
+	uploadDocuments: Record<string, ITransaction<any>>;
 }

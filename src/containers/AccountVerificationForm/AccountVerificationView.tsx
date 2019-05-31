@@ -15,7 +15,6 @@ class AccountVerificationView extends React.Component<IProps> {
 					required
 					label="Код подтверждения"
 					defaultValue={this.props.verificationCode}
-					type="date"
 					helperText={'Код подтверждения, отправленный на электронную почту'}
 					onBlur={this.props.onChangeVerificationCode}
 				/>

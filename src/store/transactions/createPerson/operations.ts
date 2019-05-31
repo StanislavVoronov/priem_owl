@@ -25,7 +25,9 @@ export interface ICreatePersonDataResponse {
 	np_uid: number;
 }
 
-export const createPersonTransaction = (data): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
+export const createPersonTransaction = (
+	data: ICreatePersonDataRequest,
+): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	dispatch(createPersonActions.request());
 
 	return PriemEnroll.post<ICreatePersonDataRequest, ICreatePersonDataResponse>(EnrollRestApi.SetNewNp, {

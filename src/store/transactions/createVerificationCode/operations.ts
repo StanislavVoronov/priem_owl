@@ -30,8 +30,12 @@ export const createVerificationCodeTransaction = (
 		.then(response => {
 			console.log('response', response);
 			dispatch(createVerificationCodeActions.success([response]));
+
+			return Promise.resolve();
 		})
 		.catch(error => {
 			dispatch(createVerificationCodeActions.failure(error));
+
+			return Promise.reject();
 		});
 };

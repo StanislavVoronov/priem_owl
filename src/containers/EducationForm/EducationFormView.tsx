@@ -5,7 +5,6 @@ import styles from './styles';
 import { DocumentForm, DropdownSelect, FormControlLabel, Checkbox } from '$components';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { withStyles } from '@material-ui/core';
-import { toggleHasEgeStatus } from '../../store/educationForm';
 import Button from '../../components/Buttons/Button';
 
 interface IProps extends IStylable, IEnrollEducationForm {

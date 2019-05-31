@@ -5,6 +5,7 @@ import findPerson, * as fromFindPerson from './findPerson';
 import createVerificationCode, * as fromCreateVerificationCode from './createVerificationCode';
 import { IRootState } from '$store';
 import { createSelector } from 'reselect';
+import uploadDocuments, * as fromUploadDocuments from './uploadDocument';
 
 export const transactionSelector = (state: IRootState) => {
 	return state.transactions;
@@ -30,6 +31,12 @@ export const createVerificationCodeSelector = createSelector(
 	fromCreateVerificationCode.createVerificationCodeSelector,
 );
 
-const transactions = combineReducers({ checkLogin, createLogin, findPerson, createVerificationCode });
+const transactions = combineReducers({
+	checkLogin,
+	createLogin,
+	findPerson,
+	createVerificationCode,
+	uploadDocuments,
+});
 
 export default transactions;

@@ -1,6 +1,13 @@
 import React, { ChangeEvent, FormEventHandler } from 'react';
-import { Autocomplete, RadioButtonGroup, TextInput, LoadingButton, Button } from '$components';
-import { EDictionaryNameList, IEnrollRegForm, IForm, IInvalidData, prepareDictionarySuggestions } from '$common';
+import { Autocomplete, RadioButtonGroup, TextInput, LoadingButton, Button, LoadingText, H2 } from '$components';
+import {
+	EDictionaryNameList,
+	IEnrollRegForm,
+	IForm,
+	IInvalidData,
+	IServerError,
+	prepareDictionarySuggestions,
+} from '$common';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 
 export const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { value: 2, label: 'Жен.' }];
@@ -13,6 +20,8 @@ interface IProps extends IEnrollRegForm, IInvalidData<IEnrollRegForm> {
 	onChangeFirstName: (value: string) => void;
 	onBlurTextInput: (event: ChangeEvent<HTMLInputElement>) => void;
 	submit: () => void;
+	error: IServerError | null;
+	loading: boolean;
 }
 
 class RegistrationView extends React.PureComponent<IProps> {
@@ -22,32 +31,6 @@ class RegistrationView extends React.PureComponent<IProps> {
 
 	onChangeGender = (_: any, gender: string) => {
 		this.props.onChangeGender(Number(gender));
-	};
-	onSubmit: FormEventHandler<HTMLFormElement> = event => {
-		// estringvent.preventDefault();
-		// const { invalidData, valupdateEnrollRegistrationTextInputidation, middleName, ...requiredFields } = this.state;
-		// let validationFields: Record<keyof IEnrollRegisterStateForm, string> = {
-		// 	lastName: '',
-		// 	middleName: '',
-		// 	firstName: '',
-		// 	stringbirthday: '',
-		// 	gender: '',
-		// 	login: '',
-		// 	password: '',
-		// 	repeatPassword: '',
-		// };
-		// Object.entries(requiredFields).forEach((values: string[]) => {
-		// 	validationFields = {
-		// 		...validationFields,
-		// 	string	[values[0]]: validateRequireTextField(values[1], true),
-		// 	};
-		// });
-		//
-		// if (ObjectconfirmationCode.values(validationFields).some(Boolean)) {
-		// 	this.setState({ validation: true, invalidData: validationFields });
-		// } else {
-		// 	this.props.updateForm({ middleName, ...requiredFields });
-		// }
 	};
 
 	render() {
@@ -62,6 +45,9 @@ class RegistrationView extends React.PureComponent<IProps> {
 				  }
 				: dictionaryMiddleNames
 			: { values: [] };
+		if (this.props.loading) {
+			return <LoadingText>Проверка абитуриента</LoadingText>;
+		}
 
 		return (
 			<form className="flexColumn" noValidate={true}>
@@ -116,6 +102,8 @@ class RegistrationView extends React.PureComponent<IProps> {
 					values={GENDERS}
 					onChange={this.onChangeGender}
 				/>
+
+				{this.props.error && <H2 color="red">{this.props.error.message}</H2>}
 				<div style={{ marginTop: 24 }}>
 					<Button onClick={this.props.submit} disabled={Object.values(this.props.validation).some(Boolean)}>
 						Проверить

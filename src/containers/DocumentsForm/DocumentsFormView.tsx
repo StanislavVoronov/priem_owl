@@ -100,16 +100,6 @@ class DocumentsFormView extends React.PureComponent<IProps> {
 													onChange={this.onChangeCodeDepartment(index, item)}
 												/>
 											) : null}
-											{docTypeId === 26 ? (
-												<DropdownSelect
-													required={true}
-													defaultValue={this.props.cheatType}
-													options={dictionaries[EDictionaryNameList.PriemSpecialCategories].values}
-													placeholder={`Выберите категорию поступления`}
-													onChange={this.props.selectCheatType}
-													title="Категория поступления"
-												/>
-											) : null}
 										</React.Fragment>
 									}
 								/>

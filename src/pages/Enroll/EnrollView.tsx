@@ -3,7 +3,7 @@ import * as React from 'react';
 import styles from './styles.module.css';
 import Logo from '$assets/mgutm.png';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { CardMedia, Step, StepButton, StepContent, Stepper, withStyles } from '$components';
+import { CardMedia, Step, StepButton, StepContent, Stepper, withStyles, Title, LoadingText } from '$components';
 import {
 	RegistrationForm,
 	PersonForm,
@@ -12,7 +12,6 @@ import {
 	DocumentsForm,
 	AccountVerificationForm,
 } from '$containers';
-import AccountVerificationContainer from '../../containers/AccountVerificationForm/AccountVerificationContainer';
 
 const localStyles = {
 	logo: { height: window.innerHeight },
@@ -33,6 +32,7 @@ interface IProps {
 	classes: any;
 	passedStep: number;
 	steps: string[];
+	onCompleteRegForm: () => void;
 }
 export class EnrollView extends React.PureComponent<IProps> {
 	static defaultProps = {
@@ -43,7 +43,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 	renderForm = (step: number) => {
 		switch (step) {
 			case 0: {
-				return <RegistrationForm submit={this.props.handleNext} />;
+				return <RegistrationForm onComplete={this.props.onCompleteRegForm} />;
 			}
 			case 1: {
 				return <PersonForm submit={this.props.handleNext} />;
@@ -57,7 +57,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 			case 4: {
 				return <DocumentsForm submit={this.props.handleNext} />;
 			}
-			case 4: {
+			case 5: {
 				return <AccountVerificationForm submit={this.props.handleNext} />;
 			}
 			default: {
@@ -85,15 +85,12 @@ export class EnrollView extends React.PureComponent<IProps> {
 								</Step>
 							))
 						) : (
-							<React.Fragment>
-								<div className={styles.loading}>
-									<CircularProgress />
-									<h3>Подготовка формы</h3>
-								</div>
-							</React.Fragment>
+							<LoadingText>Подготовка формы</LoadingText>
 						)}
 
-						{/*<Title color="green">Процесс подачи документов для поступления в Университет успешно завершен!</Title>*/}
+						{this.props.activeStep >= this.props.steps.length && (
+							<Title color="green">Процесс подачи документов для поступления в Университет успешно завершен!</Title>
+						)}
 					</Stepper>
 				</CardMedia>
 			</React.Fragment>

@@ -54,7 +54,7 @@ class ContactsFormView extends React.PureComponent<IProps> {
 					  (mobPhoneValue[4] ? +`-${mobPhoneValue[4]}` : '')
 				: '');
 
-		this.props.updateContactsForm({ ...event, target: { ...event.target, value: maskMobPhone } });
+		this.onChange({ ...event, target: { ...event.target, value: maskMobPhone, name: event.target.name } });
 	};
 
 	render() {
@@ -203,6 +203,7 @@ class ContactsFormView extends React.PureComponent<IProps> {
 				<TextInput
 					value={this.props.mobPhone}
 					defaultValue={this.props.mobPhone}
+					name="mobPhone"
 					helperText={'Формат: 999 999-99-99'}
 					label={'Мобильный телефон'}
 					required={true}

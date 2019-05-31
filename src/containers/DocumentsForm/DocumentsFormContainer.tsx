@@ -11,6 +11,7 @@ import {
 	updateDocument,
 	selectCheatType,
 } from '$store';
+import { uploadDocList } from '$operations';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { IDocument, ISelectItem } from '$common';
 

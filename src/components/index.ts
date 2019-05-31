@@ -11,6 +11,8 @@ import StepButton from '@material-ui/core/StepButton';
 import WebPhoto from '../components/WebPhoto';
 import { CardMedia, withStyles } from '@material-ui/core';
 import DocumentForm from './DocumentForm';
+import LoadingText from './LoadingText';
+import Title from './Typography/Title';
 
 export * from './Buttons';
 export * from './Inputs';
@@ -30,4 +32,6 @@ export {
 	CardMedia,
 	withStyles,
 	DocumentForm,
+	Title,
+	LoadingText,
 };

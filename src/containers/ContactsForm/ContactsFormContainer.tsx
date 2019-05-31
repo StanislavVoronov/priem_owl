@@ -24,7 +24,7 @@ interface IDispatchToProps {
 	toggleNeedDormitoryStatus: () => void;
 	toggleLiveAddressStatus: () => void;
 	selectMobileGovernment: (item: ISelectItem) => void;
-	submit: () => void;
+	createVerificationCode: () => void;
 }
 interface IOwnProps {
 	submit: () => void;
@@ -32,8 +32,11 @@ interface IOwnProps {
 type IProps = IDispatchToProps & IStateToProps & IOwnProps;
 
 class ContactsFormContainer extends React.Component<IProps> {
+	submit = () => {
+		this.props.createVerificationCode();
+	};
 	render() {
-		return <EnrollContactsFormView {...this.props} />;
+		return <EnrollContactsFormView {...this.props} submit={this.submit} />;
 	}
 }
 
@@ -43,18 +46,14 @@ const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IRootState> = s
 
 	return { ...data, dictionaries };
 };
-const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => {
-	return {
-		updateRegDocument,
-		toggleLiveAddressStatus,
-		toggleNeedDormitoryStatus,
-		updateContactsForm,
-		selectMobileGovernment,
-		submit: () => {
-			dispatch<any>(createVerificationCode()).then(ownProps.submit);
-		},
-	};
-};
+const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => ({
+	updateRegDocument: document => dispatch(updateRegDocument(document)),
+	toggleLiveAddressStatus: () => dispatch(toggleLiveAddressStatus()),
+	toggleNeedDormitoryStatus: () => dispatch(toggleNeedDormitoryStatus()),
+	updateContactsForm: event => dispatch(updateContactsForm(event)),
+	selectMobileGovernment: government => dispatch(selectMobileGovernment(government)),
+	createVerificationCode: () => dispatch<any>(createVerificationCode()).then(ownProps.submit),
+});
 
 export default connect(
 	mapStateToProps,

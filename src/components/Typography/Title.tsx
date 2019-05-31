@@ -11,3 +11,5 @@ export const Title = (props: any) => {
 		</FormLabel>
 	);
 };
+
+export default Title;
