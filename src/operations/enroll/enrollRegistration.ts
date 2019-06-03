@@ -17,7 +17,7 @@ import {
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
 import { createLoginActions, cyrillToLatin, generatePassword, moment, ServerBoolean } from '$common';
-import { IFindPersonResponse } from '../../store/transactions/findPerson';
+import { updatePhoneTransaction } from '../../store/transactions/updatePhone';
 
 export const enrollCreateNewLogin = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
 	dispatch,
@@ -82,6 +82,25 @@ export const createVerificationCode = (): ThunkAction<Promise<void>, IRootState,
 	return dispatch(createVerificationCodeTransaction(data.email, data.mobPhone, 1));
 };
 
+export const updatePhone = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
+	const { data } = enrollContactsFormSelector(getState());
+
+	return Promise.all([
+		dispatch(
+			updatePhoneTransaction({
+				phone: data.mobPhone || '',
+				type: 2,
+			}),
+		),
+		dispatch(
+			updatePhoneTransaction({
+				phone: data.homePhone || '',
+				type: 1,
+			}),
+		),
+	]).then(() => Promise.resolve());
+};
+
 export const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
 	const state = getState();
 	const registrationForm = enrollRegistrationSelector(state).data;
@@ -129,4 +148,8 @@ export const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Ac
 		.catch(() => {
 			return Promise.reject();
 		});
+};
+
+export const updatePersonInformation = (): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
+	return Promise.all([dispatch(uploadDocList()), dispatch(updatePhone())]).then(Promise.resolve);
 };

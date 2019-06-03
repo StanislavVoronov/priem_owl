@@ -6,4 +6,6 @@ export enum TRANSACTION_NAMES {
 	UploadDocument = 'UploadDocument',
 	UploadDocumentsById = 'UploadDocumentsById',
 	CreateVerificationCode = 'CreateVerificationCode',
+	UpdatePhone = 'UpdatePhone',
+	UpdateAddress = 'UpdateAddress',
 }

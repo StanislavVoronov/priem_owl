@@ -4,10 +4,9 @@ import { ITransactionState } from '$store';
 const createVerificationCodeReducer = createTransactionReducer(createVerificationCodeActions);
 
 export const createVerificationCodeSelector = (state: ITransactionState) => {
-	const { loading, error, result } = state.createLogin;
-	const npId = result.length > 0 ? result[0].id : 0;
+	const { loading, error, result } = state.createVerificationCode;
 
-	return { loading, error, result: npId };
+	return { loading, error, result };
 };
 
 export default createVerificationCodeReducer;

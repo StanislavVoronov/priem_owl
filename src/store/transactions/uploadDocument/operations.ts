@@ -31,7 +31,7 @@ export const uploadDocumentTransaction = (doc: IDocument): ThunkAction<void, IRo
 	})
 		.then((response: any) => {
 			console.log('successDocuments', response);
-			dispatch(uploadDocumentsActions.success(id, response));
+			dispatch(uploadDocumentsActions.success(id, [response]));
 
 			return Promise.resolve();
 		})

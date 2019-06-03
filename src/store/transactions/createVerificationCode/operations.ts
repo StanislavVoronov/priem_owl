@@ -28,7 +28,6 @@ export const createVerificationCodeTransaction = (
 		not_use_phone: notUsePhone,
 	})
 		.then(response => {
-			console.log('response', response);
 			dispatch(createVerificationCodeActions.success([response]));
 
 			return Promise.resolve();

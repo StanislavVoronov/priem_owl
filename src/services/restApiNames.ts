@@ -3,6 +3,7 @@ export enum PriemRestApi {
 	CheckUniqueLogin = 'testUniqueEnroll',
 	AddEnroll = 'addEnroll',
 	AddDocuments = 'iDATA_DOCUMENTS',
+	UpdatePhone = 'uDATA_PHONES',
 }
 
 export enum EnrollRestApi {

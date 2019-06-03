@@ -11,7 +11,7 @@ export interface IInputProps<T> extends BaseTextFieldProps {
 	type: string;
 	onBlur: (event: ChangeEvent<HTMLInputElement>) => void;
 	isTopLabel: boolean;
-	defaultValue?: ReactText;
+	defaultValue?: string;
 	label?: string;
 	required?: boolean;
 	multiline?: boolean;
@@ -47,12 +47,16 @@ class TextInput<T> extends React.PureComponent<IInputProps<T>, IState> {
 	};
 
 	state = {
-		value: this.props.value,
+		value: this.props.defaultValue,
 		isControlled: !!this.props.value,
 	};
 
-	public onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
-		this.props.onChange(event);
+	onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
+		if (this.state.isControlled) {
+			this.props.onChange(event);
+		} else {
+			this.setState({ value: event.target.value });
+		}
 	};
 	onBlur = (event: any) => {
 		this.props.onBlur(event);
@@ -63,6 +67,7 @@ class TextInput<T> extends React.PureComponent<IInputProps<T>, IState> {
 				{this.props.prefix && <FormLabel>{this.props.prefix}</FormLabel>}
 				<TextField
 					margin="normal"
+					value={this.state.isControlled ? this.props.value : this.state.value}
 					error={this.props.error}
 					helperText={this.props.helperText}
 					required={this.props.required}

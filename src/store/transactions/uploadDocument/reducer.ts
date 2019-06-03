@@ -1,8 +1,13 @@
-import { createTransactionReducer, uploadDocumentActions, uploadDocumentsActions } from '$common';
+import { createTransactionReducer, uploadDocumentsActions } from '$common';
 
 import { combineActions, handleActions } from 'redux-actions';
+import { ITransactionState } from '$store';
 
-const uploadDocumentReducer = createTransactionReducer(uploadDocumentActions);
+const uploadDocumentReducer = createTransactionReducer(uploadDocumentsActions);
+
+export const updateDocumentSelector = (state: ITransactionState, id: string) => {
+	return state.uploadDocuments[id];
+};
 
 const uploadDocumentsReducer = handleActions(
 	{
@@ -18,7 +23,7 @@ const uploadDocumentsReducer = handleActions(
 
 			return {
 				...state,
-				[action.payload.id]: uploadDocumentReducer(state.uploadDocuments[action.payload.id], action),
+				[action.payload.id]: uploadDocumentReducer(state[action.payload.id], action),
 			};
 		},
 	},

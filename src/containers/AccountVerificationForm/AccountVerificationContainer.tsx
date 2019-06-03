@@ -4,7 +4,7 @@ import { ChangeEvent } from 'react';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { enrollAccountVerificationFormSelector, IRootState, onChangeVerificationCode } from '$store';
 import { IAccountVerificationForm } from '$common';
-import { createPerson, uploadDocList } from '$operations';
+import { createPerson, uploadDocList, updatePersonInformation } from '$operations';
 
 interface IDispatchToProps {
 	onChangeVerificationCode: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -27,9 +27,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dis
 	return {
 		onChangeVerificationCode: event => dispatch(onChangeVerificationCode(event)),
 		submit: () => {
-			dispatch<any>(createPerson()).then(() => {
-				dispatch<any>(uploadDocList()).then(ownProps.submit);
-			});
+			dispatch<any>(createPerson())
+				.then(() => dispatch<any>(updatePersonInformation()))
+				.then(ownProps.submit);
 		},
 	};
 };

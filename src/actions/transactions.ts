@@ -8,3 +8,5 @@ export const createVerificationCodeActions = createTransactionActions(TRANSACTIO
 export const createPersonActions = createTransactionActions(TRANSACTION_NAMES.CreatePerson);
 export const uploadDocumentActions = createTransactionActions(TRANSACTION_NAMES.UploadDocument);
 export const uploadDocumentsActions = createTransactionActionsById(TRANSACTION_NAMES.UploadDocumentsById);
+export const updatePhoneActionsByKey = createTransactionActions(TRANSACTION_NAMES.UpdatePhone);
+export const updateAdressActions = createTransactionActions(TRANSACTION_NAMES.UpdateAddress);

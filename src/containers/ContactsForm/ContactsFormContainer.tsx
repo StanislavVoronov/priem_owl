@@ -11,12 +11,15 @@ import {
 	toggleLiveAddressStatus,
 	updateContactsForm,
 	updateRegDocument,
+	fromTransaction,
 } from '$store';
-import { IDocument, IEnrollContactsForm, ISelectItem } from '$common';
+import { IDocument, IEnrollContactsForm, ISelectItem, IServerError } from '$common';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 
 interface IStateToProps extends IEnrollContactsForm {
 	dictionaries: DictionaryState;
+	loading: boolean;
+	error: IServerError | null;
 }
 interface IDispatchToProps {
 	updateContactsForm: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -42,9 +45,11 @@ class ContactsFormContainer extends React.Component<IProps> {
 
 const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IRootState> = state => {
 	const dictionaries = dictionaryStateSelector(state);
+	const { loading, error } = fromTransaction.createVerificationCodeSelector(state);
+
 	const { data } = enrollContactsFormSelector(state);
 
-	return { ...data, dictionaries };
+	return { ...data, dictionaries, loading, error };
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => ({
 	updateRegDocument: document => dispatch(updateRegDocument(document)),

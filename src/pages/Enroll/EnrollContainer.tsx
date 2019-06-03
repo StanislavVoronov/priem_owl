@@ -32,7 +32,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		});
 	};
 	onCompleteRegForm = () => {
-		this.setState({ dictionaries: FULL_DICTIONARY_LIST });
+		this.setState({ dictionaries: FULL_DICTIONARY_LIST, activeStep: this.state.activeStep + 1 });
 	};
 	handleNext = () => {
 		this.setState({ activeStep: this.state.activeStep + 1 });
