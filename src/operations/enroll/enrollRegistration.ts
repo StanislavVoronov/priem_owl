@@ -98,7 +98,9 @@ export const updatePhone = (): ThunkAction<Promise<void>, IRootState, void, Acti
 				type: 1,
 			}),
 		),
-	]).then(() => Promise.resolve());
+	])
+		.then(() => Promise.resolve())
+		.catch(error => Promise.reject(error));
 };
 
 export const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
@@ -151,5 +153,9 @@ export const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Ac
 };
 
 export const updatePersonInformation = (): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
-	return Promise.all([dispatch(uploadDocList()), dispatch(updatePhone())]).then(Promise.resolve);
+	return dispatch(createPerson())
+		.then(() => {
+			return Promise.all([dispatch(uploadDocList()), dispatch(updatePhone())]);
+		})
+		.then(() => Promise.resolve());
 };

@@ -27,9 +27,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dis
 	return {
 		onChangeVerificationCode: event => dispatch(onChangeVerificationCode(event)),
 		submit: () => {
-			dispatch<any>(createPerson())
-				.then(() => dispatch<any>(updatePersonInformation()))
-				.then(ownProps.submit);
+			dispatch<any>(updatePersonInformation())
+				.then(ownProps.submit)
+				.catch((error: any) => console.log('errorAccountVerification', error));
 		},
 	};
 };
