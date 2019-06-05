@@ -40,16 +40,6 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 		const document = { ...this.props.document, docSubType };
 		this.props.updateDocument(document);
 	};
-	onChange: React.ChangeEventHandler<HTMLInputElement> = event => {
-		if (this.props.validation) {
-			const document = { ...this.props.document, [event.target.name]: inputValueAsString(event) };
-			this.props.updateDocument(document);
-		}
-	};
-	onBlur: React.ChangeEventHandler<HTMLInputElement> = event => {
-		const document = { ...this.props.document, [event.target.name]: inputValueAsString(event) };
-		this.props.updateDocument(document);
-	};
 	onDownload = (acceptedFiles: File[]) => {
 		acceptedFiles.forEach(file => {
 			const reader = new FileReader();
@@ -122,59 +112,21 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 								title={this.props.subTitle}
 							/>
 						)}
-						{needInfo && (
-							<TextInput
-								required
-								onChange={this.onChange}
-								error={!!this.validateForm(this.props.document.docSeries)}
-								helperText={this.validateForm(this.props.document.docSeries)}
-								name="docSeries"
-								defaultValue={this.props.document.docSeries}
-								placeholder="Введите серию документа"
-								label="Серия"
-								onBlur={this.onBlur}
-							/>
-						)}
+						{needInfo && <TextInput required name="docSeries" placeholder="Введите серию документа" label="Серия" />}
 						{hasNumber && (
-							<TextInput
-								onChange={this.onChange}
-								defaultValue={this.props.document.docNumber}
-								required
-								name="docNumber"
-								error={!!this.validateForm(this.props.document.docNumber)}
-								helperText={this.validateForm(this.props.document.docNumber)}
-								placeholder="Введите номер документа"
-								label="Номер"
-								type="number"
-								onBlur={this.onBlur}
-							/>
+							<TextInput required name="docNumber" placeholder="Введите номер документа" label="Номер" type="number" />
 						)}
 						{needInfo && (
-							<React.Fragment>
-								<TextInput
-									onChange={this.onChange}
-									required
-									error={!!this.validateForm(this.props.document.docDate)}
-									helperText={this.validateForm(this.props.document.docDate)}
-									type="date"
-									defaultValue={this.props.document.docDate}
-									label="Дата выдачи документа"
-									name="docDate"
-									onBlur={this.onBlur}
-								/>
+							<>
+								<TextInput required type="date" label="Дата выдачи документа" name="docDate" />
 								<TextInput
 									required
-									onChange={this.onChange}
-									error={!!this.validateForm(this.props.document.docIssieBy)}
-									helperText={this.validateForm(this.props.document.docIssieBy)}
-									defaultValue={this.props.document.docIssieBy}
 									placeholder="Введите кем выдан документ"
 									label="Кем выдан документ"
 									name="docIssieBy"
 									multiline={true}
-									onBlur={this.onBlur}
 								/>
-							</React.Fragment>
+							</>
 						)}
 
 						{this.props.extraFields}

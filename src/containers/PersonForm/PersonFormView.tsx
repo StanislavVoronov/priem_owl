@@ -10,11 +10,11 @@ import Button from '../../components/Buttons/Button';
 interface IProps extends IEnrollPersonForm, IStylable {
 	dictionaries: DictionaryState;
 	updatePersonDocument: (data: IDocument) => void;
-	onChangeBirthPlace: (event: ChangeEvent<HTMLInputElement>) => void;
+	onChangeBirthPlace: (event: any) => void;
 	addPersonPhoto: (photo: File) => void;
 	removePersonPhoto: () => void;
 	onChangeGovernment: (value: ISelectItem) => void;
-	onChangeCodeDepartment: (event: ChangeEvent<HTMLInputElement>) => void;
+	onChangeCodeDepartment: (event: any) => void;
 	onChangeApplyPersonDataStatus: () => void;
 	submit: () => void;
 }
@@ -38,25 +38,18 @@ class PersonForm extends React.PureComponent<IProps> {
 					docTitle="Файл документа, удостоверяющего личность"
 					updateDocument={this.props.updatePersonDocument}
 					dictionarySubTypes={dictionaryPersonDocTypes && dictionaryPersonDocTypes.values}
-					subTitle={'Тип документа удостоверяющего личность'}
+					subTitle="Тип документа удостоверяющего личность"
 					extraFields={
 						<React.Fragment>
 							{personDocument.docSubType && personDocument.docSubType.id === 1 && (
 								<TextInput
+									name="codeDepartment"
 									label="Код подразделения"
 									type="number"
-									defaultValue={personDocument.codeDepartment}
-									placeholder={'Введите код подразделения'}
-									onChange={this.props.onChangeCodeDepartment}
+									placeholder="Введите код подразделения"
 								/>
 							)}
-							<TextInput
-								label="Место рождения"
-								required
-								defaultValue={this.props.birthPlace}
-								placeholder={'Введите место рождения'}
-								onBlur={this.props.onChangeBirthPlace}
-							/>
+							<TextInput name="birthday" label="Место рождения" required placeholder="Введите место рождения" />
 						</React.Fragment>
 					}
 				/>

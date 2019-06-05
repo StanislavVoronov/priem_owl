@@ -102,6 +102,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 		classes: {},
 		required: false,
 		disabled: false,
+		defaultValue: '',
 	};
 	state = {
 		value: this.props.defaultValue,

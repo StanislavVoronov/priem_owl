@@ -1,15 +1,16 @@
 import * as React from 'react';
 import EducationFormView from './EducationFormView';
 import { IDocument, IEnrollEducationForm, ISelectItem } from '$common';
-import { dictionaryStateSelector, enrollEducationFormSelector, IRootState } from '$store';
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { DictionaryState } from '@mgutm-fcu/dictionary';
 import {
-	selectPersonCoolnessTypes,
+	dictionaryStateSelector,
+	enrollEducationFormSelector,
+	IRootState,
 	toggleFirstHighEducationStatus,
 	toggleHasEgeStatus,
 	updateEducationDocument,
-} from '../../store/educationForm';
+} from '$store';
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { DictionaryState } from '@mgutm-fcu/dictionary';
 
 interface IStateToProps extends IEnrollEducationForm {
 	dictionaries: DictionaryState;
@@ -19,7 +20,6 @@ interface IOwnProps {
 }
 interface IDispatchToProps {
 	updateEducationDocument: (document: IDocument) => void;
-	selectPersonCoolnessTypes: (coolnessTypes: ISelectItem[]) => void;
 	toggleHasEgeStatus: () => void;
 	toggleFirstHighEducationStatus: () => void;
 }
@@ -38,7 +38,6 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {
 	updateEducationDocument,
-	selectPersonCoolnessTypes,
 	toggleHasEgeStatus,
 	toggleFirstHighEducationStatus,
 };

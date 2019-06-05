@@ -15,11 +15,12 @@ import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { EDictionaryNameList, IEnrollRegForm, IForm, IInvalidData, IServerError } from '$common';
 import { enrollCreateNewLogin, findPerson } from '$operations';
 
-interface IStateToProps extends IEnrollRegForm, IInvalidData<IEnrollRegForm> {
+interface IStateToProps extends IInvalidData<IEnrollRegForm> {
 	dictionaries: DictionaryState;
 	statusValidation: boolean;
 	error: IServerError | null;
 	loading: boolean;
+	data: IEnrollRegForm;
 }
 interface IDispatchToProps {
 	onChangeTextInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -67,7 +68,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 
 	return {
 		dictionaries,
-		...data,
+		data,
 		error: result ? { code: '', message: 'Абитуриент уже зарегистрирован в системе' } : error,
 		loading,
 		personExists: result,

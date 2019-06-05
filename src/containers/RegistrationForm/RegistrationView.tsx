@@ -1,18 +1,21 @@
-import React, { ChangeEvent, FormEventHandler } from 'react';
-import { Autocomplete, RadioButtonGroup, TextInput, LoadingButton, Button, LoadingText, H2 } from '$components';
+import React, { ChangeEvent } from 'react';
+import { Autocomplete, RadioButtonGroup, TextInput, LoadingText, H2, SubmitButton } from '$components';
 import {
 	EDictionaryNameList,
 	IEnrollRegForm,
-	IForm,
 	IInvalidData,
 	IServerError,
-	prepareDictionarySuggestions,
+	validateRequireRusText,
+	validateRequireTextField,
 } from '$common';
+import { Formik, Form, FormikProps } from 'formik';
+
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 
 export const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { value: 2, label: 'Жен.' }];
 
-interface IProps extends IEnrollRegForm, IInvalidData<IEnrollRegForm> {
+interface IProps extends IInvalidData<IEnrollRegForm> {
+	data: IEnrollRegForm;
 	onChangeTextInput: (event: ChangeEvent<HTMLInputElement>) => void;
 	dictionaries: DictionaryState;
 	onChangeMiddleName: (value: string) => void;
@@ -24,94 +27,73 @@ interface IProps extends IEnrollRegForm, IInvalidData<IEnrollRegForm> {
 	loading: boolean;
 }
 
-class RegistrationView extends React.PureComponent<IProps> {
-	static defaultProps = {
-		disabled: false,
+const RegistrationView = (props: IProps) => {
+	const onChangeGender = (_: any, gender: string) => {
+		// this.props.onChangeGender(Number(gender));
 	};
 
-	onChangeGender = (_: any, gender: string) => {
-		this.props.onChangeGender(Number(gender));
-	};
-
-	render() {
-		const { dictionaries } = this.props;
+	const renderForm = (formikProps: FormikProps<IEnrollRegForm>) => {
+		const { dictionaries, data } = props;
 		const dictionaryFirstNames = dictionaries[EDictionaryNameList.FirstNames];
 		const dictionaryMiddleNames = dictionaries[EDictionaryNameList.MiddleNames];
 
 		const filteredDictionaryMiddleName = dictionaryMiddleNames
-			? this.props.gender
+			? data.gender
 				? {
-						values: dictionaryMiddleNames.values.filter((item: { sex: number }) => item.sex === this.props.gender),
+						values: dictionaryMiddleNames.values.filter((item: { sex: number }) => item.sex === data.gender),
 				  }
 				: dictionaryMiddleNames
 			: { values: [] };
-		if (this.props.loading) {
-			return <LoadingText>Проверка абитуриента</LoadingText>;
-		}
 
 		return (
-			<form className="flexColumn" noValidate={true}>
+			<div className="flexColumn">
 				<TextInput
+					required
+					validate={validateRequireRusText}
 					name="lastName"
-					onChange={this.props.onChangeTextInput}
-					required
-					defaultValue={this.props.lastName}
-					placeholder={'Введите фамилию'}
 					label="Фамилия"
-					helperText={this.props.validation.lastName}
-					error={!!this.props.validation.lastName}
-					onBlur={this.props.onBlurTextInput}
-				/>
-				<Autocomplete
-					label={'Имя'}
-					defaultValue={this.props.firstName}
-					required
-					helperText={this.props.validation.firstName}
-					error={!!this.props.validation.firstName}
-					onChange={this.props.onChangeFirstName}
-					placeholder={'Введите имя'}
-					suggestions={prepareDictionarySuggestions(dictionaryFirstNames)}
+					placeholder="Введите фамилию"
 				/>
 
-				<Autocomplete
-					label={'Отчество'}
-					name="middleName"
-					placeholder={'Введите отчество'}
-					defaultValue={this.props.middleName}
-					helperText={this.props.validation.middleName}
-					error={!!this.props.validation.middleName}
-					onChange={this.props.onChangeMiddleName}
-					suggestions={prepareDictionarySuggestions(filteredDictionaryMiddleName)}
-				/>
+				{/*<Autocomplete*/}
+				{/*label={'Имя'}*/}
+				{/*name="firstName"*/}
+				{/*required*/}
+				{/*helperText={this.props.validation.firstName}*/}
+				{/*error={!!this.props.validation.firstName}*/}
+				{/*onChange={this.props.onChangeFirstName}*/}
+				{/*placeholder={'Введите имя'}*/}
+				{/*suggestions={prepareDictionarySuggestions(dictionaryFirstNames)}*/}
+				{/*/>*/}
 
-				<TextInput
-					required
-					name="birthday"
-					label="Дата рождения"
-					defaultValue={this.props.birthday}
-					type="date"
-					error={!!this.props.validation.birthday}
-					helperText={this.props.validation.birthday}
-					onBlur={this.props.onBlurTextInput}
-				/>
+				{/*<Autocomplete*/}
+				{/*label={'Отчество'}*/}
+				{/*name="middleName"*/}
+				{/*placeholder={'Введите отчество'}*/}
+				{/*helperText={this.props.validation.middleName}*/}
+				{/*error={!!this.props.validation.middleName}*/}
+				{/*onChange={this.props.onChangeMiddleName}*/}
+				{/*suggestions={prepareDictionarySuggestions(filteredDictionaryMiddleName)}*/}
+				{/*/>*/}
 
-				<RadioButtonGroup
-					title="Пол"
-					required={true}
-					value={String(this.props.gender)}
-					values={GENDERS}
-					onChange={this.onChangeGender}
-				/>
+				<TextInput validate={validateRequireTextField} required name="birthday" label="Дата рождения" type="date" />
 
-				{this.props.error && <H2 color="red">{this.props.error.message}</H2>}
+				<RadioButtonGroup value={'1'} title="Пол" required={true} values={GENDERS} onChange={onChangeGender} />
+
 				<div style={{ marginTop: 24 }}>
-					<Button onClick={this.props.submit} disabled={Object.values(this.props.validation).some(Boolean)}>
-						Проверить
-					</Button>
+					<SubmitButton>Проверить</SubmitButton>
 				</div>
-			</form>
+			</div>
 		);
+	};
+	if (props.loading) {
+		return <LoadingText>Проверка абитуриента</LoadingText>;
 	}
-}
 
+	return (
+		<Formik onSubmit={props.submit} validateOnBlur={false} validateOnChange={false} initialValues={{ ...props.data }}>
+			{renderForm}
+		</Formik>
+	);
+};
 export default RegistrationView;

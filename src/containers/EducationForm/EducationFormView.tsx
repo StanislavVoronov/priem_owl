@@ -10,7 +10,6 @@ import Button from '../../components/Buttons/Button';
 interface IProps extends IStylable, IEnrollEducationForm {
 	dictionaries: DictionaryState;
 	updateEducationDocument: (document: IDocument) => void;
-	selectPersonCoolnessTypes: (coolnessTypes: ISelectItem[]) => void;
 	toggleHasEgeStatus: () => void;
 	toggleFirstHighEducationStatus: () => void;
 	submit: () => void;
@@ -39,14 +38,7 @@ class EducationFormView extends React.PureComponent<IProps> {
 					}
 					label="Получение высшего образования впервые"
 				/>
-				<DropdownSelect
-					defaultValue={coolnessTypes}
-					placeholder={'Выберите достижения'}
-					onChange={this.props.selectPersonCoolnessTypes}
-					options={coolnessTypeDictionary && coolnessTypeDictionary.values}
-					isMulti={true}
-					title={'Индивидуальные достижения'}
-				/>
+
 				<DocumentForm
 					document={educationDocument}
 					title={'Предыдущее образование'}

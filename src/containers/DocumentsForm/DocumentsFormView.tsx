@@ -14,7 +14,6 @@ import {
 import styles from './styles';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import withStyles from '@material-ui/core/styles/withStyles';
-import DropdownSelect from '../../components/DropdownSelect';
 
 interface IProps extends IStylable {
 	documents: IDocument[];
@@ -93,11 +92,10 @@ class DocumentsFormView extends React.PureComponent<IProps> {
 										<React.Fragment>
 											{docTypeId === 1 && item.docSubType && item.docSubType.id === 1 ? (
 												<TextInput
-													defaultValue={item.codeDepartment}
+													name="codeDepartment"
 													label="Код подразделения"
 													type="number"
 													placeholder={'Введите код подразделения'}
-													onChange={this.onChangeCodeDepartment(index, item)}
 												/>
 											) : null}
 										</React.Fragment>

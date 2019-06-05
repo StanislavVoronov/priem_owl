@@ -5,18 +5,17 @@ import Button from '../../components/Buttons/Button';
 interface IProps {
 	verificationCode: string;
 	submit: () => void;
-	onChangeVerificationCode: (event: ChangeEvent<HTMLInputElement>) => void;
+	onChangeVerificationCode: (event: any) => void;
 }
 class AccountVerificationView extends React.Component<IProps> {
 	render() {
 		return (
 			<form className="flexColumn" noValidate={true}>
 				<TextInput
+					name="verificationAccountCode"
 					required
 					label="Код подтверждения"
-					defaultValue={this.props.verificationCode}
 					helperText={'Код подтверждения, отправленный на электронную почту'}
-					onBlur={this.props.onChangeVerificationCode}
 				/>
 				<div style={{ marginTop: 24 }}>
 					<Button onClick={this.props.submit}>Подтвердить</Button>
