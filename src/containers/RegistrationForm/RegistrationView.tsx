@@ -55,26 +55,9 @@ const RegistrationView = (props: IProps) => {
 					placeholder="Введите фамилию"
 				/>
 
-				{/*<Autocomplete*/}
-				{/*label={'Имя'}*/}
-				{/*name="firstName"*/}
-				{/*required*/}
-				{/*helperText={this.props.validation.firstName}*/}
-				{/*error={!!this.props.validation.firstName}*/}
-				{/*onChange={this.props.onChangeFirstName}*/}
-				{/*placeholder={'Введите имя'}*/}
-				{/*suggestions={prepareDictionarySuggestions(dictionaryFirstNames)}*/}
-				{/*/>*/}
+				<Autocomplete label={'Имя'} name="firstName" required placeholder={'Введите имя'} suggestions={[]} />
 
-				{/*<Autocomplete*/}
-				{/*label={'Отчество'}*/}
-				{/*name="middleName"*/}
-				{/*placeholder={'Введите отчество'}*/}
-				{/*helperText={this.props.validation.middleName}*/}
-				{/*error={!!this.props.validation.middleName}*/}
-				{/*onChange={this.props.onChangeMiddleName}*/}
-				{/*suggestions={prepareDictionarySuggestions(filteredDictionaryMiddleName)}*/}
-				{/*/>*/}
+				<Autocomplete label={'Отчество'} name="middleName" placeholder={'Введите отчество'} suggestions={[]} />
 
 				<TextInput validate={validateRequireTextField} required name="birthday" label="Дата рождения" type="date" />
 

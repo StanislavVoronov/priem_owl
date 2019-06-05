@@ -71,12 +71,10 @@ function getSuggestionValue(suggestion: string) {
 interface IAutoCompleteProps {
 	suggestions: string[];
 	required?: boolean;
-	defaultValue: string;
 	disabled: boolean;
 	classes: any;
 	label: string;
 	placeholder: string;
-	onChange: (value: string) => void;
 	helperText?: string;
 	error?: boolean;
 	name?: string;
@@ -102,10 +100,9 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 		classes: {},
 		required: false,
 		disabled: false,
-		defaultValue: '',
 	};
 	state = {
-		value: this.props.defaultValue,
+		value: '',
 		suggestions: [],
 	};
 
@@ -124,7 +121,6 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 		this.setState({
 			value: newValue,
 		});
-		this.props.onChange(newValue);
 	};
 
 	onSelectSuggestion = (formEvent: React.FormEvent<HTMLInputElement>, data: SuggestionSelectedEventData<string>) => {
