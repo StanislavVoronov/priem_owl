@@ -16,7 +16,8 @@ import {
 import { IDocument, IEnrollContactsForm, ISelectItem, IServerError } from '$common';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 
-interface IStateToProps extends IEnrollContactsForm {
+interface IStateToProps {
+	data: IEnrollContactsForm;
 	dictionaries: DictionaryState;
 	loading: boolean;
 	error: IServerError | null;
@@ -49,7 +50,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IRootState> = s
 
 	const { data } = enrollContactsFormSelector(state);
 
-	return { ...data, dictionaries, loading, error };
+	return { data, dictionaries, loading, error };
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => ({
 	updateRegDocument: document => dispatch(updateRegDocument(document)),

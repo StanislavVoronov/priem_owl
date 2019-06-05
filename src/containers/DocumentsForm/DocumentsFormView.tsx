@@ -53,7 +53,7 @@ class DocumentsFormView extends React.PureComponent<IProps> {
 		return (
 			<form noValidate={true} className="flexColumn">
 				<div>
-					<H2>Необходимые документы для поступления:</H2>
+					<H2 style={{ marginTop: 10 }}>Необходимые документы для поступления:</H2>
 					<ol>
 						{this.props.foreigner &&
 							dictionaryDocTypes &&

@@ -1,13 +1,22 @@
 import React, { ChangeEvent } from 'react';
-import { DropdownSelect, Checkbox, WebPhoto, DocumentForm, TextInput, FormControlLabel } from '$components';
+import {
+	DropdownSelect,
+	Checkbox,
+	WebPhoto,
+	DocumentForm,
+	TextInput,
+	FormControlLabel,
+	SubmitButton,
+} from '$components';
 import { EDictionaryNameList, IDocument, IEnrollPersonForm, ISelectItem, IStylable } from '$common';
 
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { withStyles } from '@material-ui/core';
 import styles from './styles';
-import Button from '../../components/Buttons/Button';
+import { Formik } from 'formik';
 
-interface IProps extends IEnrollPersonForm, IStylable {
+interface IProps extends IStylable {
+	data: IEnrollPersonForm;
 	dictionaries: DictionaryState;
 	updatePersonDocument: (data: IDocument) => void;
 	onChangeBirthPlace: (event: any) => void;
@@ -23,8 +32,9 @@ class PersonForm extends React.PureComponent<IProps> {
 	static defaultProps = {
 		classes: {},
 	};
-	render() {
-		const { dictionaries, classes, personDocument, isApplyPersonData } = this.props;
+	renderForm = () => {
+		const { dictionaries, classes, data } = this.props;
+		const { personDocument, isApplyPersonData } = data;
 		const dictionaryGovernments = dictionaries[EDictionaryNameList.Governments];
 		const dictionaryPersonDocTypes = dictionaries[EDictionaryNameList.PersonDocTypes];
 
@@ -61,9 +71,20 @@ class PersonForm extends React.PureComponent<IProps> {
 					label="Согласие на обработку персональных данных"
 				/>
 				<div style={{ marginTop: 24 }}>
-					<Button onClick={this.props.submit}>Далее</Button>
+					<SubmitButton>Проверить</SubmitButton>
 				</div>
 			</div>
+		);
+	};
+	render() {
+		return (
+			<Formik
+				onSubmit={this.props.submit}
+				validateOnBlur={false}
+				validateOnChange={false}
+				initialValues={{ ...this.props.data, ...this.props.data.personDocument }}>
+				{this.renderForm}
+			</Formik>
 		);
 	}
 }

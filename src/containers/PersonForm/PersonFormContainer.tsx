@@ -18,7 +18,8 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { IDocument, IEnrollPersonForm, ISelectItem } from '$common';
 
-interface IStateToProps extends IEnrollPersonForm {
+interface IStateToProps {
+	data: IEnrollPersonForm;
 	dictionaries: DictionaryState;
 }
 interface IDispatchToProps {
@@ -56,7 +57,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IRootState> = s
 
 	const { data, statusValidation } = enrollPersonFormSelector(state);
 
-	return { dictionaries, ...data, statusValidation };
+	return { dictionaries, data, statusValidation };
 };
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = {

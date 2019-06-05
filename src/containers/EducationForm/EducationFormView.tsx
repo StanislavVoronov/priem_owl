@@ -6,8 +6,10 @@ import { DocumentForm, DropdownSelect, FormControlLabel, Checkbox } from '$compo
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { withStyles } from '@material-ui/core';
 import Button from '../../components/Buttons/Button';
+import { Formik } from 'formik';
 
-interface IProps extends IStylable, IEnrollEducationForm {
+interface IProps extends IStylable {
+	data: IEnrollEducationForm;
 	dictionaries: DictionaryState;
 	updateEducationDocument: (document: IDocument) => void;
 	toggleHasEgeStatus: () => void;
@@ -20,10 +22,10 @@ class EducationFormView extends React.PureComponent<IProps> {
 		classes: {},
 	};
 
-	render() {
-		const { dictionaries, classes, firstHighEducation, coolnessTypes, educationDocument, hasEge } = this.props;
-		const coolnessTypeDictionary = dictionaries[EDictionaryNameList.CoolnessTypes];
+	renderForm = () => {
+		const { dictionaries, classes, data } = this.props;
 		const educationTypeDictionary = dictionaries[EDictionaryNameList.EducationDocTypes];
+		const { firstHighEducation, educationDocument, hasEge } = data;
 
 		return (
 			<div className="flexColumn">
@@ -58,6 +60,17 @@ class EducationFormView extends React.PureComponent<IProps> {
 					<Button onClick={this.props.submit}>Далее</Button>
 				</div>
 			</div>
+		);
+	};
+	render() {
+		return (
+			<Formik
+				onSubmit={this.props.submit}
+				validateOnBlur={false}
+				validateOnChange={false}
+				initialValues={{ ...this.props.data, ...this.props.data.educationDocument }}>
+				{this.renderForm}
+			</Formik>
 		);
 	}
 }

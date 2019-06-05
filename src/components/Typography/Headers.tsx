@@ -7,5 +7,9 @@ interface IProps {
 export const H2 = (props: any) => {
 	const { color = '#0094D6' } = props;
 
-	return <FormLabel style={{ color, fontWeight: 'bold', marginTop: 16, marginBottom: 8 }}>{props.children}</FormLabel>;
+	return (
+		<FormLabel style={{ color, fontWeight: 'bold', marginTop: 16, marginBottom: 8, ...props.style }}>
+			{props.children}
+		</FormLabel>
+	);
 };

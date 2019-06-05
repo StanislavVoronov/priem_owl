@@ -1,15 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocumentForm } from '$components';
-import {
-	EDictionaryNameList,
-	IGovernmentSelectItem,
-	inputValueAsString,
-	IDocument,
-	IStylable,
-	IEnrollContactsForm,
-	ISelectItem,
-	IServerError,
-} from '$common';
+import { EDictionaryNameList, IDocument, IStylable, IEnrollContactsForm, ISelectItem, IServerError } from '$common';
+import { Formik } from 'formik';
 
 import styles from './styles';
 import { withStyles } from '@material-ui/core';
@@ -17,7 +9,8 @@ import { DictionaryState } from '@mgutm-fcu/dictionary';
 import Button from '../../components/Buttons/Button';
 import LoadingText from '../../components/LoadingText';
 
-interface IProps extends IStylable, IEnrollContactsForm {
+interface IProps extends IStylable {
+	data: IEnrollContactsForm;
 	disabled: boolean;
 	updateContactsForm: (event: ChangeEvent<HTMLInputElement>) => void;
 	updateRegDocument: (document: IDocument) => void;
@@ -36,32 +29,32 @@ class ContactsFormView extends React.PureComponent<IProps> {
 		classes: {},
 	};
 
-	onChange = (event: any) => {
-		this.props.updateContactsForm(event);
-	};
-	onChangeMobPhone: React.ChangeEventHandler<HTMLInputElement> = event => {
-		const mobPhoneValue: string[] | null = inputValueAsString(event)
-			.replace(/\D/g, '')
-			.substring(`${this.props.mobileGovernment.phone_code}`.length)
-			.match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-		const phoneCode = `+${this.props.mobileGovernment.phone_code}`;
-		const maskMobPhone =
-			phoneCode +
-			(mobPhoneValue
-				? !mobPhoneValue[2]
-					? mobPhoneValue[1]
-					: '(' +
-					  mobPhoneValue[1] +
-					  ') ' +
-					  mobPhoneValue[2] +
-					  (mobPhoneValue[3] ? `-${mobPhoneValue[3]}` : '') +
-					  (mobPhoneValue[4] ? +`-${mobPhoneValue[4]}` : '')
-				: '');
+	// onChange = (event: any) => {
+	// 	this.props.updateContactsForm(event);
+	// };
+	// onChangeMobPhone: React.ChangeEventHandler<HTMLInputElement> = event => {
+	// 	const mobPhoneValue: string[] | null = inputValueAsString(event)
+	// 		.replace(/\D/g, '')
+	// 		.substring(`${this.props.mobileGovernment.phone_code}`.length)
+	// 		.match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+	// 	const phoneCode = `+${this.props.dta.mobileGovernment.phone_code}`;
+	// 	const maskMobPhone =
+	// 		phoneCode +
+	// 		(mobPhoneValue
+	// 			? !mobPhoneValue[2]
+	// 				? mobPhoneValue[1]
+	// 				: '(' +
+	// 				  mobPhoneValue[1] +
+	// 				  ') ' +
+	// 				  mobPhoneValue[2] +
+	// 				  (mobPhoneValue[3] ? `-${mobPhoneValue[3]}` : '') +
+	// 				  (mobPhoneValue[4] ? +`-${mobPhoneValue[4]}` : '')
+	// 			: '');
+	//
+	// 	this.onChange({ ...event, target: { ...event.target, value: maskMobPhone, name: event.target.name } });
+	// };
 
-		this.onChange({ ...event, target: { ...event.target, value: maskMobPhone, name: event.target.name } });
-	};
-
-	render() {
+	renderForm = () => {
 		const governmentDictionary = this.props.dictionaries[EDictionaryNameList.Governments];
 
 		if (this.props.loading) {
@@ -72,7 +65,7 @@ class ContactsFormView extends React.PureComponent<IProps> {
 			<form className="flexColumn">
 				<H2>Адрес регистрации</H2>
 				<DocumentForm
-					document={this.props.regDocument}
+					document={this.props.data.regDocument}
 					docTitle="Файл регистрации места жительства"
 					updateDocument={this.props.updateRegDocument}
 					extraFields={
@@ -94,7 +87,7 @@ class ContactsFormView extends React.PureComponent<IProps> {
 								control={
 									<Checkbox
 										color="primary"
-										checked={this.props.needDormitory}
+										checked={this.props.data.needDormitory}
 										onChange={this.props.toggleNeedDormitoryStatus}
 									/>
 								}
@@ -108,36 +101,36 @@ class ContactsFormView extends React.PureComponent<IProps> {
 					control={
 						<Checkbox
 							color="primary"
-							checked={this.props.isRegAddressEqualLive}
+							checked={this.props.data.isRegAddressEqualLive}
 							onChange={this.props.toggleLiveAddressStatus}
 						/>
 					}
 					label="Фактический адрес проживания	совпадает с адресом регистрации"
 				/>
-				{!this.props.isRegAddressEqualLive && (
+				{!this.props.data.isRegAddressEqualLive && (
 					<div className="flexColumn">
 						<H2>Адрес проживания</H2>
 						<TextInput
 							label={'Индекс'}
 							placeholder={'Введите индекс'}
 							name="liveIndex"
-							required={this.props.isRegAddressEqualLive}
+							required={this.props.data.isRegAddressEqualLive}
 						/>
 						<TextInput
 							label="Область"
 							placeholder="Введите область"
 							name="liveRegion"
-							required={this.props.isRegAddressEqualLive}
+							required={this.props.data.isRegAddressEqualLive}
 						/>
 						<TextInput
 							label="Населенный пункт"
 							placeholder="Введите населенный пункт"
 							name="liveLocality"
-							required={this.props.isRegAddressEqualLive}
+							required={this.props.data.isRegAddressEqualLive}
 						/>
 						<TextInput
 							label="Улица"
-							required={this.props.isRegAddressEqualLive}
+							required={this.props.data.isRegAddressEqualLive}
 							name="liveStreet"
 							placeholder="Введите улицу"
 						/>
@@ -145,7 +138,7 @@ class ContactsFormView extends React.PureComponent<IProps> {
 							label="Дом"
 							name="liveHome"
 							placeholder="Введите дом"
-							required={this.props.isRegAddressEqualLive}
+							required={this.props.data.isRegAddressEqualLive}
 						/>
 						<TextInput name="liveBlock" label="Корпус" />
 						<TextInput name="liveFlat" label="Квартира" />
@@ -159,7 +152,7 @@ class ContactsFormView extends React.PureComponent<IProps> {
 				/>
 				<DropdownSelect
 					isCleanable={false}
-					defaultValue={this.props.mobileGovernment}
+					defaultValue={this.props.data.mobileGovernment}
 					onChange={this.props.selectMobileGovernment}
 					title="Страна оператора сотовой связи"
 					options={governmentDictionary ? governmentDictionary.values : []}
@@ -172,6 +165,17 @@ class ContactsFormView extends React.PureComponent<IProps> {
 					<Button onClick={this.props.submit}>Далее</Button>
 				</div>
 			</form>
+		);
+	};
+	render() {
+		return (
+			<Formik
+				onSubmit={this.props.submit}
+				validateOnBlur={false}
+				validateOnChange={false}
+				initialValues={{ ...this.props.data, ...this.props.data.regDocument }}>
+				{this.renderForm}
+			</Formik>
 		);
 	}
 }
