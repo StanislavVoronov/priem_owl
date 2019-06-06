@@ -39,10 +39,11 @@ class TextInput extends React.PureComponent<IInputProps> {
 		helperText: '',
 		disabled: false,
 		validateOnChange: false,
+		name: '',
 	};
 	onBlur = ({ field, form }: FieldProps) => (event: any) => {
 		field.onBlur(event);
-		if (!form.validateOnBlur) {
+		if (!form.validateOnBlur && this.props.required) {
 			form.validateField(field.name);
 		}
 	};

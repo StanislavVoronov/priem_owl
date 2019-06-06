@@ -13,18 +13,27 @@ import {
 	uploadDocumentTransaction,
 	createPersonTransaction,
 	enrollDocumentsFormSelector,
+	enrollSubmitRegFormAction,
 } from '$store';
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
-import { createLoginActions, cyrillToLatin, generatePassword, moment, ServerBoolean } from '$common';
+import { createLoginActions, cyrillToLatin, generatePassword, IEnrollRegForm, moment, ServerBoolean } from '$common';
 import { updatePhoneTransaction } from '../../store/transactions/updatePhone';
+export const onCompleteRegistrationForm = (
+	form: IEnrollRegForm,
+): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
+	dispatch(enrollSubmitRegFormAction(form));
 
+	return dispatch(enrollCreateNewLogin()).then(() => {
+		return dispatch(findPerson());
+	});
+};
 export const enrollCreateNewLogin = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
 	dispatch,
 	getState,
 ) => {
 	const state = getState();
-	const { data } = enrollRegistrationSelector(state);
+	const data = enrollRegistrationSelector(state);
 	const lastName = cyrillToLatin(data.lastName);
 	const firstName = cyrillToLatin(data.firstName);
 	const middleName = cyrillToLatin(data.middleName);
@@ -62,7 +71,7 @@ export const enrollCreateNewLogin = (): ThunkAction<Promise<void>, IRootState, v
 };
 
 export const findPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
-	const { data } = enrollRegistrationSelector(getState());
+	const data = enrollRegistrationSelector(getState());
 
 	return dispatch(findPersonTransaction(data)).then(() => {
 		if (fromTransaction.findPersonSelector(getState()).result) {
@@ -105,7 +114,7 @@ export const updatePhone = (): ThunkAction<Promise<void>, IRootState, void, Acti
 
 export const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
 	const state = getState();
-	const registrationForm = enrollRegistrationSelector(state).data;
+	const registrationForm = enrollRegistrationSelector(state);
 	const contactsForm = enrollContactsFormSelector(state).data;
 	const personForm = enrollPersonFormSelector(state).data;
 	const educationForm = enrollEducationFormSelector(state).data;

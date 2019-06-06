@@ -70,7 +70,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 			<React.Fragment>
 				<div className={styles.header}>
 					<img className={styles.logo} src={Logo} />
-					<h2 className={styles.pkTitle}>Приемная компания</h2>
+					<h2 className={styles.pkTitle}>Приемная кампания</h2>
 				</div>
 				<h2 className={styles.namePageTitle}>Электронная подача документов для поступления в Университет</h2>
 				<CardMedia className={this.props.classes.logo}>

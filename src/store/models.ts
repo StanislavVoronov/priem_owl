@@ -13,7 +13,7 @@ import {
 
 export interface IRootState {
 	dictionaries: DictionaryState;
-	enrollRegistration: IForm<IEnrollRegForm>;
+	enrollRegistration: IEnrollRegForm;
 	enrollContactsForm: IForm<IEnrollContactsForm>;
 	enrollPersonForm: IForm<IEnrollPersonForm>;
 	enrollEducationForm: IForm<IEnrollEducationForm>;

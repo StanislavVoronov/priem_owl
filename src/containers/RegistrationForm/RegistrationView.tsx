@@ -5,8 +5,11 @@ import {
 	IEnrollRegForm,
 	IInvalidData,
 	IServerError,
+	prepareDictionarySuggestions,
 	validateRequireRusText,
 	validateRequireTextField,
+	prop,
+	validateRusTextField,
 } from '$common';
 import { Formik, Form, FormikProps } from 'formik';
 
@@ -14,39 +17,42 @@ import { DictionaryState } from '@mgutm-fcu/dictionary';
 
 export const GENDERS = [{ value: 1, label: 'Муж.', color: 'primary' }, { value: 2, label: 'Жен.' }];
 
-interface IProps extends IInvalidData<IEnrollRegForm> {
-	data: IEnrollRegForm;
-	onChangeTextInput: (event: ChangeEvent<HTMLInputElement>) => void;
+interface IProps {
 	dictionaries: DictionaryState;
-	onChangeMiddleName: (value: string) => void;
-	onChangeGender: (value: number) => void;
-	onChangeFirstName: (value: string) => void;
-	onBlurTextInput: (event: ChangeEvent<HTMLInputElement>) => void;
-	submit: () => void;
+	data: IEnrollRegForm;
+	submit: (values: IEnrollRegForm) => void;
 	error: IServerError | null;
 	loading: boolean;
+	personExists: boolean;
 }
 
 const RegistrationView = (props: IProps) => {
-	const onChangeGender = (_: any, gender: string) => {
-		// this.props.onChangeGender(Number(gender));
+	const onChangeFirstName = (form: FormikProps<IEnrollRegForm>) => (value: string) => {
+		const firstNameDictionary = props.dictionaries[EDictionaryNameList.FirstNames];
+		const name = firstNameDictionary.values.find(item => item.name === value);
+
+		if (name) {
+			form.setFieldValue('gender', String(name.sex));
+		}
 	};
-
 	const renderForm = (formikProps: FormikProps<IEnrollRegForm>) => {
-		const { dictionaries, data } = props;
-		const dictionaryFirstNames = dictionaries[EDictionaryNameList.FirstNames];
+		const { dictionaries } = props;
+		const dictionaryFirstNames = prepareDictionarySuggestions(dictionaries[EDictionaryNameList.FirstNames]);
 		const dictionaryMiddleNames = dictionaries[EDictionaryNameList.MiddleNames];
+		const gender = prop('gender', formikProps.values);
 
-		const filteredDictionaryMiddleName = dictionaryMiddleNames
-			? data.gender
-				? {
-						values: dictionaryMiddleNames.values.filter((item: { sex: number }) => item.sex === data.gender),
-				  }
-				: dictionaryMiddleNames
-			: { values: [] };
+		const filteredDictionaryMiddleName = prepareDictionarySuggestions(
+			dictionaryMiddleNames
+				? gender
+					? {
+							values: dictionaryMiddleNames.values.filter((item: { sex: number }) => item.sex === Number(gender)),
+					  }
+					: dictionaryMiddleNames
+				: { values: [] },
+		);
 
 		return (
-			<div className="flexColumn">
+			<Form className="flexColumn" noValidate={true}>
 				<TextInput
 					required
 					validate={validateRequireRusText}
@@ -55,18 +61,32 @@ const RegistrationView = (props: IProps) => {
 					placeholder="Введите фамилию"
 				/>
 
-				<Autocomplete label={'Имя'} name="firstName" required placeholder={'Введите имя'} suggestions={[]} />
+				<Autocomplete
+					label="Имя"
+					onSelect={onChangeFirstName(formikProps)}
+					name="firstName"
+					validate={validateRequireRusText}
+					required
+					placeholder="Введите имя"
+					suggestions={dictionaryFirstNames}
+				/>
 
-				<Autocomplete label={'Отчество'} name="middleName" placeholder={'Введите отчество'} suggestions={[]} />
+				<Autocomplete
+					label="Отчество"
+					name="middleName"
+					validate={validateRusTextField}
+					placeholder="Введите отчество"
+					suggestions={filteredDictionaryMiddleName}
+				/>
 
 				<TextInput validate={validateRequireTextField} required name="birthday" label="Дата рождения" type="date" />
 
-				<RadioButtonGroup value={'1'} title="Пол" required={true} values={GENDERS} onChange={onChangeGender} />
+				<RadioButtonGroup validate={validateRequireTextField} name="gender" title="Пол" required items={GENDERS} />
 
 				<div style={{ marginTop: 24 }}>
 					<SubmitButton>Проверить</SubmitButton>
 				</div>
-			</div>
+			</Form>
 		);
 	};
 	if (props.loading) {

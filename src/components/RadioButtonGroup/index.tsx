@@ -8,6 +8,8 @@ import { IHasError, IHelperText } from '../../containers/models';
 import { FormHelperText } from '@material-ui/core';
 import './styles.css';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { Field, FieldProps, FormikProps } from 'formik';
+import { has, prop, noop } from '$common';
 
 interface IRadioButton {
 	label: string;
@@ -16,12 +18,12 @@ interface IRadioButton {
 }
 interface IRadioGroupButton extends IHelperText, IHasError {
 	required?: boolean;
-	value: string;
-	values: IRadioButton[];
+	items: IRadioButton[];
 	title: string;
 	helperText?: string;
-	onChange: (event: any, value: string) => void;
+	validate: (value: string) => string | void;
 	classes: any;
+	name: string;
 }
 const localStyles = {
 	asterisk: {
@@ -47,22 +49,28 @@ const localStyles = {
 class RadioButtonGroup extends React.PureComponent<IRadioGroupButton> {
 	static defaultProps = {
 		classes: {},
+		validate: noop,
 	};
+	onChange = (form: FormikProps<any>) => (event: React.ChangeEvent<{}>, value: string) => {
+		form.setFieldValue(this.props.name, value);
+	};
+	renderButtonGroup = (props: FieldProps) => {
+		const { form, field } = props;
+		const touched = has(field.name);
 
-	render() {
 		return (
-			<FormControl className={this.props.classes.space}>
+			<div className={this.props.classes.space}>
 				<div className={this.props.classes.flexRow}>
 					<FormLabel className={this.props.classes.label}>{this.props.title}</FormLabel>
 					<FormLabel className={this.props.classes.asterisk}>{this.props.required && '*'}</FormLabel>
 				</div>
 				<RadioGroup
-					aria-label="Gender"
-					name="gender"
-					className={this.props.classes.flexRow}
-					value={this.props.value}
-					onChange={this.props.onChange}>
-					{this.props.values.map((item, index) => (
+					aria-label={this.props.name}
+					onChange={this.onChange(form)}
+					name={this.props.name}
+					value={field.value}
+					className={this.props.classes.flexRow}>
+					{this.props.items.map((item, index) => (
 						<FormControlLabel
 							key={`${item.value}-${index}`}
 							value={item.value.toString()}
@@ -71,13 +79,16 @@ class RadioButtonGroup extends React.PureComponent<IRadioGroupButton> {
 						/>
 					))}
 				</RadioGroup>
-				{this.props.helperText && (
+				{touched && prop(field.name, form.errors) && (
 					<FormHelperText className={this.props.error && this.props.classes.helperText}>
-						{this.props.helperText}
+						{prop(field.name, form.errors)}
 					</FormHelperText>
 				)}
-			</FormControl>
+			</div>
 		);
+	};
+	render() {
+		return <Field name={this.props.name} validate={this.props.validate} render={this.renderButtonGroup} />;
 	}
 }
 

@@ -1,60 +1,38 @@
 import * as React from 'react';
 import RegistrationView from './RegistrationView';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import {
-	IRootState,
-	enrollRegistrationSelector,
-	dictionaryStateSelector,
-	onChangeMiddleName,
-	onChangeGender,
-	changeFirstName,
-	updateRegFormTextInput,
-	fromTransaction,
-} from '$store';
+import { IRootState, enrollRegistrationSelector, dictionaryStateSelector, fromTransaction } from '$store';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
-import { EDictionaryNameList, IEnrollRegForm, IForm, IInvalidData, IServerError } from '$common';
-import { enrollCreateNewLogin, findPerson } from '$operations';
+import { IEnrollRegForm, IServerError } from '$common';
+import { onCompleteRegistrationForm } from '$operations';
 
-interface IStateToProps extends IInvalidData<IEnrollRegForm> {
+interface IStateToProps {
 	dictionaries: DictionaryState;
-	statusValidation: boolean;
 	error: IServerError | null;
 	loading: boolean;
 	data: IEnrollRegForm;
+	personExists: boolean;
 }
 interface IDispatchToProps {
-	onChangeTextInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
-	onChangeMiddleName: (value: string) => void;
-	onChangeGender: (value: number) => void;
-	onChangeFirstName: (value: string, gender: number) => void;
-	submit: () => void;
+	submit: (values: IEnrollRegForm) => Promise<void>;
 }
 interface IOwnProps {
 	onComplete: () => void;
 }
 type Props = IStateToProps & IDispatchToProps & IOwnProps;
 class EnrollRegistrationContainer extends React.Component<Props> {
-	onChangeFirstName = (firstName: string) => {
-		const firstNamesDictionary = this.props.dictionaries[EDictionaryNameList.FirstNames];
-		const person = firstNamesDictionary.values.find(item => item.name === firstName);
-
-		this.props.onChangeFirstName(firstName, person ? person.sex : 0);
-	};
-	onChangeTextInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (this.props.statusValidation) {
-			this.props.onChangeTextInput(event);
-		}
-	};
-	onBlurTextInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-		this.props.onChangeTextInput(event);
+	submit = (values: IEnrollRegForm) => {
+		this.props.submit(values).then(this.props.onComplete);
 	};
 	render() {
 		return (
 			<RegistrationView
-				{...this.props}
-				onChangeFirstName={this.onChangeFirstName}
-				onChangeTextInput={this.onChangeTextInput}
-				onBlurTextInput={this.onBlurTextInput}
+				data={this.props.data}
+				personExists={this.props.personExists}
+				loading={this.props.loading}
+				dictionaries={this.props.dictionaries}
+				error={this.props.error}
+				submit={this.submit}
 			/>
 		);
 	}
@@ -62,9 +40,8 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
 	const dictionaries = dictionaryStateSelector(state);
 
-	const { data, statusValidation } = enrollRegistrationSelector(state);
+	const data = enrollRegistrationSelector(state);
 	const { error, loading, result } = fromTransaction.findPersonSelector(state);
-	const validation = { lastName: '', middleName: '', firstName: '', birthday: '', gender: '' };
 
 	return {
 		dictionaries,
@@ -72,29 +49,13 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		error: result ? { code: '', message: 'Абитуриент уже зарегистрирован в системе' } : error,
 		loading,
 		personExists: result,
-		validation,
-		statusValidation,
 	};
 };
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => {
+const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = dispatch => {
 	return {
-		onChangeTextInput: (event: React.ChangeEvent<HTMLInputElement>) => {
-			dispatch(updateRegFormTextInput(event));
-		},
-		onChangeMiddleName: (value: string) => {
-			dispatch(onChangeMiddleName(value));
-		},
-		onChangeGender: (value: number) => {
-			dispatch(onChangeGender(value));
-		},
-		onChangeFirstName: (value: string, gender: number) => {
-			dispatch(changeFirstName(value, gender));
-		},
-		submit: () => {
-			dispatch<any>(enrollCreateNewLogin()).then(() => {
-				dispatch<any>(findPerson()).then(ownProps.onComplete);
-			});
+		submit: (values: IEnrollRegForm) => {
+			return dispatch<any>(onCompleteRegistrationForm(values));
 		},
 	};
 };

@@ -3,11 +3,14 @@ import deburr from 'lodash/deburr';
 import Autosuggest, { SuggestionSelectedEventData } from 'react-autosuggest';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
-import TextField, { BaseTextFieldProps } from '@material-ui/core/TextField';
+import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core';
 import styles from './styles';
+import { Field, FieldProps, FormikHandlers, FormikProps } from 'formik';
+import { noop } from 'lodash';
+import { has, propEq, prop } from '$common';
 
 function renderInputComponent(inputProps: any) {
 	return (
@@ -76,13 +79,13 @@ interface IAutoCompleteProps {
 	label: string;
 	placeholder: string;
 	helperText?: string;
-	error?: boolean;
-	name?: string;
+	name: string;
 	maxLength?: number;
+	validate: (value: string) => string | void;
+	onSelect: (value: string) => void;
 }
 
 interface IAutoCompleteState {
-	value: string;
 	suggestions: string[];
 }
 
@@ -99,10 +102,11 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 		suggestions: [],
 		classes: {},
 		required: false,
+		validate: noop,
 		disabled: false,
+		onSelect: noop,
 	};
 	state = {
-		value: '',
 		suggestions: [],
 	};
 
@@ -117,18 +121,22 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 			suggestions: [],
 		});
 	};
-	handleChange = (event: ChangeEvent<HTMLInputElement>, { newValue }: { newValue: string }) => {
-		this.setState({
-			value: newValue,
-		});
-	};
 
-	onSelectSuggestion = (formEvent: React.FormEvent<HTMLInputElement>, data: SuggestionSelectedEventData<string>) => {
-		this.setState(state => {
-			return { ...state, value: data.suggestion };
-		});
+	onSelectSuggestion = (form: FormikProps<any>) => (
+		formEvent: React.FormEvent<HTMLInputElement>,
+		data: SuggestionSelectedEventData<string>,
+	) => {
+		form.setFieldValue(this.props.name, data.suggestion);
+		this.props.onSelect(data.suggestion);
+		form.validateField(this.props.name);
 	};
-	render() {
+	onBlur = ({ field, form }: FieldProps) => () => {
+		form.validateField(field.name);
+	};
+	renderAutoSuggest = (props: FieldProps) => {
+		const { form, field } = props;
+		const touched = has(field.name);
+
 		const autosuggestProps = {
 			renderInputComponent,
 			suggestions: this.state.suggestions,
@@ -137,7 +145,7 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 			getSuggestionValue,
 			renderSuggestion,
 		};
-		const { suggestions, ...inputProps } = this.props;
+		const { ...inputProps } = this.props;
 
 		return (
 			<div>
@@ -150,10 +158,11 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 						styles: this.props.classes,
 						label: inputProps.label,
 						placeholder: inputProps.placeholder,
-						value: this.state.value,
-						onChange: this.handleChange,
-						helperText: this.props.helperText,
-						error: this.props.error,
+						value: field.value,
+						onBlur: this.onBlur(props),
+						onChange: field.onChange,
+						error: touched && !propEq(field.name, void 0, form.errors),
+						helperText: (touched && prop(field.name, form.errors)) || this.props.helperText,
 						disabled: this.props.disabled,
 					}}
 					// @ts-ignore
@@ -165,10 +174,13 @@ class Autocomplete extends React.PureComponent<IAutoCompleteProps, IAutoComplete
 					}}
 					focusInputOnSuggestionClick={false}
 					renderSuggestionsContainer={renderSuggestionsContainer}
-					onSuggestionSelected={this.onSelectSuggestion}
+					onSuggestionSelected={this.onSelectSuggestion(form)}
 				/>
 			</div>
 		);
+	};
+	render() {
+		return <Field name={this.props.name} validate={this.props.validate} render={this.renderAutoSuggest} />;
 	}
 }
 
