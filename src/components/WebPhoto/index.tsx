@@ -74,7 +74,6 @@ class WebPhoto extends React.Component<IProps, IState> {
 								Добавить фотографию
 							</Button>
 						</div>
-						<label>Необходимо для пропуска в Университет, в случае поступления.</label>
 					</div>
 				)}
 				<Dialog maxWidth="lg" open={this.state.open} onBackdropClick={this.toggleDialog}>

@@ -23,7 +23,7 @@ export const validateRequireTextField = (value: string) => {
 };
 
 export const validateRusTextField = (value: string) => {
-	return !RUS_ALPHABET.test(value) ? 'Поле может содержать только русские буквы' : void 0;
+	return value.length > 0 && !RUS_ALPHABET.test(value) ? 'Поле может содержать только русские буквы' : void 0;
 };
 export const validateEngTextField = (value: string) => {
 	return !ENG_ALPHABET.test(value) ? 'Поле может содержать только русские буквы' : void 0;
