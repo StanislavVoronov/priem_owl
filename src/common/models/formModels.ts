@@ -1,7 +1,7 @@
 import { IDocument, IGovernmentSelectItem, IInvalidData, ISelectItem } from '$common';
 import { IPerson } from '$common';
 
-export interface IEnrollContactsForm {
+export interface IEnrollContactsForm extends IDocument {
 	needDormitory: boolean;
 	regIndex: string;
 	regRegion: string;
@@ -22,7 +22,6 @@ export interface IEnrollContactsForm {
 	isRegAddressEqualLive: boolean;
 	mobileGovernment: IGovernmentSelectItem;
 	email: string;
-	regDocument: IDocument;
 }
 
 export interface IChangeFieldAction {
@@ -30,12 +29,11 @@ export interface IChangeFieldAction {
 		[key: string]: any;
 	};
 }
-export interface IEnrollEducationForm {
+export interface IEnrollEducationForm extends IDocument {
 	firstHighEducation: boolean;
 	coolnessTypes: ISelectItem[];
 	prevEducation: number;
 	hasEge: boolean;
-	educationDocument: IDocument;
 }
 export interface IEnrollRegForm {
 	lastName: string;
@@ -50,15 +48,13 @@ export interface IForm<T extends object> {
 	statusValidation: boolean;
 }
 
-export interface IEnrollPersonForm {
+export interface IEnrollPersonForm extends IDocument {
 	isApplyPersonData: boolean;
 	photo: IDocument;
 	birthPlace: string;
-	personDocument: IDocument;
 }
 export interface IDocumentsForm {
 	documents: IDocument[];
-	cheatType: ISelectItem | null;
 }
 
 export interface IAccountVerificationForm {

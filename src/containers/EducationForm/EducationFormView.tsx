@@ -25,7 +25,7 @@ class EducationFormView extends React.PureComponent<IProps> {
 	renderForm = () => {
 		const { dictionaries, classes, data } = this.props;
 		const educationTypeDictionary = dictionaries[EDictionaryNameList.EducationDocTypes];
-		const { firstHighEducation, educationDocument, hasEge } = data;
+		const { firstHighEducation, hasEge } = data;
 
 		return (
 			<div className="flexColumn">
@@ -42,10 +42,9 @@ class EducationFormView extends React.PureComponent<IProps> {
 				/>
 
 				<DocumentForm
-					document={educationDocument}
+					document={this.props.data}
 					title={'Предыдущее образование'}
 					docTitle={'Документ о предыдущем образовании'}
-					updateDocument={this.props.updateEducationDocument}
 					dictionarySubTypes={educationTypeDictionary && educationTypeDictionary.values}
 					subTitle={'Тип документа о предыдущем образовании'}
 					extraFields={
@@ -68,7 +67,7 @@ class EducationFormView extends React.PureComponent<IProps> {
 				onSubmit={this.props.submit}
 				validateOnBlur={false}
 				validateOnChange={false}
-				initialValues={{ ...this.props.data, ...this.props.data.educationDocument }}>
+				initialValues={{ ...this.props.data }}>
 				{this.renderForm}
 			</Formik>
 		);

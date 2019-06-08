@@ -22,6 +22,10 @@ export const validateRequireTextField = (value: string) => {
 	return value.length === 0 ? 'Поле не должно быть пустым' : void 0;
 };
 
+export const validateRequireCheckbox = (check: boolean) => {
+	return !check ? 'Необходимо ознакомиться с документом' : void 0;
+};
+
 export const validateRusTextField = (value: string) => {
 	return value.length > 0 && !RUS_ALPHABET.test(value) ? 'Поле может содержать только русские буквы' : void 0;
 };

@@ -10,46 +10,16 @@ import {
 	updatePersonDocument,
 } from './actions';
 
-const enrollPersonReducer = handleActions<IForm<IEnrollPersonForm>, IChangeFieldAction>(
+const enrollPersonReducer = handleActions<IEnrollPersonForm, IChangeFieldAction>(
 	{
-		[onChangeBirthPlace.toString()]: (state, action) => {
-			return { ...state, data: { ...state.data, birthPlace: action.payload.field.value } };
-		},
-		[onChangeGovernment.toString()]: (state, action) => {
-			return {
-				...state,
-				data: {
-					...state.data,
-					personDocument: { ...state.data.personDocument, docGovernment: action.payload!.field.value },
-				},
-			};
-		},
 		[addPersonPhoto.toString()]: (state, action) => {
-			return { ...state, data: { ...state.data, photo: action.payload.field.value } };
+			return { ...state, photo: action.payload.field.value };
 		},
 		[removePersonPhoto.toString()]: state => {
-			return { ...state, data: { ...state.data, photo: null } };
-		},
-		[onChangeCodeDepartment.toString()]: (state, action) => {
-			return {
-				...state,
-				data: {
-					...state.data,
-					personDocument: { ...state.data.personDocument, codeDepartment: action.payload.field.value },
-				},
-			};
-		},
-		[updatePersonDocument.toString()]: (state, action) => {
-			return { ...state, data: { ...state.data, personDocument: action.payload.field.value } };
-		},
-		[onChangeApplyPersonDataStatus.toString()]: state => {
-			return { ...state, data: { ...state.data, isApplyPersonData: !state.data.isApplyPersonData } };
+			return { ...state, photo: null };
 		},
 	},
-	{
-		data: defaultEnrollPersonForm,
-		statusValidation: false,
-	},
+	defaultEnrollPersonForm,
 );
 
 export default enrollPersonReducer;

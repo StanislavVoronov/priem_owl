@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { Autocomplete, RadioButtonGroup, TextInput, LoadingText, H2, SubmitButton } from '$components';
 import {
 	EDictionaryNameList,
@@ -52,7 +52,7 @@ const RegistrationView = (props: IProps) => {
 		);
 
 		return (
-			<Form className="flexColumn" noValidate={true}>
+			<Form className="flexvalidateColumn" noValidate={true}>
 				<TextInput
 					required
 					validate={validateRequireRusText}
@@ -82,7 +82,7 @@ const RegistrationView = (props: IProps) => {
 				<TextInput validate={validateRequireTextField} required name="birthday" label="Дата рождения" type="date" />
 
 				<RadioButtonGroup validate={validateRequireTextField} name="gender" title="Пол" required items={GENDERS} />
-
+				{props.error && <H2 color="red">{props.error.message}</H2>}
 				<div style={{ marginTop: 24 }}>
 					<SubmitButton>Проверить</SubmitButton>
 				</div>

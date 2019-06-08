@@ -22,8 +22,6 @@ interface IProps extends IStylable {
 	updateDocument: (key: number, document: IDocument) => void;
 	removeDocument: (key: number) => void;
 	addDocument: () => void;
-	selectCheatType: (value: ISelectItem) => void;
-	cheatType: ISelectItem | null;
 	submit: () => void;
 }
 
@@ -82,7 +80,6 @@ class DocumentsFormView extends React.PureComponent<IProps> {
 							<div key={`${index}-${item.docNumber}-${item.docSeries}`} className={classes.docFormContainer}>
 								<DocumentForm
 									document={item}
-									updateDocument={this.updateDocument(index)}
 									docTitle="Файл документа"
 									title="Тип документа"
 									dictionaryTypes={dictionaryDocTypes && dictionaryDocTypes.values}

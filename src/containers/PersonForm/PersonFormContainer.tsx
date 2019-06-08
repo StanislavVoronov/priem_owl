@@ -23,25 +23,18 @@ interface IStateToProps {
 	dictionaries: DictionaryState;
 }
 interface IDispatchToProps {
-	updatePersonDocument: (data: IDocument) => void;
-	onChangeBirthPlace: (event: ChangeEvent<HTMLInputElement>) => void;
-	onChangeGovernment: (value: ISelectItem) => void;
 	addPersonPhoto: (file: File) => void;
-	onChangeCodeDepartment: (event: ChangeEvent<HTMLInputElement>) => void;
 	removePersonPhoto: () => void;
-	onChangeApplyPersonDataStatus: () => void;
 }
 
 interface IOwnProps {
-	submit: () => void;
+	onComplete: () => void;
 }
 
 type IProps = IStateToProps & IDispatchToProps & IOwnProps;
 
 class PersonFormContainer extends React.Component<IProps> {
-	submit = () => {
-		this.props.submit();
-	};
+	submit = () => {};
 	componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
 		console.log('error', error);
 		console.log('errorInfo', errorInfo);
@@ -55,19 +48,14 @@ class PersonFormContainer extends React.Component<IProps> {
 const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IRootState> = state => {
 	const dictionaries = dictionaryStateSelector(state);
 
-	const { data, statusValidation } = enrollPersonFormSelector(state);
+	const data = enrollPersonFormSelector(state);
 
-	return { dictionaries, data, statusValidation };
+	return { dictionaries, data };
 };
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = {
-	onChangeBirthPlace,
-	onChangeGovernment,
-	updatePersonDocument,
-	onChangeCodeDepartment,
 	addPersonPhoto,
 	removePersonPhoto,
-	onChangeApplyPersonDataStatus,
 };
 
 export default connect(

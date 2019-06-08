@@ -43,14 +43,14 @@ export interface ISelectItem {
 }
 
 export interface IDocument {
-	docType: IDocType | null;
+	docType?: IDocType | null;
 	docSubType?: IDocType | null;
 	docGovernment: ISelectItem;
 	docSeries?: string;
 	docNumber?: string;
 	docIssieBy?: string;
 	docDate?: string;
-	docFile: File | null;
+	docFile?: File;
 	codeDepartment?: string;
 }
 

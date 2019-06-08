@@ -25,7 +25,7 @@ export const enrollDocumentsFormSelector = (state: IRootState) => {
 };
 
 export const enrollIsForeignerSelector = (state: IRootState) => {
-	return state.enrollPersonForm.data.personDocument.docGovernment.id === 1;
+	return state.enrollPersonForm.docGovernment.id === 1;
 };
 
 export const enrollAccountVerificationFormSelector = (state: IRootState) => {

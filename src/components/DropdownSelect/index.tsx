@@ -3,67 +3,68 @@ import FormLabel from '@material-ui/core/FormLabel';
 import React from 'react';
 import Select from 'react-select';
 import styles from './styles.module.css';
-import { IHasError, IHelperText } from '../../containers/models';
-import { ISelectItem } from '$common';
+import { ISelectItem, noop, prop } from '$common';
+import { Field, FieldProps, FormikProps } from 'formik';
 
-interface ISelectProps extends IHasError, IHelperText {
-	value?: ISelectItem | null;
+interface ISelectProps {
+	name: string;
 	placeholder?: string;
 	onChange: (data: any) => void;
 	options: any[];
 	title: string;
 	isSearchable?: boolean;
 	isCleanable?: boolean;
-	defaultValue?: any;
 	isMulti?: boolean;
 	required?: boolean;
+	helperText?: string;
 }
-interface IState {
-	value?: Record<string, any> | null;
-	isControlled: boolean;
-}
-class DropdownSelect extends React.PureComponent<ISelectProps, IState> {
+
+class DropdownSelect extends React.PureComponent<ISelectProps> {
 	public static defaultProps = {
 		isSearchable: true,
 		isClearable: false,
 		options: [],
+		onChange: noop,
 	};
-	state = {
-		value: this.props.value,
-		isControlled: !!this.props.value,
-	};
-	onChange = (value: any) => {
-		if (!this.state.isControlled) {
-			this.setState({ value });
-		}
+
+	onChange = (form: FormikProps<ISelectItem>) => (value: any) => {
+		form.setFieldValue(this.props.name, value);
 		this.props.onChange(value);
 	};
 	getOptionLabel = (item: ISelectItem) => item.name;
 	getOptionValue = (item: ISelectItem): any => item.id;
-	render() {
+	validate = (value: ISelectItem | null) => {
+		return value ? void 0 : 'Необходимо выбрать значение';
+	};
+	renderFormSelect = ({ form, field }: FieldProps<ISelectItem>) => {
+		const error = prop(this.props.name)(form.errors);
+
+		console.log('error', this.props.name);
 		return (
 			<FormControl margin="normal">
-				<FormLabel className={styles.label} style={{ fontSize: '0.75rem' }}>
+				<FormLabel className={styles.label} style={{ fontSize: '0.875rem' }}>
 					{this.props.title}
 					{this.props.required ? ' *' : ''}
 				</FormLabel>
 				<Select
 					className="basic-single"
-					value={this.state.isControlled ? this.props.value : this.state.value}
+					value={field.value}
 					isMulti={this.props.isMulti}
-					defaultValue={this.props.defaultValue}
 					classNamePrefix="select"
 					placeholder={this.props.placeholder}
-					onChange={this.onChange}
+					onChange={this.onChange(form)}
 					isClearable={this.props.isCleanable}
 					isSearchable={this.props.isSearchable}
 					getOptionLabel={this.getOptionLabel}
 					getOptionValue={this.getOptionValue}
 					options={this.props.options}
 				/>
-				{this.props.error && <FormLabel classes={{ root: 'requiredLabel' }}>{this.props.helperText}</FormLabel>}
+				{error && <FormLabel classes={{ root: 'requiredLabel' }}>{error}</FormLabel>}
 			</FormControl>
 		);
+	};
+	render() {
+		return <Field name={this.props.name} validate={this.validate} render={this.renderFormSelect} />;
 	}
 }
 

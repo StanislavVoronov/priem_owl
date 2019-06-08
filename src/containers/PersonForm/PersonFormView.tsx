@@ -1,57 +1,85 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
+import { Checkbox, WebPhoto, DocumentForm, TextInput, FormControlLabel, SubmitButton } from '$components';
+import { object, string } from 'yup';
+
 import {
-	DropdownSelect,
-	Checkbox,
-	WebPhoto,
-	DocumentForm,
-	TextInput,
-	FormControlLabel,
-	SubmitButton,
-} from '$components';
-import { EDictionaryNameList, IDocument, IEnrollPersonForm, ISelectItem, IStylable } from '$common';
+	EDictionaryNameList,
+	IEnrollPersonForm,
+	IStylable,
+	validateRequireCheckbox,
+	validateRequireTextField,
+} from '$common';
 
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { withStyles } from '@material-ui/core';
 import styles from './styles';
-import { Formik } from 'formik';
+import { Formik, Form, FormikProps, FieldProps, Field } from 'formik';
 
-interface IProps extends IStylable {
+interface IProps {
 	data: IEnrollPersonForm;
 	dictionaries: DictionaryState;
-	updatePersonDocument: (data: IDocument) => void;
-	onChangeBirthPlace: (event: any) => void;
 	addPersonPhoto: (photo: File) => void;
 	removePersonPhoto: () => void;
-	onChangeGovernment: (value: ISelectItem) => void;
-	onChangeCodeDepartment: (event: any) => void;
-	onChangeApplyPersonDataStatus: () => void;
 	submit: () => void;
 }
 
-class PersonForm extends React.PureComponent<IProps> {
-	static defaultProps = {
-		classes: {},
+const ValidationSchema = object({
+	docNumber: string()
+		.min(2, 'Too Short!')
+		.max(50, 'Too Long!')
+		.required('Поле не должно быть пустым'),
+	birthPlace: string().notRequired(),
+	docType: object({}),
+	docGovernment: object().required('Поле не должно быть пустым'),
+	docSubType: object().required('Необходимо выбрать вариант'),
+	docDate: string().required('Поле не должно быть пустым'),
+	docIssieBy: string().required('Поле не должно быть пустым'),
+	docFile: object({}).required('Необходимо выбрать поле'),
+	docSeries: string().required('Поле не должно быть пустым'),
+	birthday: string().required('Поле не должно быть пустым'),
+	codeDepartment: string().test('validateState', 'Поле не должно быть пустым', function(value) {
+		console.log('test options', value, this.options);
+
+		return false;
+	}),
+});
+
+//className={this.props.classes.checkFormControl}
+const PersonForm = (props: IProps) => {
+	const renderApplyCheckbox = () => {
+		return (
+			<FormControlLabel
+				control={<Checkbox color="primary" name="isApplyPersonData" />}
+				label="Согласие на обработку персональных данных"
+			/>
+		);
 	};
-	renderForm = () => {
-		const { dictionaries, classes, data } = this.props;
-		const { personDocument, isApplyPersonData } = data;
+	const validateForm = () => {
+		return {};
+	};
+	const onSubmit = (props: any) => {
+		console.log('onSubmit', props);
+	};
+	const renderForm = (formProps: FormikProps<any>) => {
+		const { values } = formProps;
+		const { dictionaries } = props;
+		const { docSubType } = values;
 		const dictionaryGovernments = dictionaries[EDictionaryNameList.Governments];
 		const dictionaryPersonDocTypes = dictionaries[EDictionaryNameList.PersonDocTypes];
 
+		console.log('renderForm', formProps);
 		return (
-			<div className="flexColumn">
-				<WebPhoto addPhoto={this.props.addPersonPhoto} removePhoto={this.props.removePersonPhoto} />
+			<Form className="flexColumn" noValidate={true}>
 				<DocumentForm
-					document={personDocument}
+					document={values}
 					governmentTitle="Гражданство"
 					dictionaryGovernment={dictionaryGovernments && dictionaryGovernments.values}
 					docTitle="Файл документа, удостоверяющего личность"
-					updateDocument={this.props.updatePersonDocument}
 					dictionarySubTypes={dictionaryPersonDocTypes && dictionaryPersonDocTypes.values}
 					subTitle="Тип документа удостоверяющего личность"
 					extraFields={
 						<React.Fragment>
-							{personDocument.docSubType && personDocument.docSubType.id === 1 && (
+							{docSubType && docSubType.id === 1 && (
 								<TextInput
 									name="codeDepartment"
 									label="Код подразделения"
@@ -63,30 +91,23 @@ class PersonForm extends React.PureComponent<IProps> {
 						</React.Fragment>
 					}
 				/>
-				<FormControlLabel
-					className={classes.checkFormControl}
-					control={
-						<Checkbox color="primary" checked={isApplyPersonData} onChange={this.props.onChangeApplyPersonDataStatus} />
-					}
-					label="Согласие на обработку персональных данных"
-				/>
 				<div style={{ marginTop: 24 }}>
-					<SubmitButton>Проверить</SubmitButton>
+					<SubmitButton>Далее</SubmitButton>
 				</div>
-			</div>
+			</Form>
 		);
 	};
-	render() {
-		return (
-			<Formik
-				onSubmit={this.props.submit}
-				validateOnBlur={false}
-				validateOnChange={false}
-				initialValues={{ ...this.props.data, ...this.props.data.personDocument }}>
-				{this.renderForm}
-			</Formik>
-		);
-	}
-}
 
-export default withStyles(styles)(PersonForm);
+	return (
+		<Formik
+			onSubmit={onSubmit}
+			validationSchema={ValidationSchema}
+			validateOnBlur={false}
+			validateOnChange={false}
+			initialValues={props.data}>
+			{renderForm}
+		</Formik>
+	);
+};
+
+export default PersonForm;

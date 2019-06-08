@@ -9,15 +9,16 @@ import {
 	IForm,
 	IDocumentsForm,
 	IAccountVerificationForm,
+	IDocument,
 } from '$common';
 
 export interface IRootState {
 	dictionaries: DictionaryState;
 	enrollRegistration: IEnrollRegForm;
 	enrollContactsForm: IForm<IEnrollContactsForm>;
-	enrollPersonForm: IForm<IEnrollPersonForm>;
+	enrollPersonForm: IEnrollPersonForm;
 	enrollEducationForm: IForm<IEnrollEducationForm>;
-	enrollDocumentsForm: IForm<IDocumentsForm>;
+	enrollDocumentsForm: IDocument[];
 	enrollAccountVerificationForm: IForm<IAccountVerificationForm>;
 	transactions: ITransactionState;
 }

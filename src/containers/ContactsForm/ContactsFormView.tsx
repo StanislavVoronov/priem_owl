@@ -1,7 +1,8 @@
 import React, { ChangeEvent } from 'react';
 import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocumentForm } from '$components';
 import { EDictionaryNameList, IDocument, IStylable, IEnrollContactsForm, ISelectItem, IServerError } from '$common';
-import { Formik } from 'formik';
+
+import { Formik, FieldProps } from 'formik';
 
 import styles from './styles';
 import { withStyles } from '@material-ui/core';
@@ -54,7 +55,7 @@ class ContactsFormView extends React.PureComponent<IProps> {
 	// 	this.onChange({ ...event, target: { ...event.target, value: maskMobPhone, name: event.target.name } });
 	// };
 
-	renderForm = () => {
+	renderForm = ({ form }: FieldProps) => {
 		const governmentDictionary = this.props.dictionaries[EDictionaryNameList.Governments];
 
 		if (this.props.loading) {
@@ -65,9 +66,8 @@ class ContactsFormView extends React.PureComponent<IProps> {
 			<form className="flexColumn">
 				<H2>Адрес регистрации</H2>
 				<DocumentForm
-					document={this.props.data.regDocument}
+					document={form.values}
 					docTitle="Файл регистрации места жительства"
-					updateDocument={this.props.updateRegDocument}
 					extraFields={
 						<React.Fragment>
 							<TextInput label={'Индекс'} type="number" placeholder={'Введите индекс'} required name="regIndex" />
@@ -151,9 +151,8 @@ class ContactsFormView extends React.PureComponent<IProps> {
 					required
 				/>
 				<DropdownSelect
+					name="countyPhone"
 					isCleanable={false}
-					defaultValue={this.props.data.mobileGovernment}
-					onChange={this.props.selectMobileGovernment}
 					title="Страна оператора сотовой связи"
 					options={governmentDictionary ? governmentDictionary.values : []}
 				/>
@@ -173,7 +172,7 @@ class ContactsFormView extends React.PureComponent<IProps> {
 				onSubmit={this.props.submit}
 				validateOnBlur={false}
 				validateOnChange={false}
-				initialValues={{ ...this.props.data, ...this.props.data.regDocument }}>
+				initialValues={{ ...this.props.data }}>
 				{this.renderForm}
 			</Formik>
 		);

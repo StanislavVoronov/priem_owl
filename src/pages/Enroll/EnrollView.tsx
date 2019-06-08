@@ -46,7 +46,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return <RegistrationForm onComplete={this.props.onCompleteRegForm} />;
 			}
 			case 1: {
-				return <PersonForm submit={this.props.handleNext} />;
+				return <PersonForm onComplete={this.props.handleNext} />;
 			}
 			case 2: {
 				return <ContactsForm submit={this.props.handleNext} />;

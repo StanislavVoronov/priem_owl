@@ -116,10 +116,9 @@ export const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Act
 	const state = getState();
 	const registrationForm = enrollRegistrationSelector(state);
 	const contactsForm = enrollContactsFormSelector(state).data;
-	const personForm = enrollPersonFormSelector(state).data;
+	const personForm = enrollPersonFormSelector(state);
 	const educationForm = enrollEducationFormSelector(state).data;
 	const accountVerificationForm = enrollAccountVerificationFormSelector(state).data;
-	const cheatType = enrollDocumentsFormSelector(getState()).data.cheatType;
 
 	const payload = {
 		email_code: accountVerificationForm.verificationCode,
@@ -134,19 +133,18 @@ export const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Act
 		sex: registrationForm.gender,
 		hight_first: educationForm.firstHighEducation ? ServerBoolean.True : ServerBoolean.False,
 		best_prev_edu: educationForm.prevEducation,
-		cheat_type: cheatType ? cheatType.id : 0,
+		cheat_type: 0,
 	};
 
 	return dispatch(createPersonTransaction(payload)).then(() => Promise.resolve());
 };
 export const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
 	const state = getState();
-	const { data } = enrollDocumentsFormSelector(state);
 
-	const { regDocument } = enrollContactsFormSelector(state).data;
-	const { personDocument } = enrollPersonFormSelector(state).data;
-	const { educationDocument } = enrollEducationFormSelector(state).data;
-	const documents = [regDocument, personDocument, educationDocument, ...data.documents];
+	const contactsData = enrollContactsFormSelector(state).data;
+	const personData = enrollPersonFormSelector(state);
+	const educationData = enrollEducationFormSelector(state).data;
+	const documents = [contactsData, personData, educationData, ...enrollDocumentsFormSelector(state)];
 
 	return Promise.all(
 		documents.map(document => {
