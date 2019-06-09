@@ -18,7 +18,7 @@ import {
 	IStylable,
 } from '$common';
 
-import { FieldProps } from 'formik';
+import { FieldProps, FormikProps } from 'formik';
 
 import styles from './styles';
 import { withStyles } from '@material-ui/core';
@@ -53,7 +53,12 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 		disabled: false,
 		classes: {},
 	};
-
+	toggleStatus = (form: FormikProps<IEnrollContactsForm>) => (
+		event: ChangeEvent<HTMLInputElement>,
+		checked: boolean,
+	) => {
+		form.setFieldValue(event.target.name, checked);
+	};
 	// onChange = (event: any) => {
 	// 	this.props.updateContactsForm(event);
 	// };
@@ -82,6 +87,8 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 	renderForm = ({ form }: FieldProps) => {
 		const governmentDictionary = this.props.dictionaries[EDictionaryNameList.Governments];
 
+		const isRegAddressEqualLive = form.values('isRegAddressEqualLive');
+
 		if (this.props.loading) {
 			return <LoadingText>Проверка электронной почты</LoadingText>;
 		}
@@ -109,11 +116,7 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 							<FormControlLabel
 								className={this.props.classes.checkFormControl}
 								control={
-									<Checkbox
-										color="primary"
-										checked={this.props.data.needDormitory}
-										onChange={this.props.toggleNeedDormitoryStatus}
-									/>
+									<Checkbox color="primary" checked={form.values('needDormitory')} onChange={this.toggleStatus(form)} />
 								}
 								label="Нуждаюсь в предоставлении общежития"
 							/>
@@ -122,48 +125,32 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 				/>
 				<FormControlLabel
 					className={this.props.classes.checkFormControl}
-					control={
-						<Checkbox
-							color="primary"
-							checked={this.props.data.isRegAddressEqualLive}
-							onChange={this.props.toggleLiveAddressStatus}
-						/>
-					}
+					control={<Checkbox color="primary" checked={isRegAddressEqualLive} onChange={this.toggleStatus(form)} />}
 					label="Фактический адрес проживания	совпадает с адресом регистрации"
 				/>
-				{!this.props.data.isRegAddressEqualLive && (
+				{!form.values('isRegAddressEqualLive') && (
 					<div className="flexColumn">
 						<H2>Адрес проживания</H2>
 						<TextInput
 							label={'Индекс'}
 							placeholder={'Введите индекс'}
 							name="liveIndex"
-							required={this.props.data.isRegAddressEqualLive}
+							required={isRegAddressEqualLive}
 						/>
 						<TextInput
 							label="Область"
 							placeholder="Введите область"
 							name="liveRegion"
-							required={this.props.data.isRegAddressEqualLive}
+							required={isRegAddressEqualLive}
 						/>
 						<TextInput
 							label="Населенный пункт"
 							placeholder="Введите населенный пункт"
 							name="liveLocality"
-							required={this.props.data.isRegAddressEqualLive}
+							required={isRegAddressEqualLive}
 						/>
-						<TextInput
-							label="Улица"
-							required={this.props.data.isRegAddressEqualLive}
-							name="liveStreet"
-							placeholder="Введите улицу"
-						/>
-						<TextInput
-							label="Дом"
-							name="liveHome"
-							placeholder="Введите дом"
-							required={this.props.data.isRegAddressEqualLive}
-						/>
+						<TextInput label="Улица" required={isRegAddressEqualLive} name="liveStreet" placeholder="Введите улицу" />
+						<TextInput label="Дом" name="liveHome" placeholder="Введите дом" required={isRegAddressEqualLive} />
 						<TextInput name="liveBlock" label="Корпус" />
 						<TextInput name="liveFlat" label="Квартира" />
 					</div>

@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import styles from './styles.module.css';
 import Logo from '$assets/mgutm.png';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { CardMedia, Step, StepButton, StepContent, Stepper, withStyles, Title, LoadingText } from '$components';
 import {
 	RegistrationForm,
@@ -49,10 +48,10 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return <EnrollPersonForm onComplete={this.props.handleNext} />;
 			}
 			case 2: {
-				return <ContactsForm submit={this.props.handleNext} />;
+				return <ContactsForm onComplete={this.props.handleNext} />;
 			}
 			case 3: {
-				return <EducationForm submit={this.props.handleNext} />;
+				return <EducationForm onComplete={this.props.handleNext} />;
 			}
 			case 4: {
 				return <DocumentsForm submit={this.props.handleNext} />;

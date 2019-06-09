@@ -5,10 +5,10 @@ import {
 	EDictionaryNameList,
 	IEnrollPersonForm,
 	IStylable,
-	Enrol,
 	pipe,
 	DocumentFormSchema,
 	EnrollContactsFormSchema,
+	EnrollPersonFormSchema,
 } from '$common';
 
 import { DictionaryState } from '@mgutm-fcu/dictionary';

@@ -92,7 +92,7 @@ export const createVerificationCode = (): ThunkAction<Promise<void>, IRootState,
 };
 
 export const updatePhone = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
-	const { data } = enrollContactsFormSelector(getState());
+	const data = enrollContactsFormSelector(getState());
 
 	return Promise.all([
 		dispatch(
@@ -141,7 +141,7 @@ export const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Act
 export const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
 	const state = getState();
 
-	const contactsData = enrollContactsFormSelector(state).data;
+	const contactsData = enrollContactsFormSelector(state);
 	const personData = enrollPersonFormSelector(state);
 	const educationData = enrollEducationFormSelector(state);
 	const documents = [contactsData, personData, educationData, ...enrollDocumentsFormSelector(state)];

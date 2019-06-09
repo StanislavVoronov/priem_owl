@@ -29,7 +29,6 @@ const EducationForm = (props: IProps) => {
 	) => {
 		form.setFieldValue(event.target.name, checked);
 	};
-	const submit = () => {};
 	const renderForm = (formikProps: FieldProps) => {
 		const { dictionaries, classes, data } = props;
 		const educationTypeDictionary = dictionaries[EDictionaryNameList.EducationDocTypes];
