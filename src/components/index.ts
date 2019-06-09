@@ -13,7 +13,7 @@ import { CardMedia, withStyles } from '@material-ui/core';
 import DocumentForm from './DocumentForm';
 import LoadingText from './LoadingText';
 import Title from './Typography/Title';
-
+import Form from './Form';
 export * from './Buttons';
 export * from './Inputs';
 export {
@@ -34,4 +34,5 @@ export {
 	DocumentForm,
 	Title,
 	LoadingText,
+	Form,
 };

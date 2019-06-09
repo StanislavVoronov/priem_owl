@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { CardMedia, Step, StepButton, StepContent, Stepper, withStyles, Title, LoadingText } from '$components';
 import {
 	RegistrationForm,
-	PersonForm,
+	EnrollPersonForm,
 	ContactsForm,
 	EducationForm,
 	DocumentsForm,
@@ -46,7 +46,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return <RegistrationForm onComplete={this.props.onCompleteRegForm} />;
 			}
 			case 1: {
-				return <PersonForm onComplete={this.props.handleNext} />;
+				return <EnrollPersonForm onComplete={this.props.handleNext} />;
 			}
 			case 2: {
 				return <ContactsForm submit={this.props.handleNext} />;
@@ -58,7 +58,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return <DocumentsForm submit={this.props.handleNext} />;
 			}
 			case 5: {
-				return <AccountVerificationForm submit={this.props.handleNext} />;
+				return <AccountVerificationForm onComplete={this.props.handleNext} />;
 			}
 			default: {
 				return null;

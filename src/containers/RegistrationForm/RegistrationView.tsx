@@ -1,5 +1,5 @@
 import React from 'react';
-import { Autocomplete, RadioButtonGroup, TextInput, LoadingText, H2, SubmitButton } from '$components';
+import { Autocomplete, RadioButtonGroup, TextInput, LoadingText, H2, Form } from '$components';
 import {
 	EDictionaryNameList,
 	IEnrollRegForm,
@@ -10,8 +10,10 @@ import {
 	validateRequireTextField,
 	prop,
 	validateRusTextField,
+	EnrollRegFormSchema,
+	IEnrollPersonForm,
 } from '$common';
-import { Formik, Form, FormikProps } from 'formik';
+import { FieldProps, FormikProps } from 'formik';
 
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 
@@ -35,11 +37,11 @@ const RegistrationView = (props: IProps) => {
 			form.setFieldValue('gender', String(name.sex));
 		}
 	};
-	const renderForm = (formikProps: FormikProps<IEnrollRegForm>) => {
+	const renderForm = (formikProps: FieldProps) => {
 		const { dictionaries } = props;
 		const dictionaryFirstNames = prepareDictionarySuggestions(dictionaries[EDictionaryNameList.FirstNames]);
 		const dictionaryMiddleNames = dictionaries[EDictionaryNameList.MiddleNames];
-		const gender = prop('gender', formikProps.values);
+		const gender = prop('gender', formikProps.form.values);
 
 		const filteredDictionaryMiddleName = prepareDictionarySuggestions(
 			dictionaryMiddleNames
@@ -52,7 +54,7 @@ const RegistrationView = (props: IProps) => {
 		);
 
 		return (
-			<Form className="flexvalidateColumn" noValidate={true}>
+			<>
 				<TextInput
 					required
 					validate={validateRequireRusText}
@@ -63,7 +65,7 @@ const RegistrationView = (props: IProps) => {
 
 				<Autocomplete
 					label="Имя"
-					onSelect={onChangeFirstName(formikProps)}
+					onSelect={onChangeFirstName(formikProps.form)}
 					name="firstName"
 					validate={validateRequireRusText}
 					required
@@ -82,11 +84,7 @@ const RegistrationView = (props: IProps) => {
 				<TextInput validate={validateRequireTextField} required name="birthday" label="Дата рождения" type="date" />
 
 				<RadioButtonGroup validate={validateRequireTextField} name="gender" title="Пол" required items={GENDERS} />
-				{props.error && <H2 color="red">{props.error.message}</H2>}
-				<div style={{ marginTop: 24 }}>
-					<SubmitButton>Проверить</SubmitButton>
-				</div>
-			</Form>
+			</>
 		);
 	};
 	if (props.loading) {
@@ -94,9 +92,13 @@ const RegistrationView = (props: IProps) => {
 	}
 
 	return (
-		<Formik onSubmit={props.submit} validateOnBlur={false} validateOnChange={false} initialValues={{ ...props.data }}>
-			{renderForm}
-		</Formik>
+		<Form
+			renderForm={renderForm}
+			schema={EnrollRegFormSchema}
+			onSubmit={props.submit}
+			initialValues={props.data}
+			buttonText="Проверить"
+		/>
 	);
 };
 export default RegistrationView;

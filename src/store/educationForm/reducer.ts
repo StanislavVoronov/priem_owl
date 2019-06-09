@@ -1,23 +1,14 @@
 import { handleActions } from 'redux-actions';
 import { defaultEducationDataForm, IEnrollEducationForm, IForm } from '$common';
-import { toggleFirstHighEducationStatus, toggleHasEgeStatus, updateEducationDocument } from './actions';
+import { submitEnrollEducationForm } from './actions';
 
-const educationFormReducer = handleActions<IForm<IEnrollEducationForm>, any>(
+const educationFormReducer = handleActions<IEnrollEducationForm, IEnrollEducationForm>(
 	{
-		[updateEducationDocument.toString()]: (state, action) => {
-			return { ...state, data: { ...state.data, educationDocument: action.payload } };
-		},
-		[toggleFirstHighEducationStatus.toString()]: state => {
-			return { ...state, data: { ...state.data, firstHighEducation: !state.data.firstHighEducation } };
-		},
-		[toggleHasEgeStatus.toString()]: state => {
-			return { ...state, data: { ...state.data, hasEge: !state.data.hasEge } };
+		[submitEnrollEducationForm.toString()]: (state, action) => {
+			return { ...state, ...action.payload };
 		},
 	},
-	{
-		data: defaultEducationDataForm,
-		statusValidation: false,
-	},
+	defaultEducationDataForm,
 );
 
 export default educationFormReducer;

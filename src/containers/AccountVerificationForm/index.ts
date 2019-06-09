@@ -1,3 +1,3 @@
-import AccountVerificationForm from './AccountVerificationContainer';
+import AccountVerificationForm from './AccountVerificationForm';
 
 export { AccountVerificationForm };

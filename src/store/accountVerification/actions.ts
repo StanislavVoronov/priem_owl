@@ -1,9 +1,9 @@
 import { createAction } from 'redux-actions';
-import { ChangeEvent } from 'react';
+import { IAccountVerificationForm } from '$common';
 
 const NAMESPACE = 'EnrollVerificationForm';
 
-export const onChangeVerificationCode = createAction(
-	`${NAMESPACE}/onChangeVerificationCode`,
-	(event: ChangeEvent<HTMLInputElement>) => event,
+export const submitEnrollVerificationForm = createAction(
+	`${NAMESPACE}/submitEnrollVerificationForm`,
+	(form: IAccountVerificationForm) => form,
 );

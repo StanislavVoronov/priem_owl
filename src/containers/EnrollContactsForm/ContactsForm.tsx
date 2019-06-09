@@ -1,30 +1,54 @@
 import React, { ChangeEvent } from 'react';
-import { TextInput, H2, DropdownSelect, FormControlLabel, Checkbox, DocumentForm } from '$components';
-import { EDictionaryNameList, IDocument, IStylable, IEnrollContactsForm, ISelectItem, IServerError } from '$common';
+import {
+	TextInput,
+	H2,
+	DropdownSelect,
+	FormControlLabel,
+	Checkbox,
+	DocumentForm,
+	Form,
+	LoadingText,
+} from '$components';
+import {
+	EDictionaryNameList,
+	IEnrollContactsForm,
+	IServerError,
+	DocumentFormSchema,
+	EnrollPersonFormSchema,
+	IStylable,
+} from '$common';
 
-import { Formik, FieldProps } from 'formik';
+import { FieldProps } from 'formik';
 
 import styles from './styles';
 import { withStyles } from '@material-ui/core';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
-import Button from '../../components/Buttons/Button';
-import LoadingText from '../../components/LoadingText';
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import {
+	dictionaryStateSelector,
+	submitEnrollContactsForm,
+	enrollContactsFormSelector,
+	IRootState,
+	fromTransaction,
+} from '$store';
+import { createVerificationCode } from '$operations';
 
-interface IProps extends IStylable {
+interface IStateToProps {
 	data: IEnrollContactsForm;
-	disabled: boolean;
-	updateContactsForm: (event: ChangeEvent<HTMLInputElement>) => void;
-	updateRegDocument: (document: IDocument) => void;
-	toggleNeedDormitoryStatus: () => void;
-	toggleLiveAddressStatus: () => void;
-	selectMobileGovernment: (item: ISelectItem) => void;
 	dictionaries: DictionaryState;
-	submit: () => void;
 	loading: boolean;
 	error: IServerError | null;
 }
+interface IDispatchToProps {
+	onSubmit: (values: IEnrollContactsForm) => void;
+}
+interface IOwnProps {
+	onComplete: () => void;
+	disabled?: boolean;
+}
+type IProps = IDispatchToProps & IStateToProps & IOwnProps & IStylable;
 
-class ContactsFormView extends React.PureComponent<IProps> {
+class EnrollContactsForm extends React.PureComponent<IProps> {
 	static defaultProps = {
 		disabled: false,
 		classes: {},
@@ -158,24 +182,39 @@ class ContactsFormView extends React.PureComponent<IProps> {
 				/>
 				<TextInput name="mobPhone" label="Мобильный телефон" required={true} />
 				<TextInput name="homePhone" label="Домашний телефон" />
-				{this.props.error && <H2 color="red">{this.props.error.message}</H2>}
-
-				<div style={{ marginTop: 24 }}>
-					<Button onClick={this.props.submit}>Далее</Button>
-				</div>
 			</form>
 		);
 	};
 	render() {
 		return (
-			<Formik
-				onSubmit={this.props.submit}
-				validateOnBlur={false}
-				validateOnChange={false}
-				initialValues={{ ...this.props.data }}>
-				{this.renderForm}
-			</Formik>
+			<Form
+				buttonText="Далее"
+				schema={{ ...DocumentFormSchema, ...EnrollPersonFormSchema }}
+				error={this.props.error}
+				renderForm={this.renderForm}
+				onSubmit={this.props.onSubmit}
+				initialValues={{ ...this.props.data }}
+			/>
 		);
 	}
 }
-export default withStyles(styles)(ContactsFormView);
+
+const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IRootState> = state => {
+	const dictionaries = dictionaryStateSelector(state);
+	const { loading, error } = fromTransaction.createVerificationCodeSelector(state);
+
+	const data = enrollContactsFormSelector(state);
+
+	return { data, dictionaries, loading, error };
+};
+const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => ({
+	onSubmit: (values: IEnrollContactsForm) => {
+		dispatch(submitEnrollContactsForm(values));
+		dispatch<any>(createVerificationCode()).then(ownProps.onComplete);
+	},
+});
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(withStyles(styles)(EnrollContactsForm));

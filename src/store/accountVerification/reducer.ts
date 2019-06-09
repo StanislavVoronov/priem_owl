@@ -1,19 +1,18 @@
 import { handleActions } from 'redux-actions';
 import { IAccountVerificationForm, IForm, inputValueAsString } from '$common';
-import { onChangeVerificationCode } from './actions';
+import { submitEnrollVerificationForm } from './actions';
 
-const enrollAccountVerificationFormReducer = handleActions<IForm<IAccountVerificationForm>, any>(
+const enrollAccountVerificationFormReducer = handleActions<IAccountVerificationForm, IAccountVerificationForm>(
 	{
-		[onChangeVerificationCode.toString()]: (state, action) => {
+		[submitEnrollVerificationForm.toString()]: (state, action) => {
 			return {
 				...state,
-				data: { ...state.data, verificationCode: inputValueAsString(action.payload) },
+				...action.payload,
 			};
 		},
 	},
 	{
-		data: { verificationCode: '' },
-		statusValidation: false,
+		verificationCode: '',
 	},
 );
 

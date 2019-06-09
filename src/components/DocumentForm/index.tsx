@@ -6,7 +6,8 @@ import styles from './styles';
 import { noop, IDocument, IStylable, validateRequireTextField } from '$common';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 
-import DownloadFileView from '../DownloadFileView';
+import DownloadFileView from '../DownloadFile';
+import Dropzone from 'react-dropzone';
 
 interface IDocumentFormProps extends IStylable {
 	document: IDocument;
@@ -108,6 +109,9 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 						{this.props.extraFields}
 					</div>
 				) : null}
+				<div>
+					<DownloadFileView />
+				</div>
 			</div>
 		);
 	}

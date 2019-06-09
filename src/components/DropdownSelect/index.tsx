@@ -36,10 +36,14 @@ class DropdownSelect extends React.PureComponent<ISelectProps> {
 	validate = (value: ISelectItem | null) => {
 		return value ? void 0 : 'Необходимо выбрать значение';
 	};
+	onBlur = (form: FormikProps<ISelectItem>, value: ISelectItem) => () => {
+		if (this.props.required) {
+			form.validateField(value.name);
+		}
+	};
 	renderFormSelect = ({ form, field }: FieldProps<ISelectItem>) => {
 		const error = prop(this.props.name)(form.errors);
 
-		console.log('error', this.props.name);
 		return (
 			<FormControl margin="normal">
 				<FormLabel className={styles.label} style={{ fontSize: '0.875rem' }}>
@@ -52,6 +56,7 @@ class DropdownSelect extends React.PureComponent<ISelectProps> {
 					isMulti={this.props.isMulti}
 					classNamePrefix="select"
 					placeholder={this.props.placeholder}
+					onBlur={this.onBlur(form, field.value)}
 					onChange={this.onChange(form)}
 					isClearable={this.props.isCleanable}
 					isSearchable={this.props.isSearchable}

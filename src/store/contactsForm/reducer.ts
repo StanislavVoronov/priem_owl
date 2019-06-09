@@ -1,35 +1,14 @@
 import { handleActions } from 'redux-actions';
 import { defaultEnrollContactsForm, IEnrollContactsForm, IForm } from '$common';
-import {
-	selectMobileGovernment,
-	toggleLiveAddressStatus,
-	toggleNeedDormitoryStatus,
-	updateContactsForm,
-	updateRegDocument,
-} from './actions';
+import { submitEnrollContactsForm } from './actions';
 
-const enrollContactsFormReducer = handleActions<IForm<IEnrollContactsForm>, any>(
+const enrollContactsFormReducer = handleActions<IEnrollContactsForm, IEnrollContactsForm>(
 	{
-		[updateContactsForm.toString()]: (state, action) => {
-			return { ...state, data: { ...state.data, [action.payload!.name]: action.payload!.value } };
-		},
-		[updateRegDocument.toString()]: (state, action) => {
-			return { ...state, data: { ...state.data, regDocument: action.payload } };
-		},
-		[toggleLiveAddressStatus.toString()]: state => {
-			return { ...state, data: { ...state.data, isRegAddressEqualLive: !state.data.isRegAddressEqualLive } };
-		},
-		[selectMobileGovernment.toString()]: (state, action) => {
-			return { ...state, data: { ...state.data, mobileGovernment: action.payload } };
-		},
-		[toggleNeedDormitoryStatus.toString()]: state => {
-			return { ...state, data: { ...state.data, needDormitory: !state.data.needDormitory } };
+		[submitEnrollContactsForm.toString()]: (state, action) => {
+			return { ...state, ...action.payload };
 		},
 	},
-	{
-		data: defaultEnrollContactsForm,
-		statusValidation: false,
-	},
+	defaultEnrollContactsForm,
 );
 
 export default enrollContactsFormReducer;

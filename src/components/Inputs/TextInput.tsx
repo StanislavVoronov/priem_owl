@@ -57,6 +57,8 @@ class TextInput extends React.PureComponent<IInputProps> {
 		const { form, field } = props;
 		const touched = has(field.name);
 
+		console.log('checkRender', props);
+
 		return (
 			<>
 				{this.props.prefix && <FormLabel>{this.props.prefix}</FormLabel>}

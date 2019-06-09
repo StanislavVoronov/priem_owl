@@ -86,7 +86,7 @@ export const createVerificationCode = (): ThunkAction<Promise<void>, IRootState,
 	dispatch,
 	getState,
 ) => {
-	const { data } = enrollContactsFormSelector(getState());
+	const data = enrollContactsFormSelector(getState());
 
 	return dispatch(createVerificationCodeTransaction(data.email, data.mobPhone, 1));
 };
@@ -115,10 +115,10 @@ export const updatePhone = (): ThunkAction<Promise<void>, IRootState, void, Acti
 export const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
 	const state = getState();
 	const registrationForm = enrollRegistrationSelector(state);
-	const contactsForm = enrollContactsFormSelector(state).data;
+	const contactsForm = enrollContactsFormSelector(state);
 	const personForm = enrollPersonFormSelector(state);
-	const educationForm = enrollEducationFormSelector(state).data;
-	const accountVerificationForm = enrollAccountVerificationFormSelector(state).data;
+	const educationForm = enrollEducationFormSelector(state);
+	const accountVerificationForm = enrollAccountVerificationFormSelector(state);
 
 	const payload = {
 		email_code: accountVerificationForm.verificationCode,
@@ -143,7 +143,7 @@ export const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Ac
 
 	const contactsData = enrollContactsFormSelector(state).data;
 	const personData = enrollPersonFormSelector(state);
-	const educationData = enrollEducationFormSelector(state).data;
+	const educationData = enrollEducationFormSelector(state);
 	const documents = [contactsData, personData, educationData, ...enrollDocumentsFormSelector(state)];
 
 	return Promise.all(

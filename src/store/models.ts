@@ -15,10 +15,10 @@ import {
 export interface IRootState {
 	dictionaries: DictionaryState;
 	enrollRegistration: IEnrollRegForm;
-	enrollContactsForm: IForm<IEnrollContactsForm>;
+	enrollContactsForm: IEnrollContactsForm;
 	enrollPersonForm: IEnrollPersonForm;
-	enrollEducationForm: IForm<IEnrollEducationForm>;
+	enrollEducationForm: IEnrollEducationForm;
 	enrollDocumentsForm: IDocument[];
-	enrollAccountVerificationForm: IForm<IAccountVerificationForm>;
+	enrollAccountVerificationForm: IAccountVerificationForm;
 	transactions: ITransactionState;
 }

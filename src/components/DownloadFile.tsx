@@ -8,11 +8,10 @@ import { noop } from '$common';
 interface IProps {
 	name: string;
 	title: string;
-	validate: (file: File) => string | void;
 }
-class DownloadFileView extends React.Component<IProps> {
+class DownloadFile extends React.Component<IProps> {
 	static defaultProps = {
-		validate: noop,
+		name: 'docFile',
 		title: '',
 	};
 	onDownload = (form: FormikProps<File>) => (acceptedFiles: File[]) => {
@@ -31,8 +30,9 @@ class DownloadFileView extends React.Component<IProps> {
 		form.setFieldValue(this.props.name, null);
 	};
 
-	renderDropZone = (props: FieldProps) => {
-		const { field, form } = props;
+	renderDropZone = (formikProps: FieldProps) => {
+		const { field, form } = formikProps;
+
 		return (
 			<Dropzone onDrop={this.onDownload(form)}>
 				{props => (
@@ -57,15 +57,8 @@ class DownloadFileView extends React.Component<IProps> {
 		);
 	};
 	render() {
-		return (
-			<Field
-				validateOnChange={true}
-				validate={this.props.validate}
-				name={this.props.name}
-				render={this.renderDropZone}
-			/>
-		);
+		return <Field name={this.props.name} render={this.renderDropZone} />;
 	}
 }
 
-export default DownloadFileView;
+export default DownloadFile;
