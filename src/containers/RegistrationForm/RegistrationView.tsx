@@ -1,5 +1,5 @@
 import React from 'react';
-import { Autocomplete, RadioButtonGroup, TextInput, LoadingText, H2, Form } from '$components';
+import { Autocomplete, RadioButtonGroup, TextInput, LoadingText, H2, PriemForm } from '$components';
 import {
 	EDictionaryNameList,
 	IEnrollRegForm,
@@ -37,11 +37,11 @@ const RegistrationView = (props: IProps) => {
 			form.setFieldValue('gender', String(name.sex));
 		}
 	};
-	const renderForm = (formikProps: FieldProps) => {
+	const renderForm = (form: FormikProps<IEnrollRegForm>) => {
 		const { dictionaries } = props;
 		const dictionaryFirstNames = prepareDictionarySuggestions(dictionaries[EDictionaryNameList.FirstNames]);
 		const dictionaryMiddleNames = dictionaries[EDictionaryNameList.MiddleNames];
-		const gender = prop('gender', formikProps.form.values);
+		const gender = prop('gender', form.values);
 
 		const filteredDictionaryMiddleName = prepareDictionarySuggestions(
 			dictionaryMiddleNames
@@ -65,7 +65,7 @@ const RegistrationView = (props: IProps) => {
 
 				<Autocomplete
 					label="Имя"
-					onSelect={onChangeFirstName(formikProps.form)}
+					onSelect={onChangeFirstName(form)}
 					name="firstName"
 					validate={validateRequireRusText}
 					required
@@ -92,7 +92,7 @@ const RegistrationView = (props: IProps) => {
 	}
 
 	return (
-		<Form
+		<PriemForm
 			renderForm={renderForm}
 			schema={EnrollRegFormSchema}
 			onSubmit={props.submit}

@@ -1,15 +1,7 @@
 import React from 'react';
-import { Checkbox, WebPhoto, Form, DocumentForm, TextInput, FormControlLabel } from '$components';
+import { Checkbox, WebPhoto, PriemForm, DocumentForm, TextInput } from '$components';
 
-import {
-	EDictionaryNameList,
-	IEnrollPersonForm,
-	IStylable,
-	pipe,
-	DocumentFormSchema,
-	EnrollContactsFormSchema,
-	EnrollPersonFormSchema,
-} from '$common';
+import { EDictionaryNameList, IEnrollPersonForm, IStylable, pipe, EnrollPersonFormSchema } from '$common';
 
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { withStyles } from '@material-ui/core';
@@ -41,16 +33,8 @@ interface IOwnProps {
 
 type IProps = IStateToProps & IDispatchToProps & IOwnProps & IStylable;
 const PersonForm = (props: IProps) => {
-	const renderApplyCheckbox = () => {
-		return (
-			<FormControlLabel
-				control={<Checkbox color="primary" name="isApplyPersonData" />}
-				label="Согласие на обработку персональных данных"
-			/>
-		);
-	};
-	const renderForm = (formProps: FieldProps) => {
-		const { values } = formProps.form;
+	const renderForm = (form: FormikProps<IEnrollPersonForm>) => {
+		const { values } = form;
 		const { dictionaries } = props;
 		const { docSubType } = values;
 		const dictionaryGovernments = dictionaries[EDictionaryNameList.Governments];
@@ -68,18 +52,15 @@ const PersonForm = (props: IProps) => {
 					<React.Fragment>
 						{docSubType && docSubType.id === 1 && (
 							<TextInput
+								required
 								name="codeDepartment"
 								label="Код подразделения"
 								type="number"
 								placeholder="Введите код подразделения"
 							/>
 						)}
-						<TextInput name="birthday" label="Место рождения" required placeholder="Введите место рождения" />
-						<FormControlLabel
-							className={props.classes.checkFormControl}
-							control={<Checkbox color="primary" name="isApplyPersonData" />}
-							label="Согласие на обработку персональных данных"
-						/>
+						<TextInput name="birthPlace" label="Место рождения" required placeholder="Введите место рождения" />
+						<Checkbox name="isApplyPersonData" label="Согласие на обработку персональных данных" />
 					</React.Fragment>
 				}
 			/>
@@ -87,14 +68,14 @@ const PersonForm = (props: IProps) => {
 	};
 
 	return (
-		<Form
+		<PriemForm
 			onSubmit={pipe(
 				props.submit,
 				props.onComplete,
 			)}
 			buttonText="Далее"
 			renderForm={renderForm}
-			schema={{ ...DocumentFormSchema, ...EnrollPersonFormSchema }}
+			schema={EnrollPersonFormSchema}
 			initialValues={props.data}
 		/>
 	);

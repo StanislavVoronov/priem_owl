@@ -1,4 +1,4 @@
-import { FieldProps, Formik, FormikProps } from 'formik';
+import { Form, Formik, FormikProps } from 'formik';
 import React from 'react';
 import SubmitButton from './Buttons/SubmitButton';
 import { IServerError } from '$common';
@@ -9,25 +9,27 @@ interface IProps<Values> {
 	schema: any;
 	buttonText: string;
 	onSubmit: (values: any) => void;
-	renderForm: (formikProps: FieldProps) => React.ReactNode;
+	renderForm: (form: FormikProps<Values>) => React.ReactNode;
 	error: IServerError | null;
 }
 
-class Form<Values> extends React.PureComponent<IProps<Values>> {
+class PriemForm<Values> extends React.PureComponent<IProps<Values>> {
 	static defaultProps = {
 		error: null,
 	};
-	renderForm = (formikProps: FieldProps) => {
+
+	renderForm = (form: FormikProps<Values>) => {
 		const { buttonText, error, renderForm } = this.props;
+		console.log('form', form);
 
 		return (
-			<div className="flexColumn">
-				{renderForm(formikProps)}
+			<Form noValidate={true} className="flexColumn">
+				{renderForm(form)}
 				{error && <H2 color="red">{error.message}</H2>}
 				<div style={{ marginTop: 24 }}>
 					<SubmitButton>{buttonText}</SubmitButton>
 				</div>
-			</div>
+			</Form>
 		);
 	};
 	render() {
@@ -46,4 +48,4 @@ class Form<Values> extends React.PureComponent<IProps<Values>> {
 	}
 }
 
-export default Form;
+export default PriemForm;

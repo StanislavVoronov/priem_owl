@@ -4,7 +4,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { enrollAccountVerificationFormSelector, IRootState } from '$store';
 import { EnrollVerificationFormSchema, IAccountVerificationForm, IServerError } from '$common';
 import { updatePersonInformation } from '$operations';
-import { Form, TextInput } from '$components';
+import { PriemForm, TextInput } from '$components';
 
 interface IMapStateToProps {
 	data: IAccountVerificationForm;
@@ -34,7 +34,7 @@ class AccountVerificationContainer extends React.Component<IProps> {
 	};
 	render() {
 		return (
-			<Form
+			<PriemForm
 				renderForm={this.renderForm}
 				error={this.props.error}
 				schema={EnrollVerificationFormSchema}

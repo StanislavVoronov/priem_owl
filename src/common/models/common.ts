@@ -16,10 +16,10 @@ export interface IDictionaryName {
 }
 
 export interface IDocType extends ISelectItem {
-	scanable?: boolean;
-	need_info?: boolean;
-	has_number?: boolean;
-	need_foreigner?: boolean;
+	scanable?: number;
+	need_info?: number;
+	has_number?: number;
+	need_foreigner?: number;
 }
 
 export interface IGovernmentSelectItem extends ISelectItem {

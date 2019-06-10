@@ -50,22 +50,22 @@ class DocumentsFormView extends React.PureComponent<IProps> {
 
 		return (
 			<form noValidate={true} className="flexColumn">
-				<div>
-					<H2 style={{ marginTop: 10 }}>Необходимые документы для поступления:</H2>
-					<ol>
-						{this.props.foreigner &&
-							dictionaryDocTypes &&
-							dictionaryDocTypes.values
-								.map((item: IDocType) => {
-									if (item.need_foreigner) {
-										return <li key={item.id}>{item.name}</li>;
-									}
+				{/*<div>*/}
+				{/*<H2 style={{ marginTop: 10 }}>Необходимые документы для поступления:</H2>*/}
+				{/*<ol>*/}
+				{/*{this.props.foreigner &&*/}
+				{/*dictionaryDocTypes &&*/}
+				{/*dictionaryDocTypes.values*/}
+				{/*.map((item: IDocType) => {*/}
+				{/*if (item.need_foreigner) {*/}
+				{/*return <li key={item.id}>{item.name}</li>;*/}
+				{/*}*/}
 
-									return null;
-								})
-								.filter(Boolean)}
-					</ol>
-				</div>
+				{/*return null;*/}
+				{/*})*/}
+				{/*.filter(Boolean)}*/}
+				{/*</ol>*/}
+				{/*</div>div*/}
 				<div>
 					{this.props.documents.map((item, index) => {
 						const docTypeId = (item.docType && item.docType.id) || '';

@@ -21,7 +21,7 @@ export const enrollEducationFormSelector = (state: IRootState) => {
 };
 
 export const enrollDocumentsFormSelector = (state: IRootState) => {
-	return state.enrollDocumentsForm;
+	return state.enrollDocumentsForm.documents;
 };
 
 export const enrollIsForeignerSelector = (state: IRootState) => {

@@ -47,6 +47,7 @@ export const createTransactionReducer = <R, S, F>(actions: ITransactionActions<R
 			[actions.request.toString()]: state => ({
 				...state,
 				loading: true,
+				error: null,
 			}),
 			[actions.success.toString()]: (state, action) => {
 				return { ...state, loading: false, result: action.payload ? action.payload.result : [] };
@@ -74,4 +75,12 @@ export const generatePassword = () => {
 	return Math.random()
 		.toString(36)
 		.slice(-8);
+};
+
+export const mergeSchemes = (...schemas: any[]) => {
+	const [first, ...rest] = schemas;
+
+	const merged = rest.reduce((mergedSchemas, schema) => mergedSchemas.concat(schema), first);
+
+	return merged;
 };

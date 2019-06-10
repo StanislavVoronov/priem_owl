@@ -4,7 +4,8 @@ import { Field, FieldProps, FormikProps } from 'formik';
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import { FormLabel } from '@material-ui/core';
-import { noop } from '$common';
+import { noop, prop } from '$common';
+import { H2 } from '$components';
 interface IProps {
 	name: string;
 	title: string;
@@ -32,6 +33,7 @@ class DownloadFile extends React.Component<IProps> {
 
 	renderDropZone = (formikProps: FieldProps) => {
 		const { field, form } = formikProps;
+		const error = prop(this.props.name, form.errors);
 
 		return (
 			<Dropzone onDrop={this.onDownload(form)}>
@@ -48,7 +50,10 @@ class DownloadFile extends React.Component<IProps> {
 						) : (
 							<React.Fragment>
 								<input {...props.getInputProps()} name={this.props.name} />
-								<div style={styles.dropZone}>Нажмите, чтобы добавить файл или перетащите файл в отмеченную область</div>
+								<div style={styles.dropZone}>
+									<span>Нажмите, чтобы добавить файл или перетащите файл в отмеченную область</span>
+									{error && <H2 color="red">{error}</H2>}
+								</div>
 							</React.Fragment>
 						)}
 					</div>

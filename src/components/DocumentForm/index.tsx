@@ -73,7 +73,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 								title={this.props.subTitle}
 							/>
 						)}
-						{needInfo ? (
+						{needInfo && (
 							<TextInput
 								validate={validateRequireTextField}
 								required
@@ -81,18 +81,20 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 								placeholder="Введите серию документа"
 								label="Серия"
 							/>
-						) : null}
+						)}
 
-						<TextInput
-							required
-							validate={validateRequireTextField}
-							name="docNumber"
-							placeholder="Введите номер документа"
-							label="Номер"
-							type="number"
-						/>
+						{hasNumber && (
+							<TextInput
+								required
+								validate={validateRequireTextField}
+								name="docNumber"
+								placeholder="Введите номер документа"
+								label="Номер"
+								type="number"
+							/>
+						)}
 
-						{needInfo ? (
+						{needInfo && (
 							<>
 								<TextInput required type="date" label="Дата выдачи документа" name="docDate" />
 								<TextInput
@@ -104,13 +106,13 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 									multiline
 								/>
 							</>
-						) : null}
+						)}
 
 						{this.props.extraFields}
 					</div>
 				) : null}
 				<div>
-					<DownloadFileView />
+					<DownloadFileView title={this.props.docTitle} />
 				</div>
 			</div>
 		);

@@ -1,5 +1,6 @@
-import { object, string, boolean } from 'yup';
+import { object, string, boolean, number, mixed } from 'yup';
 import { RUS_ALPHABET } from '../constants';
+import { mergeSchemes } from '$common';
 
 const EMPTY_FIELD_MESSAGE = 'Поле не должно быть пустым';
 const RUS_FIELD_MESSAGE = 'Поле может содержать только русские буквы';
@@ -10,25 +11,42 @@ export const DocumentFormSchema = object({
 	docNumber: string().required(EMPTY_FIELD_MESSAGE),
 	docSeries: string().required(EMPTY_FIELD_MESSAGE),
 	docGovernment: string().required(EMPTY_FIELD_MESSAGE),
-	docIssieBy: string().required(EMPTY_FIELD_MESSAGE),
+	docIssieBy: string()
+		.required(EMPTY_FIELD_MESSAGE)
+		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
 	docDate: string().required(EMPTY_FIELD_MESSAGE),
-	docFile: object().required(EMPTY_FIELD_MESSAGE),
-	codeDepartment: string().required(EMPTY_FIELD_MESSAGE),
+	docFile: mixed().required('Необходимо добавить файл'),
 });
-export const EnrollPersonFormSchema = object({
-	birthPlace: string().notRequired(),
-	birthday: string().required(EMPTY_FIELD_MESSAGE),
+export const PersonFormSchema = object({
+	birthPlace: string()
+		.required(EMPTY_FIELD_MESSAGE)
+		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
+	isApplyPersonData: boolean().test({
+		message: 'Необходимо выбрать поле',
+		test: (value: boolean) => {
+			return value;
+		},
+	}),
+	codeDepartment: mixed().test('codeDepartment', EMPTY_FIELD_MESSAGE, function(value: string) {
+		const { docType, docSubType } = this.parent;
+		return !(docType.id === 1 && docSubType.id === 1 && value.length === 0);
+	}),
 });
+
+export const EnrollPersonFormSchema = mergeSchemes(PersonFormSchema, DocumentFormSchema);
 
 export const EnrollRegFormSchema = object({
 	firstName: string()
 		.required(EMPTY_FIELD_MESSAGE)
-		.matches(RUS_ALPHABET, 'Поле может содержать только русские буквы'),
+		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
 	lastName: string()
 		.required(EMPTY_FIELD_MESSAGE)
-		.matches(RUS_ALPHABET, 'Поле может содержать только русские буквы'),
+		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
 	birthday: string().required(EMPTY_FIELD_MESSAGE),
-	middleName: string().matches(RUS_ALPHABET, 'Поле может содержать только русские буквы'),
+	gender: number().moreThan(0, 'Необходимо выбрать одно из значений'),
+	middleName: string()
+		.required(EMPTY_FIELD_MESSAGE)
+		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
 });
 
 export const EnrollVerificationFormSchema = object({

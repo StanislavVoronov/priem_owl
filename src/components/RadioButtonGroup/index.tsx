@@ -1,12 +1,9 @@
 import React from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import { IHasError, IHelperText } from '../../containers/models';
-import { FormHelperText } from '@material-ui/core';
-import './styles.css';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Field, FieldProps, FormikProps } from 'formik';
 import { has, prop, noop } from '$common';
@@ -80,9 +77,7 @@ class RadioButtonGroup extends React.PureComponent<IRadioGroupButton> {
 					))}
 				</RadioGroup>
 				{touched && prop(field.name, form.errors) && (
-					<FormHelperText className={this.props.error && this.props.classes.helperText}>
-						{prop(field.name, form.errors)}
-					</FormHelperText>
+					<div className={this.props.classes.helperText}>{prop(field.name, form.errors)}</div>
 				)}
 			</div>
 		);

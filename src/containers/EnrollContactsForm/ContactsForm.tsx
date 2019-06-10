@@ -1,14 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import {
-	TextInput,
-	H2,
-	DropdownSelect,
-	FormControlLabel,
-	Checkbox,
-	DocumentForm,
-	Form,
-	LoadingText,
-} from '$components';
+import { TextInput, H2, DropdownSelect, Checkbox, DocumentForm, PriemForm, LoadingText } from '$components';
 import {
 	EDictionaryNameList,
 	IEnrollContactsForm,
@@ -84,10 +75,10 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 	// 	this.onChange({ ...event, target: { ...event.target, value: maskMobPhone, name: event.target.name } });
 	// };
 
-	renderForm = ({ form }: FieldProps) => {
+	renderForm = (form: FormikProps<IEnrollContactsForm>) => {
 		const governmentDictionary = this.props.dictionaries[EDictionaryNameList.Governments];
 
-		const isRegAddressEqualLive = form.values('isRegAddressEqualLive');
+		const isRegAddressEqualLive = form.values.isRegAddressEqualLive;
 
 		if (this.props.loading) {
 			return <LoadingText>Проверка электронной почты</LoadingText>;
@@ -113,22 +104,14 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 							<TextInput label={'Дом'} placeholder={'Введите дом'} name="regHome" required />
 							<TextInput label={'Корпус'} name="regBlock" />
 							<TextInput label={'Квартира'} name="regFlat" />
-							<FormControlLabel
-								className={this.props.classes.checkFormControl}
-								control={
-									<Checkbox color="primary" checked={form.values('needDormitory')} onChange={this.toggleStatus(form)} />
-								}
-								label="Нуждаюсь в предоставлении общежития"
-							/>
+							<Checkbox label="Нуждаюсь в предоставлении общежития" name="needDormitory" />
 						</React.Fragment>
 					}
 				/>
-				<FormControlLabel
-					className={this.props.classes.checkFormControl}
-					control={<Checkbox color="primary" checked={isRegAddressEqualLive} onChange={this.toggleStatus(form)} />}
-					label="Фактический адрес проживания	совпадает с адресом регистрации"
-				/>
-				{!form.values('isRegAddressEqualLive') && (
+
+				<Checkbox name="isRegAddressEqualLive" label="Фактический адрес проживания	совпадает с адресом регистрации" />
+
+				{!isRegAddressEqualLive && (
 					<div className="flexColumn">
 						<H2>Адрес проживания</H2>
 						<TextInput
@@ -174,7 +157,7 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 	};
 	render() {
 		return (
-			<Form
+			<PriemForm
 				buttonText="Далее"
 				schema={{ ...DocumentFormSchema, ...EnrollPersonFormSchema }}
 				error={this.props.error}
