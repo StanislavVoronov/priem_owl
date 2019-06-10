@@ -10,7 +10,8 @@ export interface ITransactionState {
 	createLogin: ITransaction<ICreateLoginResponse>;
 	findPerson: ITransaction<IFindPersonResponse>;
 	createPerson: ITransaction<ICreatePersonDataResponse>;
-	updatePhone: ITransaction<any>;
+	updatePhone: Record<string, ITransaction<any>>;
+	updateAddress: Record<string, ITransaction<any>>;
 	createVerificationCode: ITransaction<ICreateVerificationCodeResponse>;
 	uploadDocuments: Record<string, ITransaction<any>>;
 }

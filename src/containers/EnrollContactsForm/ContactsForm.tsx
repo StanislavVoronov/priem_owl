@@ -159,6 +159,8 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 		return (
 			<PriemForm
 				buttonText="Далее"
+				loading={this.props.loading}
+				loadingText="Проверка данных"
 				schema={{ ...DocumentFormSchema, ...EnrollPersonFormSchema }}
 				error={this.props.error}
 				renderForm={this.renderForm}

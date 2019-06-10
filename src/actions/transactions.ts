@@ -9,4 +9,4 @@ export const createPersonActions = createTransactionActions(TRANSACTION_NAMES.Cr
 export const uploadDocumentActions = createTransactionActions(TRANSACTION_NAMES.UploadDocument);
 export const uploadDocumentsActions = createTransactionActionsById(TRANSACTION_NAMES.UploadDocumentsById);
 export const updatePhoneActionsByKey = createTransactionActions(TRANSACTION_NAMES.UpdatePhone);
-export const updateAdressActions = createTransactionActions(TRANSACTION_NAMES.UpdateAddress);
+export const updateAddressActions = createTransactionActionsById(TRANSACTION_NAMES.UpdateAddress);

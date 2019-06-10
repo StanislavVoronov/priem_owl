@@ -87,12 +87,11 @@ const RegistrationView = (props: IProps) => {
 			</>
 		);
 	};
-	if (props.loading) {
-		return <LoadingText>Проверка абитуриента</LoadingText>;
-	}
 
 	return (
 		<PriemForm
+			loading={props.loading}
+			loadingText="Проверка абитуриента"
 			renderForm={renderForm}
 			schema={EnrollRegFormSchema}
 			onSubmit={props.submit}

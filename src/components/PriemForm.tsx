@@ -3,6 +3,7 @@ import React from 'react';
 import SubmitButton from './Buttons/SubmitButton';
 import { IServerError } from '$common';
 import { H2 } from '$components';
+import LoadingText from './LoadingText';
 
 interface IProps<Values> {
 	initialValues: Values;
@@ -11,24 +12,32 @@ interface IProps<Values> {
 	onSubmit: (values: any) => void;
 	renderForm: (form: FormikProps<Values>) => React.ReactNode;
 	error: IServerError | null;
+	loading: boolean;
+	loadingText: string;
 }
 
 class PriemForm<Values> extends React.PureComponent<IProps<Values>> {
 	static defaultProps = {
 		error: null,
+		loading: false,
+		loadingText: '',
 	};
 
 	renderForm = (form: FormikProps<Values>) => {
-		const { buttonText, error, renderForm } = this.props;
+		const { buttonText, error, renderForm, loading, loadingText } = this.props;
 		console.log('form', form);
 
 		return (
 			<Form noValidate={true} className="flexColumn">
 				{renderForm(form)}
 				{error && <H2 color="red">{error.message}</H2>}
-				<div style={{ marginTop: 24 }}>
-					<SubmitButton>{buttonText}</SubmitButton>
-				</div>
+				{loading ? (
+					<LoadingText>{loadingText}</LoadingText>
+				) : (
+					<div style={{ marginTop: 24 }}>
+						<SubmitButton>{buttonText}</SubmitButton>
+					</div>
+				)}
 			</Form>
 		);
 	};

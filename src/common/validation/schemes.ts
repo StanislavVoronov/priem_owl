@@ -29,6 +29,7 @@ export const PersonFormSchema = object({
 	}),
 	codeDepartment: mixed().test('codeDepartment', EMPTY_FIELD_MESSAGE, function(value: string) {
 		const { docType, docSubType } = this.parent;
+
 		return !(docType.id === 1 && docSubType.id === 1 && value.length === 0);
 	}),
 });

@@ -5,7 +5,7 @@ import findPerson, * as fromFindPerson from './findPerson';
 import createVerificationCode, * as fromCreateVerificationCode from './createVerificationCode';
 import updatePhone, * as fromUpdatePhone from './updatePhone';
 import createPerson, * as fromCreatePerson from './createPerson';
-
+import updateAddress, * as fromUpdateAddress from './updateAddress';
 import { IRootState } from '$store';
 import { createSelector } from 'reselect';
 import uploadDocuments, * as fromUploadDocuments from './uploadDocument';
@@ -46,6 +46,7 @@ const transactions = combineReducers({
 	createVerificationCode,
 	uploadDocuments,
 	createPerson,
+	updateAddress,
 	updatePhone,
 });
 

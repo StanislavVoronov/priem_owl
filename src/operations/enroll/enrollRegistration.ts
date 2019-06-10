@@ -19,6 +19,7 @@ import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
 import { createLoginActions, cyrillToLatin, generatePassword, IEnrollRegForm, moment, ServerBoolean } from '$common';
 import { updatePhoneTransaction } from '../../store/transactions/updatePhone';
+import { updateAddressTransaction } from '../../store/transactions/updateAddress';
 export const onCompleteRegistrationForm = (
 	form: IEnrollRegForm,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
@@ -107,12 +108,10 @@ export const updatePhone = (): ThunkAction<Promise<void>, IRootState, void, Acti
 				type: 1,
 			}),
 		),
-	])
-		.then(() => Promise.resolve())
-		.catch(error => Promise.reject(error));
+	]).then(() => Promise.resolve());
 };
 
-export const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
+const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
 	const state = getState();
 	const registrationForm = enrollRegistrationSelector(state);
 	const contactsForm = enrollContactsFormSelector(state);
@@ -138,7 +137,7 @@ export const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Act
 
 	return dispatch(createPersonTransaction(payload)).then(() => Promise.resolve());
 };
-export const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
+const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
 	const state = getState();
 
 	const contactsData = enrollContactsFormSelector(state);
@@ -159,10 +158,42 @@ export const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Ac
 		});
 };
 
+const updateAddress = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
+	const {
+		regIndex,
+		regRegion,
+		regLocality,
+		regStreet,
+		regHome,
+		regBlock,
+		regFlat,
+		liveBlock,
+		liveFlat,
+		liveHome,
+		liveIndex,
+		liveLocality,
+		liveRegion,
+		liveStreet,
+		isRegAddressEqualLive,
+	} = enrollContactsFormSelector(getState());
+	const regAddress = [regIndex, regRegion, regLocality, regStreet, regHome, regBlock, regFlat]
+		.filter(value => value)
+		.join(', ');
+
+	const liveAddress = [liveIndex, liveRegion, liveLocality, liveStreet, liveHome, liveBlock, liveFlat]
+		.filter(value => value)
+		.join(', ');
+
+	return Promise.all([
+		dispatch(updateAddressTransaction({ address: regAddress, type: 1 })),
+		!isRegAddressEqualLive ? dispatch(updateAddressTransaction({ address: liveAddress, type: 2 })) : Promise.resolve(),
+	]).then(() => Promise.resolve());
+};
+
 export const updatePersonInformation = (): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	return dispatch(createPerson())
 		.then(() => {
-			return Promise.all([dispatch(uploadDocList()), dispatch(updatePhone())]);
+			return Promise.all([dispatch(uploadDocList()), dispatch(updatePhone()), dispatch(updateAddress())]);
 		})
 		.then(() => Promise.resolve());
 };

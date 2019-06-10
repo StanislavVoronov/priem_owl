@@ -35,6 +35,8 @@ class AccountVerificationContainer extends React.Component<IProps> {
 	render() {
 		return (
 			<PriemForm
+				loading={this.props.loading}
+				loadingText="Формирование личного дела"
 				renderForm={this.renderForm}
 				error={this.props.error}
 				schema={EnrollVerificationFormSchema}
