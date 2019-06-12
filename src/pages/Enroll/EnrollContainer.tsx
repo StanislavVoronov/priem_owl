@@ -20,8 +20,8 @@ type IProps = IStateToProps;
 
 class EnrollContainer extends React.Component<IProps, IState> {
 	state: IState = {
-		activeStep: 0,
-		dictionaries: SHORT_DICTIONARY_LIST,
+		activeStep: 4,
+		dictionaries: FULL_DICTIONARY_LIST,
 	};
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
@@ -54,6 +54,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 					handleNext={this.handleNext}
 					onCompleteRegForm={this.onCompleteRegForm}
 					activeStep={this.state.activeStep}
+					handleStep={this.handleStep}
 				/>
 			</Dictionary>
 		);

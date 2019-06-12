@@ -1,125 +1,116 @@
 import React from 'react';
-import { TextInput, DocumentForm, Button, H2 } from '$components';
+import { TextInput, DocumentForm, Button, PriemForm } from '$components';
 import {
-	EDictionaryNameList,
-	inputValueAsString,
 	IDocument,
-	defaultDocument,
 	validateDocument,
-	IDocType,
-	ISelectItem,
 	IStylable,
+	EDictionaryNameList,
+	AnyDocumentFormSchema,
+	prop,
+	IDocumentsForm,
+	defaultDocument,
+	isNil,
 } from '$common';
-
 import styles from './styles';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { FormikProps, FieldArray } from 'formik';
 
 interface IProps extends IStylable {
 	documents: IDocument[];
 	dictionaries: DictionaryState;
 	foreigner: boolean;
-	updateDocument: (key: number, document: IDocument) => void;
-	removeDocument: (key: number) => void;
-	addDocument: () => void;
-	submit: () => void;
+	submit: (values: IDocumentsForm) => void;
 }
 
 class DocumentsFormView extends React.PureComponent<IProps> {
 	static defaultProps = {
 		classes: {},
 	};
-
-	updateDocument = (index: number) => (document: IDocument) => {
-		this.props.updateDocument(index, document);
+	removeDocument = (index: number, remove: (index: number) => void) => () => {
+		remove(index);
 	};
-	onChangeCodeDepartment = (
-		index: number,
-		document: IDocument,
-	): React.ChangeEventHandler<HTMLInputElement> => event => {
-		this.props.updateDocument(index, { ...document, codeDepartment: inputValueAsString(event) });
-	};
-	removeDocument = (index: number) => () => {
-		this.props.removeDocument(index);
+	addDocument = (push: (doc: IDocument) => void) => () => {
+		push(defaultDocument);
 	};
 
-	render() {
-		const { dictionaries, classes } = this.props;
-		const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
-		const isDisabledAddButton = this.props.documents.map(validateDocument).includes(false);
+	renderDocument = (form: FormikProps<IDocumentsForm>) => ({ push, remove }: any) => {
+		const isDisabledAddButton = form.values.documents.map(validateDocument).includes(false);
 
 		return (
-			<form noValidate={true} className="flexColumn">
-				{/*<div>*/}
-				{/*<H2 style={{ marginTop: 10 }}>Необходимые документы для поступления:</H2>*/}
-				{/*<ol>*/}
-				{/*{this.props.foreigner &&*/}
-				{/*dictionaryDocTypes &&*/}
-				{/*dictionaryDocTypes.values*/}
-				{/*.map((item: IDocType) => {*/}
-				{/*if (item.need_foreigner) {*/}
-				{/*return <li key={item.id}>{item.name}</li>;*/}
-				{/*}*/}
+			<>
+				{form.values.documents.map((item, index) => {
+					const { dictionaries, classes } = this.props;
+					const { docType, docSubType } = item;
+					const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
 
-				{/*return null;*/}
-				{/*})*/}
-				{/*.filter(Boolean)}*/}
-				{/*</ol>*/}
-				{/*</div>div*/}
-				<div>
-					{this.props.documents.map((item, index) => {
-						const docTypeId = (item.docType && item.docType.id) || '';
-						const dictionarySubDocTypes =
-							docTypeId === 1
-								? dictionaries[EDictionaryNameList.PersonDocTypes].values
-								: docTypeId === 2
-								? dictionaries[EDictionaryNameList.EducationDocTypes].values
-								: undefined;
+					const docTypeId = docType && prop('id')(docType);
+					const docSubTypeId = docSubType && prop('id')(docSubType);
 
-						return (
-							<div key={`${index}-${item.docNumber}-${item.docSeries}`} className={classes.docFormContainer}>
-								<DocumentForm
-									document={item}
-									docTitle="Файл документа"
-									title="Тип документа"
-									dictionaryTypes={dictionaryDocTypes && dictionaryDocTypes.values}
-									subTitle={'Название документа'}
-									dictionarySubTypes={dictionarySubDocTypes}
-									extraFields={
-										<React.Fragment>
-											{docTypeId === 1 && item.docSubType && item.docSubType.id === 1 ? (
-												<TextInput
-													name="codeDepartment"
-													label="Код подразделения"
-													type="number"
-													placeholder={'Введите код подразделения'}
-												/>
-											) : null}
-										</React.Fragment>
-									}
-								/>
-								<div className={classes.deleteDocButtonContainer}>
-									<Button className={classes.deleteDocButton} primary onClick={this.removeDocument(index)}>
-										{'Удалить документ'}
-									</Button>
-								</div>
-							</div>
-						);
-					})}
-				</div>
-				<div className={classes.addDocButtonContainer}>
-					<Button
-						primary
-						className={classes.addDocButton}
-						disabled={isDisabledAddButton}
-						onClick={this.props.addDocument}>
-						{'Добавить новый документ'}
-					</Button>
-				</div>
-				<div style={{ marginTop: 24 }}>
-					<Button onClick={this.props.submit}>Далее</Button>
-				</div>
-			</form>
+					const dictionarySubDocTypes =
+						docTypeId === 1
+							? dictionaries[EDictionaryNameList.PersonDocTypes].values
+							: docTypeId === 2
+							? dictionaries[EDictionaryNameList.EducationDocTypes].values
+							: undefined;
+					console.log('form', form);
+					return (
+						<div style={{ marginTop: 24 }}>
+							<DocumentForm
+								name={`documents[${index}].`}
+								document={item}
+								docTitle="Файл документа"
+								title="Тип документа"
+								dictionaryTypes={dictionaryDocTypes && dictionaryDocTypes.values}
+								subTitle={'Название документа'}
+								dictionarySubTypes={dictionarySubDocTypes}
+								extraFields={
+									<React.Fragment>
+										{docTypeId === 1 && docSubTypeId === 1 ? (
+											<TextInput
+												name={`documents[${index}].codeDepartment`}
+												label="Код подразделения"
+												type="number"
+												placeholder={'Введите код подразделения'}
+											/>
+										) : null}
+									</React.Fragment>
+								}
+							/>
+
+							<Button
+								wrapperClassName={classes.deleteDocButtonContainer}
+								className={classes.deleteDocButton}
+								primary
+								onClick={this.removeDocument(index, remove)}>
+								{'Удалить документ'}
+							</Button>
+						</div>
+					);
+				})}
+				<Button
+					primary
+					wrapperClassName={this.props.classes.addDocButtonWrapper}
+					className={this.props.classes.addDocButton}
+					disabled={isDisabledAddButton}
+					onClick={this.addDocument(push)}>
+					Добавить новый документ
+				</Button>
+			</>
+		);
+	};
+	renderFieldArray = (form: FormikProps<IDocumentsForm>) => {
+		return <FieldArray validateOnChange={false} name="documents" render={this.renderDocument(form)} />;
+	};
+	render() {
+		return (
+			<PriemForm
+				schema={AnyDocumentFormSchema}
+				buttonText={'Далее'}
+				initialValues={{ documents: this.props.documents }}
+				onSubmit={this.props.submit}
+				renderForm={this.renderFieldArray}
+			/>
 		);
 	}
 }

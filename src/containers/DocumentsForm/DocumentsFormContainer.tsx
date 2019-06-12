@@ -6,12 +6,10 @@ import {
 	enrollDocumentsFormSelector,
 	enrollIsForeignerSelector,
 	IRootState,
-	addDocument,
-	removeDocument,
-	updateDocument,
+	submitDocumentsForm,
 } from '$store';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
-import { IDocument, ISelectItem } from '$common';
+import { IDocument, IDocumentsForm } from '$common';
 
 interface IStateToProps {
 	documents: IDocument[];
@@ -19,17 +17,20 @@ interface IStateToProps {
 	foreigner: boolean;
 }
 interface IDispatchToProps {
-	updateDocument: (key: number, document: IDocument) => void;
-	removeDocument: (key: number) => void;
-	addDocument: () => void;
+	submitDocumentsForm: (values: IDocumentsForm) => void;
 }
 interface IOwnProps {
-	submit: () => void;
+	onComplete: () => void;
 }
 type IProps = IStateToProps & IDispatchToProps & IOwnProps;
 class DocumentsFormContainer extends React.Component<IProps> {
+	submit = (values: IDocumentsForm) => {
+		console.log('values', values);
+		this.props.submitDocumentsForm(values);
+		this.props.onComplete();
+	};
 	render() {
-		return <DocumentsFormView {...this.props} />;
+		return <DocumentsFormView {...this.props} submit={this.submit} />;
 	}
 }
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
@@ -40,9 +41,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	return { dictionaries, documents, foreigner };
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = {
-	updateDocument,
-	removeDocument,
-	addDocument,
+	submitDocumentsForm,
 };
 export default connect(
 	mapStateToProps,

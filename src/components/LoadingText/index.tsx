@@ -11,7 +11,7 @@ class LoadingText extends React.Component<IProps> {
 			<React.Fragment>
 				<div style={styles.loading}>
 					<CircularProgress />
-					<h3>{this.props.children}</h3>
+					<span style={styles.text}>{this.props.children}</span>
 				</div>
 			</React.Fragment>
 		);

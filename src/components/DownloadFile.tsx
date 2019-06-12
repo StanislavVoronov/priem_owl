@@ -4,7 +4,7 @@ import { Field, FieldProps, FormikProps } from 'formik';
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import { FormLabel } from '@material-ui/core';
-import { noop, prop } from '$common';
+import { noop, prop, get } from '$common';
 import { H2 } from '$components';
 interface IProps {
 	name: string;
@@ -12,15 +12,15 @@ interface IProps {
 }
 class DownloadFile extends React.Component<IProps> {
 	static defaultProps = {
-		name: 'docFile',
+		name: '',
 		title: '',
 	};
-	onDownload = (form: FormikProps<File>) => (acceptedFiles: File[]) => {
+	onDownload = (form: FormikProps<File>, field: any) => (acceptedFiles: File[]) => {
 		acceptedFiles.forEach(file => {
 			const reader = new FileReader();
 
 			reader.onload = e => {
-				form.setFieldValue(this.props.name, file);
+				form.setFieldValue(field.name, file);
 			};
 			reader.onabort = () => console.log('file reading was aborted');
 			reader.onerror = () => console.log('file reading has failed');
@@ -33,10 +33,10 @@ class DownloadFile extends React.Component<IProps> {
 
 	renderDropZone = (formikProps: FieldProps) => {
 		const { field, form } = formikProps;
-		const error = prop(this.props.name, form.errors);
+		const error = get(form.errors, this.props.name);
 
 		return (
-			<Dropzone onDrop={this.onDownload(form)}>
+			<Dropzone onDrop={this.onDownload(form, field)}>
 				{props => (
 					<div {...props.getRootProps()} style={styles.fileContainer}>
 						{this.props.title && (

@@ -1,16 +1,17 @@
 import { Form, Formik, FormikProps } from 'formik';
 import React from 'react';
 import SubmitButton from './Buttons/SubmitButton';
-import { IServerError } from '$common';
+import { IServerError, noop } from '$common';
 import { H2 } from '$components';
 import LoadingText from './LoadingText';
 
 interface IProps<Values> {
 	initialValues: Values;
-	schema: any;
-	buttonText: string;
+	schema?: any;
+	buttonText?: string;
 	onSubmit: (values: any) => void;
-	renderForm: (form: FormikProps<Values>) => React.ReactNode;
+	renderForm: (form: FormikProps<Values>) => React.ReactNode | React.ReactNode[];
+	validate: (values: any) => any;
 	error: IServerError | null;
 	loading: boolean;
 	loadingText: string;
@@ -21,11 +22,12 @@ class PriemForm<Values> extends React.PureComponent<IProps<Values>> {
 		error: null,
 		loading: false,
 		loadingText: '',
+		onSubmit: noop,
+		validate: noop,
 	};
 
 	renderForm = (form: FormikProps<Values>) => {
 		const { buttonText, error, renderForm, loading, loadingText } = this.props;
-		console.log('form', form);
 
 		return (
 			<Form noValidate={true} className="flexColumn">
@@ -34,9 +36,11 @@ class PriemForm<Values> extends React.PureComponent<IProps<Values>> {
 				{loading ? (
 					<LoadingText>{loadingText}</LoadingText>
 				) : (
-					<div style={{ marginTop: 24 }}>
-						<SubmitButton>{buttonText}</SubmitButton>
-					</div>
+					buttonText && (
+						<div style={{ marginTop: 24 }}>
+							<SubmitButton>{buttonText}</SubmitButton>
+						</div>
+					)
 				)}
 			</Form>
 		);
@@ -46,6 +50,7 @@ class PriemForm<Values> extends React.PureComponent<IProps<Values>> {
 
 		return (
 			<Formik
+				validate={this.props.validate}
 				validationSchema={schema}
 				onSubmit={onSubmit}
 				validateOnBlur={false}

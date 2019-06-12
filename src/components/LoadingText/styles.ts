@@ -1,10 +1,13 @@
 const styles = {
 	loading: {
-		height: '150px',
 		display: 'flex',
-		flexDirection: 'column' as any,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	text: {
+		marginRight: 10,
+		marginLeft: 20,
+		fontWeight: 600,
 	},
 };
 

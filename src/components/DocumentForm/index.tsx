@@ -11,6 +11,7 @@ import Dropzone from 'react-dropzone';
 
 interface IDocumentFormProps extends IStylable {
 	document: IDocument;
+	name: string;
 	dictionaryTypes?: IDictionary[];
 	dictionarySubTypes?: IDictionary[];
 	dictionaryGovernment?: IDictionary[];
@@ -30,7 +31,8 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 	};
 
 	render() {
-		const { docNumber, docSeries, docSubType, docType } = this.props.document;
+		const { name } = this.props;
+		const { docType } = this.props.document;
 		const isDataVisible = !!(
 			(this.props.dictionaryTypes && this.props.title) ||
 			(this.props.dictionarySubTypes && this.props.subTitle) ||
@@ -47,7 +49,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 						{this.props.dictionaryTypes && this.props.title && (
 							<DropdownSelect
 								required
-								name="docType"
+								name={`${name}docType`}
 								options={this.props.dictionaryTypes}
 								placeholder={`Выберите ${this.props.title.toLowerCase()}`}
 								title={this.props.title}
@@ -57,7 +59,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 						{this.props.dictionaryGovernment && this.props.governmentTitle && (
 							<DropdownSelect
 								required
-								name="docGovernment"
+								name={`${name}docGovernment`}
 								options={this.props.dictionaryGovernment}
 								placeholder={`Выберите ${this.props.governmentTitle.toLowerCase()}`}
 								title={this.props.governmentTitle}
@@ -67,52 +69,52 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 						{this.props.dictionarySubTypes && this.props.subTitle && (
 							<DropdownSelect
 								required
-								name="docSubType"
+								name={`${name}docSubType`}
 								options={this.props.dictionarySubTypes}
 								placeholder={`Выберите ${this.props.subTitle.toLowerCase()}`}
 								title={this.props.subTitle}
 							/>
 						)}
-						{needInfo && (
+						{needInfo ? (
 							<TextInput
 								validate={validateRequireTextField}
 								required
-								name="docSeries"
+								name={`${name}docSeries`}
 								placeholder="Введите серию документа"
 								label="Серия"
 							/>
-						)}
+						) : null}
 
-						{hasNumber && (
+						{hasNumber ? (
 							<TextInput
 								required
 								validate={validateRequireTextField}
-								name="docNumber"
+								name={`${name}docNumber`}
 								placeholder="Введите номер документа"
 								label="Номер"
 								type="number"
 							/>
-						)}
+						) : null}
 
-						{needInfo && (
+						{needInfo ? (
 							<>
-								<TextInput required type="date" label="Дата выдачи документа" name="docDate" />
+								<TextInput required type="date" name={`${name}docDate`} label="Дата выдачи документа" />
 								<TextInput
 									required
 									validate={validateRequireTextField}
 									placeholder="Введите кем выдан документ"
 									label="Кем выдан документ"
-									name="docIssieBy"
+									name={`${name}docIssieBy`}
 									multiline
 								/>
 							</>
-						)}
+						) : null}
 
 						{this.props.extraFields}
 					</div>
 				) : null}
 				<div>
-					<DownloadFileView title={this.props.docTitle} />
+					<DownloadFileView name={`${this.props.name}docFile`} title={this.props.docTitle} />
 				</div>
 			</div>
 		);

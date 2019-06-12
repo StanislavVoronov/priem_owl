@@ -10,10 +10,10 @@ export const validateDocument = (document: IDocument): boolean => {
 		return false;
 	}
 	if (document.docType && document.docType.has_number) {
-		return document.docNumber !== '';
+		return document.docNumber ? !!document.docNumber : false;
 	}
 	if (document.docType && document.docType.need_info) {
-		return document.docIssieBy !== '' && document.docDate !== '' && document.docSeries !== '';
+		return !!(document.docIssieBy && document.docDate && document.docSeries);
 	}
 
 	return true;
@@ -22,15 +22,8 @@ export const validateRequireTextField = (value: string) => {
 	return value.length === 0 ? 'Поле не должно быть пустым' : void 0;
 };
 
-export const validateRequireCheckbox = (check: boolean) => {
-	return !check ? 'Необходимо ознакомиться с документом' : void 0;
-};
-
 export const validateRusTextField = (value: string) => {
 	return value.length > 0 && !RUS_ALPHABET.test(value) ? 'Поле может содержать только русские буквы' : void 0;
-};
-export const validateEngTextField = (value: string) => {
-	return !ENG_ALPHABET.test(value) ? 'Поле может содержать только русские буквы' : void 0;
 };
 
 export const validateRequireRusText = (value: string) => {

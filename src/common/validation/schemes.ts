@@ -1,6 +1,6 @@
-import { object, string, boolean, number, mixed } from 'yup';
+import { object, lazy, string, boolean, number, mixed, array } from 'yup';
 import { RUS_ALPHABET } from '../constants';
-import { mergeSchemes } from '$common';
+import { ISelectItem, isNil, mergeSchemes } from '$common';
 
 const EMPTY_FIELD_MESSAGE = 'Поле не должно быть пустым';
 const RUS_FIELD_MESSAGE = 'Поле может содержать только русские буквы';
@@ -17,10 +17,49 @@ export const DocumentFormSchema = object({
 	docDate: string().required(EMPTY_FIELD_MESSAGE),
 	docFile: mixed().required('Необходимо добавить файл'),
 });
+
+export const AnyDocumentFormSchema = object().shape({
+	documents: array().of(
+		object().shape({
+			docType: mixed().test('docType', EMPTY_FIELD_MESSAGE, function(value) {
+				return !isNil(value);
+			}),
+			docSubType: mixed().test('docSubType', EMPTY_FIELD_MESSAGE, function(value: ISelectItem) {
+				const { docType } = this.parent;
+
+				return !docType ? false : !value && docType.id !== 1 && docType.id !== 2;
+			}),
+			docNumber: mixed().test('docNumber', EMPTY_FIELD_MESSAGE, function(value: string = '') {
+				const { docType } = this.parent;
+
+				return docType && docType.need_info ? !!value : true;
+			}),
+			docSeries: mixed().test('docSeries', EMPTY_FIELD_MESSAGE, function(value: string = '') {
+				const { docType } = this.parent;
+
+				return docType && docType.need_info ? !!value : true;
+			}),
+			docIssieBy: mixed()
+				.test('docIssieBy', EMPTY_FIELD_MESSAGE, function(value: string = '') {
+					const { docType } = this.parent;
+
+					return docType && docType.need_info ? !!value : true;
+				})
+				.test({ message: RUS_FIELD_MESSAGE, test: value => (value ? RUS_ALPHABET.test(value) : true) }),
+			docDate: mixed().test('docDate', EMPTY_FIELD_MESSAGE, function(value: string = '') {
+				const { docType } = this.parent;
+
+				return docType && docType.need_info ? !!value : true;
+			}),
+			docFile: mixed().required('Необходимо добавить файл'),
+		}),
+	),
+});
+
 export const PersonFormSchema = object({
 	birthPlace: string()
 		.required(EMPTY_FIELD_MESSAGE)
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
+		.test({ message: RUS_FIELD_MESSAGE, test: value => RUS_ALPHABET.test(value) }),
 	isApplyPersonData: boolean().test({
 		message: 'Необходимо выбрать поле',
 		test: (value: boolean) => {

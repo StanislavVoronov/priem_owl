@@ -6,6 +6,5 @@ export * from './defaults';
 export * from '../actions';
 import moment from 'moment';
 
-export { noop, isUndefined, omitBy, isNull } from 'lodash';
 export * from './functions';
 export { moment };

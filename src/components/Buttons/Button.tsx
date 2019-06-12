@@ -10,6 +10,7 @@ interface IProps {
 	onClick: () => void;
 	primary: boolean;
 	submit: boolean;
+	wrapperClassName: any;
 }
 class Button extends React.Component<IProps> {
 	static defaultProps = {
@@ -18,18 +19,21 @@ class Button extends React.Component<IProps> {
 		primary: true,
 		fullWidth: false,
 		submit: false,
+		wrapperClassName: '',
 	};
 	render() {
 		return (
-			<MaterialButton
-				fullWidth={this.props.fullWidth}
-				variant="contained"
-				className={this.props.className}
-				disabled={this.props.disabled}
-				color={this.props.primary ? 'primary' : 'default'}
-				onClick={this.props.onClick}>
-				{this.props.children}
-			</MaterialButton>
+			<div className={this.props.wrapperClassName}>
+				<MaterialButton
+					fullWidth={this.props.fullWidth}
+					variant="contained"
+					className={this.props.className}
+					disabled={this.props.disabled}
+					color={this.props.primary ? 'primary' : 'default'}
+					onClick={this.props.onClick}>
+					{this.props.children}
+				</MaterialButton>
+			</div>
 		);
 	}
 }

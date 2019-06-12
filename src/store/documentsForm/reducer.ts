@@ -1,29 +1,14 @@
 import { handleActions } from 'redux-actions';
-import { defaultDocument, IDocumentsForm, IForm } from '$common';
-import { updateDocument, removeDocument, addDocument, selectCheatType } from './actions';
+import { IDocumentsForm } from '$common';
+import { submitDocumentsForm } from './actions';
 
-const enrollDocumentsFormReducer = handleActions<IDocumentsForm, any>(
+const enrollDocumentsFormReducer = handleActions<IDocumentsForm, IDocumentsForm>(
 	{
-		[updateDocument.toString()]: (state, action) => {
+		[submitDocumentsForm.toString()]: (state, action) => {
 			return {
 				...state,
-				documents: state.documents.map((item, index) => {
-					if (index === action.payload.key) {
-						return action.payload.document;
-					}
-
-					return item;
-				}),
+				...action.payload,
 			};
-		},
-		[removeDocument.toString()]: (state, action) => {
-			return {
-				...state,
-				documents: state.documents.filter((item, index) => action.payload !== index),
-			};
-		},
-		[addDocument.toString()]: state => {
-			return { ...state, documents: [...state.documents, defaultDocument] };
 		},
 	},
 	{

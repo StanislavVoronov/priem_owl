@@ -5,7 +5,7 @@ import { noop } from 'lodash';
 import styles from './styles';
 import { Field, FieldProps } from 'formik';
 
-import { has, propEq, prop } from '$common';
+import { has, propEq, get } from '$common';
 
 export interface IInputProps {
 	disabled: boolean;
@@ -56,8 +56,7 @@ class TextInput extends React.PureComponent<IInputProps> {
 	renderTextInput = (props: FieldProps) => {
 		const { form, field } = props;
 		const touched = has(field.name);
-
-		console.log('checkRender', props);
+		const error = touched && get(form.errors, field.name);
 
 		return (
 			<>
@@ -66,8 +65,8 @@ class TextInput extends React.PureComponent<IInputProps> {
 					margin="normal"
 					disabled={this.props.disabled}
 					value={field.value}
-					error={touched && !propEq(field.name, void 0, form.errors)}
-					helperText={(touched && prop(field.name, form.errors)) || this.props.helperText}
+					error={!!error}
+					helperText={error || this.props.helperText}
 					required={this.props.required}
 					multiline={this.props.multiline}
 					label={this.props.label}

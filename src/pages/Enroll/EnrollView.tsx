@@ -11,7 +11,7 @@ import {
 	DocumentsForm,
 	AccountVerificationForm,
 } from '$containers';
-
+import { noop } from '$common';
 const localStyles = {
 	logo: { height: window.innerHeight },
 	stepper: {
@@ -27,6 +27,7 @@ const localStyles = {
 interface IProps {
 	loading: boolean;
 	handleNext: () => void;
+	handleStep: (index: number) => () => void;
 	activeStep: number;
 	classes: any;
 	passedStep: number;
@@ -54,7 +55,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return <EducationForm onComplete={this.props.handleNext} />;
 			}
 			case 4: {
-				return <DocumentsForm submit={this.props.handleNext} />;
+				return <DocumentsForm onComplete={this.props.handleNext} />;
 			}
 			case 5: {
 				return <AccountVerificationForm onComplete={this.props.handleNext} />;
@@ -76,8 +77,10 @@ export class EnrollView extends React.PureComponent<IProps> {
 					<Stepper className={this.props.classes.stepper} activeStep={this.props.activeStep} orientation={'vertical'}>
 						{!this.props.loading ? (
 							this.props.steps.map((label, index) => (
-								<Step key={label}>
-									<StepButton disabled={index >= this.props.passedStep}>
+								<Step key={label} onClick={index < this.props.passedStep ? this.props.handleStep(index) : noop}>
+									<StepButton
+										style={index < this.props.passedStep ? { cursor: 'pointer' } : { cursor: 'default' }}
+										disabled={index < this.props.passedStep}>
 										<span className={index === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
 									</StepButton>
 									<StepContent>{this.renderForm(index)}</StepContent>
