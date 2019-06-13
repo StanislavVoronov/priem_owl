@@ -39,6 +39,16 @@ export const updatePhoneSelector = createSelector(
 	fromUpdatePhone.updatePhoneSelector,
 );
 
+export const createPersonSelector = createSelector(
+	transactionSelector,
+	fromCreatePerson.createPersonSelector,
+);
+
+export const uploadDocumentsSelector = createSelector(
+	transactionSelector,
+	fromUploadDocuments.uploadDocumentsFormSelector,
+);
+
 const transactions = combineReducers({
 	checkLogin,
 	createLogin,

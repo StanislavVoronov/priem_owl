@@ -9,6 +9,7 @@ import { IRootState, fromTransaction, dictionaryStateSelector } from '$store';
 
 interface IState {
 	activeStep: number;
+	passedStep: number;
 	dictionaries: IDictionaryConfig[];
 }
 
@@ -20,8 +21,9 @@ type IProps = IStateToProps;
 
 class EnrollContainer extends React.Component<IProps, IState> {
 	state: IState = {
-		activeStep: 4,
-		dictionaries: FULL_DICTIONARY_LIST,
+		activeStep: 0,
+		passedStep: 0,
+		dictionaries: SHORT_DICTIONARY_LIST,
 	};
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
@@ -35,12 +37,9 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		this.setState({ dictionaries: FULL_DICTIONARY_LIST, activeStep: this.state.activeStep + 1 });
 	};
 	handleNext = () => {
-		this.setState({ activeStep: this.state.activeStep + 1 });
+		this.setState({ activeStep: this.state.activeStep + 1, passedStep: this.state.passedStep + 1 });
 	};
 
-	submit = (event: React.FormEvent<HTMLFormElement>) => {
-		return void 0;
-	};
 	render() {
 		const loading =
 			Object.keys(this.props.dictionaries).length === 0 ||
@@ -55,6 +54,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 					onCompleteRegForm={this.onCompleteRegForm}
 					activeStep={this.state.activeStep}
 					handleStep={this.handleStep}
+					passedStep={this.state.passedStep}
 				/>
 			</Dictionary>
 		);

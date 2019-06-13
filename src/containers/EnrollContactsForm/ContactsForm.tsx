@@ -80,10 +80,6 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 
 		const isRegAddressEqualLive = form.values.isRegAddressEqualLive;
 
-		if (this.props.loading) {
-			return <LoadingText>Проверка электронной почты</LoadingText>;
-		}
-
 		return (
 			<form className="flexColumn">
 				<H2>Адрес регистрации</H2>

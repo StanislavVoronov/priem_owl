@@ -1,18 +1,21 @@
-import { IDocument, IUploadDocRequest, uploadDocumentsActions } from '$common';
+import { IDocument, ITransaction, IUploadDocRequest, uploadDocumentsActions } from '$common';
 import { ThunkAction } from 'redux-thunk';
-import { IRootState } from '$store';
+import { IRootState, ITransactionState } from '$store';
 import { Action } from 'redux';
 import moment from 'moment';
 import { omitBy, isNull } from '$common';
 import { PriemApi, PriemRestApi } from '$services';
 
+export const uploadDocumentsFormSelector = (state: ITransactionState) => {
+	return state.uploadDocuments;
+};
 export const uploadDocumentTransaction = (doc: IDocument): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	const document: IUploadDocRequest = {
 		mime: doc.docFile ? doc.docFile.type : null,
 		type: doc.docType ? doc.docType.id : 0,
 		stype: doc.docSubType ? doc.docSubType.id : null,
-		seria: doc.docSeries || '-',
-		num: doc.docNumber || '-',
+		seria: doc.docSeries ? doc.docSeries.toString() : '-',
+		num: doc.docNumber ? doc.docNumber.toString() : '-',
 		iss_org: doc.docIssieBy ? `${doc.docIssieBy}${doc.codeDepartment ? ' ' + doc.codeDepartment : ''}` : '-',
 		iss_date: doc.docDate ? moment(doc.docDate).format('DD-MM-YYYY') : '01-01-1970',
 		iss_gov: doc.docGovernment ? doc.docGovernment.id : 1,

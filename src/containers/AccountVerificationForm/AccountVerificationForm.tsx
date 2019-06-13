@@ -1,8 +1,13 @@
 import * as React from 'react';
 import { ChangeEvent } from 'react';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { enrollAccountVerificationFormSelector, IRootState } from '$store';
-import { EnrollVerificationFormSchema, IAccountVerificationForm, IServerError } from '$common';
+import {
+	enrollAccountVerificationFormSelector,
+	IRootState,
+	submitEnrollVerificationForm,
+	fromTransaction,
+} from '$store';
+import { EnrollVerificationFormSchema, IAccountVerificationForm, IDocument, IServerError, ITransaction } from '$common';
 import { updatePersonInformation } from '$operations';
 import { PriemForm, TextInput } from '$components';
 
@@ -13,34 +18,30 @@ interface IMapStateToProps {
 }
 
 interface IDispatchToProps {
-	onSubmit: (event: ChangeEvent<HTMLInputElement>) => void;
+	onSubmit: (values: IAccountVerificationForm) => void;
 }
 interface IOwnProps {
 	onComplete: () => void;
 }
 type IProps = IMapStateToProps & IDispatchToProps & IOwnProps;
 class AccountVerificationContainer extends React.Component<IProps> {
-	renderForm = () => {
+	renderForm = (form: any) => {
 		return (
-			<>
-				<TextInput
-					name="verificationAccountCode"
-					required
-					label="Код подтверждения"
-					helperText={'Код подтверждения, отправленный на электронную почту'}
-				/>
-			</>
+			<TextInput
+				name="verificationCode"
+				required
+				label="Код подтверждения"
+				helperText={'Код подтверждения, отправленный на электронную почту'}
+			/>
 		);
 	};
 	render() {
 		return (
 			<PriemForm
-				loading={this.props.loading}
+				{...this.props}
 				loadingText="Формирование личного дела"
 				renderForm={this.renderForm}
-				error={this.props.error}
 				schema={EnrollVerificationFormSchema}
-				onSubmit={this.props.onSubmit}
 				buttonText="Подтвердить"
 				initialValues={this.props.data}
 			/>
@@ -49,12 +50,23 @@ class AccountVerificationContainer extends React.Component<IProps> {
 }
 const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = state => {
 	const data = enrollAccountVerificationFormSelector(state);
+	const createPerson = fromTransaction.createPersonSelector(state);
+	const uploadDocuments = fromTransaction.uploadDocumentsSelector(state);
 
-	return { data, loading: false, error: null };
+	const documentLoading = Object.values(uploadDocuments).some((document: ITransaction<IDocument>) => document.loading);
+	const documentError =
+		Object.values(uploadDocuments).find((document: ITransaction<IDocument>) => !!document.error) || null;
+
+	return {
+		data,
+		loading: createPerson.loading || documentLoading,
+		error: createPerson.error || (documentError && documentError.error),
+	};
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => {
 	return {
-		onSubmit: () => {
+		onSubmit: (values: IAccountVerificationForm) => {
+			dispatch(submitEnrollVerificationForm(values));
 			dispatch<any>(updatePersonInformation())
 				.then(ownProps.onComplete)
 				.catch((error: any) => console.log('errorAccountVerification', error));

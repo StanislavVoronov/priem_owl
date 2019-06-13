@@ -34,10 +34,14 @@ export const createPersonTransaction = (
 		...data,
 	})
 		.then(response => {
-			console.log('response', response);
 			dispatch(createPersonActions.success([response]));
+
+			return Promise.resolve();
 		})
 		.catch(error => {
+			console.log('createPersonTransaction', error);
 			dispatch(createPersonActions.failure(error));
+
+			return Promise.reject(error);
 		});
 };

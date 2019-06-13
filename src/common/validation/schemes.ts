@@ -21,7 +21,7 @@ export const DocumentFormSchema = object({
 export const AnyDocumentFormSchema = object().shape({
 	documents: array().of(
 		object().shape({
-			docType: mixed().test('docType', EMPTY_FIELD_MESSAGE, function(value) {
+			docType: mixed().test('docType', EMPTY_FIELD_MESSAGE, value => {
 				return !isNil(value);
 			}),
 			docSubType: mixed().test('docSubType', EMPTY_FIELD_MESSAGE, function(value: ISelectItem) {

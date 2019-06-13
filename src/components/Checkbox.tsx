@@ -13,8 +13,8 @@ const styles = {
 };
 interface IProps extends IStylable {
 	name: string;
-	label: string;
 	onChange?: (checked: boolean) => void;
+	label: React.ReactNode;
 }
 
 const Checkbox = (props: IProps) => {

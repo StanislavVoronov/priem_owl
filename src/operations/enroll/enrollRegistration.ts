@@ -102,12 +102,14 @@ export const updatePhone = (): ThunkAction<Promise<void>, IRootState, void, Acti
 				type: 2,
 			}),
 		),
-		dispatch(
-			updatePhoneTransaction({
-				phone: data.homePhone || '',
-				type: 1,
-			}),
-		),
+		data.homePhone
+			? dispatch(
+					updatePhoneTransaction({
+						phone: data.homePhone,
+						type: 1,
+					}),
+			  )
+			: Promise.resolve(),
 	]).then(() => Promise.resolve());
 };
 
@@ -129,13 +131,13 @@ const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> =>
 		birthdate: moment(registrationForm.birthday).format('DD-MM-YYYY'),
 		birthplace: personForm.birthPlace,
 		need_hostel: contactsForm.needDormitory ? ServerBoolean.True : ServerBoolean.False,
-		sex: registrationForm.gender,
+		sex: Number(registrationForm.gender),
 		hight_first: educationForm.firstHighEducation ? ServerBoolean.True : ServerBoolean.False,
 		best_prev_edu: educationForm.prevEducation,
 		cheat_type: 0,
 	};
 
-	return dispatch(createPersonTransaction(payload)).then(() => Promise.resolve());
+	return dispatch(createPersonTransaction(payload));
 };
 const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
 	const state = getState();
@@ -176,17 +178,27 @@ const updateAddress = (): ThunkAction<Promise<void>, IRootState, void, Action> =
 		liveStreet,
 		isRegAddressEqualLive,
 	} = enrollContactsFormSelector(getState());
-	const regAddress = [regIndex, regRegion, regLocality, regStreet, regHome, regBlock, regFlat]
-		.filter(value => value)
-		.join(', ');
+	const adressDictionary = [
+		'индекс: ',
+		'область/регион: ',
+		'город/поселок: ',
+		'улица: ',
+		'дом: ',
+		'корпус: ',
+		'квартира: ',
+	];
 
-	const liveAddress = [liveIndex, liveRegion, liveLocality, liveStreet, liveHome, liveBlock, liveFlat]
-		.filter(value => value)
-		.join(', ');
+	const regAddress = [regIndex, regRegion, regLocality, regStreet, regHome, regBlock, regFlat].filter(value => value);
+
+	const liveAddress = [liveIndex, liveRegion, liveLocality, liveStreet, liveHome, liveBlock, liveFlat].filter(
+		value => value,
+	);
 
 	return Promise.all([
-		dispatch(updateAddressTransaction({ address: regAddress, type: 1 })),
-		!isRegAddressEqualLive ? dispatch(updateAddressTransaction({ address: liveAddress, type: 2 })) : Promise.resolve(),
+		dispatch(updateAddressTransaction({ address: regAddress.join(', '), type: 1 })),
+		!isRegAddressEqualLive
+			? dispatch(updateAddressTransaction({ address: liveAddress.join(', '), type: 2 }))
+			: Promise.resolve(),
 	]).then(() => Promise.resolve());
 };
 

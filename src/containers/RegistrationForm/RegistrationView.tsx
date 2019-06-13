@@ -91,6 +91,7 @@ const RegistrationView = (props: IProps) => {
 	return (
 		<PriemForm
 			loading={props.loading}
+			error={props.error}
 			loadingText="Проверка абитуриента"
 			renderForm={renderForm}
 			schema={EnrollRegFormSchema}

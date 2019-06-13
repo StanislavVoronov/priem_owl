@@ -7,11 +7,10 @@ import LoadingText from './LoadingText';
 
 interface IProps<Values> {
 	initialValues: Values;
-	schema?: any;
+	schema: any;
 	buttonText?: string;
 	onSubmit: (values: any) => void;
 	renderForm: (form: FormikProps<Values>) => React.ReactNode | React.ReactNode[];
-	validate: (values: any) => any;
 	error: IServerError | null;
 	loading: boolean;
 	loadingText: string;
@@ -23,7 +22,6 @@ class PriemForm<Values> extends React.PureComponent<IProps<Values>> {
 		loading: false,
 		loadingText: '',
 		onSubmit: noop,
-		validate: noop,
 	};
 
 	renderForm = (form: FormikProps<Values>) => {
@@ -50,7 +48,6 @@ class PriemForm<Values> extends React.PureComponent<IProps<Values>> {
 
 		return (
 			<Formik
-				validate={this.props.validate}
 				validationSchema={schema}
 				onSubmit={onSubmit}
 				validateOnBlur={false}

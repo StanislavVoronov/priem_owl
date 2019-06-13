@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, DocumentForm, Button, PriemForm } from '$components';
+import { TextInput, DocumentForm, Button, PriemForm, withStyles } from '$components';
 import {
 	IDocument,
 	validateDocument,
@@ -9,11 +9,9 @@ import {
 	prop,
 	IDocumentsForm,
 	defaultDocument,
-	isNil,
 } from '$common';
 import styles from './styles';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
-import withStyles from '@material-ui/core/styles/withStyles';
 import { FormikProps, FieldArray } from 'formik';
 
 interface IProps extends IStylable {
@@ -53,9 +51,9 @@ class DocumentsFormView extends React.PureComponent<IProps> {
 							: docTypeId === 2
 							? dictionaries[EDictionaryNameList.EducationDocTypes].values
 							: undefined;
-					console.log('form', form);
+
 					return (
-						<div style={{ marginTop: 24 }}>
+						<div style={{ marginTop: 24 }} key={`${index}-${docTypeId}-${docSubTypeId}-${item.docNumber}`}>
 							<DocumentForm
 								name={`documents[${index}].`}
 								document={item}

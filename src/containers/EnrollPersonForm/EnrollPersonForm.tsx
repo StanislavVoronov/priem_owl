@@ -60,7 +60,14 @@ const PersonForm = (props: IProps) => {
 							/>
 						)}
 						<TextInput name="birthPlace" label="Место рождения" required placeholder="Введите место рождения" />
-						<Checkbox name="isApplyPersonData" label="Согласие на обработку персональных данных" />
+						<Checkbox
+							name="isApplyPersonData"
+							label={
+								<a href="http://www.mgutm.ru/entrant_2012/files/zayavlenie_na_obrabotku_pd.pdf" target="_blank">
+									Согласие на обработку персональных данных
+								</a>
+							}
+						/>
 					</React.Fragment>
 				}
 			/>

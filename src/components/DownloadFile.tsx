@@ -20,6 +20,7 @@ class DownloadFile extends React.Component<IProps> {
 			const reader = new FileReader();
 
 			reader.onload = e => {
+				console.log('file', e);
 				form.setFieldValue(field.name, file);
 			};
 			reader.onabort = () => console.log('file reading was aborted');
