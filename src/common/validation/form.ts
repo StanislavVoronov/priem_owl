@@ -18,11 +18,11 @@ export const validateDocument = (document: IDocument): boolean => {
 
 	return true;
 };
-export const validateRequireTextField = (value: string) => {
+export const validateRequireTextField = (value: string = '') => {
 	return value.length === 0 ? 'Поле не должно быть пустым' : void 0;
 };
 
-export const validateRusTextField = (value: string) => {
+export const validateRusTextField = (value: string = '') => {
 	return value.length > 0 && !RUS_ALPHABET.test(value) ? 'Поле может содержать только русские буквы' : void 0;
 };
 

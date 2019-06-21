@@ -28,7 +28,7 @@ export const styles = {
 		display: 'flex',
 		paddingRight: 40,
 		flexDirection: 'column' as any,
-		width: '50%',
+		width: '40%',
 	},
 	documentContainer: {
 		display: 'flex',

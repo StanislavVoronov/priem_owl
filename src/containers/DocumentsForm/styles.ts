@@ -19,12 +19,10 @@ const styles = {
 	},
 	deleteDocButtonContainer: {
 		paddingTop: 20,
-		paddingBottom: 20,
-		borderBottom: '2px solid #3f51b5',
 	},
 	deleteDocButton: {
 		color: 'white',
-		backgroundColor: '#cf2e2e',
+		backgroundColor: 'red',
 		'&:hover': {
 			backgroundColor: '#902020',
 		},

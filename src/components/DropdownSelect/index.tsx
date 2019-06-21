@@ -29,7 +29,9 @@ class DropdownSelect extends React.PureComponent<ISelectProps> {
 
 	onChange = (form: FormikProps<ISelectItem>) => (value: any) => {
 		form.setFieldValue(this.props.name, value);
-		form.setFieldError(this.props.name, '');
+		if (form.errors[this.props.name]) {
+			form.setFieldError(this.props.name, '');
+		}
 		this.props.onChange(value);
 	};
 	getOptionLabel = (item: ISelectItem) => item.name;

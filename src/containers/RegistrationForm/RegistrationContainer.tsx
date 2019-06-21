@@ -46,7 +46,13 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	return {
 		dictionaries,
 		data,
-		error: result ? { code: '', message: 'Абитуриент уже зарегистрирован в системе' } : error,
+		error: result
+			? {
+					code: '',
+					message:
+						'Абитуриент уже зарегистрирован в системе. Просьба, обратиться в приемную комиссию только для подачи заявлений на поступление',
+			  }
+			: error,
 		loading,
 		personExists: result,
 	};

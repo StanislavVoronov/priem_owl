@@ -95,10 +95,10 @@
 // };
 //
 // export const sendVerificationCode = (
-// 	email: string,
+// 	Email: string,
 // 	phoneNumber: string,
 // ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
-// 	const payload = { email, not_use_phone: 1, mobile_phone: phoneNumber };
+// 	const payload = { Email, not_use_phone: 1, mobile_phone: phoneNumber };
 //
 // 	dispatch(sendVerificationCodeFetching());
 //
@@ -134,7 +134,7 @@
 // 	const payload = {
 // 		email_code: confirmCode,
 // 		phone_code: '000000',
-// 		email: data.contactsData.email,
+// 		Email: data.contactsData.Email,
 // 		lname: data.registrationForm.data.lastName,
 // 		fname: data.registrationForm.data.firstName,
 // 		mname: data.registrationForm.data.middleName,

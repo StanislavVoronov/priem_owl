@@ -1,7 +1,7 @@
-import { createLoginActions, createTransactionReducer } from '$common';
+import { createPersonActions, createTransactionReducer } from '$common';
 import { ITransactionState } from '$store';
 
-const createLoginReducer = createTransactionReducer(createLoginActions);
+const createPersonReducer = createTransactionReducer(createPersonActions);
 
 export const createPersonSelector = (state: ITransactionState) => {
 	const { loading, error, result } = state.createPerson;
@@ -10,4 +10,4 @@ export const createPersonSelector = (state: ITransactionState) => {
 	return { loading, error, result: npId };
 };
 
-export default createLoginReducer;
+export default createPersonReducer;

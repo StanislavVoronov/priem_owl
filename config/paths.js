@@ -22,6 +22,7 @@ const moduleFileExtensions = [
 ];
 
 const envPublicUrl = process.env.PUBLIC_URL;
+const devEnvPublicUrl = process.env.DEV_PUBLIC_URL;
 
 function ensureSlash(inputPath, needsSlash) {
 	const hasSlash = inputPath.endsWith('/');
@@ -43,6 +44,12 @@ function getServedPath(appPackageJson) {
 	return ensureSlash(servedUrl, true);
 }
 
+function getDevServedPath(appPackageJson) {
+	const publicUrl = devEnvPublicUrl;
+	const servedUrl = devEnvPublicUrl + "/";
+
+	return ensureSlash(servedUrl, true);
+}
 const resolveModule = (resolveFn, filePath) => {
 	const extension = moduleFileExtensions.find((extension) =>
 		fs.existsSync(resolveFn(`${filePath}.${extension}`)),
@@ -71,6 +78,8 @@ module.exports = {
 	appNodeModules: resolveApp('node_modules'),
 	publicUrl: getPublicUrl(resolveApp('package.json')),
 	servedPath: getServedPath(resolveApp('package.json')),
+	devServedPath: getDevServedPath(resolveApp('package.json')),
+
 };
 
 

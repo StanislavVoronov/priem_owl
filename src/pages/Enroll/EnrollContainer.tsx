@@ -33,8 +33,11 @@ class EnrollContainer extends React.Component<IProps, IState> {
 			activeStep: step,
 		});
 	};
-	onCompleteRegForm = () => {
+	onCompleteCheckPersonForm = () => {
 		this.setState({ dictionaries: FULL_DICTIONARY_LIST, activeStep: this.state.activeStep + 1 });
+	};
+	onCompleteRegistration = () => {
+		this.setState({ passedStep: -1, activeStep: this.state.activeStep + 1 });
 	};
 	handleNext = () => {
 		this.setState({ activeStep: this.state.activeStep + 1, passedStep: this.state.passedStep + 1 });
@@ -51,7 +54,8 @@ class EnrollContainer extends React.Component<IProps, IState> {
 					steps={NEW_PERSON_STEPS}
 					loading={loading}
 					handleNext={this.handleNext}
-					onCompleteRegForm={this.onCompleteRegForm}
+					onCompleteCheckPersonForm={this.onCompleteCheckPersonForm}
+					onCompleteRegistration={this.onCompleteRegistration}
 					activeStep={this.state.activeStep}
 					handleStep={this.handleStep}
 					passedStep={this.state.passedStep}

@@ -1,28 +1,38 @@
 import {
 	checkLoginTransaction,
 	createLoginTransaction,
+	createPersonTransaction,
+	createVerificationCodeTransaction,
+	enrollAccountVerificationFormSelector,
+	enrollContactsFormSelector,
+	enrollDocumentsFormSelector,
+	enrollEducationFormSelector,
+	enrollPersonFormSelector,
+	enrollRegistrationSelector,
+	enrollSubmitRegFormAction,
+	findPersonTransaction,
 	fromTransaction,
 	IRootState,
-	enrollRegistrationSelector,
-	findPersonTransaction,
-	createVerificationCodeTransaction,
-	enrollContactsFormSelector,
-	enrollPersonFormSelector,
-	enrollEducationFormSelector,
-	enrollAccountVerificationFormSelector,
+	selectVerificationMethod,
 	uploadDocumentTransaction,
-	createPersonTransaction,
-	enrollDocumentsFormSelector,
-	enrollSubmitRegFormAction,
 } from '$store';
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
-import { createLoginActions, cyrillToLatin, generatePassword, IEnrollRegForm, moment, ServerBoolean } from '$common';
+import {
+	createLoginActions,
+	cyrillToLatin,
+	generatePassword,
+	IEnrollRegForm,
+	moment,
+	ServerBoolean,
+	VerificationMethod,
+} from '$common';
 import { updatePhoneTransaction } from '../../store/transactions/updatePhone';
 import { updateAddressTransaction } from '../../store/transactions/updateAddress';
+
 export const onCompleteRegistrationForm = (
 	form: IEnrollRegForm,
-): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
+): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	dispatch(enrollSubmitRegFormAction(form));
 
 	return dispatch(enrollCreateNewLogin()).then(() => {
@@ -83,34 +93,39 @@ export const findPerson = (): ThunkAction<Promise<void>, IRootState, void, Actio
 	});
 };
 
-export const createVerificationCode = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
+export const sendVerificationCodeToPhone = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
 	dispatch,
 	getState,
 ) => {
 	const data = enrollContactsFormSelector(getState());
 
-	return dispatch(createVerificationCodeTransaction(data.email, data.mobPhone, 1));
+	dispatch(selectVerificationMethod(VerificationMethod.Phone));
+
+	return dispatch(createVerificationCodeTransaction(data.email, data.mobPhone, VerificationMethod.Phone));
+};
+
+export const sendVerificationCodeToEmail = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
+	dispatch,
+	getState,
+) => {
+	const data = enrollContactsFormSelector(getState());
+
+	dispatch(selectVerificationMethod(VerificationMethod.Email));
+
+	return dispatch(createVerificationCodeTransaction(data.email, data.mobPhone, VerificationMethod.Email));
 };
 
 export const updatePhone = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
 	const data = enrollContactsFormSelector(getState());
 
-	return Promise.all([
-		dispatch(
-			updatePhoneTransaction({
-				phone: data.mobPhone || '',
-				type: 2,
-			}),
-		),
-		data.homePhone
-			? dispatch(
-					updatePhoneTransaction({
-						phone: data.homePhone,
-						type: 1,
-					}),
-			  )
-			: Promise.resolve(),
-	]).then(() => Promise.resolve());
+	return data.homePhone
+		? dispatch(
+				updatePhoneTransaction({
+					phone: data.homePhone,
+					type: 1,
+				}),
+		  )
+		: Promise.resolve();
 };
 
 const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
@@ -121,10 +136,19 @@ const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> =>
 	const educationForm = enrollEducationFormSelector(state);
 	const accountVerificationForm = enrollAccountVerificationFormSelector(state);
 
+	const emailCode =
+		accountVerificationForm.verificationMethod === VerificationMethod.Email
+			? accountVerificationForm.verificationCode
+			: '000000';
+
+	const phoneCode =
+		accountVerificationForm.verificationMethod === VerificationMethod.Phone
+			? accountVerificationForm.verificationCode
+			: '000000';
+
 	const payload = {
-		email_code: accountVerificationForm.verificationCode,
-		phone_code: '000000',
-		email: contactsForm.email,
+		email_code: emailCode,
+		phone_code: phoneCode,
 		lname: registrationForm.lastName,
 		fname: registrationForm.firstName,
 		mname: registrationForm.middleName,

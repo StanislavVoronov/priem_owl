@@ -8,12 +8,10 @@ interface IProps {
 class LoadingText extends React.Component<IProps> {
 	render() {
 		return (
-			<React.Fragment>
-				<div style={styles.loading}>
-					<CircularProgress />
-					<span style={styles.text}>{this.props.children}</span>
-				</div>
-			</React.Fragment>
+			<div style={styles.loading}>
+				<CircularProgress />
+				<span style={styles.text}>{this.props.children}</span>
+			</div>
 		);
 	}
 }

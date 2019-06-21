@@ -9,6 +9,7 @@
     "update": "git pull origin",
     "lint": "tslint src/**/*.{tsx,ts} --fix",
     "build": "node scripts/build.js",
+    "devBuild": "node scripts/devBuild.js",
     "delivery": "sh ./scripts/delivery.sh",
     "watch": "tsc --watch",
     "prepush": "tsc && tslint --project ./tsconfig.json"
@@ -19,8 +20,9 @@
   },
   "dependencies": {
     "@babel/core": "7.2.2",
-    "@material-ui/core": "^3.8.3",
-    "@material-ui/lab": "^3.0.0-alpha.30",
+    "@material-ui/core": "latest",
+    "@material-ui/lab": "latest",
+    "@material-ui/styles": "^4.1.1",
     "@mgutm-fcu/auth": "^0.21.26",
     "@mgutm-fcu/dictionary": "^0.1.42",
     "@svgr/webpack": "4.1.0",

@@ -2,7 +2,16 @@ import * as React from 'react';
 
 import styles from './styles.module.css';
 import Logo from '$assets/mgutm.png';
-import { CardMedia, Step, StepButton, StepContent, Stepper, withStyles, Title, LoadingText } from '$components';
+import { CardMedia, Step, StepButton, StepContent, Stepper, Title, LoadingText } from '$components';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import ImportContactsIcon from '@material-ui/icons/ImportContacts';
+import CategoryIcon from '@material-ui/icons/Category';
+import DateRangeIcon from '@material-ui/icons/DateRange';
+import DescriptionIcon from '@material-ui/icons/Description';
+import SchoolIcon from '@material-ui/icons/School';
+import GroupIcon from '@material-ui/icons/Group';
+import classes from './styles.module.css';
 import {
 	RegistrationForm,
 	EnrollPersonForm,
@@ -12,38 +21,26 @@ import {
 	AccountVerificationForm,
 } from '$containers';
 import { noop } from '$common';
-const localStyles = {
-	logo: { height: window.innerHeight },
-	stepper: {
-		marginBottom: 50,
-		marginRight: 50,
-		marginLeft: 50,
-		backgroundColor: '#fdfdff',
-		borderRadius: 10,
-		boxShadow: '0px 0px 0px 1px rgba(0,0,0,0.3)',
-	},
-};
 
 interface IProps {
 	loading: boolean;
 	handleNext: () => void;
 	handleStep: (index: number) => () => void;
 	activeStep: number;
-	classes: any;
 	passedStep: number;
 	steps: string[];
-	onCompleteRegForm: () => void;
+	onCompleteCheckPersonForm: () => void;
+	onCompleteRegistration: () => void;
 }
 export class EnrollView extends React.PureComponent<IProps> {
 	static defaultProps = {
-		classes: {},
 		passedStep: 0,
 	};
 
 	renderForm = (step: number) => {
 		switch (step) {
 			case 0: {
-				return <RegistrationForm onComplete={this.props.onCompleteRegForm} />;
+				return <RegistrationForm onComplete={this.props.onCompleteCheckPersonForm} />;
 			}
 			case 1: {
 				return <EnrollPersonForm onComplete={this.props.handleNext} />;
@@ -58,29 +55,117 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return <DocumentsForm onComplete={this.props.handleNext} />;
 			}
 			case 5: {
-				return <AccountVerificationForm onComplete={this.props.handleNext} />;
+				return <AccountVerificationForm onComplete={this.props.onCompleteRegistration} />;
 			}
 			default: {
 				return null;
 			}
 		}
 	};
+	onNavIconClick = (href: string) => () => {
+		window.open(href, '_blank');
+	};
+	onLogoClick = () => {
+		window.open('http://mgutm.ru', '_blank');
+	};
 	render() {
 		return (
 			<React.Fragment>
-				<div className={styles.header}>
-					<img className={styles.logo} src={Logo} />
-					<h2 className={styles.pkTitle}>Приемная кампания</h2>
+				<div>
+					<img className={classes.logo} onClick={this.onLogoClick} src={Logo} />
+
+					<BottomNavigation showLabels className={classes.nav}>
+						<BottomNavigationAction
+							className={classes.navAction}
+							label={
+								<a
+									style={{ fontSize: '1rem' }}
+									href="http://mgutm.ru/entrant_2012/aktualnii_dokumenti.php"
+									target="_blank">
+									Правила приема
+								</a>
+							}
+							icon={
+								<ImportContactsIcon
+									onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/aktualnii_dokumenti.php')}
+									fontSize="large"
+									color="primary"
+								/>
+							}
+						/>
+						<BottomNavigationAction
+							className={classes.navAction}
+							label={
+								<a style={{ fontSize: '1rem' }} href="http://mgutm.ru/entrant/doc.php" target="_blank">
+									Необходимые документы
+								</a>
+							}
+							icon={
+								<DescriptionIcon
+									fontSize="large"
+									color="primary"
+									onClick={this.onNavIconClick('http://mgutm.ru/entrant/doc.php')}
+								/>
+							}
+						/>
+						<BottomNavigationAction
+							className={classes.navAction}
+							label={
+								<a
+									style={{ fontSize: '1rem' }}
+									onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/naprovleniya_podgotovki.php')}
+									href="http://mgutm.ru/entrant_2012/naprovleniya_podgotovki.php"
+									target="_blank">
+									Направления подготовки
+								</a>
+							}
+							icon={<CategoryIcon fontSize="large" color="primary" />}
+						/>
+						<BottomNavigationAction
+							className={classes.navAction}
+							label={
+								<a
+									style={{ fontSize: '1rem' }}
+									onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/naprovleniya_podgotovki.php')}
+									href="http://mgutm.ru/entrant_2012/naprovleniya_podgotovki.php"
+									target="_blank">
+									Календарь приема
+								</a>
+							}
+							icon={<DateRangeIcon fontSize="large" color="primary" />}
+						/>
+						<BottomNavigationAction
+							className={classes.navAction}
+							label={
+								<a style={{ fontSize: '1rem' }} href="http://mgutm.ru/exams/" target="_blank">
+									Вступительные испытания
+								</a>
+							}
+							onClick={this.onNavIconClick('http://mgutm.ru/exams/')}
+							icon={<SchoolIcon fontSize="large" color="primary" />}
+						/>
+						<BottomNavigationAction
+							className={classes.navAction}
+							label={
+								<a style={{ fontSize: '1rem' }} href="http://mgutm.ru/entrant_2012/plan.php" target="_blank">
+									План приема
+								</a>
+							}
+							onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/plan.php')}
+							icon={<GroupIcon fontSize="large" color="primary" />}
+						/>
+					</BottomNavigation>
 				</div>
 				<h2 className={styles.namePageTitle}>Электронная подача документов для поступления в Университет</h2>
-				<CardMedia className={this.props.classes.logo}>
-					<Stepper className={this.props.classes.stepper} activeStep={this.props.activeStep} orientation={'vertical'}>
+				<CardMedia>
+					<Stepper className={classes.stepper} activeStep={this.props.activeStep} orientation={'vertical'}>
 						{!this.props.loading ? (
 							this.props.steps.map((label, index) => (
-								<Step key={label} onClick={index < this.props.passedStep ? this.props.handleStep(index) : noop}>
-									<StepButton
-										style={index < this.props.passedStep ? { cursor: 'pointer' } : { cursor: 'default' }}
-										disabled={index < this.props.passedStep}>
+								<Step
+									style={index <= this.props.passedStep ? { cursor: 'pointer' } : { cursor: 'default' }}
+									key={label}
+									onClick={index <= this.props.passedStep ? this.props.handleStep(index) : noop}>
+									<StepButton disabled={index <= this.props.passedStep}>
 										<span className={index === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
 									</StepButton>
 									<StepContent>{this.renderForm(index)}</StepContent>
@@ -100,4 +185,4 @@ export class EnrollView extends React.PureComponent<IProps> {
 	}
 }
 
-export default withStyles(localStyles)(EnrollView);
+export default EnrollView;

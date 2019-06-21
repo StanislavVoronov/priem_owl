@@ -11,10 +11,17 @@ import WebPhoto from '../components/WebPhoto';
 import { CardMedia, withStyles } from '@material-ui/core';
 import DocumentForm from './DocumentForm';
 import LoadingText from './LoadingText';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import Title from './Typography/Title';
 import PriemForm from './PriemForm';
 export * from './Buttons';
 export * from './Inputs';
+
 export {
 	Stepper,
 	Step,
@@ -34,4 +41,9 @@ export {
 	Title,
 	LoadingText,
 	PriemForm,
+	ExpandMoreIcon,
+	Typography,
+	ExpansionPanelDetails,
+	ExpansionPanelSummary,
+	ExpansionPanel,
 };

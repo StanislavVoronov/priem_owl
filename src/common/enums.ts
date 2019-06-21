@@ -23,3 +23,9 @@ export enum Gender {
 	Female = 2,
 	None = 0,
 }
+
+export enum VerificationMethod {
+	None,
+	Email,
+	Phone,
+}
