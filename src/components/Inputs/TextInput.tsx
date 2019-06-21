@@ -1,15 +1,11 @@
-import TextField, { BaseTextFieldProps } from '@material-ui/core/TextField';
 import React from 'react';
-import { FormLabel, withStyles } from '@material-ui/core';
-import { noop } from 'lodash';
-import styles from './styles';
+import { InputAdornment, InputLabel, FormControl, TextField } from '@material-ui/core';
 import { Field, FieldProps } from 'formik';
-
-import { has, propEq, get } from '$common';
+import classes from './styles.module.css';
+import { has, get, noop } from '$common';
 
 export interface IInputProps {
 	disabled: boolean;
-	classes: any;
 	type: string;
 	isTopLabel: boolean;
 	label?: string;
@@ -59,34 +55,33 @@ class TextInput extends React.PureComponent<IInputProps> {
 		const error = touched && get(form.errors, field.name);
 
 		return (
-			<>
-				{this.props.prefix && <FormLabel>{this.props.prefix}</FormLabel>}
+			<FormControl style={{ marginTop: 10 }}>
+				<InputLabel
+					classes={{ asterisk: classes.asterisk }}
+					shrink
+					required={this.props.required}
+					htmlFor={this.props.name}>
+					{this.props.label}
+				</InputLabel>
 				<TextField
 					margin="normal"
+					name={this.props.name}
+					id={this.props.name}
 					disabled={this.props.disabled}
 					value={field.value}
 					error={!!error}
 					helperText={error || this.props.helperText}
 					required={this.props.required}
 					multiline={this.props.multiline}
-					label={this.props.label}
 					placeholder={this.props.placeholder}
 					type={this.props.type}
 					onBlur={this.onBlur(props)}
 					onChange={this.onChange(props)}
 					inputProps={{
-						name: this.props.name,
-						type: this.props.type,
-						maxLength: this.props.maxLength,
-						minLength: this.props.minLength,
-					}}
-					name={this.props.name}
-					InputLabelProps={{
-						FormLabelClasses: { asterisk: this.props.classes.asterisk },
-						shrink: this.props.isTopLabel,
+						startAdornment: this.props.prefix && <InputAdornment position="start">{this.props.prefix}</InputAdornment>,
 					}}
 				/>
-			</>
+			</FormControl>
 		);
 	};
 	render() {
@@ -94,4 +89,4 @@ class TextInput extends React.PureComponent<IInputProps> {
 	}
 }
 
-export default withStyles(styles)(TextInput);
+export default TextInput;

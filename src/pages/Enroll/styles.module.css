@@ -1,38 +1,15 @@
-.header {
-	top: 0;
-	width: 100%;
-	position: fixed;
-	height: 80px;
-	background-color: #e8f0ff;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-wrap: wrap;
-	padding-left: 20px;
-	padding-right: 20px;
-}
-
 .logo {
 	padding-top: 8px;
 	padding-bottom: 8px;
 	height: 64px;
-	max-height: 100%;
 	position: absolute;
 	top: 0;
 	left: 14px;
-}
-
-.pkTitle {
-	text-align: center;
-	font-size: 1.3em;
-	font-family: 'Trebuchet', serif;
-	color: #142a4f;
+	cursor: pointer;
 }
 
 .namePageTitle {
-	color: #3f51b5;
 	font-family: 'Trebuchet', serif;
-	margin-top: 100px;
 	padding-left: 20px;
 	padding-right: 20px;
 	font-size: 1.2rem;
@@ -54,4 +31,22 @@
 	margin-bottom: 4px;
 	display: flex;
 	justify-content: center;
+}
+
+.nav {
+	display: grid;
+	height: 100%;
+	padding: 0 60px;
+	align-items: center;
+	grid-gap: 20px;
+	grid-template-columns: repeat(auto-fit, minmax(100px, 125px));
+	background-color: #e8f0ff;
+}
+
+.stepper {
+	margin: 0 50px 50px 50px;
+	min-height: 250px;
+	background-color: #fdfdff;
+	border-radius: 10px;
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
 }

@@ -1,4 +1,4 @@
-import { IDocument, IGovernmentSelectItem, IInvalidData, ISelectItem } from '$common';
+import { IDocument, IGovernmentSelectItem, IInvalidData, ISelectItem, VerificationMethod } from '$common';
 import { IPerson } from '$common';
 
 export interface IEnrollContactsForm extends IDocument {
@@ -58,6 +58,7 @@ export interface IDocumentsForm {
 }
 
 export interface IAccountVerificationForm {
+	verificationMethod: VerificationMethod;
 	verificationCode: string;
 }
 export type EnrollForms = IEnrollContactsForm & IEnrollEducationForm & IEnrollPersonForm & IDocument;

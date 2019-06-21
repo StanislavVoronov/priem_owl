@@ -1,4 +1,4 @@
-import { createVerificationCodeActions } from '$common';
+import { createVerificationCodeActions, VerificationMethod } from '$common';
 import { ThunkAction } from 'redux-thunk';
 import { IRootState } from '$store';
 import { Action } from 'redux';
@@ -6,7 +6,8 @@ import { EnrollRestApi, PriemEnroll } from '$services';
 
 export interface ICreateVerificationCodeRequest {
 	email: string;
-	not_use_phone: number;
+	not_use_phone?: number;
+	not_use_email?: number;
 	mobile_phone: string;
 }
 
@@ -18,15 +19,25 @@ export interface ICreateVerificationCodeResponse {
 export const createVerificationCodeTransaction = (
 	email: string,
 	mobilePhone: string,
-	notUsePhone: number,
+	typeTransport?: VerificationMethod,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	dispatch(createVerificationCodeActions.request());
 
-	return PriemEnroll.post<ICreateVerificationCodeRequest, ICreateVerificationCodeResponse>(EnrollRestApi.VerNewNp, {
+	const payload: ICreateVerificationCodeRequest = {
 		email,
-		mobile_phone: mobilePhone,
-		not_use_phone: notUsePhone,
-	})
+		mobile_phone: mobilePhone.replace(/[- )(]/g, ''),
+	};
+
+	if (VerificationMethod.Email === typeTransport) {
+		payload.not_use_phone = 1;
+	} else {
+		payload.not_use_email = 1;
+	}
+
+	return PriemEnroll.post<ICreateVerificationCodeRequest, ICreateVerificationCodeResponse>(
+		EnrollRestApi.VerNewNp,
+		payload,
+	)
 		.then(response => {
 			dispatch(createVerificationCodeActions.success([response]));
 

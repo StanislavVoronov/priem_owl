@@ -92,7 +92,6 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 								name={`${name}docNumber`}
 								placeholder="Введите номер документа"
 								label="Номер"
-								type="number"
 							/>
 						) : null}
 

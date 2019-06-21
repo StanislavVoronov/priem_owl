@@ -8,7 +8,6 @@ import { ReactText } from 'react';
 interface ICreatePersonDataRequest {
 	email_code: ReactText;
 	phone_code: ReactText;
-	email: ReactText;
 	lname: ReactText;
 	fname: ReactText;
 	mname: ReactText;

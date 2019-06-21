@@ -34,10 +34,12 @@ const cssModuleRegex = /\.module\.css$/;
 module.exports = function(webpackEnv) {
 	const isEnvDevelopment = webpackEnv === 'development';
 	const isEnvProduction = webpackEnv === 'production';
-	const publicPath = isEnvProduction ? paths.servedPath : isEnvDevelopment && '/';
+	const publicPath = isEnvDevelopment ? paths.devServedPath : paths.servedPath;
 	const shouldUseRelativeAssetPaths = publicPath === './';
-	const publicUrl = isEnvProduction ? publicPath.slice(0, -1) : isEnvDevelopment && '';
+	const publicUrl = publicPath.slice(0, -1);
 	const env = getClientEnvironment(publicUrl);
+	console.log("mode", webpackEnv)
+	console.log("publicPath", publicPath)
 
 	const srcPath = subdir => {
 		return path.join(__dirname, '../src', subdir);

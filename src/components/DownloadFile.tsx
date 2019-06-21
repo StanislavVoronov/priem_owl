@@ -10,6 +10,7 @@ interface IProps {
 	name: string;
 	title: string;
 }
+const FILE_FORMATS = ['image/jpeg', 'image/jpg'];
 class DownloadFile extends React.Component<IProps> {
 	static defaultProps = {
 		name: '',
@@ -18,9 +19,21 @@ class DownloadFile extends React.Component<IProps> {
 	onDownload = (form: FormikProps<File>, field: any) => (acceptedFiles: File[]) => {
 		acceptedFiles.forEach(file => {
 			const reader = new FileReader();
+			const size = file.size / 1024 / 1024;
+			if (!FILE_FORMATS.includes(file.type)) {
+				const message = `Формат файла не поддерживаете. Добавьте файл формата: jpg или jpeg`;
+				alert(message);
 
-			reader.onload = e => {
-				console.log('file', e);
+				return;
+			}
+			console.log('size', size);
+			if (size >= 5) {
+				alert('Файл не должен превышать размер 5 Мб');
+
+				return;
+			}
+
+			reader.onload = () => {
 				form.setFieldValue(field.name, file);
 			};
 			reader.onabort = () => console.log('file reading was aborted');
@@ -40,6 +53,8 @@ class DownloadFile extends React.Component<IProps> {
 			<Dropzone onDrop={this.onDownload(form, field)}>
 				{props => (
 					<div {...props.getRootProps()} style={styles.fileContainer}>
+						<input {...props.getInputProps()} name={this.props.name} />
+
 						{this.props.title && (
 							<div style={{ display: 'flex', flexDirection: 'row' }}>
 								<FormLabel style={{ fontSize: '.875rem', marginRight: 2 }}>{this.props.title}</FormLabel>
@@ -50,9 +65,10 @@ class DownloadFile extends React.Component<IProps> {
 							<ImageEditor title={field.value.name} file={field.value} removeImage={this.onDelete(form)} />
 						) : (
 							<React.Fragment>
-								<input {...props.getInputProps()} name={this.props.name} />
 								<div style={styles.dropZone}>
 									<span>Нажмите, чтобы добавить файл или перетащите файл в отмеченную область</span>
+									<span>(размер: &#60; 5 Мб; формат: jpg, jpeg)</span>
+
 									{error && <H2 color="red">{error}</H2>}
 								</div>
 							</React.Fragment>

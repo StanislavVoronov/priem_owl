@@ -1,7 +1,7 @@
 import { Form, Formik, FormikProps } from 'formik';
 import React from 'react';
 import SubmitButton from './Buttons/SubmitButton';
-import { IServerError, noop } from '$common';
+import { IServerError, noop, isEmpty } from '$common';
 import { H2 } from '$components';
 import LoadingText from './LoadingText';
 
@@ -14,6 +14,7 @@ interface IProps<Values> {
 	error: IServerError | null;
 	loading: boolean;
 	loadingText: string;
+	disabled: (form: FormikProps<Values>) => boolean;
 }
 
 class PriemForm<Values> extends React.PureComponent<IProps<Values>> {
@@ -22,23 +23,31 @@ class PriemForm<Values> extends React.PureComponent<IProps<Values>> {
 		loading: false,
 		loadingText: '',
 		onSubmit: noop,
+		disabled: () => false,
 	};
 
 	renderForm = (form: FormikProps<Values>) => {
 		const { buttonText, error, renderForm, loading, loadingText } = this.props;
+		if (loading) {
+			return <LoadingText>{loadingText}</LoadingText>;
+		}
+		console.log('priemForm', form);
 
 		return (
 			<Form noValidate={true} className="flexColumn">
 				{renderForm(form)}
 				{error && <H2 color="red">{error.message}</H2>}
-				{loading ? (
-					<LoadingText>{loadingText}</LoadingText>
-				) : (
-					buttonText && (
-						<div style={{ marginTop: 24 }}>
-							<SubmitButton>{buttonText}</SubmitButton>
-						</div>
-					)
+				{Object.values(form.errors).some(item => {
+					if (Array.isArray(item)) {
+						return Object.values(item).some(value => !!value);
+					}
+
+					return item.length > 0;
+				}) && <H2 color="red">Заполните обязательные поля формы</H2>}
+				{buttonText && (
+					<div style={{ marginTop: 32 }}>
+						<SubmitButton disabled={this.props.disabled(form)}>{buttonText}</SubmitButton>
+					</div>
 				)}
 			</Form>
 		);

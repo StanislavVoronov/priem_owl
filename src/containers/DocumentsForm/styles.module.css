@@ -1,0 +1,28 @@
+.list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.list li {
+	padding: 8px 0;
+	font-size: 1.1rem;
+}
+.list li.tick {
+    color: green;
+}
+.list li.tick:before {
+	content: '\2713';
+	color: darkgreen;
+}
+
+.list li.cross:before {
+	content: '\2717';
+	color: crimson;
+}
+
+.list li.cross {
+	color: red;
+}
+.expansionPanel {
+	margin-top: 24px;
+}

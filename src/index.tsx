@@ -4,10 +4,13 @@ import './global.css';
 import { Provider } from 'react-redux';
 import Enroll from './pages/Enroll';
 import store from '$store';
+import { StylesProvider } from '@material-ui/styles';
 
 ReactDOM.render(
 	<Provider store={store}>
-		<Enroll />
+		<StylesProvider injectFirst>
+			<Enroll />
+		</StylesProvider>
 	</Provider>,
 	document.getElementById('root') as HTMLElement,
 );

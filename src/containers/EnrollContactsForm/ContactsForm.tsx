@@ -7,6 +7,7 @@ import {
 	DocumentFormSchema,
 	EnrollPersonFormSchema,
 	IStylable,
+	EnrollContactsFormSchema,
 } from '$common';
 
 import { FieldProps, FormikProps } from 'formik';
@@ -22,7 +23,6 @@ import {
 	IRootState,
 	fromTransaction,
 } from '$store';
-import { createVerificationCode } from '$operations';
 
 interface IStateToProps {
 	data: IEnrollContactsForm;
@@ -89,7 +89,12 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 					extraFields={
 						<React.Fragment>
 							<TextInput label={'Индекс'} type="number" placeholder={'Введите индекс'} required name="regIndex" />
-							<TextInput label={'Область'} placeholder={'Введите область'} required name="regRegion" />
+							<TextInput
+								label={'Субъект РФ'}
+								helperText={'республика, область, край'}
+								placeholder={'Введите адрес'}
+								name="regRegion"
+							/>
 							<TextInput
 								label={'Населенный пункт'}
 								placeholder={'Введите населенный пункт'}
@@ -114,22 +119,22 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 							label={'Индекс'}
 							placeholder={'Введите индекс'}
 							name="liveIndex"
-							required={isRegAddressEqualLive}
+							required={!isRegAddressEqualLive}
 						/>
 						<TextInput
-							label="Область"
-							placeholder="Введите область"
+							label={'Субъект РФ'}
+							helperText={'республика, область, край'}
+							placeholder={'Введите адрес'}
 							name="liveRegion"
-							required={isRegAddressEqualLive}
 						/>
 						<TextInput
 							label="Населенный пункт"
 							placeholder="Введите населенный пункт"
 							name="liveLocality"
-							required={isRegAddressEqualLive}
+							required={!isRegAddressEqualLive}
 						/>
-						<TextInput label="Улица" required={isRegAddressEqualLive} name="liveStreet" placeholder="Введите улицу" />
-						<TextInput label="Дом" name="liveHome" placeholder="Введите дом" required={isRegAddressEqualLive} />
+						<TextInput label="Улица" required={!isRegAddressEqualLive} name="liveStreet" placeholder="Введите улицу" />
+						<TextInput label="Дом" name="liveHome" placeholder="Введите дом" required={!isRegAddressEqualLive} />
 						<TextInput name="liveBlock" label="Корпус" />
 						<TextInput name="liveFlat" label="Квартира" />
 					</div>
@@ -140,12 +145,12 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 					helperText="Необходимо для подтверждения учетной записи"
 					required
 				/>
-				<DropdownSelect
-					name="countyPhone"
-					isCleanable={false}
-					title="Страна оператора сотовой связи"
-					options={governmentDictionary ? governmentDictionary.values : []}
-				/>
+				{/*<DropdownSelect*/}
+				{/*name="countyPhone"*/}
+				{/*isCleanable={false}*/}
+				{/*title="Страна оператора сотовой связи"*/}
+				{/*options={governmentDictionary ? governmentDictionary.values : []}*/}
+				{/*/>*/}
 				<TextInput name="mobPhone" label="Мобильный телефон" required={true} />
 				<TextInput name="homePhone" label="Домашний телефон" />
 			</form>
@@ -157,7 +162,7 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 				buttonText="Далее"
 				loading={this.props.loading}
 				loadingText="Проверка данных"
-				schema={{ ...DocumentFormSchema, ...EnrollPersonFormSchema }}
+				schema={{ ...DocumentFormSchema, ...EnrollContactsFormSchema }}
 				error={this.props.error}
 				renderForm={this.renderForm}
 				onSubmit={this.props.onSubmit}
@@ -178,7 +183,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IRootState> = s
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => ({
 	onSubmit: (values: IEnrollContactsForm) => {
 		dispatch(submitEnrollContactsForm(values));
-		dispatch<any>(createVerificationCode()).then(ownProps.onComplete);
+		ownProps.onComplete();
 	},
 });
 

@@ -2,7 +2,7 @@ export enum TRANSACTION_NAMES {
 	CheckLogin = 'enrollCheckLogin',
 	CreateLogin = 'createLogin',
 	FindPerson = 'findPerson',
-	CreatePerson = 'CreatePerson',
+	CreatePerson = 'createPerson',
 	UploadDocument = 'UploadDocument',
 	UploadDocumentsById = 'UploadDocumentsById',
 	CreateVerificationCode = 'CreateVerificationCode',
