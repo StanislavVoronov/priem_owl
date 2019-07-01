@@ -6,6 +6,7 @@ import { connect, MapStateToProps } from 'react-redux';
 import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
 
 import { IRootState, fromTransaction, dictionaryStateSelector } from '$store';
+import { fetchPriemFilials } from '$operations';
 
 interface IState {
 	activeStep: number;
@@ -17,14 +18,22 @@ interface IStateToProps {
 	dictionaries: DictionaryState;
 	personId: number;
 }
-type IProps = IStateToProps;
+
+interface IDispatchToProps {
+	fetchPriemFilials: () => void;
+}
+type IProps = IStateToProps & IDispatchToProps;
 
 class EnrollContainer extends React.Component<IProps, IState> {
 	state: IState = {
-		activeStep: 0,
+		activeStep: 4,
 		passedStep: 0,
 		dictionaries: SHORT_DICTIONARY_LIST,
 	};
+	componentDidMount(): void {
+		this.props.fetchPriemFilials();
+	}
+
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
 	}
@@ -67,9 +76,16 @@ class EnrollContainer extends React.Component<IProps, IState> {
 
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
 	const dictionaries = dictionaryStateSelector(state);
-	const { result } = fromTransaction.createLoginSelector(state);
+	const { result } = fromTransaction.createLogin(state);
 
 	return { personId: result, dictionaries };
 };
 
-export default connect(mapStateToProps)(EnrollContainer);
+const mapDispatchToProps = {
+	fetchPriemFilials,
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(EnrollContainer);

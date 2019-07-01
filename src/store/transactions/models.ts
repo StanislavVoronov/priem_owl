@@ -1,8 +1,8 @@
-import { ITransaction } from '$common';
+import { ISelectItem, ITransaction } from '$common';
 import { ICheckLoginResponse } from './checkLogin';
 import { ICreateLoginResponse } from './createLogin';
 import { ICreateVerificationCodeResponse } from './createVerificationCode';
-import { ICreatePersonDataResponse } from './createPerson';
+import { ICreatePersonDataResponse, IPriemFilial } from './createPerson';
 import { IFindPersonResponse } from './findPerson';
 
 export interface ITransactionState {
@@ -14,4 +14,12 @@ export interface ITransactionState {
 	updateAddress: Record<string, ITransaction<any>>;
 	createVerificationCode: ITransaction<ICreateVerificationCodeResponse>;
 	uploadDocuments: Record<string, ITransaction<any>>;
+	fetchPriemFilials: ITransaction<ISelectItem>;
+	fetchPriemInstitutes: ITransaction<ISelectItem>;
+	fetchPriemEducationLevels: ITransaction<ISelectItem>;
+	fetchPriemPayForms: ITransaction<ISelectItem>;
+	fetchPriemEducationForms: ITransaction<ISelectItem>;
+	fetchPriemDirections: ITransaction<ISelectItem>;
+	fetchPriemProfiles: ITransaction<ISelectItem>;
+	createPriemApplications: Record<string, ITransaction<any>>;
 }

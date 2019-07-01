@@ -21,6 +21,7 @@ import {
 	AccountVerificationForm,
 } from '$containers';
 import { noop } from '$common';
+import ApplicationsForm from '../../containers/ApplicationsForm/ApplicationsForm';
 
 interface IProps {
 	loading: boolean;
@@ -52,9 +53,13 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return <EducationForm onComplete={this.props.handleNext} />;
 			}
 			case 4: {
-				return <DocumentsForm onComplete={this.props.handleNext} />;
+				return <ApplicationsForm onComplete={this.props.handleNext} />;
 			}
 			case 5: {
+				return <DocumentsForm onComplete={this.props.handleNext} />;
+			}
+
+			case 6: {
 				return <AccountVerificationForm onComplete={this.props.onCompleteRegistration} />;
 			}
 			default: {

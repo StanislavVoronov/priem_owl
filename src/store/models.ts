@@ -6,10 +6,9 @@ import {
 	IEnrollContactsForm,
 	IEnrollPersonForm,
 	IEnrollRegForm,
-	IForm,
 	IDocumentsForm,
 	IAccountVerificationForm,
-	IDocument,
+	IEnrollApplicationsForm,
 } from '$common';
 
 export interface IRootState {
@@ -20,5 +19,6 @@ export interface IRootState {
 	enrollEducationForm: IEnrollEducationForm;
 	enrollDocumentsForm: IDocumentsForm;
 	enrollAccountVerificationForm: IAccountVerificationForm;
+	enrollApplicationsForm: IEnrollApplicationsForm;
 	transactions: ITransactionState;
 }

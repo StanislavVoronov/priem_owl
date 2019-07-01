@@ -174,7 +174,7 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 
 const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IRootState> = state => {
 	const dictionaries = dictionaryStateSelector(state);
-	const { loading, error } = fromTransaction.createVerificationCodeSelector(state);
+	const { loading, error } = fromTransaction.createVerificationCode(state);
 
 	const data = enrollContactsFormSelector(state);
 

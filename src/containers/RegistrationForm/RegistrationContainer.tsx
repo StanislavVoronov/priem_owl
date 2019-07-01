@@ -41,7 +41,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	const dictionaries = dictionaryStateSelector(state);
 
 	const data = enrollRegistrationSelector(state);
-	const { error, loading, result } = fromTransaction.findPersonSelector(state);
+	const { error, loading, result } = fromTransaction.findPerson(state);
 
 	return {
 		dictionaries,
@@ -50,7 +50,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 			? {
 					code: '',
 					message:
-						'Абитуриент уже зарегистрирован в системе. Просьба, обратиться в приемную комиссию только для подачи заявлений на поступление',
+						'Абитуриент уже зарегистрирован в системе. Просьба, обратиться в приемную комиссию для подачи заявлений на поступление',
 			  }
 			: error,
 		loading,

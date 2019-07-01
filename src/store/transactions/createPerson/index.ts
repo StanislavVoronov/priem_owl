@@ -1,5 +1,5 @@
-import createPerson, { createPersonSelector } from './reducer';
+import createPerson, { transaction } from './reducer';
 
 export * from './operations';
-export { createPersonSelector };
+export { transaction };
 export default createPerson;

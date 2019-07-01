@@ -4,10 +4,10 @@ import React from 'react';
 import Select from 'react-select';
 import styles from './styles.module.css';
 import { get, ISelectItem, noop } from '$common';
-import { Field, FieldProps, FormikProps } from 'formik';
-
+import { InputLabel } from '@material-ui/core';
 interface ISelectProps {
 	name: string;
+	error: any;
 	placeholder?: string;
 	onChange: (data: any) => void;
 	options: any[];
@@ -17,6 +17,9 @@ interface ISelectProps {
 	isMulti?: boolean;
 	required?: boolean;
 	helperText?: string;
+	value: ISelectItem | null;
+	defaultValue?: ISelectItem;
+	loading: boolean;
 }
 
 class DropdownSelect extends React.PureComponent<ISelectProps> {
@@ -25,21 +28,21 @@ class DropdownSelect extends React.PureComponent<ISelectProps> {
 		isClearable: false,
 		options: [],
 		onChange: noop,
+		loading: false,
+		error: null,
+		value: null,
 	};
 
-	onChange = (form: FormikProps<ISelectItem>) => (value: any) => {
-		form.setFieldValue(this.props.name, value);
-		if (form.errors[this.props.name]) {
-			form.setFieldError(this.props.name, '');
+	componentDidMount(): void {
+		if (this.props.options.length === 1) {
+			this.props.onChange(this.props.options[0]);
 		}
-		this.props.onChange(value);
-	};
+	}
+
 	getOptionLabel = (item: ISelectItem) => item.name;
 	getOptionValue = (item: ISelectItem): any => item.id;
 
-	renderFormSelect = ({ form, field }: FieldProps<ISelectItem>) => {
-		const error = get(form.errors, this.props.name);
-
+	render() {
 		return (
 			<FormControl margin="normal">
 				<FormLabel className={styles.label} style={{ fontSize: '0.875rem' }}>
@@ -48,23 +51,24 @@ class DropdownSelect extends React.PureComponent<ISelectProps> {
 				</FormLabel>
 				<Select
 					className="basic-single"
-					value={field.value}
+					value={this.props.value}
+					defaultValue={this.props.defaultValue}
 					isMulti={this.props.isMulti}
 					classNamePrefix="select"
 					placeholder={this.props.placeholder}
-					onChange={this.onChange(form)}
+					onChange={this.props.onChange}
 					isClearable={this.props.isCleanable}
 					isSearchable={this.props.isSearchable}
 					getOptionLabel={this.getOptionLabel}
 					getOptionValue={this.getOptionValue}
+					isLoading={this.props.loading}
 					options={this.props.options}
 				/>
-				{error && <FormLabel style={{ color: 'red', marginTop: 4, fontSize: '0.875rem' }}>{error}</FormLabel>}
+				{this.props.error && (
+					<InputLabel style={{ color: 'red', marginTop: 4, fontSize: '0.875rem' }}>{this.props.error}</InputLabel>
+				)}
 			</FormControl>
 		);
-	};
-	render() {
-		return <Field name={this.props.name} render={this.renderFormSelect} />;
 	}
 }
 

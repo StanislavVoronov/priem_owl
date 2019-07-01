@@ -35,6 +35,31 @@ export interface IEnrollEducationForm extends IDocument {
 	prevEducation: number;
 	hasEge: boolean;
 }
+
+export interface IApplicationRequest {
+	admId: number;
+	priority: number;
+	profileId: number;
+}
+export interface IApplication {
+	filial: ISelectItem;
+	institute: ISelectItem;
+	educationLevel: ISelectItem;
+	direction: ISelectItem;
+	profile: ISelectItem;
+	payForm: ISelectItem;
+	educationForm: ISelectItem;
+}
+export interface IEnrollApplicationsForm {
+	applications: IApplication[];
+	currentFilial: ISelectItem | null;
+	currentInstitute: ISelectItem | null;
+	currentEducationLevel: ISelectItem | null;
+	currentDirection: ISelectItem | null;
+	currentProfile: ISelectItem | null;
+	currentPayForm: ISelectItem | null;
+	currentEducationForm: ISelectItem | null;
+}
 export interface IEnrollRegForm {
 	lastName: string;
 	firstName: string;

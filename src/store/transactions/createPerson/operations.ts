@@ -24,6 +24,11 @@ export interface ICreatePersonDataResponse {
 	np_uid: number;
 }
 
+export interface IPriemFilial {
+	id: string;
+	name: string;
+}
+
 export const createPersonTransaction = (
 	data: ICreatePersonDataRequest,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {

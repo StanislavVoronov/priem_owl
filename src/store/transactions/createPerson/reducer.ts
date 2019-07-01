@@ -3,7 +3,7 @@ import { ITransactionState } from '$store';
 
 const createPersonReducer = createTransactionReducer(createPersonActions);
 
-export const createPersonSelector = (state: ITransactionState) => {
+export const transaction = (state: ITransactionState) => {
 	const { loading, error, result } = state.createPerson;
 	const npId = result.length > 0 ? result[0].np_uid : 0;
 

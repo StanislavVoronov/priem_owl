@@ -60,9 +60,9 @@ class AccountVerificationContainer extends React.Component<IProps> {
 }
 const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = state => {
 	const data = enrollAccountVerificationFormSelector(state);
-	const createPerson = fromTransaction.createPersonSelector(state);
-	const uploadDocuments = fromTransaction.uploadDocumentsSelector(state);
-	const verificationCode = fromTransaction.createVerificationCodeSelector(state);
+	const createPerson = fromTransaction.createPerson(state);
+	const uploadDocuments = fromTransaction.uploadDocuments(state);
+	const verificationCode = fromTransaction.createVerificationCode(state);
 
 	const documentLoading = Object.values(uploadDocuments).some((document: ITransaction<IDocument>) => document.loading);
 	const documentError =

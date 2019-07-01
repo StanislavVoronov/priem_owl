@@ -31,3 +31,7 @@ export const enrollIsForeignerSelector = (state: IRootState) => {
 export const enrollAccountVerificationFormSelector = (state: IRootState) => {
 	return state.enrollAccountVerificationForm;
 };
+
+export const enrollApplicationsFormSelector = (state: IRootState) => {
+	return state.enrollApplicationsForm;
+};

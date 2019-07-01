@@ -7,7 +7,7 @@ import LoadingText from './LoadingText';
 
 interface IProps<Values> {
 	initialValues: Values;
-	schema: any;
+	schema?: any;
 	buttonText?: string;
 	onSubmit: (values: any) => void;
 	renderForm: (form: FormikProps<Values>) => React.ReactNode | React.ReactNode[];

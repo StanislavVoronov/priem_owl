@@ -11,6 +11,7 @@
     "build": "node scripts/build.js",
     "devBuild": "node scripts/devBuild.js",
     "delivery": "sh ./scripts/delivery.sh",
+    "devDelivery": "sh ./scripts/devDelivery.sh",
     "watch": "tsc --watch",
     "prepush": "tsc && tslint --project ./tsconfig.json"
   },

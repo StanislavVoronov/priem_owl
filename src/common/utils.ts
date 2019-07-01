@@ -1,5 +1,12 @@
 import { Action, createAction, handleActions } from 'redux-actions';
-import { IDictionaryItem, initialTransactionState, IServerError, ITransaction, ITransactionActions } from '$common';
+import {
+	IApplication,
+	IDictionaryItem,
+	initialTransactionState,
+	IServerError,
+	ITransaction,
+	ITransactionActions,
+} from '$common';
 import { ChangeEvent } from 'react';
 import { ARRAY_ENG_ALPHABET, ARRAY_RUS_ALPHABET } from './constants';
 
@@ -44,13 +51,13 @@ export const createTransactionActionsById = <T>(nameSpace: string) => {
 export const createTransactionReducer = <R, S, F>(actions: ITransactionActions<R, S, F>) => {
 	return handleActions<ITransaction<S>>(
 		{
-			[actions.request.toString()]: state => ({
-				...state,
+			[actions.request.toString()]: () => ({
+				result: [],
 				loading: true,
 				error: null,
 			}),
 			[actions.success.toString()]: (state, action) => {
-				return { ...state, loading: false, result: action.payload ? action.payload.result : [] };
+				return { ...state, loading: false, result: action.payload.result || [] };
 			},
 			[actions.failure.toString()]: (state, action) => ({
 				...state,
@@ -83,4 +90,10 @@ export const mergeSchemes = (...schemas: any[]) => {
 	const merged = rest.reduce((mergedSchemas, schema) => mergedSchemas.concat(schema), first);
 
 	return merged;
+};
+
+export const disabledAddNewApplication = (applications: IApplication[]) => {
+	let uniqueDirections = new Set(applications.map(item => item.direction.id));
+
+	return uniqueDirections.size > 2;
 };

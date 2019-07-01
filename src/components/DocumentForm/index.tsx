@@ -1,13 +1,12 @@
 import React, { createRef, ReactElement, useCallback } from 'react';
 import { TextInput } from '../Inputs';
 import DropdownSelect from '../DropdownSelect';
-import { Formik, FieldProps, FormikProps } from 'formik';
 import styles from './styles';
 import { noop, IDocument, IStylable, validateRequireTextField } from '$common';
 import { IDictionary } from '@mgutm-fcu/dictionary';
 
 import DownloadFileView from '../DownloadFile';
-import Dropzone from 'react-dropzone';
+import FieldWrapper from '../FieldWrapper';
 
 interface IDocumentFormProps extends IStylable {
 	document: IDocument;
@@ -15,10 +14,10 @@ interface IDocumentFormProps extends IStylable {
 	dictionaryTypes?: IDictionary[];
 	dictionarySubTypes?: IDictionary[];
 	dictionaryGovernment?: IDictionary[];
-	governmentTitle?: string;
-	title?: string;
-	subTitle?: string;
-	docTitle?: string;
+	governmentTitle: string;
+	title: string;
+	subTitle: string;
+	docTitle: string;
 	extraFields?: ReactElement<any> | null;
 }
 
@@ -28,10 +27,14 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 		selectDocSubType: noop,
 		classes: {},
 		name: '',
+		title: '',
+		governmentTitle: '',
+		subTitle: '',
+		docTitle: '',
 	};
 
 	render() {
-		const { name } = this.props;
+		const documentFormName = this.props.name;
 		const { docType } = this.props.document;
 		const isDataVisible = !!(
 			(this.props.dictionaryTypes && this.props.title) ||
@@ -47,39 +50,49 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 				{isDataVisible ? (
 					<div style={styles.dataContainer}>
 						{this.props.dictionaryTypes && this.props.title && (
-							<DropdownSelect
-								required
-								name={`${name}docType`}
-								options={this.props.dictionaryTypes}
-								placeholder={`Выберите ${this.props.title.toLowerCase()}`}
-								title={this.props.title}
-							/>
+							<FieldWrapper name={`${documentFormName}docType`}>
+								{props => (
+									<DropdownSelect
+										{...props}
+										required
+										options={this.props.dictionaryTypes}
+										placeholder={`Выберите ${this.props.title.toLowerCase()}`}
+										title={this.props.title}
+									/>
+								)}
+							</FieldWrapper>
 						)}
-
 						{this.props.dictionaryGovernment && this.props.governmentTitle && (
-							<DropdownSelect
-								required
-								name={`${name}docGovernment`}
-								options={this.props.dictionaryGovernment}
-								placeholder={`Выберите ${this.props.governmentTitle.toLowerCase()}`}
-								title={this.props.governmentTitle}
-							/>
+							<FieldWrapper name={`${documentFormName}docGovernment`}>
+								{props => (
+									<DropdownSelect
+										{...props}
+										required
+										options={this.props.dictionaryGovernment}
+										placeholder={`Выберите ${this.props.governmentTitle.toLowerCase()}`}
+										title={this.props.governmentTitle}
+									/>
+								)}
+							</FieldWrapper>
 						)}
-
 						{this.props.dictionarySubTypes && this.props.subTitle && (
-							<DropdownSelect
-								required
-								name={`${name}docSubType`}
-								options={this.props.dictionarySubTypes}
-								placeholder={`Выберите ${this.props.subTitle.toLowerCase()}`}
-								title={this.props.subTitle}
-							/>
+							<FieldWrapper name={`${documentFormName}docSubType`}>
+								{props => (
+									<DropdownSelect
+										{...props}
+										required
+										options={this.props.dictionarySubTypes}
+										placeholder={`Выберите ${this.props.subTitle.toLowerCase()}`}
+										title={this.props.subTitle}
+									/>
+								)}
+							</FieldWrapper>
 						)}
 						{needInfo ? (
 							<TextInput
 								validate={validateRequireTextField}
 								required
-								name={`${name}docSeries`}
+								name={`${documentFormName}docSeries`}
 								placeholder="Введите серию документа"
 								label="Серия"
 							/>
@@ -89,7 +102,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 							<TextInput
 								required
 								validate={validateRequireTextField}
-								name={`${name}docNumber`}
+								name={`${documentFormName}docNumber`}
 								placeholder="Введите номер документа"
 								label="Номер"
 							/>
@@ -97,7 +110,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 
 						{needInfo ? (
 							<>
-								<TextInput required type="date" name={`${name}docDate`} label="Дата выдачи документа" />
+								<TextInput required type="date" name={`${documentFormName}docDate`} label="Дата выдачи документа" />
 								<TextInput
 									required
 									validate={validateRequireTextField}
@@ -113,7 +126,9 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 					</div>
 				) : null}
 				<div>
-					<DownloadFileView name={`${this.props.name}docFile`} title={this.props.docTitle} />
+					<FieldWrapper name={`${name}docFile`}>
+						{props => <DownloadFileView {...props} file={props.value} title={this.props.docTitle} />}
+					</FieldWrapper>
 				</div>
 			</div>
 		);
