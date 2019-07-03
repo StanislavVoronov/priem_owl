@@ -39,6 +39,7 @@ export const fetchPriemEducationFormsTransaction = (
 		DIR: data.directionId,
 		PROFILE: data.profileId,
 	};
+
 	return PriemApi.selectData<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemEducationForms, payload)
 		.then(response => {
 			const list = response.map(item => ({ id: item.ID, name: item.NAME }));

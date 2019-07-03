@@ -18,6 +18,7 @@ export interface ITransactionState {
 	fetchPriemInstitutes: ITransaction<ISelectItem>;
 	fetchPriemEducationLevels: ITransaction<ISelectItem>;
 	fetchPriemPayForms: ITransaction<ISelectItem>;
+	fetchPriemGroups: ITransaction<any>;
 	fetchPriemEducationForms: ITransaction<ISelectItem>;
 	fetchPriemDirections: ITransaction<ISelectItem>;
 	fetchPriemProfiles: ITransaction<ISelectItem>;

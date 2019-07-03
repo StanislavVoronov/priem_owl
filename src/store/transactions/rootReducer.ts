@@ -17,6 +17,7 @@ import fetchPriemPayFormsReducer, * as fromFetchPriemPayForms from './fetchPriem
 import fetchPriemEducationFormsReducer, * as fromFetchPriemEducationForms from './fetchPriemEducationForms';
 import fetchPriemProfilesReducer, * as fromFetchPriemProfiles from './fetchPriemProfiles';
 import createPriemApplicationsReducer, * as fromCreatePriemApplication from './createPriemApplication';
+import fetchPriemGroupsReducer, * as fromFetchPriemGroups from './fetchPriemGroups';
 export const transactionSelector = (state: IRootState) => {
 	return state.transactions;
 };
@@ -95,6 +96,12 @@ export const fetchPriemPayForms = createSelector(
 	transactionSelector,
 	fromFetchPriemPayForms.transaction,
 );
+
+export const fetchPriemGroups = createSelector(
+	transactionSelector,
+	fromFetchPriemGroups.transaction,
+);
+
 const transactions = combineReducers({
 	checkLogin: checkLoginReducer,
 	createLogin: createLoginReducer,
@@ -112,6 +119,7 @@ const transactions = combineReducers({
 	fetchPriemPayForms: fetchPriemPayFormsReducer,
 	fetchPriemEducationForms: fetchPriemEducationFormsReducer,
 	createPriemApplications: createPriemApplicationsReducer,
+	fetchPriemGroups: fetchPriemGroupsReducer,
 });
 
 export default transactions;

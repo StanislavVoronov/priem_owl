@@ -30,6 +30,7 @@ export const fetchPriemDirectionsTransaction = (
 		INST: data.instituteId,
 		LVL: data.educationLevelId,
 	};
+
 	return PriemApi.selectData<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemDirections, payload)
 		.then(response => {
 			const list = response.map(item => ({ id: item.ID, name: item.NAME }));

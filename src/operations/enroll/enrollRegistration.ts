@@ -51,6 +51,7 @@ import { fetchPriemDirectionsTransaction } from '../../store/transactions/fetchP
 import { fetchPriemProfilesTransaction } from '../../store/transactions/fetchPriemProfiles';
 import { fetchPriemEducationFormsTransaction } from '../../store/transactions/fetchPriemEducationForms';
 import { fetchPriemPayFormsTransaction } from '../../store/transactions/fetchPriemPayForms';
+import { fetchPriemGroupsTransaction } from '../../store/transactions/fetchPriemGroups';
 
 export const onCompleteRegistrationForm = (
 	form: IEnrollRegForm,
@@ -379,8 +380,29 @@ export const onChangeEducationForm = (educationForm: ISelectItem): ThunkAction<v
 	}
 };
 
-export const onChangePayForm = (payForm: ISelectItem): ThunkAction<void, IRootState, void, Action> => dispatch => {
+export const onChangePayForm = (payForm: ISelectItem): ThunkAction<void, IRootState, void, Action> => (
+	dispatch,
+	getState,
+) => {
 	dispatch(changeCurrentPayForm(payForm));
+	const {
+		currentFilial,
+		currentInstitute,
+		currentDirection,
+		currentEducationForm,
+		currentEducationLevel,
+	} = enrollApplicationsFormSelector(getState());
+	if (currentFilial && currentInstitute && currentEducationLevel && currentDirection && currentEducationForm) {
+		dispatch(
+			fetchPriemGroupsTransaction({
+				filialId: currentFilial.id,
+				instituteId: currentInstitute.id,
+				directionId: currentDirection.id,
+				finFormId: payForm.id,
+				educationFormId: currentEducationForm.id,
+			}),
+		);
+	}
 };
 
 export const addPriemApplication = (): ThunkAction<void, IRootState, void, Action> => (dispatch, getState) => {
@@ -422,5 +444,3 @@ export const addPriemApplication = (): ThunkAction<void, IRootState, void, Actio
 export const onDeleteApplication = (index: number): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	dispatch(deleteApplication(index));
 };
-
-export const createPriemApplication = (): ThunkAction<void, IRootState, void, Action> => dispatch => {};

@@ -27,6 +27,7 @@ export const fetchPriemEducationLevelsTransaction = (
 		FILIAL: data.filialId,
 		INST: data.instituteId,
 	};
+
 	return PriemApi.selectData<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemEducationLevels, payload)
 		.then(response => {
 			const list = response.map(item => ({ id: item.ID, name: item.NAME }));

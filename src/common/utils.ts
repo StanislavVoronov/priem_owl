@@ -92,8 +92,6 @@ export const mergeSchemes = (...schemas: any[]) => {
 	return merged;
 };
 
-export const disabledAddNewApplication = (applications: IApplication[]) => {
-	let uniqueDirections = new Set(applications.map(item => item.direction.id));
-
-	return uniqueDirections.size > 2;
+export const disabledAddNewApplication = (applications: IApplication[]): boolean => {
+	return new Set(applications.map(item => item.direction.id)).size > 2;
 };

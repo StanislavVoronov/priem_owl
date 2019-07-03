@@ -49,6 +49,7 @@ class ApplicationsForm extends React.Component<IProps> {
 	};
 	render() {
 		const name = 'applications.';
+
 		return (
 			<div className="flexColumn">
 				<DropdownSelect
@@ -169,9 +170,6 @@ class ApplicationsForm extends React.Component<IProps> {
 							</th>
 							<th align="center">
 								<td>Форма финансирования</td>
-							</th>
-							<th>
-								<td></td>
 							</th>
 						</thead>
 						<tbody>

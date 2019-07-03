@@ -42,6 +42,7 @@ export const fetchPriemPayFormsTransaction = (
 		DIR: data.directionId,
 		PROFILE: data.profileId,
 	};
+
 	return PriemApi.selectData<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemPayForms, payload)
 		.then(response => {
 			const list = response.map(item => ({ id: item.ID, name: item.SHORTNAME }));

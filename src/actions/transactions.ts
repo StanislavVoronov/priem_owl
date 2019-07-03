@@ -18,3 +18,4 @@ export const fetchPriemProfilesActions = createTransactionActions(TRANSACTION_NA
 export const fetchPriemPayFormsActions = createTransactionActions(TRANSACTION_NAMES.FetchPriemPayForms);
 export const fetchPriemEducationFormsActions = createTransactionActions(TRANSACTION_NAMES.FetchPriemEducationForms);
 export const createPriemApplicationActions = createTransactionActionsById(TRANSACTION_NAMES.CreatePriemApplication);
+export const fetchPriemGroups = createTransactionActions(TRANSACTION_NAMES.FetchPriemGroups);
