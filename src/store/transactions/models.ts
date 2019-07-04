@@ -1,4 +1,4 @@
-import { ISelectItem, ITransaction } from '$common';
+import { IPriemGroup, ISelectItem, ITransaction } from '$common';
 import { ICheckLoginResponse } from './checkLogin';
 import { ICreateLoginResponse } from './createLogin';
 import { ICreateVerificationCodeResponse } from './createVerificationCode';
@@ -18,7 +18,7 @@ export interface ITransactionState {
 	fetchPriemInstitutes: ITransaction<ISelectItem>;
 	fetchPriemEducationLevels: ITransaction<ISelectItem>;
 	fetchPriemPayForms: ITransaction<ISelectItem>;
-	fetchPriemGroups: ITransaction<any>;
+	fetchPriemGroups: ITransaction<IPriemGroup>;
 	fetchPriemEducationForms: ITransaction<ISelectItem>;
 	fetchPriemDirections: ITransaction<ISelectItem>;
 	fetchPriemProfiles: ITransaction<ISelectItem>;

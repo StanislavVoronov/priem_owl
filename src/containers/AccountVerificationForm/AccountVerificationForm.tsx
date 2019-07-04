@@ -7,7 +7,12 @@ import {
 	fromTransaction,
 } from '$store';
 import { EnrollVerificationFormSchema, IAccountVerificationForm, IDocument, IServerError, ITransaction } from '$common';
-import { sendVerificationCodeToEmail, sendVerificationCodeToPhone, updatePersonInformation } from '$operations';
+import {
+	createPriemApplications,
+	sendVerificationCodeToEmail,
+	sendVerificationCodeToPhone,
+	updatePersonInformation,
+} from '$operations';
 import { PriemForm, TextInput, Button } from '$components';
 import classes from './styles.module.css';
 import { ICreateVerificationCodeResponse } from '../../store/transactions/createVerificationCode';
@@ -86,6 +91,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dis
 		onSubmit: (values: IAccountVerificationForm) => {
 			dispatch(submitEnrollVerificationForm(values));
 			dispatch<any>(updatePersonInformation())
+				.then(() => dispatch(createPriemApplications()))
 				.then(ownProps.onComplete)
 				.catch((error: any) => console.log('errorAccountVerification', error));
 		},

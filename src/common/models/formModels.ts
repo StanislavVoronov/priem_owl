@@ -1,4 +1,4 @@
-import { IDocument, IGovernmentSelectItem, IInvalidData, ISelectItem, VerificationMethod } from '$common';
+import { IDocument, IGovernmentSelectItem, IInvalidData, IPriemGroup, ISelectItem, VerificationMethod } from '$common';
 import { IPerson } from '$common';
 
 export interface IEnrollContactsForm extends IDocument {
@@ -38,10 +38,8 @@ export interface IEnrollEducationForm extends IDocument {
 
 export interface IApplicationRequest {
 	admId: number;
-	priority: number;
-	profileId: number;
 }
-export interface IApplication {
+export interface IApplication extends IPriemGroup {
 	filial: ISelectItem;
 	institute: ISelectItem;
 	educationLevel: ISelectItem;
@@ -57,7 +55,8 @@ export interface IEnrollApplicationsForm {
 	currentEducationLevel: ISelectItem | null;
 	currentDirection: ISelectItem | null;
 	currentProfile: ISelectItem | null;
-	currentPayForm: ISelectItem | null;
+	currentPayForms: ISelectItem[];
+	priemGroups: IPriemGroup[];
 	currentEducationForm: ISelectItem | null;
 }
 export interface IEnrollRegForm {
@@ -80,6 +79,7 @@ export interface IEnrollPersonForm extends IDocument {
 }
 export interface IDocumentsForm {
 	documents: IDocument[];
+	priemGroupNeedDoc: boolean;
 }
 
 export interface IAccountVerificationForm {

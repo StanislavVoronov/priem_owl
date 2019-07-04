@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { IApplication, ISelectItem } from '$common';
+import { IApplication, IPriemGroup, ISelectItem } from '$common';
 
 const NAMESPACE = 'EnrollApplicationForm';
 
@@ -32,5 +32,9 @@ export const changeCurrentEducationForm = createAction(
 	(value: ISelectItem) => value,
 );
 
-export const changeCurrentPayForm = createAction(`${NAMESPACE}/changeCurrentPayForm`, (value: ISelectItem) => value);
+export const changeCurrentPayForm = createAction(
+	`${NAMESPACE}/changeCurrentPayForm`,
+	(values: ISelectItem[]) => values,
+);
 export const deleteApplication = createAction(`${NAMESPACE}/deleteApplication`, (index: number) => index);
+export const updatePriemGroups = createAction(`${NAMESPACE}/updatePriemGroups`, (values: IPriemGroup[]) => values);

@@ -37,7 +37,7 @@ interface IDispatchToProps {
 	onChangeDirection: (item: ISelectItem) => void;
 	onChangeProfile: (item: ISelectItem) => void;
 	onChangeEducationForm: (item: ISelectItem) => void;
-	onChangePayForm: (item: ISelectItem) => void;
+	onChangePayForm: (item: ISelectItem[]) => void;
 	addPriemApplication: () => void;
 	onDeleteApplication: (index: number) => void;
 }
@@ -129,7 +129,8 @@ class ApplicationsForm extends React.Component<IProps> {
 				{!this.props.payForms.loading && this.props.payForms.result.length ? (
 					<DropdownSelect
 						required
-						value={this.props.currentPayForm}
+						value={this.props.currentPayForms}
+						isMulti
 						onChange={this.props.onChangePayForm}
 						name={`${name}payForms`}
 						options={this.props.payForms.result}
@@ -138,7 +139,7 @@ class ApplicationsForm extends React.Component<IProps> {
 					/>
 				) : null}
 
-				{this.props.currentPayForm && (
+				{this.props.currentPayForms.length > 0 ? (
 					<Button
 						primary
 						wrapperClassName={classes.addDocButtonWrapper}
@@ -146,7 +147,7 @@ class ApplicationsForm extends React.Component<IProps> {
 						onClick={this.props.addPriemApplication}>
 						Добавить заявление
 					</Button>
-				)}
+				) : null}
 				{this.props.applications.length ? (
 					<table className={classes.table}>
 						<thead>
@@ -170,6 +171,9 @@ class ApplicationsForm extends React.Component<IProps> {
 							</th>
 							<th align="center">
 								<td>Форма финансирования</td>
+							</th>
+							<th>
+								<td>{''}</td>
 							</th>
 						</thead>
 						<tbody>

@@ -25,6 +25,8 @@ import {
 	changeCurrentEducationForm,
 	addPriemApplication as addPriemApplicationAction,
 	deleteApplication,
+	setPriemGroupNeedDocument,
+	updatePriemGroups,
 } from '$store';
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
@@ -52,6 +54,7 @@ import { fetchPriemProfilesTransaction } from '../../store/transactions/fetchPri
 import { fetchPriemEducationFormsTransaction } from '../../store/transactions/fetchPriemEducationForms';
 import { fetchPriemPayFormsTransaction } from '../../store/transactions/fetchPriemPayForms';
 import { fetchPriemGroupsTransaction } from '../../store/transactions/fetchPriemGroups';
+import { createPriemApplicationTransaction } from '../../store/transactions/createPriemApplication';
 
 export const onCompleteRegistrationForm = (
 	form: IEnrollRegForm,
@@ -192,7 +195,7 @@ const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Action> =
 	const contactsData = enrollContactsFormSelector(state);
 	const personData = enrollPersonFormSelector(state);
 	const educationData = enrollEducationFormSelector(state);
-	const documents = [contactsData, personData, educationData, ...enrollDocumentsFormSelector(state)];
+	const documents = [contactsData, personData, educationData, ...enrollDocumentsFormSelector(state).documents];
 
 	return Promise.all(
 		documents.map(document => {
@@ -313,7 +316,7 @@ export const onChangeDirection = (direction: ISelectItem): ThunkAction<void, IRo
 	dispatch,
 	getState,
 ) => {
-	const { currentFilial, currentInstitute, currentEducationForm } = enrollApplicationsFormSelector(getState());
+	const { currentFilial, currentInstitute } = enrollApplicationsFormSelector(getState());
 	dispatch(changeCurrentDirection(direction));
 
 	if (currentFilial && currentInstitute) {
@@ -333,9 +336,7 @@ export const onChangeProfile = (profile: ISelectItem): ThunkAction<void, IRootSt
 	dispatch,
 	getState,
 ) => {
-	const { currentFilial, currentInstitute, currentDirection, currentProfile } = enrollApplicationsFormSelector(
-		getState(),
-	);
+	const { currentFilial, currentInstitute, currentDirection } = enrollApplicationsFormSelector(getState());
 	dispatch(changeCurrentProfile(profile));
 
 	if (currentFilial && currentInstitute && currentDirection) {
@@ -356,13 +357,16 @@ export const onChangeEducationForm = (educationForm: ISelectItem): ThunkAction<v
 	dispatch,
 	getState,
 ) => {
+	const state = getState();
+
 	const {
 		currentFilial,
 		currentInstitute,
 		currentEducationForm,
 		currentDirection,
 		currentProfile,
-	} = enrollApplicationsFormSelector(getState());
+	} = enrollApplicationsFormSelector(state);
+
 	dispatch(changeCurrentEducationForm(educationForm));
 
 	if (currentFilial && currentInstitute && currentDirection && currentProfile) {
@@ -380,32 +384,48 @@ export const onChangeEducationForm = (educationForm: ISelectItem): ThunkAction<v
 	}
 };
 
-export const onChangePayForm = (payForm: ISelectItem): ThunkAction<void, IRootState, void, Action> => (
+export const onChangePayForm = (payForms: ISelectItem[]): ThunkAction<void, IRootState, void, Action> => (
 	dispatch,
 	getState,
 ) => {
-	dispatch(changeCurrentPayForm(payForm));
+	dispatch(changeCurrentPayForm(payForms));
+	console.log('payForms', payForms);
 	const {
 		currentFilial,
 		currentInstitute,
 		currentDirection,
 		currentEducationForm,
 		currentEducationLevel,
+		currentProfile,
 	} = enrollApplicationsFormSelector(getState());
-	if (currentFilial && currentInstitute && currentEducationLevel && currentDirection && currentEducationForm) {
-		dispatch(
-			fetchPriemGroupsTransaction({
-				filialId: currentFilial.id,
-				instituteId: currentInstitute.id,
-				directionId: currentDirection.id,
-				finFormId: payForm.id,
-				educationFormId: currentEducationForm.id,
-			}),
-		);
+	if (
+		currentFilial &&
+		currentProfile &&
+		currentInstitute &&
+		currentEducationLevel &&
+		currentDirection &&
+		currentEducationForm
+	) {
+		dispatch(updatePriemGroups([]));
+		payForms.forEach(item => {
+			dispatch(
+				fetchPriemGroupsTransaction({
+					filialId: currentFilial.id,
+					instituteId: currentInstitute.id,
+					directionId: currentDirection.id,
+					finFormId: item.id,
+					educationFormId: currentEducationForm.id,
+				}),
+			).then(data => {
+				dispatch(updatePriemGroups([...enrollApplicationsFormSelector(getState()).priemGroups, data]));
+				dispatch(setPriemGroupNeedDocument(data.needDoc));
+			});
+		});
 	}
 };
 
 export const addPriemApplication = (): ThunkAction<void, IRootState, void, Action> => (dispatch, getState) => {
+	const state = getState();
 	const {
 		currentFilial,
 		currentInstitute,
@@ -413,8 +433,8 @@ export const addPriemApplication = (): ThunkAction<void, IRootState, void, Actio
 		currentDirection,
 		currentEducationForm,
 		currentEducationLevel,
-		currentPayForm,
-	} = enrollApplicationsFormSelector(getState());
+		currentPayForms,
+	} = enrollApplicationsFormSelector(state);
 	if (
 		currentFilial &&
 		currentInstitute &&
@@ -422,19 +442,23 @@ export const addPriemApplication = (): ThunkAction<void, IRootState, void, Actio
 		currentDirection &&
 		currentProfile &&
 		currentEducationForm &&
-		currentPayForm
+		currentPayForms
 	) {
-		dispatch(
-			addPriemApplicationAction({
-				filial: currentFilial,
-				institute: currentInstitute,
-				educationLevel: currentEducationLevel,
-				direction: currentDirection,
-				profile: currentProfile,
-				payForm: currentPayForm,
-				educationForm: currentEducationForm,
-			}),
-		);
+		currentPayForms.forEach((item, index) => {
+			const priemGroup = fromTransaction.fetchPriemGroups(state).result[index];
+			dispatch(
+				addPriemApplicationAction({
+					filial: currentFilial,
+					institute: currentInstitute,
+					educationLevel: currentEducationLevel,
+					direction: currentDirection,
+					profile: currentProfile,
+					payForm: item,
+					educationForm: currentEducationForm,
+					...priemGroup,
+				}),
+			);
+		});
 	}
 	dispatch(fetchPriemProfilesActions.success([]));
 	dispatch(fetchPriemEducationFormsActions.success([]));
@@ -443,4 +467,26 @@ export const addPriemApplication = (): ThunkAction<void, IRootState, void, Actio
 
 export const onDeleteApplication = (index: number): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	dispatch(deleteApplication(index));
+};
+
+export const createPriemApplications = (): ThunkAction<void, IRootState, void, Action> => (dispatch, getState) => {
+	const priemList = enrollApplicationsFormSelector(getState()).applications;
+
+	return Promise.all(
+		priemList.map((application, index) => {
+			return dispatch(
+				createPriemApplicationTransaction({
+					admId: application.admId,
+					priority: index + 1,
+					profileId: application.profile.id,
+				}),
+			);
+		}),
+	)
+		.then(() => {
+			return Promise.resolve();
+		})
+		.catch(() => {
+			return Promise.reject();
+		});
 };

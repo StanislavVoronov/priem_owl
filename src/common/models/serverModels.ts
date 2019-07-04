@@ -73,3 +73,8 @@ export interface IUploadDocRequest {
 	iss_date: string;
 	iss_gov: number;
 }
+
+export interface IPriemGroup {
+	admId: number;
+	needDoc: boolean;
+}

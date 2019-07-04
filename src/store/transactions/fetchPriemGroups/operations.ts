@@ -5,15 +5,16 @@ import {
 	fetchPriemEducationLevelsActions,
 	fetchPriemPayFormsActions,
 	fetchPriemGroups,
+	IPriemGroup,
 } from '$common';
 import { ThunkAction } from 'redux-thunk';
-import { IRootState } from '$store';
+import { fromTransaction, IRootState } from '$store';
 import { Action } from 'redux';
 import { PriemApi, PriemRestApi } from '$services';
 
 interface IFetchResponse {
 	ID: number;
-	SHORTNAME: string;
+	NEED_DOC: number;
 }
 
 interface IFetchRequest {
@@ -31,9 +32,10 @@ interface IPayload {
 	directionId: number;
 	finFormId: number;
 }
+
 export const fetchPriemGroupsTransaction = (
 	data: IPayload,
-): ThunkAction<Promise<ISelectItem[]>, IRootState, void, Action> => dispatch => {
+): ThunkAction<Promise<IPriemGroup>, IRootState, void, Action> => (dispatch, getState) => {
 	dispatch(fetchPriemGroups.request());
 
 	const payload = {
@@ -43,13 +45,12 @@ export const fetchPriemGroupsTransaction = (
 		DIR: data.directionId,
 		FIN: data.finFormId,
 	};
-
 	return PriemApi.selectData<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemFinForms, payload)
 		.then(response => {
-			const list = response.map(item => ({ id: item.ID, name: item.SHORTNAME }));
+			const list = response.map(item => ({ admId: item.ID, needDoc: item.NEED_DOC > 0 }));
 			dispatch(fetchPriemGroups.success(list));
 
-			return Promise.resolve(list);
+			return Promise.resolve(list[0]);
 		})
 		.catch((error: IServerError) => {
 			dispatch(fetchPriemGroups.failure(error));

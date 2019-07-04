@@ -12,7 +12,7 @@ import { PriemApi, PriemRestApi } from '$services';
 
 interface IFetchResponse {
 	ID: number;
-	SHORTNAME: string;
+	NAME: string;
 }
 
 interface IFetchRequest {
@@ -45,7 +45,7 @@ export const fetchPriemPayFormsTransaction = (
 
 	return PriemApi.selectData<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemPayForms, payload)
 		.then(response => {
-			const list = response.map(item => ({ id: item.ID, name: item.SHORTNAME }));
+			const list = response.map(item => ({ id: item.ID, name: item.NAME }));
 			dispatch(fetchPriemPayFormsActions.success(list));
 
 			return Promise.resolve(list);

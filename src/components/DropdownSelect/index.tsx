@@ -17,8 +17,8 @@ interface ISelectProps {
 	isMulti?: boolean;
 	required?: boolean;
 	helperText?: string;
-	value: ISelectItem | null;
-	defaultValue?: ISelectItem;
+	value: ISelectItem | ISelectItem[] | null;
+	defaultValue?: ISelectItem | ISelectItem[];
 	loading: boolean;
 }
 
@@ -35,7 +35,11 @@ class DropdownSelect extends React.PureComponent<ISelectProps> {
 
 	componentDidMount(): void {
 		if (this.props.options.length === 1) {
-			this.props.onChange(this.props.options[0]);
+			if (this.props.isMulti) {
+				this.props.onChange([this.props.options[0]]);
+			} else {
+				this.props.onChange(this.props.options[0]);
+			}
 		}
 	}
 

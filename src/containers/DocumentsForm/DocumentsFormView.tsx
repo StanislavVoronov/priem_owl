@@ -30,8 +30,7 @@ import classes from './styles.module.css';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { FormikProps, FieldArray } from 'formik';
 
-interface IProps extends IStylable {
-	documents: IDocument[];
+interface IProps extends IStylable, IDocumentsForm {
 	dictionaries: DictionaryState;
 	foreigner: boolean;
 	submit: (values: IDocumentsForm) => void;
@@ -182,7 +181,7 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 				<PriemForm
 					schema={AnyDocumentFormSchema}
 					buttonText={'Далее'}
-					initialValues={{ documents: this.props.documents }}
+					initialValues={{ documents: this.props.documents, priemGroupNeedDoc: this.props.priemGroupNeedDoc }}
 					onSubmit={this.props.submit}
 					disabled={this.disabledForm}
 					renderForm={this.renderFieldArray}

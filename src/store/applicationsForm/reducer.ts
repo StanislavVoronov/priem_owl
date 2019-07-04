@@ -10,6 +10,7 @@ import {
 	changeCurrentProfile,
 	addPriemApplication,
 	deleteApplication,
+	updatePriemGroups,
 } from './actions';
 
 const applicationsFormReducer = handleActions<IEnrollApplicationsForm, any>(
@@ -20,7 +21,7 @@ const applicationsFormReducer = handleActions<IEnrollApplicationsForm, any>(
 				applications: [...state.applications, action.payload],
 				currentProfile: null,
 				currentEducationForm: null,
-				currentPayForm: null,
+				currentPayForms: [],
 				currentDirection: null,
 			};
 		},
@@ -32,7 +33,7 @@ const applicationsFormReducer = handleActions<IEnrollApplicationsForm, any>(
 				currentEducationLevel: null,
 				currentProfile: null,
 				currentEducationForm: null,
-				currentPayForm: null,
+				currentPayForms: [],
 				currentDirection: null,
 			};
 		},
@@ -43,7 +44,7 @@ const applicationsFormReducer = handleActions<IEnrollApplicationsForm, any>(
 				currentEducationLevel: null,
 				currentProfile: null,
 				currentEducationForm: null,
-				currentPayForm: null,
+				currentPayForms: [],
 				currentDirection: null,
 			};
 		},
@@ -53,7 +54,7 @@ const applicationsFormReducer = handleActions<IEnrollApplicationsForm, any>(
 				currentEducationLevel: action.payload,
 				currentProfile: null,
 				currentEducationForm: null,
-				currentPayForm: null,
+				currentPayForms: [],
 				currentDirection: null,
 			};
 		},
@@ -63,14 +64,14 @@ const applicationsFormReducer = handleActions<IEnrollApplicationsForm, any>(
 				currentDirection: action.payload,
 				currentProfile: null,
 				currentEducationForm: null,
-				currentPayForm: null,
+				currentPayForms: [],
 			};
 		},
 		[changeCurrentProfile.toString()]: (state, action) => {
 			return { ...state, currentProfile: action.payload, currentEducationForm: null, currentPayForm: null };
 		},
 		[changeCurrentPayForm.toString()]: (state, action) => {
-			return { ...state, currentPayForm: action.payload };
+			return { ...state, currentPayForms: action.payload };
 		},
 		[deleteApplication.toString()]: (state, action) => {
 			return { ...state, applications: state.applications.filter((item, index) => index !== action.payload) };
@@ -82,6 +83,12 @@ const applicationsFormReducer = handleActions<IEnrollApplicationsForm, any>(
 				currentPayForm: null,
 			};
 		},
+		[updatePriemGroups.toString()]: (state, action) => {
+			return {
+				...state,
+				priemGroups: action.payload,
+			};
+		},
 	},
 	{
 		applications: [],
@@ -90,7 +97,8 @@ const applicationsFormReducer = handleActions<IEnrollApplicationsForm, any>(
 		currentEducationLevel: null,
 		currentDirection: null,
 		currentProfile: null,
-		currentPayForm: null,
+		currentPayForms: [],
+		priemGroups: [],
 		currentEducationForm: null,
 	},
 );

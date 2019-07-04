@@ -1,35 +1,44 @@
 import { ThunkAction } from 'redux-thunk';
 import { IRootState } from '$store';
 import { Action } from 'redux';
-import { checkLoginActions } from '$common';
+import { checkLoginActions, createPriemApplicationActions } from '$common';
 
 import { PriemRestApi, PriemApi } from '$services';
 import { IServerError } from '$common';
-import { ReactText } from 'react';
 
-interface ICheckLoginRequest {
-	login: ReactText;
+interface ICreatePriemApplicationRequest {
+	admId: number;
+	profileId: number;
+	priority: number;
 }
 
-export interface ICheckLoginResponse {
+export interface ICreatePriemApplicationResponse {
 	COUNT: number;
 }
 
 export const createPriemApplicationTransaction = (
-	login: string,
+	data: ICreatePriemApplicationRequest,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
-	const payload = { login };
+	const { admId, priority, profileId } = data;
+	const payload = {
+		admId,
+		priority,
+		profileId,
+	};
 
-	dispatch(checkLoginActions.request());
+	dispatch(createPriemApplicationActions.request(admId));
 
-	return PriemApi.checkData<ICheckLoginRequest, ICheckLoginResponse>(PriemRestApi.CheckUniqueLogin, payload)
+	return PriemApi.checkData<ICreatePriemApplicationRequest, ICreatePriemApplicationResponse>(
+		PriemRestApi.CheckUniqueLogin,
+		payload,
+	)
 		.then(data => {
-			dispatch(checkLoginActions.success(data));
+			dispatch(createPriemApplicationActions.success(admId, data));
 
 			return Promise.resolve();
 		})
 		.catch((error: IServerError) => {
-			dispatch(checkLoginActions.failure(error));
+			dispatch(createPriemApplicationActions.failure(admId, error));
 
 			return Promise.reject(error);
 		});
