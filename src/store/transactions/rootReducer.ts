@@ -59,7 +59,7 @@ export const uploadDocuments = createSelector(
 
 export const createPriemApplications = createSelector(
 	transactionSelector,
-	fromCreatePriemApplication.listByKey,
+	fromCreatePriemApplication.transactionList,
 );
 
 export const fetchPriemFilials = createSelector(

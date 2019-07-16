@@ -22,7 +22,7 @@ interface ISelectProps {
 	loading: boolean;
 }
 
-class DropdownSelect extends React.PureComponent<ISelectProps> {
+class DropdownSelect extends React.Component<ISelectProps> {
 	public static defaultProps = {
 		isSearchable: true,
 		isClearable: false,
@@ -33,13 +33,17 @@ class DropdownSelect extends React.PureComponent<ISelectProps> {
 		value: null,
 	};
 
-	componentDidMount(): void {
-		if (this.props.options.length === 1) {
-			if (this.props.isMulti) {
-				this.props.onChange([this.props.options[0]]);
-			} else {
-				this.props.onChange(this.props.options[0]);
-			}
+	componentDidUpdate() {
+		if (this.props.options.length !== 1) {
+			return;
+		}
+		if ((!this.props.isMulti && this.props.value) || (Array.isArray(this.props.value) && this.props.value.length > 0)) {
+			return;
+		}
+		if (this.props.isMulti) {
+			this.props.onChange([this.props.options[0]]);
+		} else {
+			this.props.onChange(this.props.options[0]);
 		}
 	}
 

@@ -1,4 +1,4 @@
-import { IPriemGroup, ISelectItem, ITransaction } from '$common';
+import { ICreatePersonData, IPriemGroup, ISelectItem, ITransaction } from '$common';
 import { ICheckLoginResponse } from './checkLogin';
 import { ICreateLoginResponse } from './createLogin';
 import { ICreateVerificationCodeResponse } from './createVerificationCode';
@@ -9,7 +9,7 @@ export interface ITransactionState {
 	checkLogin: ITransaction<ICheckLoginResponse>;
 	createLogin: ITransaction<ICreateLoginResponse>;
 	findPerson: ITransaction<IFindPersonResponse>;
-	createPerson: ITransaction<ICreatePersonDataResponse>;
+	createPerson: ITransaction<ICreatePersonData>;
 	updatePhone: Record<string, ITransaction<any>>;
 	updateAddress: Record<string, ITransaction<any>>;
 	createVerificationCode: ITransaction<ICreateVerificationCodeResponse>;

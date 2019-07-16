@@ -4,7 +4,7 @@ import { ITransactionState } from '$store';
 
 const createPriemApplicationReducer = createTransactionReducer(createPriemApplicationActions);
 
-export const listByKey = (state: ITransactionState) => {
+export const transactionList = (state: ITransactionState) => {
 	return state.createPriemApplications;
 };
 
@@ -30,4 +30,4 @@ const createPriemApplicationsReducer = handleActions(
 	{},
 );
 
-export default createPriemApplicationReducer;
+export default createPriemApplicationsReducer;

@@ -13,6 +13,7 @@ export enum PriemRestApi {
 	FetchPriemPayForms = 'ADM_FIN',
 	FetchPriemEducationForms = 'ADM_FOE',
 	FetchPriemFinForms = 'ADM_ID',
+	AddPriemApplication = 'iDATA_APPLICATIONS',
 }
 
 export enum EnrollRestApi {

@@ -5,7 +5,8 @@ const createPersonReducer = createTransactionReducer(createPersonActions);
 
 export const transaction = (state: ITransactionState) => {
 	const { loading, error, result } = state.createPerson;
-	const npId = result.length > 0 ? result[0].np_uid : 0;
+	console.log('createPerson', result);
+	const npId = result.length > 0 ? result[0].npId : 0;
 
 	return { loading, error, result: npId };
 };

@@ -3,9 +3,12 @@ import React from 'react';
 import { connect, MapStateToProps } from 'react-redux';
 import { enrollApplicationsFormSelector, fromTransaction, IRootState } from '$store';
 import { disabledAddNewApplication, IApplication, IEnrollApplicationsForm, ISelectItem, ITransaction } from '$common';
+import Delete from '@material-ui/icons/Delete';
+
 import classes from './styles.module.css';
 import {
 	addPriemApplication,
+	fetchPriemFilials,
 	onChangeDirection,
 	onChangeEducationForm,
 	onChangeEducationLevel,
@@ -16,6 +19,7 @@ import {
 	onDeleteApplication,
 } from '$operations';
 import Button from '../../components/Buttons/Button';
+import { propOr } from 'ramda';
 
 interface IOwnProps {
 	onComplete: () => void;
@@ -31,6 +35,7 @@ interface IStateToProps extends IEnrollApplicationsForm {
 	disabledAddButton: boolean;
 }
 interface IDispatchToProps {
+	fetchPriemFilials: () => void;
 	onChangeFilial: (item: ISelectItem) => void;
 	onChangeInstitute: (item: ISelectItem) => void;
 	onChangeEducationLevel: (item: ISelectItem) => void;
@@ -47,108 +52,144 @@ class ApplicationsForm extends React.Component<IProps> {
 	onDeleteApplication = (index: number) => () => {
 		this.props.onDeleteApplication(index);
 	};
+	componentDidMount(): void {
+		this.props.fetchPriemFilials();
+	}
 	render() {
 		const name = 'applications.';
+		const {
+			disabledAddButton,
+			filials,
+			currentFilial,
+			onChangeFilial,
+			currentInstitute,
+			onChangeInstitute,
+			institutes,
+			educationLevels,
+			currentEducationLevel,
+			directions,
+			currentDirection,
+			currentProfile,
+			profiles,
+			onChangePayForm,
+			onChangeEducationForm,
+			onChangeDirection,
+			onChangeEducationLevel,
+			onChangeProfile,
+			currentEducationForm,
+			educationForms,
+			payForms,
+			currentPayForms,
+			applications,
+			onComplete,
+			addPriemApplication,
+		} = this.props;
 
 		return (
 			<div className="flexColumn">
-				<DropdownSelect
-					required
-					value={this.props.currentFilial}
-					onChange={this.props.onChangeFilial}
-					name={`${name}filials`}
-					options={this.props.filials.result}
-					placeholder={`Выберите филиал`}
-					title={'Филиал'}
-					loading={this.props.filials.loading}
-				/>
+				{!disabledAddButton && (
+					<>
+						<DropdownSelect
+							required
+							value={currentFilial}
+							onChange={onChangeFilial}
+							name={`${name}filials`}
+							options={filials.result}
+							placeholder={`Выберите филиал`}
+							title={'Филиал'}
+							loading={filials.loading}
+						/>
 
-				{!this.props.institutes.loading && this.props.institutes.result.length ? (
-					<DropdownSelect
-						required
-						value={this.props.currentInstitute}
-						onChange={this.props.onChangeInstitute}
-						name={`${name}institutes`}
-						options={this.props.institutes.result}
-						placeholder={`Выберите институт`}
-						title={'Институт'}
-					/>
-				) : null}
+						<DropdownSelect
+							required
+							value={currentInstitute}
+							onChange={onChangeInstitute}
+							name={`${name}institutes`}
+							options={institutes.result}
+							placeholder={`Выберите институт`}
+							title={'Институт'}
+							loading={institutes.loading}
+						/>
 
-				{!this.props.educationLevels.loading && this.props.educationLevels.result.length ? (
-					<DropdownSelect
-						required
-						value={this.props.currentEducationLevel}
-						onChange={this.props.onChangeEducationLevel}
-						name={`${name}educationLevel`}
-						options={this.props.educationLevels.result}
-						placeholder={`Выберите уровень образования`}
-						title={'Уровень образования'}
-					/>
-				) : null}
+						{currentInstitute ? (
+							<DropdownSelect
+								required
+								value={currentEducationLevel}
+								onChange={onChangeEducationLevel}
+								name={`${name}educationLevel`}
+								options={educationLevels.result}
+								placeholder={`Выберите уровень образования`}
+								title={'Уровень образования'}
+								loading={educationLevels.loading}
+							/>
+						) : null}
 
-				{!this.props.directions.loading && this.props.directions.result.length ? (
-					<DropdownSelect
-						required
-						value={this.props.currentDirection}
-						onChange={this.props.onChangeDirection}
-						name={`${name}directions`}
-						options={this.props.directions.result}
-						placeholder={`Выберите направление подготовки`}
-						title={'Направление подготовки'}
-					/>
-				) : null}
+						{currentEducationLevel ? (
+							<DropdownSelect
+								required
+								value={currentDirection}
+								onChange={onChangeDirection}
+								name={`${name}directions`}
+								options={directions.result}
+								placeholder={`Выберите направление подготовки`}
+								title={'Направление подготовки'}
+								loading={directions.loading}
+							/>
+						) : null}
 
-				{!this.props.profiles.loading &&
-				this.props.profiles.result.length &&
-				this.props.currentFilial &&
-				this.props.currentFilial.id === 1 ? (
-					<DropdownSelect
-						required
-						value={this.props.currentProfile}
-						onChange={this.props.onChangeProfile}
-						name={`${name}profiles`}
-						options={this.props.profiles.result}
-						placeholder={`Выберите профиль`}
-						title={'Профиль'}
-					/>
-				) : null}
+						{currentDirection ? (
+							<DropdownSelect
+								required
+								value={currentProfile}
+								onChange={onChangeProfile}
+								name={`${name}profiles`}
+								options={profiles.result}
+								placeholder={`Выберите профиль`}
+								title={'Профиль'}
+								loading={profiles.loading}
+							/>
+						) : null}
 
-				{!this.props.educationForms.loading && this.props.educationForms.result.length ? (
-					<DropdownSelect
-						required
-						value={this.props.currentEducationForm}
-						onChange={this.props.onChangeEducationForm}
-						name={`${name}educationForms`}
-						options={this.props.educationForms.result}
-						placeholder={`Выберите форма обучения`}
-						title={'Форма обучения'}
-					/>
-				) : null}
+						{currentProfile ? (
+							<DropdownSelect
+								required
+								value={currentEducationForm}
+								onChange={onChangeEducationForm}
+								name={`${name}educationForms`}
+								options={educationForms.result}
+								placeholder={`Выберите форма обучения`}
+								title={'Форма обучения'}
+								loading={educationForms.loading}
+							/>
+						) : null}
 
-				{!this.props.payForms.loading && this.props.payForms.result.length ? (
-					<DropdownSelect
-						required
-						value={this.props.currentPayForms}
-						isMulti
-						onChange={this.props.onChangePayForm}
-						name={`${name}payForms`}
-						options={this.props.payForms.result}
-						placeholder={`Выберите форма финансирования`}
-						title={'Форма финансирования'}
-					/>
-				) : null}
+						{currentEducationForm ? (
+							<DropdownSelect
+								required
+								value={currentPayForms}
+								isMulti
+								onChange={onChangePayForm}
+								name={`${name}payForms`}
+								options={payForms.result}
+								placeholder={`Выберите форма финансирования`}
+								title={'Форма финансирования'}
+								loading={payForms.loading}
+							/>
+						) : null}
+					</>
+				)}
 
-				{this.props.currentPayForms.length > 0 ? (
+				{currentPayForms.length > 0 ? (
 					<Button
 						primary
+						disabled={disabledAddButton}
 						wrapperClassName={classes.addDocButtonWrapper}
 						className={classes.addDocButton}
-						onClick={this.props.addPriemApplication}>
+						onClick={addPriemApplication}>
 						Добавить заявление
 					</Button>
 				) : null}
-				{this.props.applications.length ? (
+				{applications.length ? (
 					<table className={classes.table}>
 						<thead>
 							<th align="center">
@@ -177,7 +218,7 @@ class ApplicationsForm extends React.Component<IProps> {
 							</th>
 						</thead>
 						<tbody>
-							{this.props.applications.map((item: IApplication, index: number) => (
+							{applications.map((item: IApplication, index: number) => (
 								<tr>
 									<td>{index + 1}</td>
 									<td>{item.filial.name}</td>
@@ -186,19 +227,21 @@ class ApplicationsForm extends React.Component<IProps> {
 									<td>{item.profile.id ? item.profile.name : '-'}</td>
 									<td>{item.educationForm.name}</td>
 									<td>{item.payForm.name}</td>
-									<td>
-										<Button className={classes.deleteDocButton} primary onClick={this.onDeleteApplication(index)}>
-											{'Удалить'}
-										</Button>
+									<td onClick={this.onDeleteApplication(index)} className={classes.pointer}>
+										<Delete className={classes.deleteButton} />
 									</td>
 								</tr>
 							))}
 						</tbody>
 					</table>
 				) : null}
-
-				{this.props.applications.length ? (
-					<Button primary onClick={this.props.onComplete}>
+				{disabledAddButton && (
+					<span className={classes.header}>
+						По правилам приема можно подать заявления только на три направления подготовки
+					</span>
+				)}
+				{applications.length ? (
+					<Button primary onClick={onComplete}>
 						{'Далее'}
 					</Button>
 				) : null}
@@ -221,6 +264,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IRootState> = s
 };
 
 const mapDispatchToProps = {
+	fetchPriemFilials,
 	onChangeFilial,
 	onChangeInstitute,
 	onChangeEducationLevel,

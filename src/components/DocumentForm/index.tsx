@@ -116,7 +116,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 									validate={validateRequireTextField}
 									placeholder="Введите кем выдан документ"
 									label="Кем выдан документ"
-									name={`${name}docIssieBy`}
+									name={`${documentFormName}docIssieBy`}
 									multiline
 								/>
 							</>
@@ -126,7 +126,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 					</div>
 				) : null}
 				<div>
-					<FieldWrapper name={`${name}docFile`}>
+					<FieldWrapper name={`${documentFormName}docFile`}>
 						{props => <DownloadFileView {...props} file={props.value} title={this.props.docTitle} />}
 					</FieldWrapper>
 				</div>

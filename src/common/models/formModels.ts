@@ -32,7 +32,7 @@ export interface IChangeFieldAction {
 export interface IEnrollEducationForm extends IDocument {
 	firstHighEducation: boolean;
 	coolnessTypes: ISelectItem[];
-	prevEducation: number;
+	prevEducation: ISelectItem | null;
 	hasEge: boolean;
 }
 
@@ -81,7 +81,9 @@ export interface IDocumentsForm {
 	documents: IDocument[];
 	priemGroupNeedDoc: boolean;
 }
-
+export interface ICreatePersonData {
+	npId: number;
+}
 export interface IAccountVerificationForm {
 	verificationMethod: VerificationMethod;
 	verificationCode: string;

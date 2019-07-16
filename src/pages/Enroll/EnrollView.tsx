@@ -30,8 +30,8 @@ interface IProps {
 	activeStep: number;
 	passedStep: number;
 	steps: string[];
-	onCompleteCheckPersonForm: () => void;
-	onCompleteRegistration: () => void;
+	createNewPersonLogin: () => void;
+	createNewPersonFolder: () => void;
 }
 export class EnrollView extends React.PureComponent<IProps> {
 	static defaultProps = {
@@ -41,7 +41,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 	renderForm = (step: number) => {
 		switch (step) {
 			case 0: {
-				return <RegistrationForm onComplete={this.props.onCompleteCheckPersonForm} />;
+				return <RegistrationForm onComplete={this.props.createNewPersonLogin} />;
 			}
 			case 1: {
 				return <EnrollPersonForm onComplete={this.props.handleNext} />;
@@ -60,7 +60,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 			}
 
 			case 6: {
-				return <AccountVerificationForm onComplete={this.props.onCompleteRegistration} />;
+				return <AccountVerificationForm onComplete={this.props.createNewPersonFolder} />;
 			}
 			default: {
 				return null;

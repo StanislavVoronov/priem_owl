@@ -10,7 +10,6 @@ import {
 	enrollEducationFormSelector,
 	enrollPersonFormSelector,
 	enrollRegistrationSelector,
-	enrollSubmitRegFormAction,
 	findPersonTransaction,
 	fromTransaction,
 	IRootState,
@@ -34,7 +33,6 @@ import {
 	createLoginActions,
 	cyrillToLatin,
 	generatePassword,
-	IEnrollRegForm,
 	moment,
 	ServerBoolean,
 	VerificationMethod,
@@ -56,11 +54,7 @@ import { fetchPriemPayFormsTransaction } from '../../store/transactions/fetchPri
 import { fetchPriemGroupsTransaction } from '../../store/transactions/fetchPriemGroups';
 import { createPriemApplicationTransaction } from '../../store/transactions/createPriemApplication';
 
-export const onCompleteRegistrationForm = (
-	form: IEnrollRegForm,
-): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
-	dispatch(enrollSubmitRegFormAction(form));
-
+export const createNewLogin = (): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 	return dispatch(enrollCreateNewLogin()).then(() => {
 		return dispatch(findPerson());
 	});
@@ -183,7 +177,7 @@ const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> =>
 		need_hostel: contactsForm.needDormitory ? ServerBoolean.True : ServerBoolean.False,
 		sex: Number(registrationForm.gender),
 		hight_first: educationForm.firstHighEducation ? ServerBoolean.True : ServerBoolean.False,
-		best_prev_edu: educationForm.prevEducation,
+		best_prev_edu: educationForm.prevEducation ? educationForm.prevEducation.id : 0,
 		cheat_type: 0,
 	};
 
@@ -252,14 +246,6 @@ const updateAddress = (): ThunkAction<Promise<void>, IRootState, void, Action> =
 	]).then(() => Promise.resolve());
 };
 
-export const updatePersonInformation = (): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
-	return dispatch(createPerson())
-		.then(() => {
-			return Promise.all([dispatch(uploadDocList()), dispatch(updatePhone()), dispatch(updateAddress())]);
-		})
-		.then(() => Promise.resolve());
-};
-
 export const fetchPriemFilials = (): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	dispatch(fetchPriemFilialsTransaction()).then(response => {
 		dispatch(onChangeFilial(response[0]));
@@ -277,6 +263,7 @@ export const onChangeInstitute = (institute: ISelectItem): ThunkAction<void, IRo
 	dispatch,
 	getState,
 ) => {
+	console.log(111);
 	const { currentFilial } = enrollApplicationsFormSelector(getState());
 	dispatch(changeCurrentInstitute(institute));
 
@@ -468,8 +455,24 @@ export const addPriemApplication = (): ThunkAction<void, IRootState, void, Actio
 export const onDeleteApplication = (index: number): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	dispatch(deleteApplication(index));
 };
-
-export const createPriemApplications = (): ThunkAction<void, IRootState, void, Action> => (dispatch, getState) => {
+export const createNewPersonFolder = (): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
+	return dispatch(createPerson())
+		.then(() => {
+			return Promise.all([
+				dispatch(uploadDocList()),
+				dispatch(updatePhone()),
+				dispatch(updateAddress()),
+				dispatch(createPriemApplications()),
+			])
+				.then(() => Promise.resolve())
+				.catch(() => Promise.reject());
+		})
+		.catch(() => Promise.reject());
+};
+export const createPriemApplications = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
+	dispatch,
+	getState,
+) => {
 	const priemList = enrollApplicationsFormSelector(getState()).applications;
 
 	return Promise.all(

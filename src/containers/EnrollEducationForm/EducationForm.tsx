@@ -6,6 +6,8 @@ import { DictionaryState } from '@mgutm-fcu/dictionary';
 
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { dictionaryStateSelector, enrollEducationFormSelector, IRootState, submitEnrollEducationForm } from '$store';
+import FieldWrapper from '../../components/FieldWrapper';
+import DropdownSelect from '../../components/DropdownSelect';
 
 interface IStateToProps {
 	data: IEnrollEducationForm;
@@ -23,11 +25,24 @@ const EducationForm = (props: IProps) => {
 	const renderForm = () => {
 		const { dictionaries, data } = props;
 		const educationTypeDictionary = dictionaries[EDictionaryNameList.EducationDocTypes];
-
+		const previousEducationDictionary = props.dictionaries[EDictionaryNameList.PreviousEducation];
 		return (
 			<>
 				<Checkbox name="firstHighEducation" label="Получение высшего образования впервые" />
-
+				{previousEducationDictionary && (
+					<FieldWrapper name="prevEducation">
+						{props => (
+							<DropdownSelect
+								{...props}
+								required
+								name="prevEducation"
+								options={previousEducationDictionary.values}
+								placeholder="Выберите предыдущее образование"
+								title="Предыдущее образование"
+							/>
+						)}
+					</FieldWrapper>
+				)}
 				<DocumentForm
 					document={data}
 					title={'Предыдущее образование'}

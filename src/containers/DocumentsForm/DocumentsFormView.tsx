@@ -37,6 +37,7 @@ interface IProps extends IStylable, IDocumentsForm {
 }
 interface IState {
 	panelStatus: number[];
+	requiredDocuments: number[];
 }
 class DocumentsFormView extends React.PureComponent<IProps, IState> {
 	static defaultProps = {
@@ -44,6 +45,7 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 	};
 	state: IState = {
 		panelStatus: [],
+		requiredDocuments: [9, 10],
 	};
 	removeDocument = (index: number, remove: (index: number) => void) => () => {
 		remove(index);
@@ -62,9 +64,14 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 	};
 	renderDocument = (form: FormikProps<IDocumentsForm>) => ({ push, remove }: any) => {
 		const isDisabledAddButton = form.values.documents.map(validateDocument).includes(false);
+
+		const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
 		const docForEducation = form.values.documents.some(item =>
 			item.docType && item.docFile ? item.docType.id === 9 || item.docType.id === 10 : false,
 		);
+
+		const needDocuments =
+			dictionaryDocTypes && dictionaryDocTypes.values.filter(item => this.state.requiredDocuments.includes(item.id));
 
 		return (
 			<>
@@ -83,15 +90,14 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 						<li className={classes.tick}>Документ, удостоверающий личность</li>
 						<li className={classes.tick}>Документ о регистрации места жительства</li>
 						<li className={classes.tick}>Документ о предыдущем образовании</li>
-						<li className={docForEducation ? classes.tick : classes.cross}>
-							Приложение к документу о предыдущем образовании
-						</li>
+						{needDocuments.map(item => (
+							<li className={classes.tick}>{item.name}</li>
+						))}
 					</ul>
 				</List>
 				{form.values.documents.map((item, index) => {
 					const { dictionaries } = this.props;
 					const { docType, docSubType } = item;
-					const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
 
 					const docTypeId = docType && prop('id')(docType);
 					const docSubTypeId = docSubType && prop('id')(docSubType);

@@ -38,7 +38,7 @@ export const createPersonTransaction = (
 		...data,
 	})
 		.then(response => {
-			dispatch(createPersonActions.success([response]));
+			dispatch(createPersonActions.success([{ npId: response.np_uid }]));
 
 			return Promise.resolve();
 		})

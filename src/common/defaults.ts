@@ -33,7 +33,7 @@ export const defaultEducationDataForm: IEnrollEducationForm = {
 	docType: { id: 2, name: 'Документ об предыдущем образовании', need_info: 1, has_number: 1 },
 	firstHighEducation: true,
 	coolnessTypes: [],
-	prevEducation: 3,
+	prevEducation: { id: 1, name: 'Среднее общее' },
 	hasEge: false,
 };
 

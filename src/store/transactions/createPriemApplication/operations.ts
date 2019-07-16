@@ -6,39 +6,44 @@ import { checkLoginActions, createPriemApplicationActions } from '$common';
 import { PriemRestApi, PriemApi } from '$services';
 import { IServerError } from '$common';
 
-interface ICreatePriemApplicationRequest {
+interface ICreatePriemApplication {
 	admId: number;
 	profileId: number;
 	priority: number;
 }
 
+interface ICreatePriemApplicationRequest {
+	ADM_ID: number;
+	PROF_ID: number;
+	PRIORITY: number;
+}
+
 export interface ICreatePriemApplicationResponse {
-	COUNT: number;
+	count: number;
 }
 
 export const createPriemApplicationTransaction = (
-	data: ICreatePriemApplicationRequest,
+	data: ICreatePriemApplication,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
-	const { admId, priority, profileId } = data;
 	const payload = {
-		admId,
-		priority,
-		profileId,
+		ADM_ID: data.admId,
+		PRIORITY: data.priority,
+		PROF_ID: data.profileId,
 	};
 
-	dispatch(createPriemApplicationActions.request(admId));
+	dispatch(createPriemApplicationActions.request(data.admId));
 
 	return PriemApi.checkData<ICreatePriemApplicationRequest, ICreatePriemApplicationResponse>(
-		PriemRestApi.CheckUniqueLogin,
+		PriemRestApi.AddPriemApplication,
 		payload,
 	)
-		.then(data => {
-			dispatch(createPriemApplicationActions.success(admId, data));
+		.then(response => {
+			dispatch(createPriemApplicationActions.success(data.admId, response));
 
 			return Promise.resolve();
 		})
 		.catch((error: IServerError) => {
-			dispatch(createPriemApplicationActions.failure(admId, error));
+			dispatch(createPriemApplicationActions.failure(data.admId, error));
 
 			return Promise.reject(error);
 		});

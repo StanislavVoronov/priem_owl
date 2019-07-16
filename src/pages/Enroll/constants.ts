@@ -17,9 +17,8 @@ export const SHORT_DICTIONARY_LIST = [
 
 export const FULL_DICTIONARY_LIST = [
 	{
-		dictionary: EDictionaryNameList.CoolnessTypes,
-		columns: ['id', 'name', 'hidden'],
-		filter: (item: number) => item !== 1,
+		dictionary: EDictionaryNameList.PreviousEducation,
+		columns: ['id', 'name', 'order_place'],
 	},
 	{ dictionary: EDictionaryNameList.Governments, columns: ['id', 'name', 'phone_code'] },
 	{

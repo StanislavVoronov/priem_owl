@@ -39,7 +39,7 @@ export const AnyDocumentFormSchema = object().shape({
 			docIssieBy: mixed().test('docIssieBy', EMPTY_FIELD_MESSAGE, function(value: string = '') {
 				const { docType } = this.parent;
 
-				return docType && docType.need_info ? !!value : true;
+				return docType && docType.need_info ? RUS_ALPHABET.test(value) : true;
 			}),
 			docDate: mixed().test('docDate', EMPTY_FIELD_MESSAGE, function(value: string = '') {
 				const { docType } = this.parent;
@@ -81,7 +81,10 @@ export const EnrollRegFormSchema = object({
 	gender: number().moreThan(0, 'Необходимо выбрать одно из значений'),
 	middleName: string()
 		.notRequired()
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
+		.test({
+			message: 'Поле может содержать только русские буквы',
+			test: (value = '') => (value.length ? RUS_ALPHABET.test(value) : true),
+		}),
 });
 
 export const EnrollVerificationFormSchema = object({
@@ -100,39 +103,17 @@ export const EnrollContactsFormSchema = object({
 	regStreet: string()
 		.required(EMPTY_FIELD_MESSAGE)
 		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
-	regHome: string()
-		.required(EMPTY_FIELD_MESSAGE)
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
-	regBlock: string()
-		.required(EMPTY_FIELD_MESSAGE)
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
-	regFlat: string()
-		.notRequired()
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
-	liveIndex: string()
-		.notRequired()
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
-	liveRegion: string()
-		.notRequired()
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
-	liveLocality: string()
-		.notRequired()
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
-	liveStreet: string()
-		.notRequired()
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
-	liveHome: string()
-		.notRequired()
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
-	liveBlock: string()
-		.notRequired()
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
-	liveFlat: string()
-		.notRequired()
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
-	homePhone: string()
-		.notRequired()
-		.test({ message: 'Поле может содержать только русские буквы', test: value => RUS_ALPHABET.test(value) }),
+	regHome: string().required(EMPTY_FIELD_MESSAGE),
+	regBlock: string().required(EMPTY_FIELD_MESSAGE),
+	regFlat: string().notRequired(),
+	liveIndex: string().notRequired(),
+	liveRegion: string().notRequired(),
+	liveLocality: string().notRequired(),
+	liveStreet: string().notRequired(),
+	liveHome: string().notRequired(),
+	liveBlock: string().notRequired(),
+	liveFlat: string().notRequired(),
+	homePhone: string().notRequired(),
 	mobPhone: string().required(EMPTY_FIELD_MESSAGE),
 	isRegAddressEqualLive: boolean().notRequired(),
 	mobileGovernment: object().notRequired(),
