@@ -50,30 +50,6 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 	) => {
 		form.setFieldValue(event.target.name, checked);
 	};
-	// onChange = (event: any) => {
-	// 	this.props.updateContactsForm(event);
-	// };
-	// onChangeMobPhone: React.ChangeEventHandler<HTMLInputElement> = event => {
-	// 	const mobPhoneValue: string[] | null = inputValueAsString(event)
-	// 		.replace(/\D/g, '')
-	// 		.substring(`${this.props.mobileGovernment.phone_code}`.length)
-	// 		.match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-	// 	const phoneCode = `+${this.props.dta.mobileGovernment.phone_code}`;
-	// 	const maskMobPhone =
-	// 		phoneCode +
-	// 		(mobPhoneValue
-	// 			? !mobPhoneValue[2]
-	// 				? mobPhoneValue[1]
-	// 				: '(' +
-	// 				  mobPhoneValue[1] +
-	// 				  ') ' +
-	// 				  mobPhoneValue[2] +
-	// 				  (mobPhoneValue[3] ? `-${mobPhoneValue[3]}` : '') +
-	// 				  (mobPhoneValue[4] ? +`-${mobPhoneValue[4]}` : '')
-	// 			: '');
-	//
-	// 	this.onChange({ ...event, target: { ...event.target, value: maskMobPhone, name: event.target.name } });
-	// };
 
 	renderForm = (form: FormikProps<IEnrollContactsForm>) => {
 		const governmentDictionary = this.props.dictionaries[EDictionaryNameList.Governments];

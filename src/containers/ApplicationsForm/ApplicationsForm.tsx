@@ -7,19 +7,18 @@ import Delete from '@material-ui/icons/Delete';
 
 import classes from './styles.module.css';
 import {
-	addPriemApplication,
+	addPriemApplication as addPriemApplicationAction,
 	fetchPriemFilials,
-	onChangeDirection,
-	onChangeEducationForm,
-	onChangeEducationLevel,
-	onChangeFilial,
-	onChangeInstitute,
-	onChangePayForm,
-	onChangeProfile,
+	onChangeDirection as onChangeDirectionAction,
+	onChangeEducationForm as onChangeEducationFormAction,
+	onChangeEducationLevel as onChangeEducationLevelAction,
+	onChangeFilial as onChangeFilialAction,
+	onChangeInstitute as onChangeInstituteAction,
+	onChangePayForm as onChangePayFormAction,
+	onChangeProfile as onChangeProfileAction,
 	onDeleteApplication,
 } from '$operations';
 import Button from '../../components/Buttons/Button';
-import { propOr } from 'ramda';
 
 interface IOwnProps {
 	onComplete: () => void;
@@ -265,14 +264,14 @@ const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IRootState> = s
 
 const mapDispatchToProps = {
 	fetchPriemFilials,
-	onChangeFilial,
-	onChangeInstitute,
-	onChangeEducationLevel,
-	onChangeDirection,
-	onChangeProfile,
-	onChangeEducationForm,
-	onChangePayForm,
-	addPriemApplication,
+	onChangeFilial: onChangeFilialAction,
+	onChangeInstitute: onChangeInstituteAction,
+	onChangeEducationLevel: onChangeEducationLevelAction,
+	onChangeDirection: onChangeDirectionAction,
+	onChangeProfile: onChangeProfileAction,
+	onChangeEducationForm: onChangeEducationFormAction,
+	onChangePayForm: onChangePayFormAction,
+	addPriemApplication: addPriemApplicationAction,
 	onDeleteApplication,
 };
 export default connect(

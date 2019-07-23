@@ -23,6 +23,7 @@ import {
 	AnyDocumentFormSchema,
 	prop,
 	IDocumentsForm,
+	propOr,
 	defaultDocument,
 } from '$common';
 import styles from './styles';
@@ -32,12 +33,11 @@ import { FormikProps, FieldArray } from 'formik';
 
 interface IProps extends IStylable, IDocumentsForm {
 	dictionaries: DictionaryState;
-	foreigner: boolean;
+	requiredDocuments: number[];
 	submit: (values: IDocumentsForm) => void;
 }
 interface IState {
 	panelStatus: number[];
-	requiredDocuments: number[];
 }
 class DocumentsFormView extends React.PureComponent<IProps, IState> {
 	static defaultProps = {
@@ -45,7 +45,6 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 	};
 	state: IState = {
 		panelStatus: [],
-		requiredDocuments: [9, 10],
 	};
 	removeDocument = (index: number, remove: (index: number) => void) => () => {
 		remove(index);
@@ -66,12 +65,10 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 		const isDisabledAddButton = form.values.documents.map(validateDocument).includes(false);
 
 		const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
-		const docForEducation = form.values.documents.some(item =>
-			item.docType && item.docFile ? item.docType.id === 9 || item.docType.id === 10 : false,
-		);
 
-		const needDocuments =
-			dictionaryDocTypes && dictionaryDocTypes.values.filter(item => this.state.requiredDocuments.includes(item.id));
+		const needDocuments = dictionaryDocTypes
+			? dictionaryDocTypes.values.filter(item => this.props.requiredDocuments.includes(item.id))
+			: [];
 
 		return (
 			<>
@@ -91,7 +88,14 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 						<li className={classes.tick}>Документ о регистрации места жительства</li>
 						<li className={classes.tick}>Документ о предыдущем образовании</li>
 						{needDocuments.map(item => (
-							<li className={classes.tick}>{item.name}</li>
+							<li
+								className={
+									form.values.documents.some(doc => propOr('', 'id', doc.docType) === item.id)
+										? classes.tick
+										: classes.cross
+								}>
+								{item.name}
+							</li>
 						))}
 					</ul>
 				</List>
@@ -141,17 +145,16 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 													placeholder={'Введите код подразделения'}
 												/>
 											) : null}
+											<Button
+												wrapperClassName={classes.deleteDocButtonContainer}
+												className={classes.deleteDocButton}
+												primary
+												onClick={this.removeDocument(index, remove)}>
+												{'Удалить документ'}
+											</Button>
 										</React.Fragment>
 									}
 								/>
-
-								<Button
-									wrapperClassName={this.props.classes.deleteDocButtonContainer}
-									className={this.props.classes.deleteDocButton}
-									primary
-									onClick={this.removeDocument(index, remove)}>
-									{'Удалить документ'}
-								</Button>
 							</ExpansionPanelDetails>
 						</ExpansionPanel>
 					);
@@ -171,19 +174,13 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 		return <FieldArray validateOnChange={false} name="documents" render={this.renderDocument(form)} />;
 	};
 	disabledForm = (form: FormikProps<IDocumentsForm>) => {
-		return !form.values.documents.some(item =>
-			item.docType && item.docFile ? item.docType.id === 9 || item.docType.id === 10 : false,
-		);
+		return !this.props.requiredDocuments.every(docId => {
+			return form.values.documents.some(doc => propOr('', 'id', doc.docType) === docId && validateDocument(doc));
+		});
 	};
 	render() {
 		return (
 			<>
-				{/*<div>*/}
-				{/*Для добавления заявления скачайте и прикрепите документ <b>только</b> с заполненную форму*/}
-				{/*<a href="http://mgutm.ru/entrant_2012/files/prikazi/368d/prilojenie_19_3105.pdf" target="_blank">*/}
-				{/*{' документ'}*/}
-				{/*</a>*/}
-				{/*</div>*/}
 				<PriemForm
 					schema={AnyDocumentFormSchema}
 					buttonText={'Далее'}

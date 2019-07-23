@@ -29,7 +29,6 @@ class DownloadFile extends React.Component<IProps> {
 
 				return;
 			}
-			console.log('size', size);
 			if (size >= 5) {
 				alert('Файл не должен превышать размер 5 Мб');
 

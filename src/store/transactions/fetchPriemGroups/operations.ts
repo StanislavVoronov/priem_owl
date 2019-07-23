@@ -45,6 +45,7 @@ export const fetchPriemGroupsTransaction = (
 		DIR: data.directionId,
 		FIN: data.finFormId,
 	};
+
 	return PriemApi.selectData<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemFinForms, payload)
 		.then(response => {
 			const list = response.map(item => ({ admId: item.ID, needDoc: item.NEED_DOC > 0 }));

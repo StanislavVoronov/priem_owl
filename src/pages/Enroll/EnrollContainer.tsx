@@ -28,7 +28,7 @@ type IProps = IStateToProps & IDispatchToProps;
 
 class EnrollContainer extends React.Component<IProps, IState> {
 	state: IState = {
-		activeStep: 5,
+		activeStep: 0,
 		passedStep: 0,
 		dictionaries: SHORT_DICTIONARY_LIST,
 	};

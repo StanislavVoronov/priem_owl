@@ -199,8 +199,10 @@ const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Action> =
 		.then(() => {
 			return Promise.resolve();
 		})
-		.catch(() => {
-			return Promise.reject();
+		.catch(error => {
+			console.log('uploadDocList', error, document);
+
+			return Promise.reject(error);
 		});
 };
 
@@ -232,17 +234,18 @@ const updateAddress = (): ThunkAction<Promise<void>, IRootState, void, Action> =
 		'квартира: ',
 	];
 
-	const regAddress = [regIndex, regRegion, regLocality, regStreet, regHome, regBlock, regFlat].filter(value => value);
+	const regAddress = [regIndex, regRegion, regLocality, regStreet, regHome, regBlock, regFlat]
+		.filter(value => value)
+		.join(', ');
 
-	const liveAddress = [liveIndex, liveRegion, liveLocality, liveStreet, liveHome, liveBlock, liveFlat].filter(
-		value => value,
-	);
+	const liveAddress = [liveIndex, liveRegion, liveLocality, liveStreet, liveHome, liveBlock, liveFlat]
+		.filter(value => value)
+		.join(', ');
 
 	return Promise.all([
-		dispatch(updateAddressTransaction({ address: regAddress.join(', '), type: 1 })),
-		!isRegAddressEqualLive
-			? dispatch(updateAddressTransaction({ address: liveAddress.join(', '), type: 2 }))
-			: Promise.resolve(),
+		dispatch(updateAddressTransaction({ address: regAddress, type: 1 })),
+
+		dispatch(updateAddressTransaction({ address: liveAddress.length ? liveAddress : regAddress, type: 2 })),
 	]).then(() => Promise.resolve());
 };
 
@@ -465,9 +468,17 @@ export const createNewPersonFolder = (): ThunkAction<Promise<void>, IRootState, 
 				dispatch(createPriemApplications()),
 			])
 				.then(() => Promise.resolve())
-				.catch(() => Promise.reject());
+				.catch(error => {
+					console.log('createNewPersonFolder', error);
+
+					return Promise.reject();
+				});
 		})
-		.catch(() => Promise.reject());
+		.catch(error => {
+			console.log('createNewPersonFolder', error);
+
+			return Promise.reject();
+		});
 };
 export const createPriemApplications = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
 	dispatch,

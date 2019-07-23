@@ -26,14 +26,15 @@ const EducationForm = (props: IProps) => {
 		const { dictionaries, data } = props;
 		const educationTypeDictionary = dictionaries[EDictionaryNameList.EducationDocTypes];
 		const previousEducationDictionary = props.dictionaries[EDictionaryNameList.PreviousEducation];
+
 		return (
 			<>
 				<Checkbox name="firstHighEducation" label="Получение высшего образования впервые" />
 				{previousEducationDictionary && (
 					<FieldWrapper name="prevEducation">
-						{props => (
+						{field => (
 							<DropdownSelect
-								{...props}
+								{...field}
 								required
 								name="prevEducation"
 								options={previousEducationDictionary.values}

@@ -131,8 +131,8 @@ export class EnrollView extends React.PureComponent<IProps> {
 							label={
 								<a
 									style={{ fontSize: '1rem' }}
-									onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/naprovleniya_podgotovki.php')}
-									href="http://mgutm.ru/entrant_2012/naprovleniya_podgotovki.php"
+									onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/plan-kalendar-priema.php')}
+									href="http://mgutm.ru/entrant_2012/plan-kalendar-priema.php"
 									target="_blank">
 									Календарь приема
 								</a>
