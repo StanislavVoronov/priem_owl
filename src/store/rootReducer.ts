@@ -6,6 +6,7 @@ import { enrollPersonForm } from './personForm';
 import { enrollContactsForm } from './contactsForm';
 import { enrollEducationForm } from './educationForm';
 import { enrollDocumentsForm } from './documentsForm';
+import { enrollApplicationsForm } from './applicationsForm';
 import transactions from './transactions';
 import { enrollAccountVerificationForm } from './accountVerification';
 
@@ -13,6 +14,7 @@ const rootReducer = combineReducers<any>({
 	enrollRegistration,
 	enrollPersonForm,
 	enrollEducationForm,
+	enrollApplicationsForm,
 	dictionaries: dictionaryReducer,
 	enrollAccountVerificationForm,
 	enrollContactsForm,

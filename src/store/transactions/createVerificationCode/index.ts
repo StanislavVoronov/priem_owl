@@ -1,5 +1,5 @@
-import createVerificationCode, { createVerificationCodeSelector } from './reducer';
+import createVerificationCode, { transaction } from './reducer';
 
 export * from './operations';
-export { createVerificationCodeSelector };
+export { transaction };
 export default createVerificationCode;

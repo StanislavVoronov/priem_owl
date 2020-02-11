@@ -9,6 +9,7 @@ export * from './contactsForm';
 export * from './documentsForm';
 export * from './educationForm';
 export * from './accountVerification';
+export * from './applicationsForm';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 

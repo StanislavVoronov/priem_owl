@@ -23,6 +23,7 @@ import {
 	AnyDocumentFormSchema,
 	prop,
 	IDocumentsForm,
+	propOr,
 	defaultDocument,
 } from '$common';
 import styles from './styles';
@@ -30,10 +31,9 @@ import classes from './styles.module.css';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { FormikProps, FieldArray } from 'formik';
 
-interface IProps extends IStylable {
-	documents: IDocument[];
+interface IProps extends IStylable, IDocumentsForm {
 	dictionaries: DictionaryState;
-	foreigner: boolean;
+	requiredDocuments: number[];
 	submit: (values: IDocumentsForm) => void;
 }
 interface IState {
@@ -63,9 +63,12 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 	};
 	renderDocument = (form: FormikProps<IDocumentsForm>) => ({ push, remove }: any) => {
 		const isDisabledAddButton = form.values.documents.map(validateDocument).includes(false);
-		const docForEducation = form.values.documents.some(item =>
-			item.docType && item.docFile ? item.docType.id === 9 || item.docType.id === 10 : false,
-		);
+
+		const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
+
+		const needDocuments = dictionaryDocTypes
+			? dictionaryDocTypes.values.filter(item => this.props.requiredDocuments.includes(item.id))
+			: [];
 
 		return (
 			<>
@@ -84,15 +87,21 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 						<li className={classes.tick}>Документ, удостоверающий личность</li>
 						<li className={classes.tick}>Документ о регистрации места жительства</li>
 						<li className={classes.tick}>Документ о предыдущем образовании</li>
-						<li className={docForEducation ? classes.tick : classes.cross}>
-							Приложение к документу о предыдущем образовании
-						</li>
+						{needDocuments.map(item => (
+							<li
+								className={
+									form.values.documents.some(doc => propOr('', 'id', doc.docType) === item.id)
+										? classes.tick
+										: classes.cross
+								}>
+								{item.name}
+							</li>
+						))}
 					</ul>
 				</List>
 				{form.values.documents.map((item, index) => {
 					const { dictionaries } = this.props;
 					const { docType, docSubType } = item;
-					const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
 
 					const docTypeId = docType && prop('id')(docType);
 					const docSubTypeId = docSubType && prop('id')(docSubType);
@@ -136,17 +145,16 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 													placeholder={'Введите код подразделения'}
 												/>
 											) : null}
+											<Button
+												wrapperClassName={classes.deleteDocButtonContainer}
+												className={classes.deleteDocButton}
+												primary
+												onClick={this.removeDocument(index, remove)}>
+												{'Удалить документ'}
+											</Button>
 										</React.Fragment>
 									}
 								/>
-
-								<Button
-									wrapperClassName={this.props.classes.deleteDocButtonContainer}
-									className={this.props.classes.deleteDocButton}
-									primary
-									onClick={this.removeDocument(index, remove)}>
-									{'Удалить документ'}
-								</Button>
 							</ExpansionPanelDetails>
 						</ExpansionPanel>
 					);
@@ -166,23 +174,17 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 		return <FieldArray validateOnChange={false} name="documents" render={this.renderDocument(form)} />;
 	};
 	disabledForm = (form: FormikProps<IDocumentsForm>) => {
-		return !form.values.documents.some(item =>
-			item.docType && item.docFile ? item.docType.id === 9 || item.docType.id === 10 : false,
-		);
+		return !this.props.requiredDocuments.every(docId => {
+			return form.values.documents.some(doc => propOr('', 'id', doc.docType) === docId && validateDocument(doc));
+		});
 	};
 	render() {
 		return (
 			<>
-				{/*<div>*/}
-				{/*Для добавления заявления скачайте и прикрепите документ <b>только</b> с заполненную форму*/}
-				{/*<a href="http://mgutm.ru/entrant_2012/files/prikazi/368d/prilojenie_19_3105.pdf" target="_blank">*/}
-				{/*{' документ'}*/}
-				{/*</a>*/}
-				{/*</div>*/}
 				<PriemForm
 					schema={AnyDocumentFormSchema}
 					buttonText={'Далее'}
-					initialValues={{ documents: this.props.documents }}
+					initialValues={{ documents: this.props.documents, priemGroupNeedDoc: this.props.priemGroupNeedDoc }}
 					onSubmit={this.props.submit}
 					disabled={this.disabledForm}
 					renderForm={this.renderFieldArray}

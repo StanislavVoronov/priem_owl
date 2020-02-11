@@ -1,0 +1,62 @@
+.addDocButtonWrapper {
+	margin: 20px 0;
+}
+
+.addDocButton {
+	color: white;
+	background-color: #64991e;
+}
+
+.addDocButton:hover {
+	background-color: #507a18;
+}
+
+.deleteDocButton {
+	color: white;
+	background-color: red;
+}
+.deleteDocButton:hover {
+	background-color: #902020;
+}
+
+.table {
+	border-collapse: collapse;
+	margin: 32px 0 40px 0;
+	width: 100%;
+}
+.table thead th {
+	padding: 10px 0;
+	background: #3f51b5;
+	color: white;
+	border-right: 2px solid;
+}
+.table td {
+	text-align: center;
+}
+
+.table tbody td {
+	border-style: solid;
+	border-width: 0 0 1px 0;
+	padding: 14px;
+}
+
+.table tbody td:last-child {
+	border-width: 0 1px 1px 0;
+}
+
+.table tbody td:first-child {
+	border-width: 0 0 1px 1px;
+}
+
+.header {
+	font-size: 18px;
+	text-align: center;
+	font-weight: bold;
+	padding: 0 0 20px 0;
+}
+.deleteButton {
+	color: red;
+}
+.pointer {
+	cursor: pointer;
+}

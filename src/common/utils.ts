@@ -1,5 +1,12 @@
 import { Action, createAction, handleActions } from 'redux-actions';
-import { IDictionaryItem, initialTransactionState, IServerError, ITransaction, ITransactionActions } from '$common';
+import {
+	IApplication,
+	IDictionaryItem,
+	initialTransactionState,
+	IServerError,
+	ITransaction,
+	ITransactionActions,
+} from '$common';
 import { ChangeEvent } from 'react';
 import { ARRAY_ENG_ALPHABET, ARRAY_RUS_ALPHABET } from './constants';
 
@@ -35,22 +42,25 @@ export const createTransactionActions = <T>(nameSpace: string) => {
 
 export const createTransactionActionsById = <T>(nameSpace: string) => {
 	return {
-		request: createAction(`${nameSpace}/transactionRequest`, (id: string) => ({ id })),
-		success: createAction(`${nameSpace}/transactionSuccess`, (id: string, result: T[]) => ({ result, id })),
-		failure: createAction(`${nameSpace}/transactionFailure`, (id: string, error: IServerError) => ({ error, id })),
+		request: createAction(`${nameSpace}/transactionRequest`, (id: string | number) => ({ id })),
+		success: createAction(`${nameSpace}/transactionSuccess`, (id: string | number, result: T[]) => ({ result, id })),
+		failure: createAction(`${nameSpace}/transactionFailure`, (id: string | number, error: IServerError) => ({
+			error,
+			id,
+		})),
 	};
 };
 
 export const createTransactionReducer = <R, S, F>(actions: ITransactionActions<R, S, F>) => {
 	return handleActions<ITransaction<S>>(
 		{
-			[actions.request.toString()]: state => ({
-				...state,
+			[actions.request.toString()]: () => ({
+				result: [],
 				loading: true,
 				error: null,
 			}),
 			[actions.success.toString()]: (state, action) => {
-				return { ...state, loading: false, result: action.payload ? action.payload.result : [] };
+				return { ...state, loading: false, result: action.payload.result || [] };
 			},
 			[actions.failure.toString()]: (state, action) => ({
 				...state,
@@ -83,4 +93,8 @@ export const mergeSchemes = (...schemas: any[]) => {
 	const merged = rest.reduce((mergedSchemas, schema) => mergedSchemas.concat(schema), first);
 
 	return merged;
+};
+
+export const disabledAddNewApplication = (applications: IApplication[]): boolean => {
+	return new Set(applications.map(item => item.direction.id)).size > 2;
 };

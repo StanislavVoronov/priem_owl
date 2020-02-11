@@ -7,7 +7,7 @@ import LoadingText from './LoadingText';
 
 interface IProps<Values> {
 	initialValues: Values;
-	schema: any;
+	schema?: any;
 	buttonText?: string;
 	onSubmit: (values: any) => void;
 	renderForm: (form: FormikProps<Values>) => React.ReactNode | React.ReactNode[];
@@ -31,7 +31,6 @@ class PriemForm<Values> extends React.PureComponent<IProps<Values>> {
 		if (loading) {
 			return <LoadingText>{loadingText}</LoadingText>;
 		}
-		console.log('priemForm', form);
 
 		return (
 			<Form noValidate={true} className="flexColumn">

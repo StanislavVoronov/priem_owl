@@ -7,14 +7,6 @@ export enum EDictionaryNameList {
 	EducationDocTypes = 'directory_doc_subtypes_education_doc',
 	Governments = 'directory_goverments',
 	PreviousEducation = 'directory_prev_educations',
-	PriemDepartments = 'directory_departments',
-	PriemFilials = 'directory_filial',
-	PriemUniversities = 'directory_inst',
-	PriemDirections = 'directory_directions',
-	PriemProfiles = 'directory_prof',
-	PriemFormEducation = 'directory_form_education',
-	PriemLevelEducation = 'directory_education_level',
-	PriemPaySources = 'directory_financial_sources',
 	PriemSpecialCategories = 'directory_cheat_types',
 }
 

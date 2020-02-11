@@ -6,6 +6,8 @@ import { connect, MapStateToProps } from 'react-redux';
 import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
 
 import { IRootState, fromTransaction, dictionaryStateSelector } from '$store';
+import { createNewLogin, createNewPersonFolder } from '$operations';
+import { IAccountVerificationForm } from '$common';
 
 interface IState {
 	activeStep: number;
@@ -17,7 +19,12 @@ interface IStateToProps {
 	dictionaries: DictionaryState;
 	personId: number;
 }
-type IProps = IStateToProps;
+
+interface IDispatchToProps {
+	createNewPersonFolder: () => Promise<void>;
+	createNewLogin: () => Promise<void>;
+}
+type IProps = IStateToProps & IDispatchToProps;
 
 class EnrollContainer extends React.Component<IProps, IState> {
 	state: IState = {
@@ -25,6 +32,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		passedStep: 0,
 		dictionaries: SHORT_DICTIONARY_LIST,
 	};
+
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
 	}
@@ -33,8 +41,10 @@ class EnrollContainer extends React.Component<IProps, IState> {
 			activeStep: step,
 		});
 	};
-	onCompleteCheckPersonForm = () => {
-		this.setState({ dictionaries: FULL_DICTIONARY_LIST, activeStep: this.state.activeStep + 1 });
+	createNewPersonLogin = () => {
+		this.props.createNewLogin().then(() => {
+			this.setState({ dictionaries: FULL_DICTIONARY_LIST, activeStep: this.state.activeStep + 1 });
+		});
 	};
 	onCompleteRegistration = () => {
 		this.setState({ passedStep: -1, activeStep: this.state.activeStep + 1 });
@@ -42,7 +52,9 @@ class EnrollContainer extends React.Component<IProps, IState> {
 	handleNext = () => {
 		this.setState({ activeStep: this.state.activeStep + 1, passedStep: this.state.passedStep + 1 });
 	};
-
+	createNewPersonFolder = () => {
+		this.props.createNewPersonFolder().then(this.onCompleteRegistration);
+	};
 	render() {
 		const loading =
 			Object.keys(this.props.dictionaries).length === 0 ||
@@ -54,11 +66,11 @@ class EnrollContainer extends React.Component<IProps, IState> {
 					steps={NEW_PERSON_STEPS}
 					loading={loading}
 					handleNext={this.handleNext}
-					onCompleteCheckPersonForm={this.onCompleteCheckPersonForm}
-					onCompleteRegistration={this.onCompleteRegistration}
+					createNewPersonLogin={this.createNewPersonLogin}
 					activeStep={this.state.activeStep}
 					handleStep={this.handleStep}
 					passedStep={this.state.passedStep}
+					createNewPersonFolder={this.createNewPersonFolder}
 				/>
 			</Dictionary>
 		);
@@ -67,9 +79,17 @@ class EnrollContainer extends React.Component<IProps, IState> {
 
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
 	const dictionaries = dictionaryStateSelector(state);
-	const { result } = fromTransaction.createLoginSelector(state);
+	const { result } = fromTransaction.createLogin(state);
 
 	return { personId: result, dictionaries };
 };
 
-export default connect(mapStateToProps)(EnrollContainer);
+const mapDispatchToProps = {
+	createNewLogin,
+	createNewPersonFolder,
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(EnrollContainer);

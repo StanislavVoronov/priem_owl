@@ -5,8 +5,8 @@ import { ITransactionState } from '$store';
 
 const uploadDocumentReducer = createTransactionReducer(uploadDocumentsActions);
 
-export const updateDocumentSelector = (state: ITransactionState, id: string) => {
-	return state.uploadDocuments[id];
+export const transactionList = (state: ITransactionState) => {
+	return state.uploadDocuments;
 };
 
 const uploadDocumentsReducer = handleActions(
@@ -19,7 +19,6 @@ const uploadDocumentsReducer = handleActions(
 			if (!(action.payload && action.payload.id)) {
 				return state;
 			}
-			console.log('state', action, state);
 
 			return {
 				...state,

@@ -3,14 +3,15 @@ export class JsonRequest {
 	path: string = '';
 	body: any = '';
 
-	constructor(host: string, path: string, api: string, payload: any, extraData: any) {
+	constructor(host: string, path: string, api: string, payload: any, extraData: any = {}) {
 		this.host = host;
 		this.path = path;
 		const body = new FormData();
 		body.append('api', api);
-		body.append('values', JSON.stringify(payload));
+		if (payload) {
+			body.append('values', JSON.stringify(payload));
+		}
 		Object.keys(extraData).forEach((key: string) => {
-			console.log('key', extraData);
 			body.append(key, extraData[key].value, extraData[key].name);
 		});
 		this.body = body;

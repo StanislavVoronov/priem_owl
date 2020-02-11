@@ -1,10 +1,15 @@
 import * as React from 'react';
 import RegistrationView from './RegistrationView';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { IRootState, enrollRegistrationSelector, dictionaryStateSelector, fromTransaction } from '$store';
+import {
+	IRootState,
+	enrollRegistrationSelector,
+	dictionaryStateSelector,
+	fromTransaction,
+	enrollSubmitRegFormAction,
+} from '$store';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { IEnrollRegForm, IServerError } from '$common';
-import { onCompleteRegistrationForm } from '$operations';
 
 interface IStateToProps {
 	dictionaries: DictionaryState;
@@ -14,15 +19,15 @@ interface IStateToProps {
 	personExists: boolean;
 }
 interface IDispatchToProps {
-	submit: (values: IEnrollRegForm) => Promise<void>;
+	onSubmit: (values: IEnrollRegForm) => void;
 }
 interface IOwnProps {
 	onComplete: () => void;
 }
 type Props = IStateToProps & IDispatchToProps & IOwnProps;
 class EnrollRegistrationContainer extends React.Component<Props> {
-	submit = (values: IEnrollRegForm) => {
-		this.props.submit(values).then(this.props.onComplete);
+	onSubmit = (values: IEnrollRegForm) => {
+		this.props.onSubmit(values);
 	};
 	render() {
 		return (
@@ -32,7 +37,7 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 				loading={this.props.loading}
 				dictionaries={this.props.dictionaries}
 				error={this.props.error}
-				submit={this.submit}
+				submit={this.onSubmit}
 			/>
 		);
 	}
@@ -41,7 +46,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	const dictionaries = dictionaryStateSelector(state);
 
 	const data = enrollRegistrationSelector(state);
-	const { error, loading, result } = fromTransaction.findPersonSelector(state);
+	const { error, loading, result } = fromTransaction.findPerson(state);
 
 	return {
 		dictionaries,
@@ -50,7 +55,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 			? {
 					code: '',
 					message:
-						'Абитуриент уже зарегистрирован в системе. Просьба, обратиться в приемную комиссию только для подачи заявлений на поступление',
+						'Абитуриент уже зарегистрирован в системе. Просьба, обратиться в приемную комиссию для подачи заявлений на поступление',
 			  }
 			: error,
 		loading,
@@ -58,10 +63,11 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	};
 };
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = dispatch => {
+const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => {
 	return {
-		submit: (values: IEnrollRegForm) => {
-			return dispatch<any>(onCompleteRegistrationForm(values));
+		onSubmit: (values: IEnrollRegForm) => {
+			dispatch(enrollSubmitRegFormAction(values));
+			ownProps.onComplete();
 		},
 	};
 };

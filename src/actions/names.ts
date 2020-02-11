@@ -8,4 +8,13 @@ export enum TRANSACTION_NAMES {
 	CreateVerificationCode = 'CreateVerificationCode',
 	UpdatePhone = 'UpdatePhone',
 	UpdateAddress = 'UpdateAddress',
+	FetchPriemFilials = 'FetchPriemFilials',
+	FetchPriemInstitutes = 'FetchPriemInstitutes',
+	FetchPriemEducationLevels = 'FetchPriemEducationLevels',
+	FetchPriemDirections = 'FetchPriemDirections',
+	FetchPriemProfiles = 'FetchPriemProfiles',
+	FetchPriemPayForms = 'FetchPriemPayForms',
+	FetchPriemEducationForms = 'FetchPriemEducationForms',
+	CreatePriemApplication = 'CreatePriemApplication',
+	FetchPriemGroups = 'FetchPriemGroups',
 }

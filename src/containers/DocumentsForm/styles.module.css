@@ -8,7 +8,7 @@
 	font-size: 1.1rem;
 }
 .list li.tick {
-    color: green;
+	color: green;
 }
 .list li.tick:before {
 	content: '\2713';
@@ -25,4 +25,22 @@
 }
 .expansionPanel {
 	margin-top: 24px;
+}
+
+.deleteDocButton {
+	color: white;
+	background-color: red;
+}
+
+.deleteDocButtonContainer{
+	padding: 32px 0;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.deleteDocButton:hover {
+	background-color: #902020;
 }

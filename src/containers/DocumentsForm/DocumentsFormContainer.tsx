@@ -9,10 +9,9 @@ import {
 	submitDocumentsForm,
 } from '$store';
 import { DictionaryState } from '@mgutm-fcu/dictionary';
-import { IDocument, IDocumentsForm } from '$common';
+import { EDictionaryNameList, IDocument, IDocumentsForm } from '$common';
 
-interface IStateToProps {
-	documents: IDocument[];
+interface IStateToProps extends IDocumentsForm {
 	dictionaries: DictionaryState;
 	foreigner: boolean;
 }
@@ -22,15 +21,30 @@ interface IDispatchToProps {
 interface IOwnProps {
 	onComplete: () => void;
 }
+interface IState {
+	requiredDocuments: number[];
+}
 type IProps = IStateToProps & IDispatchToProps & IOwnProps;
-class DocumentsFormContainer extends React.Component<IProps> {
+class DocumentsFormContainer extends React.Component<IProps, IState> {
+	state = {
+		requiredDocuments: [],
+	};
+	componentDidMount(): void {
+		const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
+
+		const needDocuments =
+			dictionaryDocTypes && this.props.foreigner
+				? dictionaryDocTypes.values.filter(item => item.need_foreigner).map(item => item.id)
+				: [];
+		this.setState({ requiredDocuments: [9, 10, ...needDocuments] });
+	}
+
 	submit = (values: IDocumentsForm) => {
-		console.log('values', values);
 		this.props.submitDocumentsForm(values);
 		this.props.onComplete();
 	};
 	render() {
-		return <DocumentsFormView {...this.props} submit={this.submit} />;
+		return <DocumentsFormView requiredDocuments={this.state.requiredDocuments} {...this.props} submit={this.submit} />;
 	}
 }
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
@@ -38,7 +52,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	const documents = enrollDocumentsFormSelector(state);
 	const foreigner = enrollIsForeignerSelector(state);
 
-	return { dictionaries, documents, foreigner };
+	return { dictionaries, ...documents, foreigner };
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = {
 	submitDocumentsForm,

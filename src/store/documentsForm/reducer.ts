@@ -1,8 +1,8 @@
 import { handleActions } from 'redux-actions';
 import { IDocumentsForm } from '$common';
-import { submitDocumentsForm } from './actions';
+import { setPriemGroupNeedDocument, submitDocumentsForm } from './actions';
 
-const enrollDocumentsFormReducer = handleActions<IDocumentsForm, IDocumentsForm>(
+const enrollDocumentsFormReducer = handleActions<IDocumentsForm, any>(
 	{
 		[submitDocumentsForm.toString()]: (state, action) => {
 			return {
@@ -10,9 +10,16 @@ const enrollDocumentsFormReducer = handleActions<IDocumentsForm, IDocumentsForm>
 				...action.payload,
 			};
 		},
+		[setPriemGroupNeedDocument.toString()]: (state, action) => {
+			return {
+				...state,
+				priemGroupNeedDocument: action.payload,
+			};
+		},
 	},
 	{
 		documents: [],
+		priemGroupNeedDoc: false,
 	},
 );
 

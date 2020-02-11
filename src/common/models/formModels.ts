@@ -1,4 +1,4 @@
-import { IDocument, IGovernmentSelectItem, IInvalidData, ISelectItem, VerificationMethod } from '$common';
+import { IDocument, IGovernmentSelectItem, IInvalidData, IPriemGroup, ISelectItem, VerificationMethod } from '$common';
 import { IPerson } from '$common';
 
 export interface IEnrollContactsForm extends IDocument {
@@ -32,8 +32,32 @@ export interface IChangeFieldAction {
 export interface IEnrollEducationForm extends IDocument {
 	firstHighEducation: boolean;
 	coolnessTypes: ISelectItem[];
-	prevEducation: number;
+	prevEducation: ISelectItem | null;
 	hasEge: boolean;
+}
+
+export interface IApplicationRequest {
+	admId: number;
+}
+export interface IApplication extends IPriemGroup {
+	filial: ISelectItem;
+	institute: ISelectItem;
+	educationLevel: ISelectItem;
+	direction: ISelectItem;
+	profile: ISelectItem;
+	payForm: ISelectItem;
+	educationForm: ISelectItem;
+}
+export interface IEnrollApplicationsForm {
+	applications: IApplication[];
+	currentFilial: ISelectItem | null;
+	currentInstitute: ISelectItem | null;
+	currentEducationLevel: ISelectItem | null;
+	currentDirection: ISelectItem | null;
+	currentProfile: ISelectItem | null;
+	currentPayForms: ISelectItem[];
+	priemGroups: IPriemGroup[];
+	currentEducationForm: ISelectItem | null;
 }
 export interface IEnrollRegForm {
 	lastName: string;
@@ -55,8 +79,11 @@ export interface IEnrollPersonForm extends IDocument {
 }
 export interface IDocumentsForm {
 	documents: IDocument[];
+	priemGroupNeedDoc: boolean;
 }
-
+export interface ICreatePersonData {
+	npId: number;
+}
 export interface IAccountVerificationForm {
 	verificationMethod: VerificationMethod;
 	verificationCode: string;

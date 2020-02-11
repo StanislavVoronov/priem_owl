@@ -11,22 +11,6 @@ const styles = {
 			backgroundColor: '#507a18',
 		},
 	},
-	addDocButtonContainer: {
-		marginTop: 20,
-		marginBottom: 20,
-		display: 'flex',
-		flexDirection: 'column' as any,
-	},
-	deleteDocButtonContainer: {
-		paddingTop: 20,
-	},
-	deleteDocButton: {
-		color: 'white',
-		backgroundColor: 'red',
-		'&:hover': {
-			backgroundColor: '#902020',
-		},
-	},
 	addDocButtonWrapper: {
 		marginTop: 20,
 		marginBottom: 20,

@@ -5,6 +5,15 @@ export enum PriemRestApi {
 	AddEnroll = 'addEnroll',
 	AddDocuments = 'iDATA_DOCUMENTS',
 	UpdatePhone = 'uDATA_PHONES',
+	FetchPriemFilials = 'ADM_FILIAL',
+	FetchPriemInstitutes = 'ADM_INIST',
+	FetchPriemEducationLevels = 'ADM_LVL',
+	FetchPriemDirections = 'ADM_DIRECTION',
+	FetchPriemProfiles = 'ADM_PROF',
+	FetchPriemPayForms = 'ADM_FIN',
+	FetchPriemEducationForms = 'ADM_FOE',
+	FetchPriemFinForms = 'ADM_ID',
+	AddPriemApplication = 'iDATA_APPLICATIONS',
 }
 
 export enum EnrollRestApi {

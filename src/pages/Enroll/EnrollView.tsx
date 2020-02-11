@@ -21,6 +21,7 @@ import {
 	AccountVerificationForm,
 } from '$containers';
 import { noop } from '$common';
+import ApplicationsForm from '../../containers/ApplicationsForm/ApplicationsForm';
 
 interface IProps {
 	loading: boolean;
@@ -29,8 +30,8 @@ interface IProps {
 	activeStep: number;
 	passedStep: number;
 	steps: string[];
-	onCompleteCheckPersonForm: () => void;
-	onCompleteRegistration: () => void;
+	createNewPersonLogin: () => void;
+	createNewPersonFolder: () => void;
 }
 export class EnrollView extends React.PureComponent<IProps> {
 	static defaultProps = {
@@ -40,7 +41,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 	renderForm = (step: number) => {
 		switch (step) {
 			case 0: {
-				return <RegistrationForm onComplete={this.props.onCompleteCheckPersonForm} />;
+				return <RegistrationForm onComplete={this.props.createNewPersonLogin} />;
 			}
 			case 1: {
 				return <EnrollPersonForm onComplete={this.props.handleNext} />;
@@ -52,10 +53,14 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return <EducationForm onComplete={this.props.handleNext} />;
 			}
 			case 4: {
-				return <DocumentsForm onComplete={this.props.handleNext} />;
+				return <ApplicationsForm onComplete={this.props.handleNext} />;
 			}
 			case 5: {
-				return <AccountVerificationForm onComplete={this.props.onCompleteRegistration} />;
+				return <DocumentsForm onComplete={this.props.handleNext} />;
+			}
+
+			case 6: {
+				return <AccountVerificationForm onComplete={this.props.createNewPersonFolder} />;
 			}
 			default: {
 				return null;
@@ -126,8 +131,8 @@ export class EnrollView extends React.PureComponent<IProps> {
 							label={
 								<a
 									style={{ fontSize: '1rem' }}
-									onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/naprovleniya_podgotovki.php')}
-									href="http://mgutm.ru/entrant_2012/naprovleniya_podgotovki.php"
+									onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/plan-kalendar-priema.php')}
+									href="http://mgutm.ru/entrant_2012/plan-kalendar-priema.php"
 									target="_blank">
 									Календарь приема
 								</a>

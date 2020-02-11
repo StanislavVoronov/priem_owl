@@ -1,4 +1,4 @@
-export const RUS_ALPHABET = /^[аАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ]+$/;
+export const RUS_ALPHABET = /^[аАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ\.-\s]+$/;
 export const ENG_ALPHABET = /^[A-Za-z]+$/;
 export const ARRAY_ENG_ALPHABET = new Array(
 	'Ya',

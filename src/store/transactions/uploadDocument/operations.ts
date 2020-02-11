@@ -6,9 +6,6 @@ import moment from 'moment';
 import { omitBy, isNull } from '$common';
 import { PriemApi, PriemRestApi } from '$services';
 
-export const uploadDocumentsFormSelector = (state: ITransactionState) => {
-	return state.uploadDocuments;
-};
 export const uploadDocumentTransaction = (doc: IDocument): ThunkAction<void, IRootState, void, Action> => dispatch => {
 	const document: IUploadDocRequest = {
 		mime: doc.docFile ? doc.docFile.type : null,
