@@ -1,6 +1,6 @@
 import React from 'react';
 import AvatarEditor from 'react-avatar-editor';
-import Slider from '@material-ui/lab/Slider';
+import Slider from '@material-ui/core/Slider';
 import Fab from '@material-ui/core/Fab';
 import RotateLeft from '@material-ui/icons/RotateLeft';
 import Delete from '@material-ui/icons/Delete';
