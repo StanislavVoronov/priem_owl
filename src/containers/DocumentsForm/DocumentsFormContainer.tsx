@@ -8,11 +8,11 @@ import {
 	IRootState,
 	submitDocumentsForm,
 } from '$store';
-import { DictionaryState } from '@mgutm-fcu/dictionary';
-import { EDictionaryNameList, IDocument, IDocumentsForm } from '$common';
+
+import { EDictionaryNameList, IDocumentsForm } from '$common';
 
 interface IStateToProps extends IDocumentsForm {
-	dictionaries: DictionaryState;
+	dictionaries: any;
 	foreigner: boolean;
 }
 interface IDispatchToProps {
@@ -34,7 +34,7 @@ class DocumentsFormContainer extends React.Component<IProps, IState> {
 
 		const needDocuments =
 			dictionaryDocTypes && this.props.foreigner
-				? dictionaryDocTypes.values.filter(item => item.need_foreigner).map(item => item.id)
+				? dictionaryDocTypes.values.filter((item: any) => item.need_foreigner).map((item: any) => item.id)
 				: [];
 		this.setState({ requiredDocuments: [9, 10, ...needDocuments] });
 	}
@@ -57,7 +57,4 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = {
 	submitDocumentsForm,
 };
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(DocumentsFormContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentsFormContainer);

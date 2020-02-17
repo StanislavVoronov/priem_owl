@@ -2,7 +2,6 @@ import * as React from 'react';
 import { DocumentFormSchema, EDictionaryNameList, IEnrollEducationForm, pipe } from '$common';
 
 import { DocumentForm, Checkbox, PriemForm } from '$components';
-import { DictionaryState } from '@mgutm-fcu/dictionary';
 
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { dictionaryStateSelector, enrollEducationFormSelector, IRootState, submitEnrollEducationForm } from '$store';
@@ -11,7 +10,7 @@ import DropdownSelect from '../../components/DropdownSelect';
 
 interface IStateToProps {
 	data: IEnrollEducationForm;
-	dictionaries: DictionaryState;
+	dictionaries: any;
 }
 interface IOwnProps {
 	onComplete: () => void;
@@ -61,10 +60,7 @@ const EducationForm = (props: IProps) => {
 			schema={DocumentFormSchema}
 			buttonText="Далее"
 			renderForm={renderForm}
-			onSubmit={pipe(
-				props.onSubmit,
-				props.onComplete,
-			)}
+			onSubmit={pipe(props.onSubmit, props.onComplete)}
 			initialValues={props.data}
 		/>
 	);
@@ -81,7 +77,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = {
 	onSubmit: submitEnrollEducationForm,
 };
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(EducationForm);
+export default connect(mapStateToProps, mapDispatchToProps)(EducationForm);

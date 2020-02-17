@@ -1,10 +1,4 @@
-import {
-	IServerError,
-	fetchPriemEducationLevelsActions,
-	ISelectItem,
-	fetchPriemDirectionsActions,
-	fetchPriemProfilesActions,
-} from '$common';
+import { IServerError, ISelectItem, fetchPriemProfilesActions } from '$common';
 import { ThunkAction } from 'redux-thunk';
 import { IRootState } from '$store';
 import { Action } from 'redux';
@@ -45,7 +39,7 @@ export const fetchPriemProfilesTransaction = (
 			return Promise.resolve(list);
 		})
 		.catch((error: IServerError) => {
-			dispatch(fetchPriemProfilesActions.failure(error));
+			// dispatch(fetchPriemProfilesActions.failure(error));
 
 			return Promise.reject(error);
 		});

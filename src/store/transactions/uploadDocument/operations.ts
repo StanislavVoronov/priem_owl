@@ -1,6 +1,6 @@
-import { IDocument, ITransaction, IUploadDocRequest, uploadDocumentsActions } from '$common';
+import { IDocument, IUploadDocRequest, uploadDocumentsActions } from '$common';
 import { ThunkAction } from 'redux-thunk';
-import { IRootState, ITransactionState } from '$store';
+import { IRootState } from '$store';
 import { Action } from 'redux';
 import moment from 'moment';
 import { omitBy, isNull } from '$common';
@@ -37,7 +37,7 @@ export const uploadDocumentTransaction = (doc: IDocument): ThunkAction<void, IRo
 		})
 		.catch(error => {
 			console.log('errorDocuments', error);
-			dispatch(uploadDocumentsActions.failure(id, error));
+			// dispatch(uploadDocumentsActions.failure(id, error));
 
 			return Promise.reject();
 		});

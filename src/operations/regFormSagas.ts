@@ -1,15 +1,13 @@
 import {
-	checkLoginTransaction,
-	createLoginTransaction,
 	createPersonTransaction,
 	createVerificationCodeTransaction,
 	enrollAccountVerificationFormSelector,
 	enrollApplicationsFormSelector,
-	enrollContactsFormSelector,
+	contactsFormSelector,
 	enrollDocumentsFormSelector,
 	enrollEducationFormSelector,
 	enrollPersonFormSelector,
-	enrollRegistrationSelector,
+	regFormSelector,
 	findPersonTransaction,
 	fromTransaction,
 	IRootState,
@@ -30,7 +28,6 @@ import {
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
 import {
-	createLoginActions,
 	cyrillToLatin,
 	generatePassword,
 	moment,
@@ -40,84 +37,87 @@ import {
 	fetchPriemProfilesActions,
 	fetchPriemPayFormsActions,
 	fetchPriemEducationFormsActions,
+	createNewLoginTransactionActions,
+	IRegForm,
 } from '$common';
-import { updatePhoneTransaction } from '../../store/transactions/updatePhone';
-import { updateAddressTransaction } from '../../store/transactions/updateAddress';
-import { fetchPriemFilialsTransaction } from '../../store/transactions/fetchPriemFilials';
+import { updatePhoneTransaction } from '../store/transactions/updatePhone';
+import { updateAddressTransaction } from '../store/transactions/updateAddress';
+import { fetchPriemFilialsTransaction } from '../store/transactions/fetchPriemFilials';
 
-import { fetchPriemInstitutesTransaction } from '../../store/transactions/fetchPriemInstitutes';
-import { fetchPriemEducationLevelsTransaction } from '../../store/transactions/fetchPriemEducationLevels';
-import { fetchPriemDirectionsTransaction } from '../../store/transactions/fetchPriemDirections';
-import { fetchPriemProfilesTransaction } from '../../store/transactions/fetchPriemProfiles';
-import { fetchPriemEducationFormsTransaction } from '../../store/transactions/fetchPriemEducationForms';
-import { fetchPriemPayFormsTransaction } from '../../store/transactions/fetchPriemPayForms';
-import { fetchPriemGroupsTransaction } from '../../store/transactions/fetchPriemGroups';
-import { createPriemApplicationTransaction } from '../../store/transactions/createPriemApplication';
+import { fetchPriemInstitutesTransaction } from '../store/transactions/fetchPriemInstitutes';
+import { fetchPriemEducationLevelsTransaction } from '../store/transactions/fetchPriemEducationLevels';
+import { fetchPriemDirectionsTransaction } from '../store/transactions/fetchPriemDirections';
+import { fetchPriemProfilesTransaction } from '../store/transactions/fetchPriemProfiles';
+import { fetchPriemEducationFormsTransaction } from '../store/transactions/fetchPriemEducationForms';
+import { fetchPriemPayFormsTransaction } from '../store/transactions/fetchPriemPayForms';
+import { fetchPriemGroupsTransaction } from '../store/transactions/fetchPriemGroups';
+import { createPriemApplicationTransaction } from '../store/transactions/createPriemApplication';
+import { sagaEffects } from '@black_bird/utils';
+import { createNewLoginAction } from '$actions';
+import { checkLoginTransactionActions, createLoginTransactionActions } from '$store';
+import { checkLoginRest, createLoginRest } from '../rests';
 
-export const createNewLogin = (): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
-	return dispatch(enrollCreateNewLogin()).then(() => {
-		return dispatch(findPerson());
-	});
-};
-export const enrollCreateNewLogin = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
-	dispatch,
-	getState,
-) => {
-	const state = getState();
-	const data = enrollRegistrationSelector(state);
+export const regFormSagas = [
+	sagaEffects.watcher(checkLoginTransactionActions, ({ payload }) => {
+		return checkLoginRest(payload);
+	}),
+	sagaEffects.watcher(checkLoginTransactionActions, ({ payload }) => {
+		const password = generatePassword();
+
+		return createLoginRest(payload, password);
+	}),
+	sagaEffects.takeLatest(createNewLoginAction, function*() {
+		const data = yield sagaEffects.select(regFormSelector);
+		yield sagaEffects.call(enrollCreateNewLogin, data);
+	}),
+];
+
+function* enrollCreateNewLogin(data: IRegForm) {
+	console.log('data', data);
 	const lastName = cyrillToLatin(data.lastName);
 	const firstName = cyrillToLatin(data.firstName);
 	const middleName = cyrillToLatin(data.middleName);
 
 	let firstPart = '';
-	const password = generatePassword();
+
 	const firstNameList = Array.from(firstName);
 	const secondNameList = Array.from(middleName);
-	const generateLogin = async () => {
-		for (const firstLetter of firstNameList) {
-			firstPart += firstLetter;
-			let login = `${lastName}.${firstPart}.`;
-			for (const secondLetter of secondNameList) {
-				login += secondLetter;
-				await dispatch(checkLoginTransaction(login));
-				if (fromTransaction.isUniqueLogin(getState()).result) {
-					return Promise.resolve(login);
-				}
+
+	for (const first of firstNameList) {
+		firstPart += first;
+		let login = `${lastName}.${firstPart}.`;
+		for (const second of secondNameList) {
+			login += second;
+			console.log('login', login);
+			yield sagaEffects.put(checkLoginTransactionActions.trigger(login));
+			const isUniqueLogin = yield sagaEffects.select(fromTransaction.isUniqueLogin);
+			console.log('isUniqueLogin', isUniqueLogin);
+
+			if (isUniqueLogin) {
+				break;
 			}
 		}
-
-		return Promise.reject("Не сформировать уникальный логин'");
-	};
-
-	return generateLogin()
-		.then(login => {
-			if (login) {
-				return dispatch(createLoginTransaction(login, password));
-			}
-			throw new Error('Не удалось сформировать уникальный логин');
-		})
-		.catch(error => {
-			dispatch(createLoginActions.failure({ message: error }));
-		});
-};
+	}
+}
 
 export const findPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
-	const data = enrollRegistrationSelector(getState());
+	const data = regFormSelector(getState());
 
-	return dispatch(findPersonTransaction(data)).then(() => {
-		if (fromTransaction.findPerson(getState()).result) {
-			return Promise.reject();
-		} else {
-			return Promise.resolve();
-		}
-	});
+	return Promise.resolve();
+	// return dispatch(findPersonTransaction(data)).then(() => {
+	// 	if (fromTransaction.findPerson(getState()).result) {
+	// 		return Promise.reject();
+	// 	} else {
+	// 		return Promise.resolve();
+	// 	}
+	// });
 };
 
 export const sendVerificationCodeToPhone = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
 	dispatch,
 	getState,
 ) => {
-	const data = enrollContactsFormSelector(getState());
+	const data = contactsFormSelector(getState());
 
 	dispatch(selectVerificationMethod(VerificationMethod.Phone));
 
@@ -128,7 +128,7 @@ export const sendVerificationCodeToEmail = (): ThunkAction<Promise<void>, IRootS
 	dispatch,
 	getState,
 ) => {
-	const data = enrollContactsFormSelector(getState());
+	const data = contactsFormSelector(getState());
 
 	dispatch(selectVerificationMethod(VerificationMethod.Email));
 
@@ -136,7 +136,7 @@ export const sendVerificationCodeToEmail = (): ThunkAction<Promise<void>, IRootS
 };
 
 export const updatePhone = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
-	const data = enrollContactsFormSelector(getState());
+	const data = contactsFormSelector(getState());
 
 	return data.homePhone
 		? dispatch(
@@ -150,8 +150,8 @@ export const updatePhone = (): ThunkAction<Promise<void>, IRootState, void, Acti
 
 const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
 	const state = getState();
-	const registrationForm = enrollRegistrationSelector(state);
-	const contactsForm = enrollContactsFormSelector(state);
+	const registrationForm = regFormSelector(state);
+	const contactsForm = contactsFormSelector(state);
 	const personForm = enrollPersonFormSelector(state);
 	const educationForm = enrollEducationFormSelector(state);
 	const accountVerificationForm = enrollAccountVerificationFormSelector(state);
@@ -186,7 +186,7 @@ const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> =>
 const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
 	const state = getState();
 
-	const contactsData = enrollContactsFormSelector(state);
+	const contactsData = contactsFormSelector(state);
 	const personData = enrollPersonFormSelector(state);
 	const educationData = enrollEducationFormSelector(state);
 	const documents = [contactsData, personData, educationData, ...enrollDocumentsFormSelector(state).documents];
@@ -222,17 +222,7 @@ const updateAddress = (): ThunkAction<Promise<void>, IRootState, void, Action> =
 		liveLocality,
 		liveRegion,
 		liveStreet,
-		isRegAddressEqualLive,
-	} = enrollContactsFormSelector(getState());
-	const adressDictionary = [
-		'индекс: ',
-		'область/регион: ',
-		'город/поселок: ',
-		'улица: ',
-		'дом: ',
-		'корпус: ',
-		'квартира: ',
-	];
+	} = contactsFormSelector(getState());
 
 	const regAddress = [regIndex, regRegion, regLocality, regStreet, regHome, regBlock, regFlat]
 		.filter(value => value)
@@ -349,13 +339,7 @@ export const onChangeEducationForm = (educationForm: ISelectItem): ThunkAction<v
 ) => {
 	const state = getState();
 
-	const {
-		currentFilial,
-		currentInstitute,
-		currentEducationForm,
-		currentDirection,
-		currentProfile,
-	} = enrollApplicationsFormSelector(state);
+	const { currentFilial, currentInstitute, currentDirection, currentProfile } = enrollApplicationsFormSelector(state);
 
 	dispatch(changeCurrentEducationForm(educationForm));
 

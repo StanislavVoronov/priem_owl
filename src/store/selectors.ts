@@ -1,7 +1,7 @@
 import { IRootState } from '$store';
 
-export const enrollRegistrationSelector = (state: IRootState) => {
-	return state.enrollRegistration;
+export const regFormSelector = (state: IRootState) => {
+	return state.regForm;
 };
 
 export const dictionaryStateSelector = (state: IRootState) => {
@@ -12,8 +12,12 @@ export const enrollPersonFormSelector = (state: IRootState) => {
 	return state.enrollPersonForm;
 };
 
-export const enrollContactsFormSelector = (state: IRootState) => {
-	return state.enrollContactsForm;
+export const enrollSelector = (state: IRootState) => {
+	return state.enroll;
+};
+
+export const contactsFormSelector = (state: IRootState) => {
+	return state.contactsForm;
 };
 
 export const enrollEducationFormSelector = (state: IRootState) => {

@@ -3,7 +3,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import React from 'react';
 import Select from 'react-select';
 import styles from './styles.module.css';
-import { get, ISelectItem, noop } from '$common';
+import { ISelectItem, noop } from '$common';
 import { InputLabel } from '@material-ui/core';
 interface ISelectProps {
 	name: string;

@@ -1,13 +1,16 @@
 import { handleActions } from 'redux-actions';
-import { defaultEducationDataForm, IEnrollEducationForm, IForm } from '$common';
-import { submitEnrollEducationForm } from './actions';
+import { createReducer, forAction } from '@black_bird/utils';
+import { defaultEducationDataForm, IEnrollEducationForm } from '$common';
+import { submitEnrollEducationForm } from '$store';
 
-const educationFormReducer = handleActions<IEnrollEducationForm, IEnrollEducationForm>(
-	{
-		[submitEnrollEducationForm.toString()]: (state, action) => {
-			return { ...state, ...action.payload };
-		},
-	},
+const educationFormReducer = createReducer(
+	[
+		forAction(submitEnrollEducationForm, (state, payload) => {
+			console.log('payload', payload);
+
+			return { ...payload };
+		}),
+	],
 	defaultEducationDataForm,
 );
 

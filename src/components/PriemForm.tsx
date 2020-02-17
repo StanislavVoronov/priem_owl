@@ -1,7 +1,7 @@
 import { Form, Formik, FormikProps } from 'formik';
 import React from 'react';
 import SubmitButton from './Buttons/SubmitButton';
-import { IServerError, noop, isEmpty } from '$common';
+import { IServerError, noop } from '$common';
 import { H2 } from '$components';
 import LoadingText from './LoadingText';
 
@@ -41,7 +41,7 @@ class PriemForm<Values> extends React.PureComponent<IProps<Values>> {
 						return Object.values(item).some(value => !!value);
 					}
 
-					return item.length > 0;
+					return Array.isArray(item) && item.length > 0;
 				}) && <H2 color="red">Заполните обязательные поля формы</H2>}
 				{buttonText && (
 					<div style={{ marginTop: 32 }}>

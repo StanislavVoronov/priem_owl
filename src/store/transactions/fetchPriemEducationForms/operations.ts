@@ -1,10 +1,4 @@
-import {
-	IServerError,
-	ISelectItem,
-	fetchPriemProfilesActions,
-	fetchPriemEducationLevelsActions,
-	fetchPriemEducationFormsActions,
-} from '$common';
+import { IServerError, ISelectItem, fetchPriemEducationFormsActions } from '$common';
 import { ThunkAction } from 'redux-thunk';
 import { IRootState } from '$store';
 import { Action } from 'redux';
@@ -31,8 +25,6 @@ interface IPayload {
 export const fetchPriemEducationFormsTransaction = (
 	data: IPayload,
 ): ThunkAction<Promise<ISelectItem[]>, IRootState, void, Action> => dispatch => {
-	dispatch(fetchPriemEducationFormsActions.request());
-
 	const payload = {
 		FILIAL: data.filialId,
 		INST: data.instituteId,
@@ -48,8 +40,6 @@ export const fetchPriemEducationFormsTransaction = (
 			return Promise.resolve(list);
 		})
 		.catch((error: IServerError) => {
-			dispatch(fetchPriemEducationFormsActions.failure(error));
-
 			return Promise.reject(error);
 		});
 };

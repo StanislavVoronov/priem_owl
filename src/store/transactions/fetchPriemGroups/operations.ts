@@ -1,14 +1,6 @@
-import {
-	IServerError,
-	ISelectItem,
-	fetchPriemProfilesActions,
-	fetchPriemEducationLevelsActions,
-	fetchPriemPayFormsActions,
-	fetchPriemGroups,
-	IPriemGroup,
-} from '$common';
+import { IServerError, fetchPriemGroups, IPriemGroup } from '$common';
 import { ThunkAction } from 'redux-thunk';
-import { fromTransaction, IRootState } from '$store';
+import { IRootState } from '$store';
 import { Action } from 'redux';
 import { PriemApi, PriemRestApi } from '$services';
 
@@ -54,7 +46,7 @@ export const fetchPriemGroupsTransaction = (
 			return Promise.resolve(list[0]);
 		})
 		.catch((error: IServerError) => {
-			dispatch(fetchPriemGroups.failure(error));
+			// dispatch(fetchPriemGroups.failure(error));
 
 			return Promise.reject(error);
 		});

@@ -1,25 +1,25 @@
-import { combineReducers } from 'redux';
-import { dictionaryReducer } from '@mgutm-fcu/dictionary';
+import { combineReducers } from '@black_bird/utils';
+import { applyMiddleware, createStore, Middleware } from 'redux';
+import { dictionaryReducer } from '@black_bird/dictionaries';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { regFormReducer } from './regForm';
+import { contactsFormReducer } from './contactsForm';
+import { enrollReducer } from './enroll';
 
-import { enrollRegistration } from './registrationForm';
-import { enrollPersonForm } from './personForm';
-import { enrollContactsForm } from './contactsForm';
-import { enrollEducationForm } from './educationForm';
-import { enrollDocumentsForm } from './documentsForm';
-import { enrollApplicationsForm } from './applicationsForm';
 import transactions from './transactions';
-import { enrollAccountVerificationForm } from './accountVerification';
+import { IRootState } from './models';
 
-const rootReducer = combineReducers<any>({
-	enrollRegistration,
-	enrollPersonForm,
-	enrollEducationForm,
-	enrollApplicationsForm,
-	dictionaries: dictionaryReducer,
-	enrollAccountVerificationForm,
-	enrollContactsForm,
-	enrollDocumentsForm,
-	transactions,
-});
+const composeDevTools = composeWithDevTools({});
 
-export default rootReducer;
+export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) => () => {
+	return createStore(
+		combineReducers<any>({
+			enroll: enrollReducer,
+			regForm: regFormReducer,
+			contactsForm: contactsFormReducer,
+			dictionaries: dictionaryReducer,
+			transactions,
+		}),
+		composeDevTools(applyMiddleware(...middlewares)),
+	);
+};

@@ -1,37 +1,28 @@
 import React, { ChangeEvent } from 'react';
-import { TextInput, H2, DropdownSelect, Checkbox, DocumentForm, PriemForm, LoadingText } from '$components';
-import {
-	EDictionaryNameList,
-	IEnrollContactsForm,
-	IServerError,
-	DocumentFormSchema,
-	EnrollPersonFormSchema,
-	IStylable,
-	EnrollContactsFormSchema,
-} from '$common';
+import { TextInput, H2, Checkbox, DocumentForm, PriemForm } from '$components';
+import { IContactsForm, IServerError, DocumentFormSchema, IStylable, EnrollContactsFormSchema } from '$common';
 
-import { FieldProps, FormikProps } from 'formik';
+import { FormikProps } from 'formik';
 
 import styles from './styles';
 import { withStyles } from '@material-ui/core';
-import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import {
 	dictionaryStateSelector,
 	submitEnrollContactsForm,
-	enrollContactsFormSelector,
+	contactsFormSelector,
 	IRootState,
 	fromTransaction,
 } from '$store';
 
 interface IStateToProps {
-	data: IEnrollContactsForm;
-	dictionaries: DictionaryState;
+	data: IContactsForm;
+	dictionaries: any; // FIXME change interface
 	loading: boolean;
 	error: IServerError | null;
 }
 interface IDispatchToProps {
-	onSubmit: (values: IEnrollContactsForm) => void;
+	onSubmit: (values: IContactsForm) => void;
 }
 interface IOwnProps {
 	onComplete: () => void;
@@ -44,16 +35,11 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 		disabled: false,
 		classes: {},
 	};
-	toggleStatus = (form: FormikProps<IEnrollContactsForm>) => (
-		event: ChangeEvent<HTMLInputElement>,
-		checked: boolean,
-	) => {
+	toggleStatus = (form: FormikProps<IContactsForm>) => (event: ChangeEvent<HTMLInputElement>, checked: boolean) => {
 		form.setFieldValue(event.target.name, checked);
 	};
 
-	renderForm = (form: FormikProps<IEnrollContactsForm>) => {
-		const governmentDictionary = this.props.dictionaries[EDictionaryNameList.Governments];
-
+	renderForm = (form: FormikProps<IContactsForm>) => {
 		const isRegAddressEqualLive = form.values.isRegAddressEqualLive;
 
 		return (
@@ -152,18 +138,15 @@ const mapStateToProps: MapStateToProps<IStateToProps, IOwnProps, IRootState> = s
 	const dictionaries = dictionaryStateSelector(state);
 	const { loading, error } = fromTransaction.createVerificationCode(state);
 
-	const data = enrollContactsFormSelector(state);
+	const data = contactsFormSelector(state);
 
 	return { data, dictionaries, loading, error };
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => ({
-	onSubmit: (values: IEnrollContactsForm) => {
+	onSubmit: (values: IContactsForm) => {
 		dispatch(submitEnrollContactsForm(values));
 		ownProps.onComplete();
 	},
 });
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(withStyles(styles)(EnrollContactsForm));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(EnrollContactsForm));

@@ -1,16 +1,17 @@
-import { checkLoginTransaction } from './checkLogin';
-import { createLoginTransaction } from './createLogin';
+import { checkLoginTransactionActions } from './checkLogin';
+import { createLoginTransactionActions } from './createLogin';
+
 import { findPersonTransaction } from './findPerson';
 import { createVerificationCodeTransaction } from './createVerificationCode';
 import { uploadDocumentTransaction } from './uploadDocument';
 import { createPersonTransaction } from './createPerson';
+import * as fromTransaction from './transactionSelectors';
+import transactions from './transactionReducer';
 
-import transactions, * as fromTransaction from './rootReducer';
-
-export * from './models';
+export * from './transactionModels';
 export {
-	checkLoginTransaction,
-	createLoginTransaction,
+	checkLoginTransactionActions,
+	createLoginTransactionActions,
 	findPersonTransaction,
 	createVerificationCodeTransaction,
 	fromTransaction,

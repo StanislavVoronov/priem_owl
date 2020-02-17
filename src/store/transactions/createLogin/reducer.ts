@@ -1,13 +1,13 @@
-import { createLoginActions, createTransactionReducer } from '$common';
-import { ITransactionState } from '$store';
+import { createTransactionReducer } from '@black_bird/utils';
+import { createLoginTransactionActions } from './actions';
+import { ITransactionState } from '../transactionModels';
 
-const createLoginReducer = createTransactionReducer(createLoginActions);
+export const createLoginReducer = createTransactionReducer(createLoginTransactionActions);
 
 export const transaction = (state: ITransactionState) => {
+	console.log('state', state);
 	const { loading, error, result } = state.createLogin;
 	const npId = result.length > 0 ? result[0].id : 0;
 
 	return { loading, error, result: npId };
 };
-
-export default createLoginReducer;

@@ -1,7 +1,6 @@
-import { IDocument, IGovernmentSelectItem, IInvalidData, IPriemGroup, ISelectItem, VerificationMethod } from '$common';
-import { IPerson } from '$common';
+import { IDocument, IGovernmentSelectItem, IPriemGroup, ISelectItem, VerificationMethod } from '$common';
 
-export interface IEnrollContactsForm extends IDocument {
+export interface IContactsForm extends IDocument {
 	needDormitory: boolean;
 	regIndex: string;
 	regRegion: string;
@@ -59,12 +58,12 @@ export interface IEnrollApplicationsForm {
 	priemGroups: IPriemGroup[];
 	currentEducationForm: ISelectItem | null;
 }
-export interface IEnrollRegForm {
+export interface IRegForm {
 	lastName: string;
 	firstName: string;
 	middleName: string;
 	birthday: string;
-	gender: number;
+	gender: string;
 }
 
 export interface IForm<T extends object> {
@@ -88,4 +87,9 @@ export interface IAccountVerificationForm {
 	verificationMethod: VerificationMethod;
 	verificationCode: string;
 }
-export type EnrollForms = IEnrollContactsForm & IEnrollEducationForm & IEnrollPersonForm & IDocument;
+export type EnrollForms = IContactsForm & IEnrollEducationForm & IEnrollPersonForm & IDocument;
+
+export interface IEnrollState {
+	step: number;
+	passedStep: number;
+}

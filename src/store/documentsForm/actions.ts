@@ -1,6 +1,5 @@
 import { createAction } from 'redux-actions';
-import { ChangeEvent } from 'react';
-import { IDocument, IDocumentsForm, ISelectItem } from '$common';
+import { IDocumentsForm } from '$common';
 
 const NAMESPACE = 'EnrollDocumentsForm';
 

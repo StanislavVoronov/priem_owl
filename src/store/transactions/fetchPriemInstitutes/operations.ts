@@ -1,4 +1,4 @@
-import { findPersonActions, IPerson, IServerError, fetchPriemInstitutesActions, ISelectItem } from '$common';
+import { IServerError, fetchPriemInstitutesActions, ISelectItem } from '$common';
 import { ThunkAction } from 'redux-thunk';
 import { IRootState } from '$store';
 import { Action } from 'redux';
@@ -28,7 +28,7 @@ export const fetchPriemInstitutesTransaction = (
 			return Promise.resolve(list);
 		})
 		.catch((error: IServerError) => {
-			dispatch(fetchPriemInstitutesActions.failure(error));
+			// dispatch(fetchPriemInstitutesActions.failure(error));
 
 			return Promise.reject(error);
 		});

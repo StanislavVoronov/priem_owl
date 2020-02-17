@@ -9,3 +9,33 @@ body {
 	display: flex;
 	flex-direction: column;
 }
+
+.spaceHorMiddle {
+	margin: 16px 0 8px 0;
+}
+.spaceHorHuge {
+	margin: 24px 0 16px 0;
+}
+.spaceVerMiddle {
+	margin: 0 16px;
+}
+
+.spaceVerHuge {
+	margin: 0 24px;
+}
+.spaceVerSmall {
+	margin: 0 8px;
+}
+
+.spaceHorSmall {
+	margin: 8px 0 4px 0;
+}
+
+.spaceDefault {
+	margin: 12px;
+}
+
+.asterisk {
+	color: red;
+	font-size: 0.775rem;
+}

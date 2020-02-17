@@ -1,5 +1,5 @@
 import { IDocument } from '$common';
-import { ENG_ALPHABET, RUS_ALPHABET } from '../constants';
+import { RUS_ALPHABET } from '../constants';
 import { isNil, not } from '../functions';
 
 export const validateDocument = (document: IDocument): boolean => {

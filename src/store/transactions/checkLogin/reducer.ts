@@ -1,7 +1,8 @@
-import { checkLoginActions, createTransactionReducer } from '$common';
+import { createTransactionReducer } from '$common';
 import { ITransactionState } from '$store';
+import { checkLoginTransactionActions } from './actions';
 
-const checkLoginReducer = createTransactionReducer(checkLoginActions);
+const checkLoginReducer = createTransactionReducer(checkLoginTransactionActions);
 
 export const isUniqueLogin = (state: ITransactionState) => {
 	const { loading, error, result } = state.checkLogin;

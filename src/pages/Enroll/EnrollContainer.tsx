@@ -1,95 +1,91 @@
 import * as React from 'react';
 import EnrollView from './EnrollView';
-import Dictionary, { DictionaryState, IDictionary, IDictionaryConfig } from '@mgutm-fcu/dictionary';
-
 import { connect, MapStateToProps } from 'react-redux';
 import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
 
-import { IRootState, fromTransaction, dictionaryStateSelector } from '$store';
-import { createNewLogin, createNewPersonFolder } from '$operations';
-import { IAccountVerificationForm } from '$common';
+import { IRootState, fromTransaction, dictionaryStateSelector, enrollSelector } from '$store';
+import { createNewPersonFolder } from '$operations';
+import { IDictionaryConfig } from '@black_bird/dictionaries';
+import { initAction, handleNextStep } from '$store';
 
 interface IState {
-	activeStep: number;
-	passedStep: number;
 	dictionaries: IDictionaryConfig[];
 }
 
 interface IStateToProps {
-	dictionaries: DictionaryState;
+	dictionaries: any;
 	personId: number;
+	step: number;
+	passedStep: number;
 }
 
 interface IDispatchToProps {
+	init: () => void;
 	createNewPersonFolder: () => Promise<void>;
-	createNewLogin: () => Promise<void>;
+	handleNextStep: () => void;
 }
 type IProps = IStateToProps & IDispatchToProps;
 
 class EnrollContainer extends React.Component<IProps, IState> {
 	state: IState = {
-		activeStep: 0,
-		passedStep: 0,
 		dictionaries: SHORT_DICTIONARY_LIST,
 	};
-
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
 	}
+
+	componentDidMount() {
+		this.props.init();
+	}
+
 	handleStep = (step: number) => () => {
-		this.setState({
-			activeStep: step,
-		});
-	};
-	createNewPersonLogin = () => {
-		this.props.createNewLogin().then(() => {
-			this.setState({ dictionaries: FULL_DICTIONARY_LIST, activeStep: this.state.activeStep + 1 });
-		});
+		this.props.handleNextStep();
 	};
 	onCompleteRegistration = () => {
-		this.setState({ passedStep: -1, activeStep: this.state.activeStep + 1 });
+		// this.setState({ passedStep: -1, activeStep: this.state.activeStep + 1 });
 	};
 	handleNext = () => {
-		this.setState({ activeStep: this.state.activeStep + 1, passedStep: this.state.passedStep + 1 });
+		this.props.handleNextStep();
+		const dictionaries = FULL_DICTIONARY_LIST;
+		this.setState({ dictionaries });
 	};
 	createNewPersonFolder = () => {
 		this.props.createNewPersonFolder().then(this.onCompleteRegistration);
 	};
 	render() {
+		const { step, passedStep } = this.props;
+
 		const loading =
 			Object.keys(this.props.dictionaries).length === 0 ||
-			Object.values(this.props.dictionaries).find((item: IDictionary) => item.fetching) !== undefined;
+			Object.values(this.props.dictionaries).find((item: any) => item.fetching) !== undefined;
 
 		return (
-			<Dictionary version={2} url={'/dev-bin/priem_api.fcgi'} list={this.state.dictionaries}>
-				<EnrollView
-					steps={NEW_PERSON_STEPS}
-					loading={loading}
-					handleNext={this.handleNext}
-					createNewPersonLogin={this.createNewPersonLogin}
-					activeStep={this.state.activeStep}
-					handleStep={this.handleStep}
-					passedStep={this.state.passedStep}
-					createNewPersonFolder={this.createNewPersonFolder}
-				/>
-			</Dictionary>
+			<EnrollView
+				steps={NEW_PERSON_STEPS}
+				loading={loading}
+				handleNext={this.handleNext}
+				activeStep={step}
+				handleStep={this.handleStep}
+				passedStep={passedStep}
+				createNewPersonFolder={this.createNewPersonFolder}
+			/>
 		);
 	}
 }
 
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
 	const dictionaries = dictionaryStateSelector(state);
-	const { result } = fromTransaction.createLogin(state);
+	const enroll = enrollSelector(state);
 
-	return { personId: result, dictionaries };
+	// const { result } = fromTransaction.createLogin(state);
+
+	return { personId: 0, dictionaries, step: enroll.step, passedStep: enroll.passedStep };
 };
 
 const mapDispatchToProps = {
-	createNewLogin,
 	createNewPersonFolder,
+	init: initAction,
+	handleNextStep,
 };
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(EnrollContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(EnrollContainer);

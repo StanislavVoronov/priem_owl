@@ -1,4 +1,4 @@
-import { createTransactionReducer, fetchPriemEducationLevelsActions, fetchPriemFilialsActions } from '$common';
+import { createTransactionReducer, fetchPriemEducationLevelsActions } from '$common';
 import { ITransactionState } from '$store';
 
 const fetchPriemEducationReducer = createTransactionReducer(fetchPriemEducationLevelsActions);

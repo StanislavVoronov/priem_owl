@@ -4,8 +4,7 @@ import ImageEditor from './ImageEditor';
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import { FormLabel, InputLabel } from '@material-ui/core';
-import { noop, prop, get } from '$common';
-import { H2 } from '$components';
+
 interface IProps {
 	name: string;
 	title: string;

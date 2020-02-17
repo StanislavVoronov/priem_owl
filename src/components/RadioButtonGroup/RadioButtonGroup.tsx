@@ -4,9 +4,10 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import { IHasError, IHelperText } from '../../containers/models';
-import withStyles from '@material-ui/core/styles/withStyles';
-import { Field, FieldProps, FormikProps } from 'formik';
-import { has, prop, noop } from '$common';
+
+import { noop } from '$common';
+import { IFormField } from '@black_bird/components/dist/models';
+import classes from './RadioButtonGroup.module.css';
 
 interface IRadioButton {
 	label: string;
@@ -21,6 +22,8 @@ interface IRadioGroupButton extends IHelperText, IHasError {
 	validate: (value: string) => string | void;
 	classes: any;
 	name: string;
+	onChange: (data: IFormField<string>) => void;
+	value: string;
 }
 const localStyles = {
 	asterisk: {
@@ -35,12 +38,14 @@ const localStyles = {
 		display: 'flex',
 		flexDirection: 'row' as any,
 	},
+	group: {
+		display: 'flex',
+		flexDirection: 'row' as any,
+		paddingLeft: '12px',
+	},
 	helperText: {
 		color: 'red',
 		fontSize: '0.875rem',
-	},
-	space: {
-		marginTop: 16,
 	},
 };
 class RadioButtonGroup extends React.PureComponent<IRadioGroupButton> {
@@ -48,43 +53,36 @@ class RadioButtonGroup extends React.PureComponent<IRadioGroupButton> {
 		classes: {},
 		validate: noop,
 	};
-	onChange = (form: FormikProps<any>) => (event: React.ChangeEvent<{}>, value: string) => {
-		form.setFieldValue(this.props.name, value);
+	onChange = (event: React.ChangeEvent<{}>, value: string) => {
+		this.props.onChange({ name: this.props.name, value });
 	};
-	renderButtonGroup = (props: FieldProps) => {
-		const { form, field } = props;
-		const touched = has(field.name);
+	render() {
+		const { value, name, items } = this.props;
 
 		return (
-			<div className={this.props.classes.space}>
-				<div className={this.props.classes.flexRow}>
-					<FormLabel className={this.props.classes.label}>{this.props.title}</FormLabel>
-					<FormLabel className={this.props.classes.asterisk}>{this.props.required && '*'}</FormLabel>
+			<div className="spaceHorMiddle">
+				<div className="flexRow">
+					<FormLabel className={classes.label}>{this.props.title}</FormLabel>
+					<FormLabel className="asterisk">{this.props.required && '*'}</FormLabel>
 				</div>
 				<RadioGroup
 					aria-label={this.props.name}
-					onChange={this.onChange(form)}
-					name={this.props.name}
-					value={field.value}
-					className={this.props.classes.flexRow}>
-					{this.props.items.map((item, index) => (
+					onChange={this.onChange}
+					name={name}
+					value={value}
+					className={classes.group}>
+					{items.map((item, index) => (
 						<FormControlLabel
 							key={`${item.value}-${index}`}
-							value={item.value.toString()}
+							value={item.value}
 							control={<Radio color={item.color} />}
 							label={item.label}
 						/>
 					))}
 				</RadioGroup>
-				{touched && prop(field.name, form.errors) && (
-					<div className={this.props.classes.helperText}>{prop(field.name, form.errors)}</div>
-				)}
 			</div>
 		);
-	};
-	render() {
-		return <Field name={this.props.name} validate={this.props.validate} render={this.renderButtonGroup} />;
 	}
 }
 
-export default withStyles(localStyles)(RadioButtonGroup);
+export default RadioButtonGroup;

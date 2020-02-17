@@ -1,5 +1,3 @@
-import { IDocType } from '$common';
-
 export interface IHasError {
 	error?: boolean;
 }

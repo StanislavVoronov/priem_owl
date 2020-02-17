@@ -4,7 +4,8 @@
   "description": "owl",
   "main": "index.js",
   "scripts": {
-    "tsc": "rm -rf build/dist && tsc --watch",
+    "tsc": "rm -rf build/dist && tsc  --skipLibCheck",
+    "clean": "rm -rf ./owl",
     "pipeline": "npm run update && npm run build && npm run delivery",
     "update": "git pull origin",
     "lint": "tslint src/**/*.{tsx,ts} --fix",
@@ -20,12 +21,12 @@
     "url": "http://monitoring.mgutm.ru:81/stas/priem_owl.git"
   },
   "dependencies": {
+    "redux-devtools-extension": "^2.13.8",
+    "@black_bird/components": "0.0.19",
+    "@black_bird/dictionaries": "0.0.5",
+    "@black_bird/utils": "0.0.34",
     "@babel/core": "7.2.2",
-    "@material-ui/core": "latest",
-    "@material-ui/lab": "latest",
-    "@material-ui/styles": "^4.1.1",
     "@mgutm-fcu/auth": "^0.21.26",
-    "@mgutm-fcu/dictionary": "^0.1.42",
     "@svgr/webpack": "4.1.0",
     "@types/classnames": "^2.2.7",
     "@types/ramda": "^0.26.9",

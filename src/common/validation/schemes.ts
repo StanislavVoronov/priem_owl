@@ -1,4 +1,4 @@
-import { object, lazy, string, boolean, number, mixed, array } from 'yup';
+import { object, string, boolean, number, mixed, array } from 'yup';
 import { RUS_ALPHABET } from '../constants';
 import { ISelectItem, isNil, mergeSchemes } from '$common';
 

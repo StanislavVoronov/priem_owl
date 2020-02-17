@@ -25,7 +25,7 @@ export const updatePhoneTransaction = (
 			return Promise.resolve();
 		})
 		.catch((error: IServerError) => {
-			dispatch(updatePhoneActionsByKey.failure(error));
+			// dispatch(updatePhoneActionsByKey.failure(error));
 
 			return Promise.reject(error);
 		});

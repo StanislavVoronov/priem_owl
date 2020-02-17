@@ -1,4 +1,4 @@
-import { updateAddressActions, IEnrollContactsForm, IPerson, IServerError } from '$common';
+import { updateAddressActions, IServerError } from '$common';
 import { ThunkAction } from 'redux-thunk';
 import { IRootState } from '$store';
 import { Action } from 'redux';
@@ -25,7 +25,7 @@ export const updateAddressTransaction = (
 			return Promise.resolve();
 		})
 		.catch((error: IServerError) => {
-			dispatch(updateAddressActions.failure(type.toString(), error));
+			// dispatch(updateAddressActions.failure(type.toString(), error));
 
 			return Promise.reject(error);
 		});

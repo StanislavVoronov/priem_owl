@@ -1,12 +1,11 @@
 import React from 'react';
-import { Checkbox, WebPhoto, PriemForm, DocumentForm, TextInput } from '$components';
+import { Checkbox, PriemForm, DocumentForm, TextInput } from '$components';
 
 import { EDictionaryNameList, IEnrollPersonForm, IStylable, pipe, EnrollPersonFormSchema } from '$common';
 
-import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { withStyles } from '@material-ui/core';
 import styles from './styles';
-import { Formik, FormikProps, FieldProps, Field } from 'formik';
+import { FormikProps } from 'formik';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import {
 	addPersonPhoto,
@@ -19,7 +18,7 @@ import {
 
 interface IStateToProps {
 	data: IEnrollPersonForm;
-	dictionaries: DictionaryState;
+	dictionaries: any;
 }
 interface IDispatchToProps {
 	addPersonPhoto: (file: File) => void;
@@ -76,10 +75,7 @@ const PersonForm = (props: IProps) => {
 
 	return (
 		<PriemForm
-			onSubmit={pipe(
-				props.submit,
-				props.onComplete,
-			)}
+			onSubmit={pipe(props.submit, props.onComplete)}
 			buttonText="Далее"
 			renderForm={renderForm}
 			schema={EnrollPersonFormSchema}
@@ -102,7 +98,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = {
 	submit: submitEnrollPersonForm,
 };
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(withStyles(styles)(PersonForm));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(PersonForm));

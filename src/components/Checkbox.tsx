@@ -1,9 +1,9 @@
 import React from 'react';
-import { withStyles, FormControlLabel, InputLabel, FormHelperText } from '@material-ui/core';
+import { withStyles, FormControlLabel, FormHelperText } from '@material-ui/core';
 import CheckboxMaterial from '@material-ui/core/Checkbox';
 import { FormikProps, Field, FieldProps } from 'formik';
 import { IStylable, prop } from '$common';
-import { H2 } from '$components';
+
 const styles = {
 	checkFormControl: {
 		marginTop: 10,

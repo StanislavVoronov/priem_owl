@@ -1,5 +1,4 @@
 import checkLogin, { isUniqueLogin } from './reducer';
-
-export * from './operations';
+export * from './actions';
 export { isUniqueLogin };
 export default checkLogin;

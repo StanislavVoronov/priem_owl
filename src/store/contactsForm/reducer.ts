@@ -1,14 +1,21 @@
-import { handleActions } from 'redux-actions';
-import { defaultEnrollContactsForm, IEnrollContactsForm, IForm } from '$common';
+import { defaultDocument, IContactsForm } from '$common';
 import { submitEnrollContactsForm } from './actions';
+import { createReducer, forAction } from '@black_bird/utils';
 
-const enrollContactsFormReducer = handleActions<IEnrollContactsForm, IEnrollContactsForm>(
-	{
-		[submitEnrollContactsForm.toString()]: (state, action) => {
-			return { ...state, ...action.payload };
-		},
-	},
-	defaultEnrollContactsForm,
-);
+const initial: IContactsForm = {
+	...defaultDocument,
+	needDormitory: false,
+	regLocality: '',
+	regIndex: '',
+	regHome: '',
+	regRegion: '',
+	email: '',
+	mobPhone: '+7',
+	isRegAddressEqualLive: true,
+	docType: { id: 3, name: 'Регистрация места жительства' },
+	mobileGovernment: { id: 1, name: 'Россия', phone_code: '7' },
+};
 
-export default enrollContactsFormReducer;
+const contactsFormReducer = createReducer([forAction(submitEnrollContactsForm, (state, payload) => payload)], initial);
+
+export default contactsFormReducer;

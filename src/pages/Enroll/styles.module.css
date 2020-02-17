@@ -1,13 +1,3 @@
-.logo {
-	padding-top: 8px;
-	padding-bottom: 8px;
-	height: 64px;
-	position: absolute;
-	top: 0;
-	left: 14px;
-	cursor: pointer;
-}
-
 .namePageTitle {
 	font-family: 'Trebuchet', serif;
 	padding-left: 20px;
@@ -32,21 +22,18 @@
 	display: flex;
 	justify-content: center;
 }
-
-.nav {
-	display: grid;
-	height: 100%;
-	padding: 0 60px;
-	align-items: center;
-	grid-gap: 20px;
-	grid-template-columns: repeat(auto-fit, minmax(100px, 125px));
-	background-color: #e8f0ff;
-}
-
 .stepper {
-	margin: 0 50px 50px 50px;
-	min-height: 250px;
+	display: flex;
+	margin: 20px;
 	background-color: #fdfdff;
 	border-radius: 10px;
 	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
+.root {
+	padding: 20px;
+}
+
+.stepButton {
+	justify-content: flex-start;
 }

@@ -1,7 +1,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { IRootState } from '$store';
 import { Action } from 'redux';
-import { checkLoginActions, createPriemApplicationActions } from '$common';
+import { createPriemApplicationActions } from '$common';
 
 import { PriemRestApi, PriemApi } from '$services';
 import { IServerError } from '$common';
@@ -43,7 +43,7 @@ export const createPriemApplicationTransaction = (
 			return Promise.resolve();
 		})
 		.catch((error: IServerError) => {
-			dispatch(createPriemApplicationActions.failure(data.admId, error));
+			// dispatch(createPriemApplicationActions.failure(data.admId, error));
 
 			return Promise.reject(error);
 		});

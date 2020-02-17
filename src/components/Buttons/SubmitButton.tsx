@@ -1,6 +1,5 @@
 import * as React from 'react';
 import MaterialButton from '@material-ui/core/Button';
-import { noop } from '$common';
 
 interface IProps {
 	children: string;

@@ -1,12 +1,12 @@
-import React, { createRef, ReactElement, useCallback } from 'react';
+import React, { ReactElement } from 'react';
 import { TextInput } from '../Inputs';
 import DropdownSelect from '../DropdownSelect';
 import styles from './styles';
 import { noop, IDocument, IStylable, validateRequireTextField } from '$common';
-import { IDictionary } from '@mgutm-fcu/dictionary';
+
+type IDictionary = Record<any, any>;
 
 import DownloadFileView from '../DownloadFile';
-import FieldWrapper from '../FieldWrapper';
 
 interface IDocumentFormProps extends IStylable {
 	document: IDocument;
@@ -50,43 +50,31 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 				{isDataVisible ? (
 					<div style={styles.dataContainer}>
 						{this.props.dictionaryTypes && this.props.title && (
-							<FieldWrapper name={`${documentFormName}docType`}>
-								{props => (
-									<DropdownSelect
-										{...props}
-										required
-										options={this.props.dictionaryTypes}
-										placeholder={`Выберите ${this.props.title.toLowerCase()}`}
-										title={this.props.title}
-									/>
-								)}
-							</FieldWrapper>
+							<DropdownSelect
+								name="docType"
+								required
+								options={this.props.dictionaryTypes}
+								placeholder={`Выберите ${this.props.title.toLowerCase()}`}
+								title={this.props.title}
+							/>
 						)}
 						{this.props.dictionaryGovernment && this.props.governmentTitle && (
-							<FieldWrapper name={`${documentFormName}docGovernment`}>
-								{props => (
-									<DropdownSelect
-										{...props}
-										required
-										options={this.props.dictionaryGovernment}
-										placeholder={`Выберите ${this.props.governmentTitle.toLowerCase()}`}
-										title={this.props.governmentTitle}
-									/>
-								)}
-							</FieldWrapper>
+							<DropdownSelect
+								name="government"
+								required
+								options={this.props.dictionaryGovernment}
+								placeholder={`Выберите ${this.props.governmentTitle.toLowerCase()}`}
+								title={this.props.governmentTitle}
+							/>
 						)}
 						{this.props.dictionarySubTypes && this.props.subTitle && (
-							<FieldWrapper name={`${documentFormName}docSubType`}>
-								{props => (
-									<DropdownSelect
-										{...props}
-										required
-										options={this.props.dictionarySubTypes}
-										placeholder={`Выберите ${this.props.subTitle.toLowerCase()}`}
-										title={this.props.subTitle}
-									/>
-								)}
-							</FieldWrapper>
+							<DropdownSelect
+								name="docSubType"
+								required
+								options={this.props.dictionarySubTypes}
+								placeholder={`Выберите ${this.props.subTitle.toLowerCase()}`}
+								title={this.props.subTitle}
+							/>
 						)}
 						{needInfo ? (
 							<TextInput
@@ -125,14 +113,10 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 						{this.props.extraFields}
 					</div>
 				) : null}
-				<div>
-					<FieldWrapper name={`${documentFormName}docFile`}>
-						{props => <DownloadFileView {...props} file={props.value} title={this.props.docTitle} />}
-					</FieldWrapper>
-				</div>
+				<div />
 			</div>
 		);
 	}
 }
-
+// <DownloadFileView title={this.props.docTitle} />
 export default DocumentForm;

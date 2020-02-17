@@ -1,4 +1,4 @@
-import { RegistrationForm } from './RegistrationForm';
+import { RegistrationForm } from './RegForm';
 import { EnrollPersonForm } from './EnrollPersonForm';
 import { ContactsForm } from './EnrollContactsForm';
 import { EducationForm } from './EnrollEducationForm';

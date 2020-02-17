@@ -36,7 +36,7 @@ export const findPersonTransaction = (
 			return Promise.resolve();
 		})
 		.catch((error: IServerError) => {
-			dispatch(findPersonActions.failure(error));
+			// dispatch(findPersonActions.failure(error));
 
 			return Promise.reject(error);
 		});

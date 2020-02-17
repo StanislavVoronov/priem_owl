@@ -38,8 +38,8 @@ module.exports = function(webpackEnv) {
 	const shouldUseRelativeAssetPaths = publicPath === './';
 	const publicUrl = publicPath.slice(0, -1);
 	const env = getClientEnvironment(publicUrl);
-	console.log("mode", webpackEnv)
-	console.log("publicPath", publicPath)
+	console.log('mode', webpackEnv);
+	console.log('publicPath', publicPath);
 
 	const srcPath = subdir => {
 		return path.join(__dirname, '../src', subdir);
@@ -161,6 +161,7 @@ module.exports = function(webpackEnv) {
 			alias: {
 				$common: srcPath('common'),
 				$components: srcPath('components'),
+				$rests: srcPath('rests'),
 				$pages: srcPath('pages'),
 				$services: srcPath('services'),
 				$assets: srcPath('assets'),
@@ -302,35 +303,35 @@ module.exports = function(webpackEnv) {
 				publicPath: publicPath,
 			}),
 			new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-			isEnvProduction &&
-				new WorkboxWebpackPlugin.GenerateSW({
-					clientsClaim: true,
-					exclude: [/\.map$/, /asset-manifest\.json$/],
-					importWorkboxFrom: 'cdn',
-					navigateFallback: publicUrl + '/index.html',
-					navigateFallbackBlacklist: [new RegExp('^/_'), new RegExp('/[^/]+\\.[^/]+$')],
+			// isEnvProduction &&
+			// 	new WorkboxWebpackPlugin.GenerateSW({
+			// 		clientsClaim: true,
+			// 		exclude: [/\.map$/, /asset-manifest\.json$/],
+			// 		importWorkboxFrom: 'cdn',
+			// 		navigateFallback: publicUrl + '/index.html',
+			// 		navigateFallbackBlacklist: [new RegExp('^/_'), new RegExp('/[^/]+\\.[^/]+$')],
+			// 	}),
+
+			new ForkTsCheckerWebpackPlugin({
+				typescript: resolve.sync('typescript', {
+					basedir: paths.appNodeModules,
 				}),
-			useTypeScript &&
-				new ForkTsCheckerWebpackPlugin({
-					typescript: resolve.sync('typescript', {
-						basedir: paths.appNodeModules,
-					}),
-					async: isEnvDevelopment,
-					useTypescriptIncrementalApi: true,
-					checkSyntacticErrors: true,
-					tsconfig: paths.appTsConfig,
-					reportFiles: [
-						'**',
-						'!**/*.json',
-						'!**/__tests__/**',
-						'!**/?(*.)(spec|test).*',
-						'!**/src/setupProxy.*',
-						'!**/src/setupTests.*',
-					],
-					watch: paths.appSrc,
-					silent: true,
-					formatter: isEnvProduction ? typescriptFormatter : undefined,
-				}),
+				async: isEnvDevelopment,
+				useTypescriptIncrementalApi: true,
+				checkSyntacticErrors: true,
+				tsconfig: paths.appTsConfig,
+				reportFiles: [
+					'**',
+					'!**/*.json',
+					'!**/__tests__/**',
+					'!**/?(*.)(spec|test).*',
+					'!**/src/setupProxy.*',
+					'!**/src/setupTests.*',
+				],
+				watch: paths.appSrc,
+				silent: true,
+				formatter: isEnvProduction ? typescriptFormatter : undefined,
+			}),
 		].filter(Boolean),
 		node: {
 			module: 'empty',

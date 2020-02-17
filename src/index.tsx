@@ -3,11 +3,15 @@ import * as ReactDOM from 'react-dom';
 import './global.css';
 import { Provider } from 'react-redux';
 import Enroll from './pages/Enroll';
-import store from '$store';
+import { createCustomStore } from '$store';
 import { StylesProvider } from '@material-ui/styles';
+import { enhanceStoreCreator, sagaMiddlewareDescriptor } from '@black_bird/utils';
+import rootSagas from '$operations';
+
+const store = enhanceStoreCreator(createCustomStore(), sagaMiddlewareDescriptor(rootSagas));
 
 ReactDOM.render(
-	<Provider store={store}>
+	<Provider store={store()}>
 		<StylesProvider injectFirst>
 			<Enroll />
 		</StylesProvider>

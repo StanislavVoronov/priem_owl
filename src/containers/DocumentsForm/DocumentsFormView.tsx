@@ -13,7 +13,6 @@ import {
 } from '$components';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 
 import {
 	IDocument,
@@ -28,11 +27,10 @@ import {
 } from '$common';
 import styles from './styles';
 import classes from './styles.module.css';
-import { DictionaryState } from '@mgutm-fcu/dictionary';
 import { FormikProps, FieldArray } from 'formik';
 
 interface IProps extends IStylable, IDocumentsForm {
-	dictionaries: DictionaryState;
+	dictionaries: any;
 	requiredDocuments: number[];
 	submit: (values: IDocumentsForm) => void;
 }
@@ -67,7 +65,7 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 		const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
 
 		const needDocuments = dictionaryDocTypes
-			? dictionaryDocTypes.values.filter(item => this.props.requiredDocuments.includes(item.id))
+			? dictionaryDocTypes.values.filter((item: any) => this.props.requiredDocuments.includes(item.id))
 			: [];
 
 		return (
@@ -87,7 +85,7 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 						<li className={classes.tick}>Документ, удостоверающий личность</li>
 						<li className={classes.tick}>Документ о регистрации места жительства</li>
 						<li className={classes.tick}>Документ о предыдущем образовании</li>
-						{needDocuments.map(item => (
+						{needDocuments.map((item: any) => (
 							<li
 								className={
 									form.values.documents.some(doc => propOr('', 'id', doc.docType) === item.id)
