@@ -1,6 +1,3 @@
 {
-  "hooks": {
-    "pre-commit": "lint-staged",
-    "pre-push": "tsc && tslint --fix --project ./tsconfig.json"
-  }
+  "hooks": {}
 }

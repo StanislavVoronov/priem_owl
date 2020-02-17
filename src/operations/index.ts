@@ -1,5 +1,5 @@
-import { rootSagas } from './sagas';
+import { rootSagas } from './rootSagas';
 import { classifiersSagas } from '@black_bird/dictionaries';
-export * from './regFormSagas';
+export * from './allSagas';
 
 export default [...rootSagas, ...classifiersSagas];

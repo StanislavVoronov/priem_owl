@@ -1,4 +1,4 @@
-import { EDictionaryNameList, IDictionaryScanableFilter, IDictionaryTypeFilter } from '../../common';
+import { EDictionaryNameList, IDictionaryScanableFilter, IDictionaryTypeFilter } from '$common';
 
 export const SHORT_DICTIONARY_LIST = [
 	{

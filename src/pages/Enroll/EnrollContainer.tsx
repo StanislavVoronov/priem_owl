@@ -1,7 +1,7 @@
 import * as React from 'react';
 import EnrollView from './EnrollView';
 import { connect, MapStateToProps } from 'react-redux';
-import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from './constants';
+import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from '../../dictionaries';
 
 import { IRootState, fromTransaction, dictionaryStateSelector, enrollSelector } from '$store';
 import { createNewPersonFolder } from '$operations';
@@ -46,8 +46,6 @@ class EnrollContainer extends React.Component<IProps, IState> {
 	};
 	handleNext = () => {
 		this.props.handleNextStep();
-		const dictionaries = FULL_DICTIONARY_LIST;
-		this.setState({ dictionaries });
 	};
 	createNewPersonFolder = () => {
 		this.props.createNewPersonFolder().then(this.onCompleteRegistration);
