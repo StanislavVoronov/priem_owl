@@ -19,6 +19,6 @@ export const regFormSagas = [
 	}),
 	sagaEffects.takeLatest(createNewLoginAction, function*() {
 		const data = yield sagaEffects.select(regFormSelector);
-		yield sagaEffects.call(enrollCreateNewLogin, data);
+		yield sagaEffects.call(createLoginRest, data);
 	}),
 ];
