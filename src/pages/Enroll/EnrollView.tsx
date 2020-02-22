@@ -71,11 +71,11 @@ export class EnrollView extends React.PureComponent<IProps> {
 					orientation={'vertical'}>
 					{!this.props.loading ? (
 						this.props.steps.map((label, index) => (
-							<Step
-								style={index <= this.props.passedStep ? { cursor: 'pointer' } : { cursor: 'default' }}
-								key={label}
-								onClick={index <= this.props.passedStep ? this.props.handleStep(index) : noop}>
-								<StepButton className={classes.stepButton} disabled={index <= this.props.passedStep}>
+							<Step style={index <= this.props.passedStep ? { cursor: 'pointer' } : { cursor: 'default' }} key={label}>
+								<StepButton
+									className={classes.stepButton}
+									disabled={index <= this.props.passedStep}
+									onClick={index <= this.props.passedStep ? this.props.handleStep(index) : noop}>
 									<span className={index === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
 								</StepButton>
 								<StepContent>{this.renderForm(index)}</StepContent>

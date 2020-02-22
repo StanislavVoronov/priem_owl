@@ -9,16 +9,16 @@ function* submitRegForm(values: any) {
 
 export const regFormSagas = [
 	sagaEffects.takeEvery(submitRegFormAction, submitRegForm),
-	sagaEffects.watcher(checkLoginTransactionActions, ({ payload }) => {
+	sagaEffects.rest(checkLoginTransactionActions, ({ payload }) => {
 		return checkLoginRest(payload);
 	}),
-	sagaEffects.watcher(checkLoginTransactionActions, ({ payload }) => {
+	sagaEffects.rest(checkLoginTransactionActions, ({ payload }) => {
 		const password = generatePassword();
 
 		return createLoginRest(payload, password);
 	}),
 	sagaEffects.takeLatest(createNewLoginAction, function*() {
 		const data = yield sagaEffects.select(regFormSelector);
-		yield sagaEffects.call(createLoginRest, data);
+		// yield sagaEffects.call(createLoginRest, data);
 	}),
 ];

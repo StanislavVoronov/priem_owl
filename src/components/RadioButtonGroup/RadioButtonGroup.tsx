@@ -6,7 +6,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import { IHasError, IHelperText } from '../../containers/models';
 
 import { noop } from '$common';
-import { IFormField } from '@black_bird/components/dist/models';
+import { IFormField } from '@black_bird/components';
 import classes from './RadioButtonGroup.module.css';
 
 interface IRadioButton {

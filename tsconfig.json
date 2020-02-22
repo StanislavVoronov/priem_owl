@@ -23,6 +23,7 @@
 		"emitDecoratorMetadata": true,
 		"paths": {
 			"$store": ["./store"],
+			"$assets": ["./assets"],
 			"$actions": ["./actions"],
 			"$common": ["./common"],
 			"$operations": ["./operations"],

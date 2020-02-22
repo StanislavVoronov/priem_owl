@@ -1,6 +1,6 @@
 import React from 'react';
 import { RadioButtonGroup } from '$components';
-import { Form, TextInput, IFormProps } from '@black_bird/components';
+import { Form, TextInput, IFormProps, Autocomplete } from '@black_bird/components';
 import { prop } from '@black_bird/utils';
 import {
 	EDictionaryNameList,
@@ -34,10 +34,13 @@ const RegFormView = (props: IProps) => {
 	// 		form.setFieldValue('gender', String(name.sex));
 	// 	}
 	// };
-	const renderForm = (form: IFormProps<IRegForm>) => {
+	const defaultOnChange = (event: any) => {
+		console.log("event", event)
+	}
+	const renderForm = (form: IFormProps<any>) => {
 		const { onChange, values } = form;
 		const { dictionaries } = props;
-		// const dictionaryFirstNames = prepareDictionarySuggestions(dictionaries[EDictionaryNameList.FirstNames]);
+		const dictionaryFirstNames = prepareDictionarySuggestions(dictionaries[EDictionaryNameList.FirstNames]);
 		// const dictionaryMiddleNames = dictionaries[EDictionaryNameList.MiddleNames];
 		// const gender = prop('gender', form.values);
 		//
@@ -51,20 +54,23 @@ const RegFormView = (props: IProps) => {
 		// 		: { values: [] },
 		// );
 
+		console.log("form", values);
+
+
 		return (
 			<>
 				<TextInput onChange={onChange} required name="lastName" label="Фамилия" placeholder="Введите фамилию" />
 
-				{/*<Autocomplete*/}
-				{/*	title="Имя"*/}
-				{/*	getOptionLabel={getCode}*/}
-				{/*	onChange={onChangeFirstName(form)}*/}
-				{/*	name="firstName"*/}
-				{/*	//validate={validateRequireRusText}*/}
-				{/*	required*/}
-				{/*	placeholder="Введите имя"*/}
-				{/*	options={dictionaryFirstNames}*/}
-				{/*/>*/}
+				<Autocomplete
+					title="Имя"
+					// @ts-ignore
+					getOptionLabel={getCode}
+					onChange={defaultOnChange}
+					name="firstName"
+					required
+					placeholder="Введите имя"
+					options={dictionaryFirstNames}
+				/>
 
 				{/*<Autocomplete*/}
 				{/*	label="Отчество"*/}
