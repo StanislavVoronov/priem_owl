@@ -1,5 +1,6 @@
 import findPerson, { isPersonFound } from './reducer';
 
-export * from './operations';
+
+export * from './actions';
 export { isPersonFound };
 export default findPerson;

@@ -1,7 +1,8 @@
 import { createTransactionActions } from '@black_bird/utils';
 import { TRANSACTION_NAMES } from './names';
 
-export const createNewLoginTransactionActions = createTransactionActions(TRANSACTION_NAMES.CheckLogin);
+
+
 export const findPersonActions = createTransactionActions(TRANSACTION_NAMES.FindPerson);
 export const createVerificationCodeActions = createTransactionActions(TRANSACTION_NAMES.CreateVerificationCode);
 export const createPersonActions = createTransactionActions(TRANSACTION_NAMES.CreatePerson);

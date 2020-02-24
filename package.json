@@ -9,10 +9,7 @@
     "pipeline": "npm run update && npm run build && npm run delivery",
     "update": "git pull origin",
     "lint": "tslint src/**/*.{tsx,ts} --fix",
-    "build": "node scripts/build.js",
-    "devBuild": "node scripts/devBuild.js",
-    "delivery": "sh ./scripts/delivery.sh",
-    "devDelivery": "sh ./scripts/devDelivery.sh",
+    "build": "rm -rf owl && node scripts/build.js",
     "watch": "tsc --watch",
     "prepush": "tsc && tslint --project ./tsconfig.json"
   },
@@ -23,9 +20,9 @@
   "dependencies": {
     "formik": "^2.1.4",
     "redux-devtools-extension": "^2.13.8",
-    "@black_bird/components": "0.0.23",
+    "@black_bird/components": "0.0.53",
     "@black_bird/dictionaries": "0.0.5",
-    "@black_bird/utils": "0.0.38",
+    "@black_bird/utils": "0.0.46",
     "@babel/core": "7.2.2",
     "@mgutm-fcu/auth": "^0.21.26",
     "@svgr/webpack": "4.1.0",

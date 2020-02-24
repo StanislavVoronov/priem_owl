@@ -8,7 +8,6 @@ import {
 	enrollEducationFormSelector,
 	enrollPersonFormSelector,
 	regFormSelector,
-	findPersonTransaction,
 	fromTransaction,
 	IRootState,
 	selectVerificationMethod,
@@ -28,8 +27,6 @@ import {
 import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
 import {
-	cyrillToLatin,
-	generatePassword,
 	moment,
 	ServerBoolean,
 	VerificationMethod,
@@ -37,8 +34,6 @@ import {
 	fetchPriemProfilesActions,
 	fetchPriemPayFormsActions,
 	fetchPriemEducationFormsActions,
-	createNewLoginTransactionActions,
-	IRegForm,
 } from '$common';
 import { updatePhoneTransaction } from '../store/transactions/updatePhone';
 import { updateAddressTransaction } from '../store/transactions/updateAddress';
@@ -52,51 +47,6 @@ import { fetchPriemEducationFormsTransaction } from '../store/transactions/fetch
 import { fetchPriemPayFormsTransaction } from '../store/transactions/fetchPriemPayForms';
 import { fetchPriemGroupsTransaction } from '../store/transactions/fetchPriemGroups';
 import { createPriemApplicationTransaction } from '../store/transactions/createPriemApplication';
-import { sagaEffects } from '@black_bird/utils';
-import { createNewLoginAction } from '$actions';
-import { checkLoginTransactionActions, createLoginTransactionActions } from '$store';
-import { checkLoginRest, createLoginRest } from '../rests';
-
-function* enrollCreateNewLogin(data: IRegForm) {
-	console.log('data', data);
-	const lastName = cyrillToLatin(data.lastName);
-	const firstName = cyrillToLatin(data.firstName);
-	const middleName = cyrillToLatin(data.middleName);
-
-	let firstPart = '';
-
-	const firstNameList = Array.from(firstName);
-	const secondNameList = Array.from(middleName);
-
-	for (const first of firstNameList) {
-		firstPart += first;
-		let login = `${lastName}.${firstPart}.`;
-		for (const second of secondNameList) {
-			login += second;
-			console.log('login', login);
-			yield sagaEffects.put(checkLoginTransactionActions.trigger(login));
-			const isUniqueLogin = yield sagaEffects.select(fromTransaction.isUniqueLogin);
-			console.log('isUniqueLogin', isUniqueLogin);
-
-			if (isUniqueLogin) {
-				break;
-			}
-		}
-	}
-}
-
-export const findPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
-	const data = regFormSelector(getState());
-
-	return Promise.resolve();
-	// return dispatch(findPersonTransaction(data)).then(() => {
-	// 	if (fromTransaction.findPerson(getState()).result) {
-	// 		return Promise.reject();
-	// 	} else {
-	// 		return Promise.resolve();
-	// 	}
-	// });
-};
 
 export const sendVerificationCodeToPhone = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
 	dispatch,

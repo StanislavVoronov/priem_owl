@@ -23,6 +23,14 @@
 }
 
 .label {
-	margin-right: 3px;
+	margin-right: 4px;
 	font-size: 0.775rem;
+}
+
+.radioLabel {
+	margin-right: 32px;
+}
+
+.radio {
+	margin-right: 4px;
 }

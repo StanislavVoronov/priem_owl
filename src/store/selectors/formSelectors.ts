@@ -4,10 +4,6 @@ export const regFormSelector = (state: IRootState) => {
 	return state.regForm;
 };
 
-export const dictionaryStateSelector = (state: IRootState) => {
-	return state.dictionaries;
-};
-
 export const enrollPersonFormSelector = (state: IRootState) => {
 	return state.enrollPersonForm;
 };

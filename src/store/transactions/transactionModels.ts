@@ -1,8 +1,7 @@
 import { ICreatePersonData, IPriemGroup, ISelectItem, ITransaction } from '$common';
 
 import { ICreateVerificationCodeResponse } from './createVerificationCode';
-import { IFindPersonResponse } from './findPerson';
-import { ICheckLoginResponse, ICreateLoginResponse } from '$rests';
+import { ICheckLoginResponse, ICreateLoginResponse, IFindPersonResponse } from '$rests';
 
 export interface ITransactionState {
 	checkLogin: ITransaction<ICheckLoginResponse>;

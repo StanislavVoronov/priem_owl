@@ -1,7 +1,7 @@
 import { checkLoginTransactionActions } from './checkLogin';
 import { createLoginTransactionActions } from './createLogin';
+import { findPersonTransactionActions } from './findPerson';
 
-import { findPersonTransaction } from './findPerson';
 import { createVerificationCodeTransaction } from './createVerificationCode';
 import { uploadDocumentTransaction } from './uploadDocument';
 import { createPersonTransaction } from './createPerson';
@@ -11,8 +11,8 @@ import transactions from './transactionReducer';
 export * from './transactionModels';
 export {
 	checkLoginTransactionActions,
+	findPersonTransactionActions,
 	createLoginTransactionActions,
-	findPersonTransaction,
 	createVerificationCodeTransaction,
 	fromTransaction,
 	uploadDocumentTransaction,

@@ -54,6 +54,7 @@ class RadioButtonGroup extends React.PureComponent<IRadioGroupButton> {
 		validate: noop,
 	};
 	onChange = (event: React.ChangeEvent<{}>, value: string) => {
+		console.log("event", event, value)
 		this.props.onChange({ name: this.props.name, value });
 	};
 	render() {
@@ -75,7 +76,8 @@ class RadioButtonGroup extends React.PureComponent<IRadioGroupButton> {
 						<FormControlLabel
 							key={`${item.value}-${index}`}
 							value={item.value}
-							control={<Radio color={item.color} />}
+							classes={{root: classes.radioLabel}}
+							control={<Radio classes={{root: classes.radio}} color={item.color} />}
 							label={item.label}
 						/>
 					))}

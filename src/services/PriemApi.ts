@@ -10,23 +10,17 @@ class PriemApi {
 	static checkData = <Q, R>(api: string, payload: Q, extraData: object = {}): Promise<R[]> => {
 		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, payload, extraData);
 
-		return Request.send<IPriemApiResponse<R[]>>().then(response => {
-			return Promise.resolve(response.result);
-		});
+		return Request.send().then((response: { result: R[] }) => Promise.resolve(response.result));
 	};
 	static selectData = <Q, R>(api: string, payload?: Q): Promise<R[]> => {
 		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, payload);
 
-		return Request.send<IPriemApiResponse<R[]>>().then(response => {
-			return Promise.resolve(response.result);
-		});
+		return Request.send();
 	};
 	static post = <Q, R>(api: PriemRestApi, payload: Q, extraData: object = {}): Promise<R> => {
 		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, payload, extraData);
 
-		return Request.send<R>().then(response => {
-			return Promise.resolve(response);
-		});
+		return Request.send();
 	};
 }
 

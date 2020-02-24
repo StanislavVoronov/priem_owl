@@ -1,6 +1,7 @@
 import { createTransactionActions } from '@black_bird/utils';
+import { TRANSACTION_NAMES } from '$actions';
 
 export const checkLoginTransactionActions = createTransactionActions(
-	'CREATE_LOGIN_TRANSACTION',
-	(login: string) => login,
+	TRANSACTION_NAMES.CheckLogin,
+	(login: string) => ({ login }),
 );

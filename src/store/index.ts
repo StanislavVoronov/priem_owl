@@ -1,4 +1,3 @@
-export * from './selectors';
 export * from './transactions';
 export * from './regForm';
 export * from './personForm';
@@ -10,3 +9,4 @@ export * from './accountVerification';
 export * from './applicationsForm';
 export * from './models';
 export * from './rootReducer';
+export * from './selectors'

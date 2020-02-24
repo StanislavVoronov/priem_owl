@@ -16,7 +16,7 @@ export class JsonRequest {
 		});
 		this.body = body;
 	}
-	send = <T>(): Promise<T> => {
+	send = (): any => {
 		return fetch(`${this.host}${this.path}`, {
 			method: 'POST',
 			credentials: 'include',
@@ -27,10 +27,10 @@ export class JsonRequest {
 			})
 			.then((data: any) => {
 				if (data.error) {
-					return Promise.reject({ message: data.error.string, type: data.error.id });
+					throw new Error(data.error.string);
 				}
 
-				return data;
+				return Promise.resolve(data);
 			});
 	};
 }

@@ -3,17 +3,19 @@ import EnrollView from './EnrollView';
 import { connect, MapStateToProps } from 'react-redux';
 import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from '../../dictionaries';
 
-import { IRootState, fromTransaction, dictionaryStateSelector, enrollSelector } from '$store';
+import { IRootState, fromTransaction, enrollSelector, middleNamesDictionary } from '$store';
 import { createNewPersonFolder } from '$operations';
 import { IDictionaryConfig } from '@black_bird/dictionaries';
 import { initAction, handleNextStep } from '$store';
+import { firstNamesDictionary } from '../../store/selectors';
+import { ITransaction } from '@black_bird/utils';
 
 interface IState {
 	dictionaries: IDictionaryConfig[];
 }
 
 interface IStateToProps {
-	dictionaries: any;
+	firstNameDictionary: ITransaction<any>;
 	personId: number;
 	step: number;
 	passedStep: number;
@@ -51,11 +53,9 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		this.props.createNewPersonFolder().then(this.onCompleteRegistration);
 	};
 	render() {
-		const { step, passedStep } = this.props;
+		const { step, passedStep, firstNameDictionary } = this.props;
 
-		const loading =
-			Object.keys(this.props.dictionaries).length === 0 ||
-			Object.values(this.props.dictionaries).find((item: any) => item.fetching) !== undefined;
+		const loading = firstNameDictionary.isFetching;
 
 		return (
 			<EnrollView
@@ -72,12 +72,13 @@ class EnrollContainer extends React.Component<IProps, IState> {
 }
 
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
-	const dictionaries = dictionaryStateSelector(state);
+	const firstNameDictionary = firstNamesDictionary(state);
+
 	const enroll = enrollSelector(state);
 
 	// const { result } = fromTransaction.createLogin(state);
 
-	return { personId: 0, dictionaries, step: enroll.step, passedStep: enroll.passedStep };
+	return { personId: 0, firstNameDictionary, step: enroll.step, passedStep: enroll.passedStep };
 };
 
 const mapDispatchToProps = {

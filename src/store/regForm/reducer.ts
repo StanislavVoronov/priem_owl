@@ -9,15 +9,6 @@ const initial = {
 	gender: '',
 };
 
-const regFormReducer = createReducer(
-	[
-		forAction(submitRegFormAction, (state, payload) => {
-			console.log('payload', payload);
-
-			return payload;
-		}),
-	],
-	initial,
-);
+const regFormReducer = createReducer([forAction(submitRegFormAction, (state, payload) => payload)], initial);
 
 export default regFormReducer;

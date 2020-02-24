@@ -3,5 +3,5 @@ export interface IPerson {
 	firstName: string;
 	middleName: string;
 	birthday: string;
-	gender: number;
+	gender: string;
 }

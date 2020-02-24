@@ -1,31 +1,34 @@
 import React from 'react';
 import { RadioButtonGroup } from '$components';
-import { Form, TextInput, IFormProps, Autocomplete } from '@black_bird/components';
-import { prop } from '@black_bird/utils';
+import { Form, TextInput, IFormProps, Autocomplete, IFormField } from '@black_bird/components';
+import { ifElse, ITransaction, prop } from '@black_bird/utils';
 import {
 	EDictionaryNameList,
 	IRegForm,
 	IServerError,
 	prepareDictionarySuggestions,
 	validateRequireTextField,
+	IFistNameDictionary,
 	validateRusTextField,
 } from '$common';
+import classes from './RegForm.module.css';
 
 export const GENDERS = [
-	{ value: 1, label: 'Муж.', color: 'primary' },
-	{ value: 2, label: 'Жен.' },
+	{ value: '1', label: 'Муж.', color: 'primary' },
+	{ value: '2', label: 'Жен.' },
 ];
 
 interface IProps {
-	dictionaries: any;
-	data: IRegForm;
-	submit: (values: IRegForm) => void;
-	error: IServerError | null;
-	loading: boolean;
+	firstNameDictionary: ITransaction<IFistNameDictionary>;
+	middleNameDictionary: ITransaction<IFistNameDictionary>;
+	form: IFormProps<any>;
 }
-const getCode = prop('code');
+const getName = prop('name');
 
 const RegFormView = (props: IProps) => {
+	const { firstNameDictionary, middleNameDictionary } = props;
+	const { onChange, values } = props.form;
+
 	// const onChangeFirstName = (form: any) => (value: string) => {
 	// 	const firstNameDictionary = props.dictionaries[EDictionaryNameList.FirstNames];
 	// 	const name = firstNameDictionary.values.find((item: any) => item.name === value);
@@ -34,82 +37,70 @@ const RegFormView = (props: IProps) => {
 	// 		form.setFieldValue('gender', String(name.sex));
 	// 	}
 	// };
-	const defaultOnChange = (event: any) => {
-		console.log("event", event)
-	}
-	const renderForm = (form: IFormProps<any>) => {
-		const { onChange, values } = form;
-		const { dictionaries } = props;
-		const dictionaryFirstNames = prepareDictionarySuggestions(dictionaries[EDictionaryNameList.FirstNames]);
-		// const dictionaryMiddleNames = dictionaries[EDictionaryNameList.MiddleNames];
-		// const gender = prop('gender', form.values);
-		//
-		// const filteredDictionaryMiddleName = prepareDictionarySuggestions(
-		// 	dictionaryMiddleNames
-		// 		? gender
-		// 			? {
-		// 					values: dictionaryMiddleNames.values.filter((item: { sex: number }) => item.sex === Number(gender)),
-		// 			  }
-		// 			: dictionaryMiddleNames
-		// 		: { values: [] },
-		// );
+	const defaultOnChange = (data: IFormField<string>) => {
+		const genderName = firstNameDictionary.result.find(item => item.name === data.value);
 
-		console.log("form", values);
+		if (genderName) {
+			onChange(data, [{ name: 'gender', value: String(genderName.sex) }]);
+		} else {
+			onChange(data);
+		}
+	};
 
+	const gender = prop('gender', values);
 
-		return (
-			<>
-				<TextInput onChange={onChange} required name="lastName" label="Фамилия" placeholder="Введите фамилию" />
+	const filterMiddleNames = (items: any, state: any) => {
+		return prop('firstName')(values)
+			? items.filter((item: { sex: number; name: string }) => {
+					const includes = item.name.includes(state.inputValue);
 
-				<Autocomplete
-					title="Имя"
-					// @ts-ignore
-					getOptionLabel={getCode}
-					onChange={defaultOnChange}
-					name="firstName"
-					required
-					placeholder="Введите имя"
-					options={dictionaryFirstNames}
-				/>
-
-				{/*<Autocomplete*/}
-				{/*	label="Отчество"*/}
-				{/*	name="middleName"*/}
-				{/*	validate={validateRusTextField}*/}
-				{/*	placeholder="Введите отчество"*/}
-				{/*	suggestions={filteredDictionaryMiddleName}*/}
-				{/*/>*/}
-
-				<TextInput
-					onChange={onChange}
-					validate={validateRequireTextField}
-					required
-					name="birthday"
-					label="Дата рождения"
-					type="date"
-				/>
-
-				<RadioButtonGroup
-					value={values.gender}
-					onChange={onChange}
-					validate={validateRequireTextField}
-					name="gender"
-					title="Пол"
-					required
-					items={GENDERS}
-				/>
-			</>
-		);
+					return gender ? item.sex === Number(gender) && includes : includes;
+			  })
+			: items;
 	};
 
 	return (
-		<Form
-			error={props.error}
-			renderForm={renderForm}
-			onSubmit={props.submit}
-			initialValues={props.data}
-			buttonText="Проверить"
-		/>
+		<>
+			<TextInput onChange={onChange} required name="lastName" label="Фамилия" placeholder="Введите фамилию" />
+
+			<Autocomplete
+				title="Имя"
+				onChange={defaultOnChange}
+				name="firstName"
+				required
+				placeholder="Введите имя"
+				options={firstNameDictionary.result}
+			/>
+
+			<Autocomplete
+				title="Имя"
+				onChange={defaultOnChange}
+				name="middleName"
+				filterOptions={filterMiddleNames}
+				placeholder="Введите отчество"
+				options={middleNameDictionary.result}
+			/>
+
+			<TextInput
+				onChange={onChange}
+				validate={validateRequireTextField}
+				required
+				name="birthday"
+				label="Дата рождения"
+				placeholder="дд.мм.гггг"
+				type="date"
+			/>
+
+			<RadioButtonGroup
+				value={values.gender}
+				onChange={onChange}
+				validate={validateRequireTextField}
+				name="gender"
+				title="Пол"
+				required
+				items={GENDERS}
+			/>
+		</>
 	);
 };
 export default RegFormView;
