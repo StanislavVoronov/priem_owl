@@ -19,7 +19,7 @@ interface IStateToProps {
 	error: IServerError | null;
 	loading: boolean;
 	data: IRegForm;
-	isCheckPersonFetching: boolean;
+	requestFetching: boolean;
 }
 interface IDispatchToProps {
 	onSubmit: (values: IRegForm) => void;
@@ -43,13 +43,13 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 	};
 
 	render() {
-		const { onSubmit, data, error, isCheckPersonFetching } = this.props;
+		const { onSubmit, data, error, requestFetching } = this.props;
 
 		return (
 			<Form
 				error={error}
-				loading={isCheckPersonFetching}
-				loadingText = 'Проверка личного дела'
+				loading={requestFetching}
+				loadingText="Проверка личного дела"
 				renderForm={this.renderForm}
 				onSubmit={onSubmit}
 				initialValues={data}
@@ -63,6 +63,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	const middleNameDictionary = middleNamesDictionary(state);
 
 	const isUniqueLoginTransaction = fromTransaction.isUniqueLogin(state);
+	const isCreateLoginTransaction = fromTransaction.createLogin(state);
 	const data = regFormSelector(state);
 	const { error, loading } = fromTransaction.findPerson(state);
 
@@ -72,7 +73,10 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		data,
 		error,
 		loading,
-		isCheckPersonFetching: isUniqueLoginTransaction.loading,
+		requestFetching:
+			isUniqueLoginTransaction.loading ||
+			isCreateLoginTransaction.loading ||
+			loading,
 	};
 };
 

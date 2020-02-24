@@ -1,4 +1,4 @@
-import { sagaEffects } from '@black_bird/utils';
+import { sagaEffects, isEmptyArray } from '@black_bird/utils';
 import {
 	checkLoginTransactionActions,
 	fromTransaction,
@@ -7,6 +7,7 @@ import {
 	createLoginTransactionActions,
 	generateUserPasswordAction,
 	findPersonTransactionActions,
+	handleNextStep,
 } from '$store';
 import { checkLoginRest, createLoginRest, findPersonRest } from '$rests';
 import { cyrillToLatin, generatePassword } from '$common';
@@ -27,12 +28,15 @@ function* createNewLogin(state: any) {
 		let login = `${lastName}.${firstPart}.`;
 		for (const second of secondNameList) {
 			login += second;
-			yield sagaEffects.put(checkLoginTransactionActions.request());
+			try {
+				yield sagaEffects.put(checkLoginTransactionActions.request());
 
-			const result = yield sagaEffects.call(checkLoginRest, login);
+				const result = yield sagaEffects.call(checkLoginRest, login);
 
-			yield sagaEffects.put(checkLoginTransactionActions.success(result));
-
+				yield sagaEffects.put(checkLoginTransactionActions.success(result));
+			} catch (e) {
+				yield sagaEffects.put(checkLoginTransactionActions.failure(e));
+			}
 			const isUniqueLogin = yield sagaEffects.select(fromTransaction.isUniqueLogin);
 
 			if (isUniqueLogin.result) {
@@ -54,9 +58,12 @@ export const regFormSagas = [
 
 		yield sagaEffects.put(createLoginTransactionActions.trigger(payload, password));
 	}),
+	sagaEffects.takeLatest(findPersonTransactionActions.success, function*({ payload }: any) {
+		if (isEmptyArray(payload.response)) {
+			yield sagaEffects.put(handleNextStep());
+		}
+	}),
 	sagaEffects.rest(createLoginTransactionActions, ({ payload }) => {
-		console.log('payload', payload);
-
 		return createLoginRest(payload.login, payload.password);
 	}),
 	sagaEffects.takeEvery(createLoginTransactionActions.success, function*() {
