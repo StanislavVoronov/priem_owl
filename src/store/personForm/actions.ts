@@ -1,15 +1,8 @@
-import { createAction } from 'redux-actions';
-import { IEnrollPersonForm } from '$common';
+import { createAction } from '@black_bird/utils';
+import { IPersonForm } from '$common';
 
 const NAMESPACE = 'PersonForm';
 
-export const submitEnrollPersonForm = createAction(
-	`${NAMESPACE}/submitEnrollPersonForm`,
-	(form: IEnrollPersonForm) => form,
+export const submitPersonFormAction = createAction<IPersonForm>(
+	`${NAMESPACE}/SUBMIT`
 );
-
-export const addPersonPhoto = createAction(`${NAMESPACE}/addPersonPhoto`, (file: File) => ({
-	field: { value: file },
-}));
-
-export const removePersonPhoto = createAction(`${NAMESPACE}/removePersonPhoto`, () => void 0);

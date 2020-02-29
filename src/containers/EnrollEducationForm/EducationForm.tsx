@@ -43,14 +43,14 @@ const EducationForm = (props: IProps) => {
 						)}
 					</FieldWrapper>
 				)}
-				<DocumentForm
-					document={data}
-					title={'Предыдущее образование'}
-					docTitle={'Документ о предыдущем образовании'}
-					dictionarySubTypes={educationTypeDictionary && educationTypeDictionary.values}
-					subTitle={'Тип документа о предыдущем образовании'}
-					// extraFields={<Checkbox name="hasEge" label="Имею результаты ЕГЭ" />}
-				/>
+				{/*<DocumentForm*/}
+				{/*	document={data}*/}
+				{/*	title={'Предыдущее образование'}*/}
+				{/*	docTitle={'Документ о предыдущем образовании'}*/}
+				{/*	dictionarySubTypes={educationTypeDictionary && educationTypeDictionary.values}*/}
+				{/*	subTitle={'Тип документа о предыдущем образовании'}*/}
+				{/*	// extraFields={<Checkbox name="hasEge" label="Имею результаты ЕГЭ" />}*/}
+				{/*/>*/}
 			</>
 		);
 	};

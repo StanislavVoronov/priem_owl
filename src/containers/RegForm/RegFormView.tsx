@@ -1,17 +1,11 @@
 import React from 'react';
 import { RadioButtonGroup } from '$components';
-import { Form, TextInput, IFormProps, Autocomplete, IFormField } from '@black_bird/components';
-import { ifElse, ITransaction, prop } from '@black_bird/utils';
+import { TextInput, IFormProps, Autocomplete, IFormField } from '@black_bird/components';
+import { ITransaction, prop } from '@black_bird/utils';
 import {
-	EDictionaryNameList,
-	IRegForm,
-	IServerError,
-	prepareDictionarySuggestions,
 	validateRequireTextField,
 	IFistNameDictionary,
-	validateRusTextField,
 } from '$common';
-import classes from './RegForm.module.css';
 
 export const GENDERS = [
 	{ value: '1', label: 'Муж.', color: 'primary' },
@@ -23,7 +17,6 @@ interface IProps {
 	middleNameDictionary: ITransaction<IFistNameDictionary>;
 	form: IFormProps<any>;
 }
-const getName = prop('name');
 
 const RegFormView = (props: IProps) => {
 	const { firstNameDictionary, middleNameDictionary } = props;

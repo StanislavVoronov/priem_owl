@@ -3,11 +3,11 @@ import EnrollView from './EnrollView';
 import { connect, MapStateToProps } from 'react-redux';
 import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from '../../dictionaries';
 
-import { IRootState, fromTransaction, enrollSelector, middleNamesDictionary } from '$store';
+import { IRootState, fromTransaction, enrollSelector, getMiddleNamesDictionary } from '$store';
 import { createNewPersonFolder } from '$operations';
 import { IDictionaryConfig } from '@black_bird/dictionaries';
 import { initAction, handleNextStep } from '$store';
-import { firstNamesDictionary } from '../../store/selectors';
+import { getFirstNamesDictionary } from '../../store/selectors';
 import { ITransaction } from '@black_bird/utils';
 
 interface IState {
@@ -72,7 +72,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 }
 
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
-	const firstNameDictionary = firstNamesDictionary(state);
+	const firstNameDictionary = getFirstNamesDictionary(state);
 
 	const enroll = enrollSelector(state);
 

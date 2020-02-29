@@ -4,12 +4,14 @@ import ImageEditor from './ImageEditor';
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import { FormLabel, InputLabel } from '@material-ui/core';
+import { IFormField } from '@black_bird/components';
+import { isNotVoid } from '@black_bird/utils';
 
 interface IProps {
 	name: string;
 	title: string;
-	file: any;
-	onChange: (file: File | null) => void;
+	file: any | null;
+	onChange: (file: IFormField) => void;
 	error?: any;
 }
 const FILE_FORMATS = ['image/jpeg', 'image/jpg'];
@@ -18,6 +20,7 @@ class DownloadFile extends React.Component<IProps> {
 		name: '',
 		title: '',
 	};
+	onChange = () => {};
 	onDownload = (acceptedFiles: File[]) => {
 		acceptedFiles.forEach(file => {
 			const reader = new FileReader();
@@ -35,18 +38,20 @@ class DownloadFile extends React.Component<IProps> {
 			}
 
 			reader.onload = () => {
-				this.props.onChange(file);
+				this.props.onChange({ name: this.props.name, value: file });
 			};
-			reader.onabort = () => console.log('file reading was aborted');
-			reader.onerror = () => console.log('file reading has failed');
+			reader.onabort = () => alert('file reading was aborted');
+			reader.onerror = () => alert('file reading has failed');
 			reader.readAsBinaryString(file);
 		});
 	};
 	onDelete = () => {
-		this.props.onChange(null);
+		this.props.onChange({ name: this.props.name, value: null });
 	};
 
 	render() {
+		const { file } = this.props;
+
 		return (
 			<Dropzone onDrop={this.onDownload}>
 				{props => (
@@ -59,8 +64,8 @@ class DownloadFile extends React.Component<IProps> {
 								<FormLabel style={{ color: 'red' }}>{'*'}</FormLabel>
 							</div>
 						)}
-						{this.props.file ? (
-							<ImageEditor title={this.props.file.name} file={this.props.file} removeImage={this.onDelete} />
+						{isNotVoid(file) ? (
+							<ImageEditor title={file.name} file={file} removeImage={this.onDelete} />
 						) : (
 							<React.Fragment>
 								<div style={styles.dropZone}>

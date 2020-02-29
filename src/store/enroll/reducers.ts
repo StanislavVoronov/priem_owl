@@ -10,7 +10,7 @@ const enrollReducerNextStep = createReducer(
 			return payload;
 		}),
 	],
-	0,
+	1,
 );
 
 const enrollReducerPassedStep = createReducer(
@@ -22,7 +22,7 @@ const enrollReducerPassedStep = createReducer(
 			return state + 1;
 		}),
 	],
-	0,
+	1,
 );
 
 export default combineReducers({ step: enrollReducerNextStep, passedStep: enrollReducerPassedStep });

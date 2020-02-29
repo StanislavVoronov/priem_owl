@@ -2,7 +2,7 @@ import { ITransactionState } from '$store';
 import {
 	IEnrollEducationForm,
 	IContactsForm,
-	IEnrollPersonForm,
+	IPersonForm,
 	IRegForm,
 	IDocumentsForm,
 	IAccountVerificationForm,
@@ -15,7 +15,7 @@ export interface IRootState {
 	dictionaries: Record<string, any>;
 	regForm: IRegForm;
 	contactsForm: IContactsForm;
-	enrollPersonForm: IEnrollPersonForm;
+	personForm: IPersonForm;
 	enrollEducationForm: IEnrollEducationForm;
 	enrollDocumentsForm: IDocumentsForm;
 	enrollAccountVerificationForm: IAccountVerificationForm;

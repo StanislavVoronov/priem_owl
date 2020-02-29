@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import styles from './styles.module.css';
 
-import { CardMedia, Step, StepButton, StepContent, Stepper, Title, LoadingText, EnrollHeader } from '$components';
+import { Step, StepButton, StepContent, Stepper, Title, LoadingText, EnrollHeader } from '$components';
 import classes from './styles.module.css';
 import {
 	RegistrationForm,
-	EnrollPersonForm,
+	PersonForm,
 	ContactsForm,
 	EducationForm,
 	DocumentsForm,
@@ -35,7 +35,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return <RegistrationForm />;
 			}
 			case 1: {
-				return <EnrollPersonForm onComplete={this.props.handleNext} />;
+				return <PersonForm />;
 			}
 			case 2: {
 				return <ContactsForm onComplete={this.props.handleNext} />;

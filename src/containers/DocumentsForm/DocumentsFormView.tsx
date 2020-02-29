@@ -125,34 +125,35 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 								</Typography>
 							</ExpansionPanelSummary>
 							<ExpansionPanelDetails className="flexColumn">
-								<DocumentForm
-									name={`documents[${index}].`}
-									document={item}
-									docTitle="Файл документа"
-									title="Тип документа"
-									dictionaryTypes={dictionaryDocTypes && dictionaryDocTypes.values}
-									subTitle={'Название документа'}
-									dictionarySubTypes={dictionarySubDocTypes}
-									extraFields={
-										<React.Fragment>
-											{docTypeId === 1 && docSubTypeId === 1 ? (
-												<TextInput
-													name={`documents[${index}].codeDepartment`}
-													label="Код подразделения"
-													type="number"
-													placeholder={'Введите код подразделения'}
-												/>
-											) : null}
-											<Button
-												wrapperClassName={classes.deleteDocButtonContainer}
-												className={classes.deleteDocButton}
-												primary
-												onClick={this.removeDocument(index, remove)}>
-												{'Удалить документ'}
-											</Button>
-										</React.Fragment>
-									}
-								/>
+								{/*<DocumentForm*/}
+								{/*	name={`documents[${index}].`}*/}
+								{/*	onChange = {onChange}*/}
+								{/*	document={item}*/}
+								{/*	docTitle="Файл документа"*/}
+								{/*	title="Тип документа"*/}
+								{/*	dictionaryTypes={dictionaryDocTypes && dictionaryDocTypes.values}*/}
+								{/*	subTitle={'Название документа'}*/}
+								{/*	dictionarySubTypes={dictionarySubDocTypes}*/}
+								{/*	extraFields={*/}
+								{/*		<React.Fragment>*/}
+								{/*			{docTypeId === 1 && docSubTypeId === 1 ? (*/}
+								{/*				<TextInput*/}
+								{/*					name={`documents[${index}].codeDepartment`}*/}
+								{/*					label="Код подразделения"*/}
+								{/*					type="number"*/}
+								{/*					placeholder={'Введите код подразделения'}*/}
+								{/*				/>*/}
+								{/*			) : null}*/}
+								{/*			<Button*/}
+								{/*				wrapperClassName={classes.deleteDocButtonContainer}*/}
+								{/*				className={classes.deleteDocButton}*/}
+								{/*				primary*/}
+								{/*				onClick={this.removeDocument(index, remove)}>*/}
+								{/*				{'Удалить документ'}*/}
+								{/*			</Button>*/}
+								{/*		</React.Fragment>*/}
+								{/*	}*/}
+								{/*/>*/}
 							</ExpansionPanelDetails>
 						</ExpansionPanel>
 					);

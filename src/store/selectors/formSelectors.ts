@@ -4,8 +4,8 @@ export const regFormSelector = (state: IRootState) => {
 	return state.regForm;
 };
 
-export const enrollPersonFormSelector = (state: IRootState) => {
-	return state.enrollPersonForm;
+export const personFormSelector = (state: IRootState) => {
+	return state.personForm;
 };
 
 export const enrollSelector = (state: IRootState) => {
@@ -25,7 +25,7 @@ export const enrollDocumentsFormSelector = (state: IRootState) => {
 };
 
 export const enrollIsForeignerSelector = (state: IRootState) => {
-	return state.enrollPersonForm.docGovernment.id !== 1;
+	return state.personForm.document.government.id !== 1;
 };
 
 export const enrollAccountVerificationFormSelector = (state: IRootState) => {

@@ -71,7 +71,8 @@ export interface IForm<T extends object> {
 	statusValidation: boolean;
 }
 
-export interface IEnrollPersonForm extends IDocument {
+export interface IPersonForm {
+	document: IDocument;
 	isApplyPersonData: boolean;
 	photo: IDocument;
 	birthPlace: string;
@@ -87,7 +88,7 @@ export interface IAccountVerificationForm {
 	verificationMethod: VerificationMethod;
 	verificationCode: string;
 }
-export type EnrollForms = IContactsForm & IEnrollEducationForm & IEnrollPersonForm & IDocument;
+export type EnrollForms = IContactsForm & IEnrollEducationForm & IPersonForm & IDocument;
 
 export interface IEnrollState {
 	step: number;

@@ -9,7 +9,7 @@ import { H2 } from './Typography/Headers';
 import StepButton from '@material-ui/core/StepButton';
 import WebPhoto from '../components/WebPhoto';
 import { CardMedia, withStyles } from '@material-ui/core';
-import DocumentForm from './DocumentForm';
+import DocumentForm from './DocumentForm/DocumentForm';
 import LoadingText from './LoadingText';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';

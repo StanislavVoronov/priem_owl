@@ -7,13 +7,29 @@ export const dictionaryStateSelector = (state: IRootState) => {
 	return state.dictionaries;
 };
 
-export const firstNamesDictionary = createSelector(
+export const getFirstNamesDictionary = createSelector(
 	dictionaryStateSelector,
 	state => state[EDictionaryNameList.FirstNames] || DEFAULT_TRANSACTION,
 );
 
-export const middleNamesDictionary = createSelector(
+export const getMiddleNamesDictionary = createSelector(
 	dictionaryStateSelector,
 	state => state[EDictionaryNameList.MiddleNames] || DEFAULT_TRANSACTION,
 );
+
+export const getPersonTypesDocDictionary = createSelector(
+	dictionaryStateSelector,
+	state => state[EDictionaryNameList.PersonDocTypes] || DEFAULT_TRANSACTION,
+);
+
+export const getTypesDocsDictionary = createSelector(
+	dictionaryStateSelector,
+	state => state[EDictionaryNameList.DocTypes] || DEFAULT_TRANSACTION,
+);
+
+export const getGovernmentDictionary = createSelector(
+	dictionaryStateSelector,
+	state => state[EDictionaryNameList.Governments] || DEFAULT_TRANSACTION,
+);
+
 

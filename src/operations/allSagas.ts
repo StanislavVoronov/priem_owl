@@ -6,7 +6,7 @@ import {
 	contactsFormSelector,
 	enrollDocumentsFormSelector,
 	enrollEducationFormSelector,
-	enrollPersonFormSelector,
+	personFormSelector,
 	regFormSelector,
 	fromTransaction,
 	IRootState,
@@ -87,7 +87,7 @@ const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> =>
 	const state = getState();
 	const registrationForm = regFormSelector(state);
 	const contactsForm = contactsFormSelector(state);
-	const personForm = enrollPersonFormSelector(state);
+	const personForm = personFormSelector(state);
 	const educationForm = enrollEducationFormSelector(state);
 	const accountVerificationForm = enrollAccountVerificationFormSelector(state);
 
@@ -122,13 +122,13 @@ const uploadDocList = (): ThunkAction<Promise<void>, IRootState, void, Action> =
 	const state = getState();
 
 	const contactsData = contactsFormSelector(state);
-	const personData = enrollPersonFormSelector(state);
+	const personData = personFormSelector(state);
 	const educationData = enrollEducationFormSelector(state);
 	const documents = [contactsData, personData, educationData, ...enrollDocumentsFormSelector(state).documents];
 
 	return Promise.all(
 		documents.map(document => {
-			return dispatch(uploadDocumentTransaction(document));
+			// return dispatch(uploadDocumentTransaction(document));
 		}),
 	)
 		.then(() => {

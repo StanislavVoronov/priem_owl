@@ -1,21 +1,10 @@
-import { handleActions } from 'redux-actions';
-import { defaultEnrollPersonForm, IChangeFieldAction, IEnrollPersonForm } from '$common';
-import { addPersonPhoto, removePersonPhoto, submitEnrollPersonForm } from '$store';
+import { defaultPersonForm, IPersonForm } from '$common';
+import { submitPersonFormAction } from './actions';
+import { createReducer, forAction } from '@black_bird/utils';
 
-// const enrollPersonReducer = handleActions<IEnrollPersonForm, IChangeFieldAction>(
-// 	{
-// 		[submitEnrollPersonForm.toString()]: (state, action) => ({
-// 			...state,
-// 			...action.payload,
-// 		}),
-// 		[addPersonPhoto.toString()]: (state, action) => {
-// 			return { ...state, photo: action.payload.field.value };
-// 		},
-// 		[removePersonPhoto.toString()]: state => {
-// 			return { ...state, photo: null };
-// 		},
-// 	},
-// 	defaultEnrollPersonForm,
-// );
+const personFormReducer = createReducer<IPersonForm>(
+	[forAction(submitPersonFormAction, (state, payload) => payload)],
+	defaultPersonForm,
+);
 
-export default null;
+export default personFormReducer;

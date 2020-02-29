@@ -5,10 +5,9 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { regFormReducer } from './regForm';
 import { contactsFormReducer } from './contactsForm';
 import { enrollReducer } from './enroll';
-
 import transactions from './transactions';
+import { personFormReducer } from './personForm';
 import { IRootState } from './models';
-
 const composeDevTools = composeWithDevTools({});
 
 export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) => () => {
@@ -16,6 +15,7 @@ export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) 
 		combineReducers<any>({
 			enroll: enrollReducer,
 			regForm: regFormReducer,
+			personForm: personFormReducer,
 			contactsForm: contactsFormReducer,
 			dictionaries: dictionaryReducer,
 			transactions,

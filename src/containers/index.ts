@@ -1,5 +1,5 @@
 import { RegistrationForm } from './RegForm';
-import { EnrollPersonForm } from './EnrollPersonForm';
+import { PersonForm } from './PersonForm';
 import { ContactsForm } from './EnrollContactsForm';
 import { EducationForm } from './EnrollEducationForm';
 import { DocumentsForm } from './DocumentsForm';
@@ -8,7 +8,7 @@ import { ApplicationsForm } from './ApplicationsForm';
 
 export {
 	RegistrationForm,
-	EnrollPersonForm,
+	PersonForm,
 	ContactsForm,
 	EducationForm,
 	DocumentsForm,

@@ -6,8 +6,8 @@ import {
 	regFormSelector,
 	fromTransaction,
 	submitRegFormAction,
-	middleNamesDictionary,
-	firstNamesDictionary,
+	getMiddleNamesDictionary,
+	getFirstNamesDictionary,
 } from '$store';
 import { IRegForm, IServerError, IFistNameDictionary } from '$common';
 import { ITransaction } from '@black_bird/utils';
@@ -59,8 +59,8 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 	}
 }
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
-	const firstNameDictionary = firstNamesDictionary(state);
-	const middleNameDictionary = middleNamesDictionary(state);
+	const firstNameDictionary = getFirstNamesDictionary(state);
+	const middleNameDictionary = getMiddleNamesDictionary(state);
 
 	const isUniqueLoginTransaction = fromTransaction.isUniqueLogin(state);
 	const isCreateLoginTransaction = fromTransaction.createLogin(state);

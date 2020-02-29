@@ -43,15 +43,16 @@ export interface ISelectItem {
 }
 
 export interface IDocument {
-	docType?: IDocType | null;
-	docSubType?: IDocType | null;
-	docGovernment: ISelectItem;
-	docSeries?: string;
-	docNumber?: string;
-	docIssieBy?: string;
-	docDate?: string;
-	docFile?: File;
+	type?: IDocType | null;
+	subType?: IDocType | null;
+	government: ISelectItem;
+	series?: string;
+	num?: string;
+	issieBy?: string;
+	date?: string;
+	file?: File;
 	codeDepartment?: string;
+	[key: string]: any
 }
 
 export interface IStylable {

@@ -45,32 +45,32 @@ class EnrollContactsForm extends React.PureComponent<IProps> {
 		return (
 			<form className="flexColumn">
 				<H2>Адрес регистрации</H2>
-				<DocumentForm
-					document={form.values}
-					docTitle="Файл регистрации места жительства"
-					extraFields={
-						<React.Fragment>
-							<TextInput label={'Индекс'} type="number" placeholder={'Введите индекс'} required name="regIndex" />
-							<TextInput
-								label={'Субъект РФ'}
-								helperText={'республика, область, край'}
-								placeholder={'Введите адрес'}
-								name="regRegion"
-							/>
-							<TextInput
-								label={'Населенный пункт'}
-								placeholder={'Введите населенный пункт'}
-								required
-								name="regLocality"
-							/>
-							<TextInput label={'Улица'} placeholder={'Введите улицу'} required name="regStreet" />
-							<TextInput label={'Дом'} placeholder={'Введите дом'} name="regHome" required />
-							<TextInput label={'Корпус'} name="regBlock" />
-							<TextInput label={'Квартира'} name="regFlat" />
-							<Checkbox label="Нуждаюсь в предоставлении общежития" name="needDormitory" />
-						</React.Fragment>
-					}
-				/>
+				{/*<DocumentForm*/}
+				{/*	document={form.values}*/}
+				{/*	docTitle="Файл регистрации места жительства"*/}
+				{/*	extraFields={*/}
+				{/*		<React.Fragment>*/}
+				{/*			<TextInput label={'Индекс'} type="number" placeholder={'Введите индекс'} required name="regIndex" />*/}
+				{/*			<TextInput*/}
+				{/*				label={'Субъект РФ'}*/}
+				{/*				helperText={'республика, область, край'}*/}
+				{/*				placeholder={'Введите адрес'}*/}
+				{/*				name="regRegion"*/}
+				{/*			/>*/}
+				{/*			<TextInput*/}
+				{/*				label={'Населенный пункт'}*/}
+				{/*				placeholder={'Введите населенный пункт'}*/}
+				{/*				required*/}
+				{/*				name="regLocality"*/}
+				{/*			/>*/}
+				{/*			<TextInput label={'Улица'} placeholder={'Введите улицу'} required name="regStreet" />*/}
+				{/*			<TextInput label={'Дом'} placeholder={'Введите дом'} name="regHome" required />*/}
+				{/*			<TextInput label={'Корпус'} name="regBlock" />*/}
+				{/*			<TextInput label={'Квартира'} name="regFlat" />*/}
+				{/*			<Checkbox label="Нуждаюсь в предоставлении общежития" name="needDormitory" />*/}
+				{/*		</React.Fragment>*/}
+				{/*	}*/}
+				{/*/>*/}
 
 				<Checkbox name="isRegAddressEqualLive" label="Фактический адрес проживания	совпадает с адресом регистрации" />
 

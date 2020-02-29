@@ -1,3 +1,3 @@
-import ContactsForm from './ContactsForm';
+import ContactsForm from './ContactsFormView';
 
 export { ContactsForm };
