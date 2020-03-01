@@ -9,12 +9,12 @@ import {
 	priemFilialsTransactionActions,
 	submitApplicationFormAction, priemFilialsTransactionSelector,
 } from '$store';
-import { ISelectItem } from '$common';
+import { IAdmDictionaryItem } from '$common';
 import ApplicationsFormView from './ApplicationsFormView';
 
 interface IStateToProps {
-	filials: ITransaction<ISelectItem>;
-	filial: ISelectItem | null;
+	filials: ITransaction<IAdmDictionaryItem>;
+	filial: IAdmDictionaryItem | null;
 	// instituteDictionary: ITransaction<IDictionary>;
 	// educLevelDictionary: ITransaction<IDictionary>;
 	// directionDictionary: ITransaction<IDictionary>;
@@ -26,7 +26,7 @@ interface IStateToProps {
 
 interface IDispatchToProps {
 	fetchPriemFilials: () => void;
-	onChangeFilial: (item: IFormField<ISelectItem>) => void;
+	onChangeFilial: (item: IFormField<IAdmDictionaryItem>) => void;
 	submit: () => void;
 	// onChangeFilial: (item: IFormField<ISelectItem>) => void;
 	// onChangeInstitute: (item: ISelectItem) => void;

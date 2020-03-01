@@ -21,7 +21,7 @@ export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) 
 			personForm: personFormReducer,
 			contactsForm: contactsFormReducer,
 			educationForm: educationFormReducer,
-			applicationsFrom: applicationsFormReducer,
+			applicationsForm: applicationsFormReducer,
 			dictionaries: dictionaryReducer,
 			transactions: transactionsReducer,
 		}),

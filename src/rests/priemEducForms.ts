@@ -1,4 +1,4 @@
-import { IServerError, ISelectItem, priemEducFormsTransactionActions } from '$common';
+import { IServerError, IDictionary, priemEducFormsTransactionActions } from '$common';
 import { ThunkAction } from 'redux-thunk';
 import { IRootState } from '$store';
 import { Action } from 'redux';

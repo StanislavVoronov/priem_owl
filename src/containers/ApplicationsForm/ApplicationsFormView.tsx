@@ -1,13 +1,13 @@
 import React from 'react';
-import { ITransaction } from '@black_bird/utils';
-import { IDictionary, ISelectItem } from '$common';
+import { ITransaction, prop } from '@black_bird/utils';
+import { IDictionary, IAdmDictionaryItem } from '$common';
 
 import { IFormField, Select } from '@black_bird/components';
 
 interface IProps {
-	filials: ITransaction<IDictionary>;
-	filial: ISelectItem | null;
-	onChangeFilial: (item: IFormField<ISelectItem>) => void;
+	filials: ITransaction<IAdmDictionaryItem>;
+	filial: IAdmDictionaryItem | null;
+	onChangeFilial: (item: IFormField<IAdmDictionaryItem>) => void;
 	// instituteDictionary: ITransaction<IDictionary>;
 	// educLevelDictionary: ITransaction<IDictionary>;
 	// directionDictionary: ITransaction<IDictionary>;
@@ -27,19 +27,20 @@ interface IProps {
 
 const ApplicationsFormView = (props: IProps) => {
 	const { filials, onChangeFilial, filial } = props;
+	console.log('filials', filials, filial);
 
 	return (
 		<div className="flexColumn">
 			{/*{!disabledAddButton && (*/}
 			<Select
 				required
-				value={filial}
 				onChange={onChangeFilial}
+				getOptionValue={prop('ID')}
+				getOptionLabel={prop('NAME')}
 				name="filial"
 				options={filials.result}
 				placeholder={`Выберите филиал`}
 				title={'Филиал'}
-				loading={filials.isFetching}
 			/>
 			{/*	<DropdownSelect*/}
 			{/*		required*/}
@@ -123,7 +124,7 @@ const ApplicationsFormView = (props: IProps) => {
 			{/*		onClick={addPriemApplication}>*/}
 			{/*		Добавить заявление*/}
 			{/*	</Button>*/}
-			// ) : null}
+
 			{/*{applications.length ? (*/}
 			{/*	<table className={classes.table}>*/}
 			{/*		<thead>*/}

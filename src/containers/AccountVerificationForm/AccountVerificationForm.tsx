@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import {
-	enrollAccountVerificationFormSelector,
-	IRootState,
-	submitEnrollVerificationForm,
-} from '$store';
+import { enrollAccountVerificationFormSelector, IRootState, submitEnrollVerificationForm } from '$store';
 import {
 	EnrollVerificationFormSchema,
 	IAccountVerificationForm,
@@ -13,7 +9,7 @@ import {
 	IServerError,
 	ITransaction,
 } from '$common';
-import { PriemForm, TextInput, Button } from '$components';
+import { TextInput, Button } from '$components';
 import classes from './styles.module.css';
 
 interface IMapStateToProps {
@@ -53,17 +49,16 @@ class AccountVerificationContainer extends React.Component<IProps> {
 		this.props.onSubmit(values);
 	};
 	render() {
-		return (
-			<PriemForm
-				{...this.props}
-				onSubmit={this.onSubmit}
-				loadingText={this.props.verificationCode.loading ? 'Отправка кода' : 'Формирование личного дела'}
-				renderForm={this.renderForm}
-				schema={EnrollVerificationFormSchema}
-				buttonText={this.props.verificationCode.result.length > 0 ? 'Подтвердить' : ''}
-				initialValues={this.props.data}
-			/>
-		);
+		return null;
+		// <PriemForm
+		// 	{...this.props}
+		// 	onSubmit={this.onSubmit}
+		// 	loadingText={this.props.verificationCode.loading ? 'Отправка кода' : 'Формирование личного дела'}
+		// 	renderForm={this.renderForm}
+		// 	schema={EnrollVerificationFormSchema}
+		// 	buttonText={this.props.verificationCode.result.length > 0 ? 'Подтвердить' : ''}
+		// 	initialValues={this.props.data}
+		// />
 	}
 }
 const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = state => {
@@ -106,7 +101,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dis
 	};
 };
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(AccountVerificationContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(AccountVerificationContainer);

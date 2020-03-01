@@ -1,10 +1,10 @@
 import { PriemApi, PriemRestApi } from '$services';
 
 interface IFetchResponse {
-	ID: number;
-	NAME: string;
+	result: Array<{ ID: number; NAME: string }>;
 }
 export const priemFilialsRest = () => {
-
-	return PriemApi.selectData<never, IFetchResponse>(PriemRestApi.PriemFilials)
+	return PriemApi.selectData<never, IFetchResponse>(PriemRestApi.PriemFilials).then(response =>
+		Promise.resolve(response.result),
+	);
 };

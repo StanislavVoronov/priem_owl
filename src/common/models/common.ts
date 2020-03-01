@@ -1,4 +1,4 @@
-import { IServerError } from '$common';
+import { IDictionary, IServerError } from '$common';
 import { Action, ActionFunctionAny } from 'redux-actions';
 
 export interface IDictionaryTypeFilter {
@@ -15,14 +15,14 @@ export interface IDictionaryName {
 	type: number;
 }
 
-export interface IDocType extends ISelectItem {
+export interface IDocType extends IDictionary {
 	scanable?: number;
 	need_info?: number;
 	has_number?: number;
 	need_foreigner?: number;
 }
 
-export interface IGovernmentSelectItem extends ISelectItem {
+export interface IGovernmentSelectItem extends IDictionary {
 	name: string;
 	id: number;
 	phone_code: string;
@@ -32,20 +32,17 @@ export interface IClasses {
 	classes: any;
 }
 
-export interface IDictionaryItem {
-	id: string;
-	name: string;
+
+export interface IAdmDictionaryItem {
+	ID: string;
+	NAME: string;
 }
 
-export interface ISelectItem {
-	name: string;
-	id: number;
-}
 
 export interface IDocument {
 	type?: IDocType | null;
 	subType?: IDocType | null;
-	government: ISelectItem;
+	government: IDictionary;
 	series?: string;
 	num?: string;
 	issieBy?: string;

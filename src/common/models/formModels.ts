@@ -1,4 +1,11 @@
-import { IDocument, IGovernmentSelectItem, IPriemGroup, ISelectItem, VerificationMethod } from '$common';
+import {
+	IDocument,
+	IGovernmentSelectItem,
+	IPriemGroup,
+	IDictionary,
+	IAdmDictionaryItem,
+	VerificationMethod,
+} from '$common';
 
 export interface IContactsForm {
 	regDoc: IDocument;
@@ -33,8 +40,8 @@ export interface IChangeFieldAction {
 export interface IEducationForm {
 	document: IDocument;
 	firstHighEducation: boolean;
-	coolnessTypes: ISelectItem[];
-	prevEducation: ISelectItem | null;
+	coolnessTypes: IDictionary[];
+	prevEducation: IDictionary | null;
 	hasEge: boolean;
 }
 
@@ -42,24 +49,24 @@ export interface IApplicationRequest {
 	admId: number;
 }
 export interface IApplication extends IPriemGroup {
-	filial: ISelectItem;
-	institute: ISelectItem;
-	educationLevel: ISelectItem;
-	direction: ISelectItem;
-	profile: ISelectItem;
-	payForm: ISelectItem;
-	educationForm: ISelectItem;
+	filial: IDictionary;
+	institute: IDictionary;
+	educationLevel: IDictionary;
+	direction: IDictionary;
+	profile: IDictionary;
+	payForm: IDictionary;
+	educationForm: IDictionary;
 }
 export interface IApplicationForm {
 	// applications: IApplication[];
-	filial: ISelectItem | null;
-	institute: ISelectItem | null;
-	educLevel: ISelectItem | null;
-	direction: ISelectItem | null;
-	profile: ISelectItem | null;
-	payForms: ISelectItem[];
+	filial: IAdmDictionaryItem | null;
+	institute: IAdmDictionaryItem | null;
+	educLevel: IAdmDictionaryItem | null;
+	direction: IAdmDictionaryItem | null;
+	profile: IAdmDictionaryItem | null;
+	payForms: IAdmDictionaryItem[];
 	// groups: IPriemGroup[];
-	educForms: ISelectItem[];
+	educForms: IAdmDictionaryItem[];
 }
 export interface IRegForm {
 	lastName: string;

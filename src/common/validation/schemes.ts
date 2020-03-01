@@ -1,6 +1,6 @@
 import { object, string, boolean, number, mixed, array } from 'yup';
 import { RUS_ALPHABET } from '../constants';
-import { ISelectItem, isNil, mergeSchemes } from '$common';
+import { IDictionary, isNil, mergeSchemes } from '$common';
 
 const EMPTY_FIELD_MESSAGE = 'Поле не должно быть пустым';
 const RUS_FIELD_MESSAGE = 'Поле может содержать только русские буквы';
@@ -21,7 +21,7 @@ export const AnyDocumentFormSchema = object().shape({
 			docType: mixed().test('docType', EMPTY_FIELD_MESSAGE, value => {
 				return !isNil(value);
 			}),
-			docSubType: mixed().test('docSubType', EMPTY_FIELD_MESSAGE, function(value: ISelectItem) {
+			docSubType: mixed().test('docSubType', EMPTY_FIELD_MESSAGE, function(value: IDictionary) {
 				const { docType } = this.parent;
 
 				return !docType ? false : !value && docType.id !== 1 && docType.id !== 2;

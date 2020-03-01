@@ -1,7 +1,7 @@
 import { Action, createAction, handleActions } from 'redux-actions';
 import {
 	IApplication,
-	IDictionaryItem,
+	IDictionary,
 	initialTransactionState,
 	IServerError,
 	ITransaction,
@@ -16,7 +16,7 @@ export const checkPayload = <State, Payload>(action: Action<any>, callback: (dat
 	return callback(data);
 };
 
-export const prepareDictionarySuggestions = <T extends IDictionaryItem>(dictionary: { values: T[] }) => {
+export const prepareDictionarySuggestions = <T extends IDictionary>(dictionary: { values: T[] }) => {
 	if (!dictionary || !Array.isArray(dictionary.values)) {
 		return [];
 	}

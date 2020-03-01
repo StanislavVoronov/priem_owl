@@ -1,17 +1,17 @@
 import { ITransaction } from '@black_bird/utils';
 import { ICheckLoginResponse, ICreateLoginResponse, IFindPersonResponse } from '$rests';
-import { ICreatePersonData, IPriemGroup, ISelectItem } from '$common';
+import { ICreatePersonData, IPriemGroup, IDictionary, IAdmDictionaryItem } from '$common';
 
 export interface ITransactionsState {
 	checkLogin: ITransaction<ICheckLoginResponse>;
 	createLogin: ITransaction<ICreateLoginResponse>;
 	findPerson: ITransaction<IFindPersonResponse>;
 	createPerson: ITransaction<ICreatePersonData>;
-	priemFilials: ITransaction<ISelectItem>;
-	priemDirections: ITransaction<ISelectItem>;
-	priemInstitutes: ITransaction<ISelectItem>;
-	priemEducLevels: ITransaction<ISelectItem>;
-	priemEducForms: ITransaction<ISelectItem>;
+	priemFilials: ITransaction<IAdmDictionaryItem>;
+	priemDirections: ITransaction<IDictionary>;
+	priemInstitutes: ITransaction<IDictionary>;
+	priemEducLevels: ITransaction<IDictionary>;
+	priemEducForms: ITransaction<IDictionary>;
 	priemGroups: ITransaction<IPriemGroup>;
 	createVerCode: ITransaction<any>;
 	priemPayForms: ITransaction<any>;

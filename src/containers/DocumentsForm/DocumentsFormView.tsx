@@ -1,9 +1,6 @@
 import React from 'react';
 import {
-	TextInput,
-	DocumentForm,
 	Button,
-	PriemForm,
 	withStyles,
 	ExpansionPanel,
 	ExpansionPanelSummary,
@@ -180,14 +177,14 @@ class DocumentsFormView extends React.PureComponent<IProps, IState> {
 	render() {
 		return (
 			<>
-				<PriemForm
-					schema={AnyDocumentFormSchema}
-					buttonText={'Далее'}
-					initialValues={{ documents: this.props.documents, priemGroupNeedDoc: this.props.priemGroupNeedDoc }}
-					onSubmit={this.props.submit}
-					disabled={this.disabledForm}
-					renderForm={this.renderFieldArray}
-				/>
+				{/*<PriemForm*/}
+				{/*	schema={AnyDocumentFormSchema}*/}
+				{/*	buttonText={'Далее'}*/}
+				{/*	initialValues={{ documents: this.props.documents, priemGroupNeedDoc: this.props.priemGroupNeedDoc }}*/}
+				{/*	onSubmit={this.props.submit}*/}
+				{/*	disabled={this.disabledForm}*/}
+				{/*	renderForm={this.renderFieldArray}*/}
+				{/*/>*/}
 			</>
 		);
 	}

@@ -3,7 +3,6 @@ import { EnrollHeader } from './EnrollHeader';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Checkbox from './Checkbox';
-import DropdownSelect from './DropdownSelect/';
 import { RadioButtonGroup } from './RadioButtonGroup/';
 import { H2 } from './Typography/Headers';
 import StepButton from '@material-ui/core/StepButton';
@@ -16,7 +15,6 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import PriemForm from './PriemForm';
 import Title from './Typography/Title';
 
 export * from './Buttons';
@@ -30,7 +28,6 @@ export {
 	RadioButtonGroup,
 	FormControl,
 	FormControlLabel,
-	DropdownSelect,
 	H2,
 	Checkbox,
 	StepButton,
@@ -46,5 +43,4 @@ export {
 	ExpansionPanelDetails,
 	ExpansionPanelSummary,
 	ExpansionPanel,
-	PriemForm,
 };

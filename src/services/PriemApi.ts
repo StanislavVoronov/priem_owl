@@ -12,7 +12,7 @@ class PriemApi {
 
 		return Request.send().then((response: { result: R[] }) => Promise.resolve(response.result));
 	};
-	static selectData = <Q, R>(api: string, payload?: Q): Promise<R[]> => {
+	static selectData = <Q, R>(api: string, payload?: Q): Promise<R> => {
 		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, payload);
 
 		return Request.send();

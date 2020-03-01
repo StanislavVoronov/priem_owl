@@ -1,4 +1,4 @@
-import { IApplicationForm, ISelectItem } from '$common';
+import { IApplicationForm, IDictionary, IAdmDictionaryItem } from '$common';
 import {
 	changeCurrentDirection,
 	changeCurrentEducationLevel,
@@ -9,37 +9,37 @@ import {
 } from './actions';
 import { combineReducers, createReducer, forAction } from '@black_bird/utils';
 
-const educLevelReducer = createReducer<ISelectItem | null>(
+const educLevelReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(changeCurrentEducationLevel, (state, payload) => payload)],
 	null,
 );
 
-const filialReducer = createReducer<ISelectItem | null>(
+const filialReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(onChangeFilialAction, (state, payload) => payload)],
 	null,
 );
 
-const profileReducer = createReducer<ISelectItem | null>(
+const profileReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(changeCurrentProfile, (state, payload) => payload)],
 	null,
 );
 
-const instituteReducer = createReducer<ISelectItem | null>(
+const instituteReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(changeCurrentInstitute, (state, payload) => payload)],
 	null,
 );
 
-const directionReducer = createReducer<ISelectItem | null>(
+const directionReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(changeCurrentDirection, (state, payload) => payload)],
 	null,
 );
 
-const payFormsReducer = createReducer<ISelectItem[]>(
+const payFormsReducer = createReducer<IAdmDictionaryItem[]>(
 	[forAction(changeCurrentPayForm, (state, payload) => payload)],
 	[],
 );
 
-const educFormsReducer = createReducer<ISelectItem[]>(
+const educFormsReducer = createReducer<IAdmDictionaryItem[]>(
 	[forAction(onChangeEducFormAction, (state, payload) => payload)],
 	[],
 );
