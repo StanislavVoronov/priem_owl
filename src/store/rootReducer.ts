@@ -2,11 +2,14 @@ import { combineReducers } from '@black_bird/utils';
 import { applyMiddleware, createStore, Middleware } from 'redux';
 import { dictionaryReducer } from '@black_bird/dictionaries';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { regFormReducer } from './regForm';
-import { contactsFormReducer } from './contactsForm';
 import { enrollReducer } from './enroll';
-import transactions from './transactions';
+import { regFormReducer } from './regForm';
 import { personFormReducer } from './personForm';
+import { contactsFormReducer } from './contactsForm';
+import { applicationFormReducer } from './applicationsForm';
+import { educationFormReducer } from './educationForm';
+import transactionsReducer from './transactionReducer';
+
 import { IRootState } from './models';
 const composeDevTools = composeWithDevTools({});
 
@@ -17,8 +20,10 @@ export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) 
 			regForm: regFormReducer,
 			personForm: personFormReducer,
 			contactsForm: contactsFormReducer,
+			educationForm: educationFormReducer,
+			applicationFrom: applicationFormReducer,
 			dictionaries: dictionaryReducer,
-			transactions,
+			transactions: transactionsReducer,
 		}),
 		composeDevTools(applyMiddleware(...middlewares)),
 	);

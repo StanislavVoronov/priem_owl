@@ -1,4 +1,4 @@
-import enrollEducationForm from './reducer';
+import educationFormReducer from './reducer';
 export * from './actions';
 
-export { enrollEducationForm };
+export { educationFormReducer };

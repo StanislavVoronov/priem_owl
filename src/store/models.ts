@@ -1,12 +1,12 @@
-import { ITransactionState } from '$store';
+import { ITransactionsState } from '$store';
 import {
-	IEnrollEducationForm,
+	IEducationForm,
 	IContactsForm,
 	IPersonForm,
 	IRegForm,
 	IDocumentsForm,
 	IAccountVerificationForm,
-	IEnrollApplicationsForm,
+	IApplicationForm,
 	IEnrollState,
 } from '$common';
 
@@ -16,9 +16,9 @@ export interface IRootState {
 	regForm: IRegForm;
 	contactsForm: IContactsForm;
 	personForm: IPersonForm;
-	enrollEducationForm: IEnrollEducationForm;
+	educationForm: IEducationForm;
 	enrollDocumentsForm: IDocumentsForm;
 	enrollAccountVerificationForm: IAccountVerificationForm;
-	enrollApplicationsForm: IEnrollApplicationsForm;
-	transactions: ITransactionState;
+	applicationsForm: IApplicationForm;
+	transactions: ITransactionsState;
 }

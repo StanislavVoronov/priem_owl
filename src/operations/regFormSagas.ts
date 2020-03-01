@@ -1,18 +1,17 @@
 import { sagaEffects, isEmptyArray } from '@black_bird/utils';
 import {
 	checkLoginTransactionActions,
-	fromTransaction,
 	regFormSelector,
 	submitRegFormAction,
 	createLoginTransactionActions,
 	generateUserPasswordAction,
 	findPersonTransactionActions,
-	handleNextStep,
+	handleNextStep, isUniqueLoginTransactionSelector,
 } from '$store';
 import { checkLoginRest, createLoginRest, findPersonRest } from '$rests';
 import { cyrillToLatin, generatePassword } from '$common';
 
-function* createNewLogin(state: any) {
+function* createNewLogin() {
 	const data = yield sagaEffects.select(regFormSelector);
 	const lastName = cyrillToLatin(data.lastName);
 	const firstName = cyrillToLatin(data.firstName);
@@ -37,7 +36,7 @@ function* createNewLogin(state: any) {
 			} catch (e) {
 				yield sagaEffects.put(checkLoginTransactionActions.failure(e));
 			}
-			const isUniqueLogin = yield sagaEffects.select(fromTransaction.isUniqueLogin);
+			const isUniqueLogin = yield sagaEffects.select(isUniqueLoginTransactionSelector);
 
 			if (isUniqueLogin.result) {
 				yield sagaEffects.put(generateUserPasswordAction(login));

@@ -2,59 +2,69 @@ import * as React from 'react';
 import DocumentsFormView from './DocumentsFormView';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import {
-	dictionaryStateSelector,
 	enrollDocumentsFormSelector,
+	educationFormSelector,
 	enrollIsForeignerSelector,
+	getEducTypeDocDictionary,
+	getGovernmentDictionary,
+	getPrevEducTypesDocDictionary,
 	IRootState,
 	submitDocumentsForm,
 } from '$store';
+import { IDictionary, IDocumentsForm, IEducationForm } from '$common';
+import { ITransaction } from '@black_bird/utils';
 
-import { EDictionaryNameList, IDocumentsForm } from '$common';
+interface IStateToProps {
+	form: IEducationForm;
+	governmentDictionary: ITransaction<IDictionary>;
+	preEducDictionary: ITransaction<IDictionary>;
+	educationDictionary: ITransaction<IDictionary>;
 
-interface IStateToProps extends IDocumentsForm {
 	dictionaries: any;
 	foreigner: boolean;
 }
 interface IDispatchToProps {
 	submitDocumentsForm: (values: IDocumentsForm) => void;
 }
-interface IOwnProps {
-	onComplete: () => void;
-}
+
 interface IState {
 	requiredDocuments: number[];
 }
-type IProps = IStateToProps & IDispatchToProps & IOwnProps;
+type IProps = IStateToProps & IDispatchToProps;
 class DocumentsFormContainer extends React.Component<IProps, IState> {
 	state = {
 		requiredDocuments: [],
 	};
 	componentDidMount(): void {
-		const dictionaryDocTypes = this.props.dictionaries[EDictionaryNameList.DocTypes];
-
-		const needDocuments =
-			dictionaryDocTypes && this.props.foreigner
-				? dictionaryDocTypes.values.filter((item: any) => item.need_foreigner).map((item: any) => item.id)
-				: [];
-		this.setState({ requiredDocuments: [9, 10, ...needDocuments] });
+		// const dictionaryDocTypes =[]
+		//
+		// const needDocuments =
+		// 	dictionaryDocTypes && this.props.foreigner
+		// 		? dictionaryDocTypes.values.filter((item: any) => item.need_foreigner).map((item: any) => item.id)
+		// 		: [];
+		// this.setState({ requiredDocuments: [9, 10, ...needDocuments] });
 	}
 
 	submit = (values: IDocumentsForm) => {
 		this.props.submitDocumentsForm(values);
-		this.props.onComplete();
+
 	};
 	render() {
-		return <DocumentsFormView requiredDocuments={this.state.requiredDocuments} {...this.props} submit={this.submit} />;
+		return null
+		// return <DocumentsFormView requiredDocuments={this.state.requiredDocuments} {...this.props} submit={this.submit} />;
 	}
 }
-const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
-	const dictionaries = dictionaryStateSelector(state);
+const mapStateToProps: MapStateToProps<any, {}, IRootState> = state => {
+	const prevEducDictionary = getPrevEducTypesDocDictionary(state);
+	const educationDictionary = getEducTypeDocDictionary(state);
+	const governmentDictionary = getGovernmentDictionary(state);
+
 	const documents = enrollDocumentsFormSelector(state);
 	const foreigner = enrollIsForeignerSelector(state);
 
-	return { dictionaries, ...documents, foreigner };
+	return { educationDictionary, governmentDictionary, prevEducDictionary, form: educationFormSelector, foreigner };
 };
-const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = {
+const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {
 	submitDocumentsForm,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentsFormContainer);

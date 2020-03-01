@@ -1,6 +1,9 @@
 import { createAction } from '@black_bird/utils';
-import { IEnrollEducationForm } from '$common';
+import { IEducationForm } from '$common';
 
-const NAMESPACE = 'EnrollEducationForm';
+const NAMESPACE = 'EducationForm';
 
-export const submitEnrollEducationForm = createAction<IEnrollEducationForm>(`${NAMESPACE}/submitEnrollEducationForm`);
+export const submitEducationFormAction = createAction<IEducationForm>(
+	`${NAMESPACE}/SUBMIT`,
+	(form: IEducationForm) => form,
+);

@@ -1,24 +1,22 @@
-import { createAction } from 'redux-actions';
+import { createAction } from '@black_bird/utils';
 import { IApplication, IPriemGroup, ISelectItem } from '$common';
+import { IFormField } from '@black_bird/components';
 
-const NAMESPACE = 'EnrollApplicationForm';
+const NAMESPACE = 'APPLICATION_FORM';
 
 export const addPriemApplication = createAction(
 	`${NAMESPACE}/addPriemApplication`,
 	(application: IApplication) => application,
 );
 
-export const changeCurrentFilial = createAction(`${NAMESPACE}/changeCurrentFilial`, (value: ISelectItem) => value);
+export const onChangeFilialAction = createAction(`${NAMESPACE}/changeCurrentFilial`, (item: IFormField<ISelectItem>) => item.value);
 
 export const changeCurrentInstitute = createAction(
 	`${NAMESPACE}/changeCurrentInstitute`,
 	(value: ISelectItem) => value,
 );
 
-export const changeCurrentEducationLevel = createAction(
-	`${NAMESPACE}/changeCurrentEducationLevel`,
-	(value: ISelectItem) => value,
-);
+
 
 export const changeCurrentDirection = createAction(
 	`${NAMESPACE}/changeCurrentDirection`,
@@ -27,8 +25,13 @@ export const changeCurrentDirection = createAction(
 
 export const changeCurrentProfile = createAction(`${NAMESPACE}/changeCurrentProfile`, (value: ISelectItem) => value);
 
-export const changeCurrentEducationForm = createAction(
+export const onChangeEducFormAction = createAction(
 	`${NAMESPACE}/changeCurrentEducationForm`,
+	(item: IFormField<ISelectItem[]>) => item.value,
+);
+
+export const changeCurrentEducationLevel = createAction(
+	`${NAMESPACE}/changeEducationLevel`,
 	(value: ISelectItem) => value,
 );
 
@@ -38,3 +41,5 @@ export const changeCurrentPayForm = createAction(
 );
 export const deleteApplication = createAction(`${NAMESPACE}/deleteApplication`, (index: number) => index);
 export const updatePriemGroups = createAction(`${NAMESPACE}/updatePriemGroups`, (values: IPriemGroup[]) => values);
+
+export const submitApplicationFormAction = createAction(`${NAMESPACE}/SUBMIT`);

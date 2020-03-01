@@ -4,7 +4,6 @@ import {
 	enrollAccountVerificationFormSelector,
 	IRootState,
 	submitEnrollVerificationForm,
-	fromTransaction,
 } from '$store';
 import {
 	EnrollVerificationFormSchema,
@@ -14,14 +13,12 @@ import {
 	IServerError,
 	ITransaction,
 } from '$common';
-import { sendVerificationCodeToEmail, sendVerificationCodeToPhone } from '$operations';
 import { PriemForm, TextInput, Button } from '$components';
 import classes from './styles.module.css';
-import { ICreateVerificationCodeResponse } from '../../store/transactions/createVerificationCode';
 
 interface IMapStateToProps {
 	data: IAccountVerificationForm;
-	verificationCode: ITransaction<ICreateVerificationCodeResponse>;
+	verificationCode: any;
 	error: IServerError | null;
 	loading: boolean;
 }
@@ -71,40 +68,36 @@ class AccountVerificationContainer extends React.Component<IProps> {
 }
 const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = state => {
 	const data = enrollAccountVerificationFormSelector(state);
-	const createPerson = fromTransaction.createPerson(state);
-	const uploadDocuments = fromTransaction.uploadDocuments(state);
-	const createApplications = fromTransaction.createPriemApplications(state);
+	// const createPerson = (state);
+	// const uploadDocuments = fromTransaction.uploadDocuments(state);
+	// const createApplications = fromTransaction.createPriemApplications(state);
+	//
+	// const verificationCode = fromTransaction.createVerificationCode(state);
 
-	const verificationCode = fromTransaction.createVerificationCode(state);
-
-	const documentLoading = Object.values(uploadDocuments).some((document: ITransaction<IDocument>) => document.loading);
-	const applicationLoading = Object.values(createApplications).some(
-		(application: ITransaction<IApplication>) => application.loading,
-	);
-	const documentError =
-		Object.values(uploadDocuments).find((document: ITransaction<IDocument>) => !!document.error) || null;
-
-	const applicationError =
-		Object.values(createApplications).find((application: ITransaction<IApplication>) => !!application.error) || null;
+	// const documentLoading = Object.values(uploadDocuments).some((document: ITransaction<IDocument>) => document.loading);
+	// const applicationLoading = Object.values(createApplications).some(
+	// 	(application: ITransaction<IApplication>) => application.loading,
+	// );
+	// const documentError =
+	// 	Object.values(uploadDocuments).find((document: ITransaction<IDocument>) => !!document.error) || null;
+	//
+	// const applicationError =
+	// 	Object.values(createApplications).find((application: ITransaction<IApplication>) => !!application.error) || null;
 
 	return {
 		data,
-		loading: createPerson.loading || documentLoading || verificationCode.loading || applicationLoading,
-		error:
-			verificationCode.error ||
-			createPerson.error ||
-			(documentError && documentError.error) ||
-			(applicationError && applicationError.error),
-		verificationCode,
+		loading: false,
+		error: null,
+		verificationCode: '',
 	};
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, IOwnProps> = (dispatch, ownProps) => {
 	return {
 		sendCodeToEmail: () => {
-			dispatch<any>(sendVerificationCodeToEmail());
+			// dispatch<any>(sendVerificationCodeToEmail());
 		},
 		sendCodeToPhone: () => {
-			dispatch<any>(sendVerificationCodeToPhone());
+			// dispatch<any>(sendVerificationCodeToPhone());
 		},
 		onSubmit: (values: IAccountVerificationForm) => {
 			dispatch(submitEnrollVerificationForm(values));

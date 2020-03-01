@@ -16,8 +16,8 @@ export const contactsFormSelector = (state: IRootState) => {
 	return state.contactsForm;
 };
 
-export const enrollEducationFormSelector = (state: IRootState) => {
-	return state.enrollEducationForm;
+export const educationFormSelector = (state: IRootState) => {
+	return state.educationForm;
 };
 
 export const enrollDocumentsFormSelector = (state: IRootState) => {
@@ -32,6 +32,6 @@ export const enrollAccountVerificationFormSelector = (state: IRootState) => {
 	return state.enrollAccountVerificationForm;
 };
 
-export const enrollApplicationsFormSelector = (state: IRootState) => {
-	return state.enrollApplicationsForm;
+export const applicationFormSelector = (state: IRootState) => {
+	return state.applicationsForm;
 };

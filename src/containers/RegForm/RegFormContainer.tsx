@@ -1,25 +1,27 @@
 import * as React from 'react';
-import RegFormView from './RegFormView';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { IException, ITransaction } from '@black_bird/utils';
+import { Form, IFormProps } from '@black_bird/components';
+import RegFormView from './RegFormView';
 import {
 	IRootState,
 	regFormSelector,
-	fromTransaction,
 	submitRegFormAction,
 	getMiddleNamesDictionary,
 	getFirstNamesDictionary,
+	isUniqueLoginTransactionSelector,
+	isPersonFoundTransactionSelector,
+	createLoginTransactionSelector,
 } from '$store';
-import { IRegForm, IServerError, IFistNameDictionary } from '$common';
-import { ITransaction } from '@black_bird/utils';
-import { Form, IFormProps } from '@black_bird/components';
+import { IRegForm, IFistNameDictionary } from '$common';
+
 
 interface IStateToProps {
 	firstNameDictionary: ITransaction<IFistNameDictionary>;
 	middleNameDictionary: ITransaction<IFistNameDictionary>;
-	error: IServerError | null;
+	error: IException | null;
 	loading: boolean;
 	data: IRegForm;
-	requestFetching: boolean;
 }
 interface IDispatchToProps {
 	onSubmit: (values: IRegForm) => void;
@@ -43,13 +45,13 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 	};
 
 	render() {
-		const { onSubmit, data, error, requestFetching } = this.props;
+		const { onSubmit, data, error, loading } = this.props;
 
 		return (
 			<Form
 				error={error}
-				loading={requestFetching}
-				loadingText="Проверка личного дела"
+				loading={loading}
+				loadingText="Поиск личного дела"
 				renderForm={this.renderForm}
 				onSubmit={onSubmit}
 				initialValues={data}
@@ -62,21 +64,17 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	const firstNameDictionary = getFirstNamesDictionary(state);
 	const middleNameDictionary = getMiddleNamesDictionary(state);
 
-	const isUniqueLoginTransaction = fromTransaction.isUniqueLogin(state);
-	const isCreateLoginTransaction = fromTransaction.createLogin(state);
+	const uniqueLoginTransaction = isUniqueLoginTransactionSelector(state);
+	const createLoginTransaction = createLoginTransactionSelector(state);
 	const data = regFormSelector(state);
-	const { error, loading } = fromTransaction.findPerson(state);
+	const findPersonTransaction = isPersonFoundTransactionSelector(state);
 
 	return {
 		firstNameDictionary,
 		middleNameDictionary,
 		data,
-		error,
-		loading,
-		requestFetching:
-			isUniqueLoginTransaction.loading ||
-			isCreateLoginTransaction.loading ||
-			loading,
+		error: uniqueLoginTransaction.exception || createLoginTransaction.exception || findPersonTransaction.exception,
+		loading: uniqueLoginTransaction.isFetching || createLoginTransaction.isFetching || findPersonTransaction.isFetching,
 	};
 };
 

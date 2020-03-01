@@ -27,19 +27,19 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 		selectDocType: noop,
 		selectDocSubType: noop,
 		classes: {},
-		name: '',
+		name: 'document',
 		title: '',
 		governmentTitle: '',
 		subTitle: '',
-		fileTitle: '',
+		fileTitle: ''
 	};
 	onChange = (field: IFormField) => {
-		const { document, onChange } = this.props;
+		const { document, onChange, name } = this.props;
 		console.log('field', field);
 		console.log('document', document);
 
 		onChange({
-			name: 'document',
+			name,
 			value: {
 				...document,
 				[field.name]: field.value,
@@ -48,22 +48,15 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 	};
 
 	render() {
-		const { name, dictionaryGovernment, governmentTitle, dictionarySubTypes, subTitle, fileTitle } = this.props;
+		const { name, dictionaryGovernment, governmentTitle, dictionarySubTypes, subTitle, fileTitle, endFields, startFields } = this.props;
 		const { type, file = null, government, subType, num, series, issieBy } = this.props.document;
-		const isDataVisible = !!(
-			(this.props.dictionaryTypes && this.props.title) ||
-			(this.props.dictionarySubTypes && this.props.subTitle) ||
-			(type && type.need_info) ||
-			this.props.extraFields
-		);
 		const needInfo = type && type.need_info;
 		const hasNumber = type && type.has_number;
 
 		return (
 			<div className={classes.form}>
-				{isDataVisible ? (
 					<Column>
-						{this.props.startFields}
+						{startFields}
 						{isNotEmptyArray(dictionaryGovernment) && governmentTitle && (
 							<Select
 								name="government"
@@ -99,6 +92,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 								title={this.props.subTitle}
 							/>
 						)}
+
 						{needInfo ? (
 							<TextInput
 								value = {series}
@@ -144,9 +138,8 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps> {
 								/>
 							</>
 						) : null}
-						{this.props.endFields}
+						{endFields}
 					</Column>
-				) : null}
 				<DownloadFile name="file" file={file} onChange={this.onChange} title={fileTitle} />
 			</div>
 		);

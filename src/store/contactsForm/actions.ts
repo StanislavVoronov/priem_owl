@@ -1,9 +1,9 @@
-import { createAction } from 'redux-actions';
+import { createAction } from '@black_bird/utils';
 import { IContactsForm } from '$common';
 
-const NAMESPACE = 'EnrollContactsForm';
+const NAMESPACE = 'ContactsForm';
 
-export const submitEnrollContactsForm = createAction(
-	`${NAMESPACE}/submitEnrollContactsForm`,
+export const submitContactsFormAction = createAction(
+	`${NAMESPACE}/SUBMIT`,
 	(form: IContactsForm) => form,
 );

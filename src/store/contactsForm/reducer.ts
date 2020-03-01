@@ -1,9 +1,10 @@
 import { defaultDocument, IContactsForm } from '$common';
-import { submitEnrollContactsForm } from './actions';
+import { submitContactsFormAction } from './actions';
 import { createReducer, forAction } from '@black_bird/utils';
 
 const initial: IContactsForm = {
-	...defaultDocument,
+	regDoc: { ...defaultDocument, type: { id: 3, name: 'Регистрация места жительства' } },
+	liveDoc: { ...defaultDocument, type: { id: 3, name: 'Регистрация места жительства' } },
 	needDormitory: false,
 	regLocality: '',
 	regIndex: '',
@@ -12,10 +13,9 @@ const initial: IContactsForm = {
 	email: '',
 	mobPhone: '+7',
 	isRegAddressEqualLive: true,
-	docType: { id: 3, name: 'Регистрация места жительства' },
 	mobileGovernment: { id: 1, name: 'Россия', phone_code: '7' },
 };
 
-const contactsFormReducer = createReducer([forAction(submitEnrollContactsForm, (state, payload) => payload)], initial);
+const contactsFormReducer = createReducer([forAction(submitContactsFormAction, (state, payload) => payload)], initial);
 
 export default contactsFormReducer;

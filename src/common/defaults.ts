@@ -1,5 +1,5 @@
 import { IDocument } from '$common';
-import { IContactsForm, IEnrollEducationForm, IPersonForm } from '$common';
+import { IContactsForm, IEducationForm, IPersonForm } from '$common';
 
 export const defaultDocument: IDocument = {
 	government: { id: 1, name: 'Россия' },
@@ -16,9 +16,11 @@ export const defaultPersonForm: IPersonForm = {
 	birthPlace: '',
 };
 
-export const defaultEducationDataForm: IEnrollEducationForm = {
-	...defaultDocument,
-	type: { id: 2, name: 'Документ об предыдущем образовании', need_info: 1, has_number: 1 },
+export const defaultEducationDataForm: IEducationForm = {
+	document: {
+		...defaultDocument,
+		type: { id: 2, name: 'Документ об предыдущем образовании', need_info: 1, has_number: 1 },
+	},
 	firstHighEducation: true,
 	coolnessTypes: [],
 	prevEducation: { id: 1, name: 'Среднее общее' },

@@ -1,3 +1,3 @@
-import ApplicationsForm from './ApplicationsForm';
+import ApplicationsForm from './ApplicationFormContainer';
 
 export { ApplicationsForm };

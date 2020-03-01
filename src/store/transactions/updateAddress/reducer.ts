@@ -1,11 +1,11 @@
 import { updateAddressActions, createTransactionReducer } from '$common';
-import { ITransactionState } from '$store';
+import { ITransactionsState } from '$store';
 import { combineActions, handleActions } from 'redux-actions';
 
 const updateAddressReducer = createTransactionReducer(updateAddressActions);
 
-export const updateAddressSelectorById = (state: ITransactionState, id: number) => {
-	return state.updateAddress[id];
+export const updateAddressSelectorById = (state: ITransactionsState, id: number) => {
+	return 'state.updateAddress[id]';
 };
 
 const updateAddressesReducer = handleActions(

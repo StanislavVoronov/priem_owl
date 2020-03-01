@@ -1,14 +1,13 @@
 import * as React from 'react';
 import EnrollView from './EnrollView';
 import { connect, MapStateToProps } from 'react-redux';
-import { FULL_DICTIONARY_LIST, NEW_PERSON_STEPS, SHORT_DICTIONARY_LIST } from '../../dictionaries';
+import { NEW_PERSON_STEPS } from '../../dictionaries';
 
-import { IRootState, fromTransaction, enrollSelector, getMiddleNamesDictionary } from '$store';
-import { createNewPersonFolder } from '$operations';
+import { IRootState, enrollSelector } from '$store';
 import { IDictionaryConfig } from '@black_bird/dictionaries';
 import { initAction, handleNextStep } from '$store';
 import { getFirstNamesDictionary } from '../../store/selectors';
-import { ITransaction } from '@black_bird/utils';
+import { ITransaction, noop } from '@black_bird/utils';
 
 interface IState {
 	dictionaries: IDictionaryConfig[];
@@ -29,9 +28,7 @@ interface IDispatchToProps {
 type IProps = IStateToProps & IDispatchToProps;
 
 class EnrollContainer extends React.Component<IProps, IState> {
-	state: IState = {
-		dictionaries: SHORT_DICTIONARY_LIST,
-	};
+
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
 	}
@@ -43,14 +40,12 @@ class EnrollContainer extends React.Component<IProps, IState> {
 	handleStep = (step: number) => () => {
 		this.props.handleNextStep();
 	};
-	onCompleteRegistration = () => {
-		// this.setState({ passedStep: -1, activeStep: this.state.activeStep + 1 });
-	};
+
 	handleNext = () => {
 		this.props.handleNextStep();
 	};
 	createNewPersonFolder = () => {
-		this.props.createNewPersonFolder().then(this.onCompleteRegistration);
+
 	};
 	render() {
 		const { step, passedStep, firstNameDictionary } = this.props;
@@ -82,7 +77,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 };
 
 const mapDispatchToProps = {
-	createNewPersonFolder,
+	createNewPersonFolder: noop,
 	init: initAction,
 	handleNextStep,
 };

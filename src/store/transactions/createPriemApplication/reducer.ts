@@ -1,11 +1,11 @@
 import { createPriemApplicationActions, createTransactionReducer } from '$common';
 import { combineActions, handleActions } from 'redux-actions';
-import { ITransactionState } from '$store';
+import { ITransactionsState } from '$store';
 
 const createPriemApplicationReducer = createTransactionReducer(createPriemApplicationActions);
 
-export const transactionList = (state: ITransactionState) => {
-	return state.createPriemApplications;
+export const transactionList = (state: ITransactionsState) => {
+	return null;
 };
 
 const createPriemApplicationsReducer = handleActions(

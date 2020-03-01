@@ -22,6 +22,16 @@ export const getPersonTypesDocDictionary = createSelector(
 	state => state[EDictionaryNameList.PersonDocTypes] || DEFAULT_TRANSACTION,
 );
 
+export const getEducTypeDocDictionary = createSelector(
+	dictionaryStateSelector,
+	state => state[EDictionaryNameList.EducationDocTypes] || DEFAULT_TRANSACTION,
+);
+
+export const getPrevEducTypesDocDictionary = createSelector(
+	dictionaryStateSelector,
+	state => state[EDictionaryNameList.PreviousEducation] || DEFAULT_TRANSACTION,
+);
+
 export const getTypesDocsDictionary = createSelector(
 	dictionaryStateSelector,
 	state => state[EDictionaryNameList.DocTypes] || DEFAULT_TRANSACTION,

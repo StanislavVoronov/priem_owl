@@ -1,4 +1,4 @@
-import { createPersonActions, ServerBoolean } from '$common';
+import { createPersonTransactionActions, ServerBoolean } from '$common';
 import { ThunkAction } from 'redux-thunk';
 import { IRootState } from '$store';
 import { Action } from 'redux';
@@ -32,19 +32,19 @@ export interface IPriemFilial {
 export const createPersonTransaction = (
 	data: ICreatePersonDataRequest,
 ): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
-	dispatch(createPersonActions.request());
+	dispatch(createPersonTransactionActions.request());
 
 	return PriemEnroll.post<ICreatePersonDataRequest, ICreatePersonDataResponse>(EnrollRestApi.SetNewNp, {
 		...data,
 	})
 		.then(response => {
-			dispatch(createPersonActions.success([{ npId: response.np_uid }]));
+			dispatch(createPersonTransactionActions.success([{ npId: response.np_uid }]));
 
 			return Promise.resolve();
 		})
 		.catch(error => {
 			console.log('createPersonTransaction', error);
-			dispatch(createPersonActions.failure(error));
+			dispatch(createPersonTransactionActions.failure(error));
 
 			return Promise.reject(error);
 		});

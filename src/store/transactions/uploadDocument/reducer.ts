@@ -1,12 +1,12 @@
 import { createTransactionReducer, uploadDocumentsActions } from '$common';
 
 import { combineActions, handleActions } from 'redux-actions';
-import { ITransactionState } from '$store';
+import { ITransactionsState } from '$store';
 
 const uploadDocumentReducer = createTransactionReducer(uploadDocumentsActions);
 
-export const transactionList = (state: ITransactionState) => {
-	return state.uploadDocuments;
+export const transactionList = (state: ITransactionsState) => {
+	return [];
 };
 
 const uploadDocumentsReducer = handleActions(

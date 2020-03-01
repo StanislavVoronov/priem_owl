@@ -1,22 +1,13 @@
-import { checkLoginTransactionActions } from './checkLogin';
-import { createLoginTransactionActions } from './createLogin';
-import { findPersonTransactionActions } from './findPerson';
+export * from './checkLoginTransaction';
+export * from './createLoginTransaction';
+export * from './priemInstitutesTransaction';
+export * from './priemFilialsTransaction';
+export * from './priemEducLevelsTransaction';
+export * from './priemDirectionsTransaction';
+export * from './priemEducLevelsTransaction';
+export * from './findPersonTransaction';
+export * from './createVerCodeTransaction';
+export * from './priemPayFormsTransaction';
+export * from './transactionsModels'
+export * from './priemEducFormsTransaction'
 
-import { createVerificationCodeTransaction } from './createVerificationCode';
-import { uploadDocumentTransaction } from './uploadDocument';
-import { createPersonTransaction } from './createPerson';
-import * as fromTransaction from './transactionSelectors';
-import transactions from './transactionReducer';
-
-export * from './transactionModels';
-export {
-	checkLoginTransactionActions,
-	findPersonTransactionActions,
-	createLoginTransactionActions,
-	createVerificationCodeTransaction,
-	fromTransaction,
-	uploadDocumentTransaction,
-	createPersonTransaction,
-};
-
-export default transactions;
