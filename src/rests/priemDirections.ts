@@ -16,16 +16,12 @@ interface IPayload {
 	instituteId: number;
 	educationLevelId: number;
 }
-export const priemDirectionsRest = (
-	data: IPayload,
-) => {
-
+export const fetchPriemDirections = (filialId: number, instituteId: number, educLevelId: number) => {
 	const payload = {
-		FILIAL: data.filialId,
-		INST: data.instituteId,
-		LVL: data.educationLevelId,
+		FILIAL: filialId,
+		INST: instituteId,
+		LVL: educLevelId,
 	};
 
-	return PriemApi.selectData<IPriemDirectionsRequest, IPriemDirectionsResponse>(PriemRestApi.FetchPriemDirections, payload)
-
+	return PriemApi.select<IPriemDirectionsRequest, IPriemDirectionsResponse>(PriemRestApi.FetchPriemDirections, payload);
 };

@@ -11,20 +11,12 @@ interface IPriemProfilesRequest {
 	DIR: number;
 }
 
-interface IPayload {
-	filialId: number;
-	instituteId: number;
-	directionId: number;
-}
-export const priemProfilesRest = (
-	data: IPayload,
-) => {
-
+export const fetchPriemProfiles = (filialId: number, instituteId: number, directionId: number) => {
 	const payload = {
-		FILIAL: data.filialId,
-		INST: data.instituteId,
-		DIR: data.directionId,
+		FILIAL: filialId,
+		INST: instituteId,
+		DIR: directionId,
 	};
 
-	return PriemApi.selectData<IPriemProfilesRequest, IPriemProfilesResponse>(PriemRestApi.FetchPriemProfiles, payload)
+	return PriemApi.select<IPriemProfilesRequest, IPriemProfilesResponse>(PriemRestApi.FetchPriemProfiles, payload);
 };

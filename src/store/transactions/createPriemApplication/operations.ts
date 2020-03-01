@@ -33,7 +33,7 @@ export const createPriemApplicationTransaction = (
 
 	dispatch(createPriemApplicationActions.request(data.admId));
 
-	return PriemApi.checkData<ICreatePriemApplicationRequest, ICreatePriemApplicationResponse>(
+	return PriemApi.check<ICreatePriemApplicationRequest, ICreatePriemApplicationResponse>(
 		PriemRestApi.AddPriemApplication,
 		payload,
 	)

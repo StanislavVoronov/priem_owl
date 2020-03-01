@@ -11,7 +11,6 @@ export const uploadDocumentsActions = createTransactionActions(TRANSACTION_NAMES
 export const updatePhoneActionsByKey = createTransactionActions(TRANSACTION_NAMES.UpdatePhone);
 export const updateAddressActions = createTransactionActions(TRANSACTION_NAMES.UpdateAddress);
 export const priemFilialsTransactionActions = createTransactionActions(TRANSACTION_NAMES.FetchPriemFilials);
-export const priemInstitutesTransactionActions = createTransactionActions(TRANSACTION_NAMES.FetchPriemInstitutes);
 export const priemEducFormsTransactionActions = createTransactionActions(TRANSACTION_NAMES.FetchPriemEducationForms);
 export const createPriemApplicationActions = createTransactionActions(TRANSACTION_NAMES.CreatePriemApplication);
 export const fetchPriemGroups = createTransactionActions(TRANSACTION_NAMES.FetchPriemGroups);

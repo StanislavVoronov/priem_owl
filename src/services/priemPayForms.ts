@@ -32,5 +32,5 @@ export const primPayFormsRest = (
 		PROFILE: data.profileId,
 	};
 
-	return PriemApi.selectData<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemPayForms, payload)
+	return PriemApi.select<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemPayForms, payload)
 };

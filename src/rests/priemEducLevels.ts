@@ -15,14 +15,14 @@ interface IPayload {
 	instituteId: number;
 }
 
-export const priemEducLevelsRest = (
-	data: IPayload,
+export const fetchPriemEducLevels = (
+	filialId: number, instId: number
 ) => {
 
 	const payload = {
-		FILIAL: data.filialId,
-		INST: data.instituteId,
+		FILIAL: filialId,
+		INST: instId,
 	};
 
-	return PriemApi.selectData<IPriemEducLevelsRequest, IPriemEducLevelsResponse>(PriemRestApi.FetchPriemEducationLevels, payload)
+	return PriemApi.select<IPriemEducLevelsRequest, IPriemEducLevelsResponse>(PriemRestApi.FetchPriemEducationLevels, payload)
 };

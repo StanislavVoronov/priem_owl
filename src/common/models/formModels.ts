@@ -63,7 +63,7 @@ export interface IApplicationForm {
 	institute: IAdmDictionaryItem | null;
 	educLevel: IAdmDictionaryItem | null;
 	direction: IAdmDictionaryItem | null;
-	profile: IAdmDictionaryItem | null;
+	profiles: IAdmDictionaryItem[];
 	payForms: IAdmDictionaryItem[];
 	// groups: IPriemGroup[];
 	educForms: IAdmDictionaryItem[];

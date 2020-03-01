@@ -1,46 +1,49 @@
 import { IApplicationForm, IDictionary, IAdmDictionaryItem } from '$common';
 import {
-	changeCurrentDirection,
-	changeCurrentEducationLevel,
+	onChangeDirectionAction,
+	onChangeProfilesAction,
 	onChangeFilialAction,
-	changeCurrentInstitute,
-	changeCurrentPayForm,
-	changeCurrentProfile, onChangeEducFormAction,
+	onChangeInstAction,
+	onChangeEducFormsAction,
+	onChangeEducLevelAction, onChangePayFormsAction,
 } from './actions';
 import { combineReducers, createReducer, forAction } from '@black_bird/utils';
-
-const educLevelReducer = createReducer<IAdmDictionaryItem | null>(
-	[forAction(changeCurrentEducationLevel, (state, payload) => payload)],
-	null,
-);
 
 const filialReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(onChangeFilialAction, (state, payload) => payload)],
 	null,
 );
 
-const profileReducer = createReducer<IAdmDictionaryItem | null>(
-	[forAction(changeCurrentProfile, (state, payload) => payload)],
+const educLevelReducer = createReducer<IAdmDictionaryItem | null>(
+	[forAction(onChangeEducLevelAction, (state, payload) => payload)],
 	null,
 );
 
+const profileReducer = createReducer<IAdmDictionaryItem[]>(
+	[
+		forAction(onChangeProfilesAction, (state, payload) => payload),
+		forAction(onChangeDirectionAction, (state, payload) => []),
+	],
+	[],
+);
+
 const instituteReducer = createReducer<IAdmDictionaryItem | null>(
-	[forAction(changeCurrentInstitute, (state, payload) => payload)],
+	[forAction(onChangeInstAction, (state, payload) => payload)],
 	null,
 );
 
 const directionReducer = createReducer<IAdmDictionaryItem | null>(
-	[forAction(changeCurrentDirection, (state, payload) => payload)],
+	[forAction(onChangeDirectionAction, (state, payload) => payload), forAction(onChangeEducLevelAction, state => null)],
 	null,
 );
 
 const payFormsReducer = createReducer<IAdmDictionaryItem[]>(
-	[forAction(changeCurrentPayForm, (state, payload) => payload)],
+	[forAction(onChangePayFormsAction, (state, payload) => payload)],
 	[],
 );
 
 const educFormsReducer = createReducer<IAdmDictionaryItem[]>(
-	[forAction(onChangeEducFormAction, (state, payload) => payload)],
+	[forAction(onChangeEducFormsAction, (state, payload) => payload)],
 	[],
 );
 
@@ -50,7 +53,7 @@ const applicationsFormReducer = combineReducers<IApplicationForm>({
 	educForms: educFormsReducer,
 	payForms: payFormsReducer,
 	direction: directionReducer,
-	profile: profileReducer,
+	profiles: profileReducer,
 	institute: instituteReducer,
 });
 

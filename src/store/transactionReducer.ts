@@ -10,6 +10,7 @@ import {
 	findPersonReducer,
 	priemFilialsReducer,
 	priemPayFormsReducer,
+	priemProfilesReducer
 } from './transactions';
 
 const transactionsReducer = combineReducers({
@@ -23,6 +24,7 @@ const transactionsReducer = combineReducers({
 	priemInstitutes: priemInstitutesReducer,
 	createVerCode: createVerCodeReducer,
 	priemPayForms: priemPayFormsReducer,
+	priemProfiles: priemProfilesReducer,
 	// createVerificationCode: createVerificationCodeReducer,
 	// uploadDocuments: uploadDocumentsReducer,
 	// createPerson: createPersonReducer,

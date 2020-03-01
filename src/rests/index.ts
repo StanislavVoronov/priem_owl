@@ -9,3 +9,4 @@ export * from './priemEducForms';
 export * from './priemEducLevels';
 export * from './priemProfiles';
 export * from './priemDirections';
+export * from './priemPayForms';

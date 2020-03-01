@@ -7,8 +7,8 @@ interface ICheckLoginRequest {
 export interface ICheckLoginResponse {
 	COUNT: number;
 }
-export const checkLoginRest = (login: string) => {
+export const fetchCheckLogin = (login: string) => {
 	const payload = { login };
 
-	return PriemApi.checkData<ICheckLoginRequest, ICheckLoginResponse>(PriemRestApi.CheckUniqueLogin, payload)
+	return PriemApi.check<ICheckLoginRequest, ICheckLoginResponse>(PriemRestApi.CheckUniqueLogin, payload)
 };

@@ -1,13 +1,36 @@
 import React from 'react';
-import { ITransaction, prop } from '@black_bird/utils';
+import { isNotEmptyArray, ITransaction, prop } from '@black_bird/utils';
 import { IDictionary, IAdmDictionaryItem } from '$common';
 
 import { IFormField, Select } from '@black_bird/components';
 
 interface IProps {
-	filials: ITransaction<IAdmDictionaryItem>;
+	filialDictionary: ITransaction<IAdmDictionaryItem>;
+	instituteDictionary: ITransaction<IAdmDictionaryItem>;
 	filial: IAdmDictionaryItem | null;
+	institute: IAdmDictionaryItem | null;
+
 	onChangeFilial: (item: IFormField<IAdmDictionaryItem>) => void;
+	onChangeInst: (item: IFormField<IAdmDictionaryItem>) => void;
+	onChangeEducLevel: (item: IFormField<IAdmDictionaryItem>) => void;
+	educLevel: IAdmDictionaryItem | null;
+	educLevelDictionary: ITransaction<IAdmDictionaryItem>;
+
+	onChangeDirection: (item: IFormField<IAdmDictionaryItem>) => void;
+	direction: IAdmDictionaryItem | null;
+	directionDictionary: ITransaction<IAdmDictionaryItem>;
+
+	onChangeProfiles: (item: IFormField<IAdmDictionaryItem[]>) => void;
+	profiles: IAdmDictionaryItem[];
+	profileDictionary: ITransaction<IAdmDictionaryItem>;
+
+	onChangeEducForms: (item: IFormField<IAdmDictionaryItem[]>) => void;
+	educForms: IAdmDictionaryItem[];
+	educFormDictionary: ITransaction<IAdmDictionaryItem>;
+
+	onChangePayForms: (item: IFormField<IAdmDictionaryItem[]>) => void;
+	payForms: IAdmDictionaryItem[];
+	payFormDictionary: ITransaction<IAdmDictionaryItem>;
 	// instituteDictionary: ITransaction<IDictionary>;
 	// educLevelDictionary: ITransaction<IDictionary>;
 	// directionDictionary: ITransaction<IDictionary>;
@@ -25,23 +48,142 @@ interface IProps {
 	// onDeleteApplication: (index: number) => void;
 }
 
+const getId: any = prop('ID');
+
 const ApplicationsFormView = (props: IProps) => {
-	const { filials, onChangeFilial, filial } = props;
-	console.log('filials', filials, filial);
+	const {
+		filialDictionary,
+		institute,
+		onChangeDirection,
+		profileDictionary,
+		profiles,
+		onChangeProfiles,
+		direction,
+		directionDictionary,
+		instituteDictionary,
+		onChangeFilial,
+		educLevel,
+		educFormDictionary,
+		educLevelDictionary,
+		onChangeEducLevel,
+		onChangeInst,
+		filial,
+		educForms,
+		payFormDictionary,
+		payForms,
+		onChangeEducForms,
+		onChangePayForms,
+	} = props;
 
 	return (
 		<div className="flexColumn">
 			{/*{!disabledAddButton && (*/}
 			<Select
 				required
+				value={filial}
 				onChange={onChangeFilial}
-				getOptionValue={prop('ID')}
+				getOptionValue={getId}
 				getOptionLabel={prop('NAME')}
 				name="filial"
-				options={filials.result}
+				options={filialDictionary.result}
 				placeholder={`Выберите филиал`}
 				title={'Филиал'}
+				loading={filialDictionary.isFetching}
 			/>
+
+			{filial && (
+				<Select
+					required
+					value={institute}
+					onChange={onChangeInst}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="inst"
+					options={instituteDictionary.result}
+					placeholder={`Выберите институт`}
+					title={'Институт'}
+					loading={instituteDictionary.isFetching}
+				/>
+			)}
+
+			{institute && (
+				<Select
+					required
+					value={educLevel}
+					onChange={onChangeEducLevel}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="inst"
+					options={educLevelDictionary.result}
+					placeholder={`Выберите уровень образования`}
+					title={'Уровень образования'}
+					loading={educLevelDictionary.isFetching}
+				/>
+			)}
+
+			{educLevel && (
+				<Select
+					required
+					value={direction}
+					onChange={onChangeDirection}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="direction"
+					options={directionDictionary.result}
+					placeholder={`Выберите направление подготовки`}
+					title={'Направление подготовки'}
+					loading={directionDictionary.isFetching}
+				/>
+			)}
+
+			{direction && (
+				<Select
+					required
+					value={profiles}
+					onChange={onChangeProfiles}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="profile"
+					options={profileDictionary.result}
+					placeholder={`Выберите профиль`}
+					title={'Профиль'}
+					isMulti
+					loading={profileDictionary.isFetching}
+				/>
+			)}
+
+			{isNotEmptyArray(profiles) && (
+				<Select
+					required
+					value={educForms}
+					onChange={onChangeEducForms}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="educForm"
+					options={educLevelDictionary.result}
+					placeholder={`Выберите форму обучения`}
+					title={'Форма обучения'}
+					isMulti
+					loading={educLevelDictionary.isFetching}
+				/>
+			)}
+
+			{isNotEmptyArray(educForms) && (
+				<Select
+					required
+					value={payForms}
+					onChange={onChangePayForms}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="payForm"
+					options={payFormDictionary.result}
+					placeholder={`Выберите форму финансироавания`}
+					title={'Форма финансирования'}
+					isMulti
+					loading={payFormDictionary.isFetching}
+				/>
+			)}
+
 			{/*	<DropdownSelect*/}
 			{/*		required*/}
 			{/*		value={currentInstitute}*/}

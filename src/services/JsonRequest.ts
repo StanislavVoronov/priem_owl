@@ -16,7 +16,7 @@ export class JsonRequest {
 		});
 		this.body = body;
 	}
-	send = (): any => {
+	post = (): any => {
 		return fetch(`${this.host}${this.path}`, {
 			method: 'POST',
 			credentials: 'include',

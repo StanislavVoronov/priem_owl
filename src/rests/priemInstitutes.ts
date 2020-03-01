@@ -6,10 +6,10 @@ interface IFetchResponse {
 interface IFetchRequest {
 	FILIAL: number;
 }
-export const priemInstitutesRest = (filialId: number) => {
+export const fetchPriemInstitutes = (filialId: number) => {
 	const payload = {
 		FILIAL: filialId,
 	};
 
-	return PriemApi.selectData<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemInstitutes, payload);
+	return PriemApi.select<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemInstitutes, payload);
 };

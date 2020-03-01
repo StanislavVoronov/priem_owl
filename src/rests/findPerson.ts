@@ -12,7 +12,7 @@ export interface IFindPersonRequest {
 export interface IFindPersonResponse {
 	ID: number;
 }
-export const findPersonRest = (data: IPerson) => {
+export const fetchFindPerson = (data: IPerson) => {
 	const { firstName, birthday, lastName, middleName = '' } = data;
 
 	const payload = {
@@ -22,5 +22,5 @@ export const findPersonRest = (data: IPerson) => {
 		birthdate: moment(birthday).format('YYYY-MM-DD'),
 	};
 
-	return PriemApi.checkData<IFindPersonRequest, IFindPersonResponse>(PriemRestApi.FindPerson, payload);
+	return PriemApi.check<IFindPersonRequest, IFindPersonResponse>(PriemRestApi.FindPerson, payload);
 };

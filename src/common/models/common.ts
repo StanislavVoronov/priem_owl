@@ -34,7 +34,7 @@ export interface IClasses {
 
 
 export interface IAdmDictionaryItem {
-	ID: string;
+	ID: number;
 	NAME: string;
 }
 
