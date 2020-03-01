@@ -22,7 +22,6 @@ interface IProps {
 	activeStep: number;
 	passedStep: number;
 	steps: string[];
-	createNewPersonFolder: () => void;
 }
 export class EnrollView extends React.PureComponent<IProps> {
 	static defaultProps = {
@@ -51,7 +50,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 			}
 
 			case 6: {
-				return <AccountVerificationForm onComplete={this.props.createNewPersonFolder} />;
+				return null; // AccountVerificationForm;
 			}
 			default: {
 				return null;

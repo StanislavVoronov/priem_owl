@@ -20,7 +20,6 @@ class DownloadFile extends React.Component<IProps> {
 		name: '',
 		title: '',
 	};
-	onChange = () => {};
 	onDownload = (acceptedFiles: File[]) => {
 		acceptedFiles.forEach(file => {
 			const reader = new FileReader();

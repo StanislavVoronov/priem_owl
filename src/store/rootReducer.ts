@@ -6,7 +6,7 @@ import { enrollReducer } from './enroll';
 import { regFormReducer } from './regForm';
 import { personFormReducer } from './personForm';
 import { contactsFormReducer } from './contactsForm';
-import { applicationFormReducer } from './applicationsForm';
+import { applicationsFormReducer } from './applicationsForm';
 import { educationFormReducer } from './educationForm';
 import transactionsReducer from './transactionReducer';
 
@@ -21,7 +21,7 @@ export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) 
 			personForm: personFormReducer,
 			contactsForm: contactsFormReducer,
 			educationForm: educationFormReducer,
-			applicationFrom: applicationFormReducer,
+			applicationsFrom: applicationsFormReducer,
 			dictionaries: dictionaryReducer,
 			transactions: transactionsReducer,
 		}),

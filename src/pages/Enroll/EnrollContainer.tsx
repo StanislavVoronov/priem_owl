@@ -44,9 +44,7 @@ class EnrollContainer extends React.Component<IProps, IState> {
 	handleNext = () => {
 		this.props.handleNextStep();
 	};
-	createNewPersonFolder = () => {
 
-	};
 	render() {
 		const { step, passedStep, firstNameDictionary } = this.props;
 
@@ -60,7 +58,6 @@ class EnrollContainer extends React.Component<IProps, IState> {
 				activeStep={step}
 				handleStep={this.handleStep}
 				passedStep={passedStep}
-				createNewPersonFolder={this.createNewPersonFolder}
 			/>
 		);
 	}

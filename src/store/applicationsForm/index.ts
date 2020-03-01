@@ -1,4 +1,4 @@
-import applicationFormReducer from './reducer';
+import applicationsFormReducer from './reducer';
 export * from './actions';
 
-export { applicationFormReducer };
+export { applicationsFormReducer };
