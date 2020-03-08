@@ -1,8 +1,9 @@
 import React from 'react';
-import { isNotEmptyArray, ITransaction, prop } from '@black_bird/utils';
+import { isNotEmptyArray, ITransaction, noop, prop } from '@black_bird/utils';
 import { IDictionary, IAdmDictionaryItem } from '$common';
+import classes from './styles.module.css';
 
-import { IFormField, Select } from '@black_bird/components';
+import { Button, IFormField, Select } from '@black_bird/components';
 
 interface IProps {
 	filialDictionary: ITransaction<IAdmDictionaryItem>;
@@ -94,6 +95,21 @@ const ApplicationsFormView = (props: IProps) => {
 			{filial && (
 				<Select
 					required
+					value={educLevel}
+					onChange={onChangeEducLevel}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="educLevel"
+					options={educLevelDictionary.result}
+					placeholder={`Выберите уровень образования`}
+					title={'Уровень образования'}
+					loading={educLevelDictionary.isFetching}
+				/>
+			)}
+
+			{educLevel && (
+				<Select
+					required
 					value={institute}
 					onChange={onChangeInst}
 					getOptionValue={getId}
@@ -107,21 +123,6 @@ const ApplicationsFormView = (props: IProps) => {
 			)}
 
 			{institute && (
-				<Select
-					required
-					value={educLevel}
-					onChange={onChangeEducLevel}
-					getOptionValue={getId}
-					getOptionLabel={prop('NAME')}
-					name="inst"
-					options={educLevelDictionary.result}
-					placeholder={`Выберите уровень образования`}
-					title={'Уровень образования'}
-					loading={educLevelDictionary.isFetching}
-				/>
-			)}
-
-			{educLevel && (
 				<Select
 					required
 					value={direction}
@@ -160,11 +161,11 @@ const ApplicationsFormView = (props: IProps) => {
 					getOptionValue={getId}
 					getOptionLabel={prop('NAME')}
 					name="educForm"
-					options={educLevelDictionary.result}
+					options={educFormDictionary.result}
 					placeholder={`Выберите форму обучения`}
 					title={'Форма обучения'}
 					isMulti
-					loading={educLevelDictionary.isFetching}
+					loading={educFormDictionary.isFetching}
 				/>
 			)}
 
@@ -184,88 +185,11 @@ const ApplicationsFormView = (props: IProps) => {
 				/>
 			)}
 
-			{/*	<DropdownSelect*/}
-			{/*		required*/}
-			{/*		value={currentInstitute}*/}
-			{/*		onChange={onChangeInstitute}*/}
-			{/*		name={`${name}institutes`}*/}
-			{/*		options={institutes.result}*/}
-			{/*		placeholder={`Выберите институт`}*/}
-			{/*		title={'Институт'}*/}
-			{/*		loading={institutes.loading}*/}
-			{/*	/>*/}
-			{/*	{currentInstitute ? (*/}
-			{/*		<DropdownSelect*/}
-			{/*			required*/}
-			{/*			value={currentEducationLevel}*/}
-			{/*			onChange={onChangeEducationLevel}*/}
-			{/*			name={`${name}educationLevel`}*/}
-			{/*			options={educationLevels.result}*/}
-			{/*			placeholder={`Выберите уровень образования`}*/}
-			{/*			title={'Уровень образования'}*/}
-			{/*			loading={educationLevels.loading}*/}
-			{/*		/>*/}
-			{/*	) : null}*/}
-			{/*	{currentEducationLevel ? (*/}
-			{/*		<DropdownSelect*/}
-			{/*			required*/}
-			{/*			value={currentDirection}*/}
-			{/*			onChange={onChangeDirection}*/}
-			{/*			name={`${name}directions`}*/}
-			{/*			options={directions.result}*/}
-			{/*			placeholder={`Выберите направление подготовки`}*/}
-			{/*			title={'Направление подготовки'}*/}
-			{/*			loading={directions.loading}*/}
-			{/*		/>*/}
-			{/*	) : null}*/}
-			{/*	{currentDirection ? (*/}
-			{/*		<DropdownSelect*/}
-			{/*			required*/}
-			{/*			value={currentProfile}*/}
-			{/*			onChange={onChangeProfile}*/}
-			{/*			name={`${name}profiles`}*/}
-			{/*			options={profiles.result}*/}
-			{/*			placeholder={`Выберите профиль`}*/}
-			{/*			title={'Профиль'}*/}
-			{/*			loading={profiles.loading}*/}
-			{/*		/>*/}
-			{/*	) : null}*/}
-			{/*	{currentProfile ? (*/}
-			{/*		<DropdownSelect*/}
-			{/*			required*/}
-			{/*			value={currentEducationForm}*/}
-			{/*			onChange={onChangeEducationForm}*/}
-			{/*			name={`${name}educationForms`}*/}
-			{/*			options={educationForms.result}*/}
-			{/*			placeholder={`Выберите форма обучения`}*/}
-			{/*			title={'Форма обучения'}*/}
-			{/*			loading={educationForms.loading}*/}
-			{/*		/>*/}
-			{/*	) : null}*/}
-			{/*	{currentEducationForm ? (*/}
-			{/*		<DropdownSelect*/}
-			{/*			required*/}
-			{/*			value={currentPayForms}*/}
-			{/*			isMulti*/}
-			{/*			onChange={onChangePayForm}*/}
-			{/*			name={`${name}payForms`}*/}
-			{/*			options={payForms.result}*/}
-			{/*			placeholder={`Выберите форма финансирования`}*/}
-			{/*			title={'Форма финансирования'}*/}
-			{/*			loading={payForms.loading}*/}
-			{/*		/>*/}
-			{/*	) : null}*/}
-			{/*</>*/}
-			{/*)}*/}
-			{/*{currentPayForms.length > 0 ? (*/}
-			{/*	<Button*/}
-			{/*		primary*/}
-			{/*		disabled={disabledAddButton}*/}
-			{/*		wrapperClassName={classes.addDocButtonWrapper}*/}
-			{/*		className={classes.addDocButton}*/}
-			{/*		onClick={addPriemApplication}>*/}
-			{/*		Добавить заявление*/}
-			{/*	</Button>*/}
+			{isNotEmptyArray(payForms) ? (
+				<Button disabled={false} classes={{ root: classes.addDocButton }} onClick={noop}>
+					Добавить заявление
+				</Button>
+			) : null}
 
 			{/*{applications.length ? (*/}
 			{/*	<table className={classes.table}>*/}

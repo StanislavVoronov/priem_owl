@@ -6,22 +6,19 @@ interface IPriemEducLevelsResponse {
 }
 
 interface IPriemEducLevelsRequest {
-	FILIAL: number;
-	INST: number;
+	filial: number;
 }
 
 interface IPayload {
 	filialId: number;
-	instituteId: number;
 }
 
 export const fetchPriemEducLevels = (
-	filialId: number, instId: number
+	filialId: number
 ) => {
 
 	const payload = {
-		FILIAL: filialId,
-		INST: instId,
+		filial: filialId,
 	};
 
 	return PriemApi.select<IPriemEducLevelsRequest, IPriemEducLevelsResponse>(PriemRestApi.FetchPriemEducationLevels, payload)

@@ -2,7 +2,10 @@ import { IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
 import { createSelector, createTransactionActions, prop, createTransactionReducer } from '@black_bird/utils';
 import { ITransactionsState } from './transactionsModels';
 
-export const priemInstitutesTransactionActions = createTransactionActions(TRANSACTION_NAMES.FetchPriemInstitutes, (item: IAdmDictionaryItem)=> item);
+export const priemInstitutesTransactionActions = createTransactionActions(
+	TRANSACTION_NAMES.FetchPriemInstitutes,
+	(filial: IAdmDictionaryItem, eduLevel: IAdmDictionaryItem) => ({ filial, eduLevel }),
+);
 
 export const priemInstitutesReducer = createTransactionReducer(priemInstitutesTransactionActions);
 

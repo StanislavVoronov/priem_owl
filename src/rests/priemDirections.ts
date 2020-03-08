@@ -6,21 +6,21 @@ interface IPriemDirectionsResponse {
 }
 
 interface IPriemDirectionsRequest {
-	FILIAL: number;
-	INST: number;
-	LVL: number;
+	filial: number;
+	inst: number;
+	educLevel: number;
 }
 
 interface IPayload {
 	filialId: number;
-	instituteId: number;
-	educationLevelId: number;
+	instId: number;
+	educLevelId: number;
 }
-export const fetchPriemDirections = (filialId: number, instituteId: number, educLevelId: number) => {
+export const fetchPriemDirections = (filialId: number, educLevelId: number, instId: number) => {
 	const payload = {
-		FILIAL: filialId,
-		INST: instituteId,
-		LVL: educLevelId,
+		filial: filialId,
+		inst: instId,
+		educLevel: educLevelId,
 	};
 
 	return PriemApi.select<IPriemDirectionsRequest, IPriemDirectionsResponse>(PriemRestApi.FetchPriemDirections, payload);

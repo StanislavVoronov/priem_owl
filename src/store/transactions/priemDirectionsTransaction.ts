@@ -4,7 +4,7 @@ import { createSelector, createTransactionActions, prop, createTransactionReduce
 
 export const priemDirectionsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemDirections,
-	(filial: IAdmDictionaryItem, inst: IAdmDictionaryItem, eduLevel: IAdmDictionaryItem) => ({ filial, inst, eduLevel }),
+	(filial: IAdmDictionaryItem, educLevel: IAdmDictionaryItem, inst: IAdmDictionaryItem) => ({ filial, inst, educLevel }),
 );
 
 export const priemDirectionsReducer = createTransactionReducer(priemDirectionsTransactionActions);

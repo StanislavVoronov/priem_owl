@@ -4,7 +4,7 @@ import { ITransactionsState } from './transactionsModels';
 
 export const priemEducLevelsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemEducationLevels,
-	(filial: IAdmDictionaryItem, inst: IAdmDictionaryItem, educLevel: IAdmDictionaryItem) => ({ filial, inst, educLevel }),
+	(filial: IAdmDictionaryItem) => ({ filial }),
 );
 
 export const priemEducLevelsReducer = createTransactionReducer(priemEducLevelsTransactionActions);

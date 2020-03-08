@@ -18,35 +18,38 @@ import {
 } from '$store';
 import { sagaEffects } from '@black_bird/utils';
 import {
-	fetchPriemDirections, fetchPriemEducForms,
+	fetchPriemDirections,
+	fetchPriemEducForms,
 	fetchPriemEducLevels,
+	fetchPriemFilials,
 	fetchPriemInstitutes,
-	fetchPriemPayForms, fetchPriemProfiles,
+	fetchPriemPayForms,
+	fetchPriemProfiles,
 } from '$rests';
 
 export const applicationFormSagas = [
 	sagaEffects.rest(priemFilialsTransactionActions, () => {
-		return priemFilialsRest();
+		return fetchPriemFilials();
 	}),
 	sagaEffects.takeEvery(onChangeFilialAction, function*() {
 		const { filial } = yield sagaEffects.select(applicationFormSelector);
 
 		if (filial) {
-			yield sagaEffects.put(priemInstitutesTransactionActions.trigger(filial));
+			yield sagaEffects.put(priemEducLevelsTransactionActions.trigger(filial));
 		}
 	}),
 	sagaEffects.takeEvery(onChangeInstAction, function*() {
-		const { filial, institute } = yield sagaEffects.select(applicationFormSelector);
-
-		if (filial && institute) {
-			yield sagaEffects.put(priemEducLevelsTransactionActions.trigger(filial, institute));
-		}
-	}),
-	sagaEffects.takeEvery(onChangeEducLevelAction, function*() {
 		const { filial, institute, educLevel } = yield sagaEffects.select(applicationFormSelector);
 
 		if (filial && institute && educLevel) {
-			yield sagaEffects.put(priemDirectionsTransactionActions.trigger(filial, institute, educLevel));
+			yield sagaEffects.put(priemDirectionsTransactionActions.trigger(filial, educLevel, institute));
+		}
+	}),
+	sagaEffects.takeEvery(onChangeEducLevelAction, function*() {
+		const { filial, educLevel } = yield sagaEffects.select(applicationFormSelector);
+
+		if (filial) {
+			yield sagaEffects.put(priemInstitutesTransactionActions.trigger(filial, educLevel));
 		}
 	}),
 	sagaEffects.takeEvery(onChangeDirectionAction, function*() {
@@ -71,13 +74,13 @@ export const applicationFormSagas = [
 		}
 	}),
 	sagaEffects.rest(priemInstitutesTransactionActions, ({ payload }) => {
-		return fetchPriemInstitutes(payload.ID);
+		return fetchPriemInstitutes(payload.filial.ID, payload.eduLevel.ID);
 	}),
 	sagaEffects.rest(priemEducLevelsTransactionActions, ({ payload }) => {
-		return fetchPriemEducLevels(payload.filial.ID, payload.inst.ID);
+		return fetchPriemEducLevels(payload.filial.ID);
 	}),
 	sagaEffects.rest(priemDirectionsTransactionActions, ({ payload }) => {
-		return fetchPriemDirections(payload.filial.ID, payload.inst.ID, payload.eduLevel.ID);
+		return fetchPriemDirections(payload.filial.ID, payload.educLevel.ID, payload.inst.ID);
 	}),
 	sagaEffects.rest(priemProfilesTransactionActions, ({ payload }) => {
 		return fetchPriemProfiles(payload.filial.ID, payload.inst.ID, payload.direction.ID);
