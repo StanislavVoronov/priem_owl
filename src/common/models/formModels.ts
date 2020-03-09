@@ -65,7 +65,6 @@ export interface IApplicationForm {
 	direction: IAdmDictionaryItem | null;
 	profiles: IAdmDictionaryItem[];
 	payForms: IAdmDictionaryItem[];
-	// groups: IPriemGroup[];
 	educForms: IAdmDictionaryItem[];
 }
 export interface IRegForm {

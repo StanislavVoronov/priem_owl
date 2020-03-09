@@ -1,6 +1,6 @@
 import React from 'react';
 import { isNotEmptyArray, ITransaction, noop, prop } from '@black_bird/utils';
-import { IDictionary, IAdmDictionaryItem } from '$common';
+import { IAdmDictionaryItem } from '$common';
 import classes from './styles.module.css';
 
 import { Button, IFormField, Select } from '@black_bird/components';
@@ -32,20 +32,9 @@ interface IProps {
 	onChangePayForms: (item: IFormField<IAdmDictionaryItem[]>) => void;
 	payForms: IAdmDictionaryItem[];
 	payFormDictionary: ITransaction<IAdmDictionaryItem>;
-	// instituteDictionary: ITransaction<IDictionary>;
-	// educLevelDictionary: ITransaction<IDictionary>;
-	// directionDictionary: ITransaction<IDictionary>;
-	// profileDictionary: ITransaction<IDictionary>;
-	// payFormDictionary: ITransaction<IDictionary>;
-	// educFormDictionary: ITransaction<IDictionary>;
+	applications: any[];
 	// disabledAddButton: boolean;
-	// onChangeInstitute: (item: ISelectItem) => void;
-	// onChangeEducationLevel: (item: ISelectItem) => void;
-	// onChangeDirection: (item: ISelectItem) => void;
-	// onChangeProfile: (item: ISelectItem) => void;
-	// onChangeEducationForm: (item: ISelectItem) => void;
-	// onChangePayForm: (item: ISelectItem[]) => void;
-	// addPriemApplication: () => void;
+	addPriemApplication: () => void;
 	// onDeleteApplication: (index: number) => void;
 }
 
@@ -74,6 +63,7 @@ const ApplicationsFormView = (props: IProps) => {
 		payForms,
 		onChangeEducForms,
 		onChangePayForms,
+		addPriemApplication,
 	} = props;
 
 	return (
@@ -186,7 +176,7 @@ const ApplicationsFormView = (props: IProps) => {
 			)}
 
 			{isNotEmptyArray(payForms) ? (
-				<Button disabled={false} classes={{ root: classes.addDocButton }} onClick={noop}>
+				<Button disabled={false} classes={{ root: classes.addDocButton }} onClick={addPriemApplication}>
 					Добавить заявление
 				</Button>
 			) : null}

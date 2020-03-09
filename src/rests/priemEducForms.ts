@@ -1,7 +1,4 @@
-import { IServerError, IDictionary, priemEducFormsTransactionActions } from '$common';
-import { ThunkAction } from 'redux-thunk';
-import { IRootState } from '$store';
-import { Action } from 'redux';
+
 import { PriemApi, PriemRestApi } from '$services';
 
 interface IFetchResponse {
@@ -24,3 +21,4 @@ export const fetchPriemEducForms = (filialId: number, instituteId: number, direc
 
 	return PriemApi.select<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemEducationForms, payload);
 };
+

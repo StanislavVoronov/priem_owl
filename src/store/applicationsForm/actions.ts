@@ -47,4 +47,8 @@ export const onChangePayFormsAction = createAction(
 export const deleteApplication = createAction(`${NAMESPACE}/deleteApplication`, (index: number) => index);
 export const updatePriemGroups = createAction(`${NAMESPACE}/updatePriemGroups`, (values: IPriemGroup[]) => values);
 
+export const newPriemApplicationAdded = createAction(
+	`${NAMESPACE}/NEW_PRIEM_APPLICATION_ADDED`
+);
+
 export const submitApplicationFormAction = createAction(`${NAMESPACE}/SUBMIT`);

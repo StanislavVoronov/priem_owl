@@ -5,9 +5,12 @@ import {
 	onChangeFilialAction,
 	onChangeInstAction,
 	onChangeEducFormsAction,
-	onChangeEducLevelAction, onChangePayFormsAction,
+	onChangeEducLevelAction,
+	onChangePayFormsAction,
+	addPriemApplication,
+	newPriemApplicationAdded,
 } from './actions';
-import { combineReducers, createReducer, forAction } from '@black_bird/utils';
+import { combineActions, combineReducers, createReducer, forAction, byKeyReducer } from '@black_bird/utils';
 
 const filialReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(onChangeFilialAction, (state, payload) => payload)],
@@ -22,30 +25,43 @@ const educLevelReducer = createReducer<IAdmDictionaryItem | null>(
 const profileReducer = createReducer<IAdmDictionaryItem[]>(
 	[
 		forAction(onChangeProfilesAction, (state, payload) => payload),
-		forAction(onChangeDirectionAction, (state, payload) => []),
+		forAction(combineActions(onChangeDirectionAction, newPriemApplicationAdded), (state, payload) => []),
 	],
 	[],
 );
 
 const instituteReducer = createReducer<IAdmDictionaryItem | null>(
-	[forAction(onChangeInstAction, (state, payload) => payload)],
+	[
+		forAction(onChangeInstAction, (state, payload) => payload),
+		forAction(newPriemApplicationAdded, (state, payload) => null),
+	],
 	null,
 );
 
 const directionReducer = createReducer<IAdmDictionaryItem | null>(
-	[forAction(onChangeDirectionAction, (state, payload) => payload), forAction(onChangeEducLevelAction, state => null)],
+	[
+		forAction(onChangeDirectionAction, (state, payload) => payload),
+		forAction(combineActions(onChangeInstAction, newPriemApplicationAdded), state => null),
+	],
 	null,
 );
 
 const payFormsReducer = createReducer<IAdmDictionaryItem[]>(
-	[forAction(onChangePayFormsAction, (state, payload) => payload)],
+	[
+		forAction(onChangePayFormsAction, (state, payload) => payload),
+		forAction(combineActions(onChangeDirectionAction, newPriemApplicationAdded), state => []),
+	],
 	[],
 );
 
 const educFormsReducer = createReducer<IAdmDictionaryItem[]>(
-	[forAction(onChangeEducFormsAction, (state, payload) => payload)],
+	[
+		forAction(onChangeEducFormsAction, (state, payload) => payload),
+		forAction(combineActions(onChangePayFormsAction, newPriemApplicationAdded), state => []),
+	],
 	[],
 );
+
 
 const applicationsFormReducer = combineReducers<IApplicationForm>({
 	filial: filialReducer,

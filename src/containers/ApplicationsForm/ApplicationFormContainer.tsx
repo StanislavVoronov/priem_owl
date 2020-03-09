@@ -7,7 +7,6 @@ import {
 	onChangeFilialAction,
 	applicationFormSelector,
 	priemFilialsTransactionActions,
-	submitApplicationFormAction,
 	priemFilialsTransactionSelector,
 	priemInstitutesTransactionSelector,
 	onChangeInstAction,
@@ -18,7 +17,9 @@ import {
 	onChangeProfilesAction,
 	priemProfilesTransactionSelector,
 	priemEducFormsTransactionSelector,
-	priemPayFormsTransactionSelector, onChangeEducFormsAction, onChangePayFormsAction,
+	priemPayFormsTransactionSelector,
+	onChangeEducFormsAction,
+	onChangePayFormsAction, newPriemApplicationAdded,
 } from '$store';
 import { IAdmDictionaryItem } from '$common';
 import ApplicationsFormView from './ApplicationsFormView';
@@ -43,12 +44,7 @@ interface IStateToProps {
 
 	payForms: IAdmDictionaryItem[];
 	payFormDictionary: ITransaction<IAdmDictionaryItem>;
-	// instituteDictionary: ITransaction<IDictionary>;
-	// educLevelDictionary: ITransaction<IDictionary>;
-	// directionDictionary: ITransaction<IDictionary>;
-	// profileDictionary: ITransaction<IDictionary>;
-	// payFormDictionary: ITransaction<IDictionary>;
-	// educFormDictionary: ITransaction<IDictionary>;
+	applications: any[];
 	// disabledAddButton: boolean;
 }
 
@@ -61,17 +57,7 @@ interface IDispatchToProps {
 	onChangeProfiles: (item: IFormField<IAdmDictionaryItem[]>) => void;
 	onChangeEducForms: (item: IFormField<IAdmDictionaryItem[]>) => void;
 	onChangePayForms: (item: IFormField<IAdmDictionaryItem[]>) => void;
-
-	submit: () => void;
-	// onChangeFilial: (item: IFormField<ISelectItem>) => void;
-	// onChangeInstitute: (item: ISelectItem) => void;
-	// onChangeEducationLevel: (item: ISelectItem) => void;
-	// onChangeDirection: (item: ISelectItem) => void;
-	// onChangeProfile: (item: ISelectItem) => void;
-	// onChangeEducationForm: (item: ISelectItem) => void;
-	// onChangePayForm: (item: ISelectItem[]) => void;
-	// addPriemApplication: () => void;
-	// onDeleteApplication: (index: number) => void;
+	addPriemApplication: () => void;
 }
 
 type Props = IStateToProps & IDispatchToProps;
@@ -112,6 +98,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		filial,
 		educForms,
 		payForms,
+		applications: []
 	};
 };
 
@@ -124,8 +111,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {
 	onChangeProfiles: onChangeProfilesAction,
 	onChangeEducForms: onChangeEducFormsAction,
 	onChangePayForms: onChangePayFormsAction,
-
-	submit: submitApplicationFormAction,
+	addPriemApplication: newPriemApplicationAdded,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactsFormContainer);
