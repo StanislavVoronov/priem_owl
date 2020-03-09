@@ -32,10 +32,10 @@ export const priemPayFormsTransactionSelector = createSelector(
 );
 
 export const payFormsSaga = sagaEffects.rest(priemPayFormsTransactionActions, ({ payload }) => {
-	return fetchPriemPayForms(
-		payload.filial.ID,
-		payload.inst.ID,
-		payload.direction.ID,
-		payload.educForms.map(item => item.ID),
-	);
-});
+		return fetchPriemPayForms(
+			payload.filial.ID,
+			payload.inst.ID,
+			payload.direction.ID,
+			payload.educForms.map(item => item.ID),
+		);
+	})

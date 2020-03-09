@@ -6,7 +6,7 @@ import Enroll from './pages/Enroll';
 import { createCustomStore } from '$store';
 import { StylesProvider } from '@material-ui/styles';
 import { enhanceStoreCreator, sagaMiddlewareDescriptor } from '@black_bird/utils';
-import rootSagas from '$operations';
+import rootSagas from './rootSagas';
 
 const store = enhanceStoreCreator(createCustomStore(), sagaMiddlewareDescriptor(rootSagas));
 

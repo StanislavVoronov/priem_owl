@@ -17,6 +17,4 @@ export const priemFilialsTransactionSelector = createSelector(
 	(state: ITransactionsState) => state.priemFilials,
 );
 
-export const priemFilialsSaga = sagaEffects.rest(priemFilialsTransactionActions, () => {
-	return fetchPriemFilials();
-});
+export const priemFilialsSaga = sagaEffects.rest(priemFilialsTransactionActions, () => fetchPriemFilials());

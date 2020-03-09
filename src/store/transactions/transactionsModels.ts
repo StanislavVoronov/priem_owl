@@ -16,7 +16,7 @@ export interface ITransactionsState {
 	createVerCode: ITransaction<any>;
 	priemPayForms: ITransaction<any>;
 	priemProfiles: ITransaction<IAdmDictionaryItem>;
-	priemAdmGroups: Record<string, ITransaction<IAdmDictionaryItem>>;
+	priemAdmGroups: Record<string, ITransaction<IAdmDictionaryItem>>
 	// updatePhone: Record<string, ITransaction<any>>;
 	// updateAddress: Record<string, ITransaction<any>>;
 	// createVerificationCode: ITransaction<ICreateVerificationCodeResponse>;

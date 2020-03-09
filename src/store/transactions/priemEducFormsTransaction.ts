@@ -32,5 +32,5 @@ export const priemEducFormsTransactionSelector = createSelector(
 );
 
 export const educFormsSaga = sagaEffects.rest(priemEducFormsTransactionActions, ({ payload }) => {
-	return fetchPriemEducForms(payload.filial.ID, payload.inst.ID, payload.direction.ID);
-});
+		return fetchPriemEducForms(payload.filial.ID, payload.inst.ID, payload.direction.ID);
+	})

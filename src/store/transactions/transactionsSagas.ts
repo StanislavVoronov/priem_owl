@@ -1,12 +1,10 @@
-import {
-	educFormsSaga,
-	payFormsSaga,
-	priemAdmGroupsSaga,
-	priemDirectionSaga,
-	priemInstsSaga,
-	priemProfilesSaga,
-	priemFilialsSaga,
-} from '$store';
+import { payFormsSaga } from './priemPayFormsTransaction';
+import { educFormsSaga } from './priemEducFormsTransaction';
+import { priemAdmGroupsSaga } from './priemAdmGroups';
+import { priemProfilesSaga } from './priemProfilesTransaction';
+import { priemDirectionSaga } from './priemDirectionsTransaction';
+import { priemInstsSaga } from './priemInstitutesTransaction';
+import { priemFilialsSaga } from './priemFilialsTransaction';
 
 export const transactionsSagas = [
 	payFormsSaga,

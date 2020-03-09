@@ -18,20 +18,9 @@ import {
 	submitApplicationFormAction,
 	priemAdmGroupsTransactionActions,
 } from '$store';
-import { prop, sagaEffects, guid } from '@black_bird/utils';
-import {
-	fetchPriemDirections,
-	fetchPriemEducForms,
-	fetchPriemEducLevels,
-	fetchPriemFilials,
-	fetchPriemGroups,
-	fetchPriemInstitutes,
-	fetchPriemPayForms,
-	fetchPriemProfiles,
-} from '$rests';
+import { sagaEffects, guid } from '@black_bird/utils';
 
 export const applicationFormSagas = [
-
 	sagaEffects.takeEvery(onChangeFilialAction, function*() {
 		const { filial } = yield sagaEffects.select(applicationFormSelector);
 
@@ -78,7 +67,9 @@ export const applicationFormSagas = [
 		const { filial, institute, direction, payForms, educForms } = yield sagaEffects.select(applicationFormSelector);
 		const key = guid();
 
-		yield sagaEffects.put(priemAdmGroupsTransactionActions.trigger(filial, institute, direction, educForms, payForms, key));
+		yield sagaEffects.put(
+			priemAdmGroupsTransactionActions.trigger(filial, institute, direction, educForms, payForms, key),
+		);
 	}),
 	sagaEffects.takeEvery(submitApplicationFormAction, function*() {
 		yield sagaEffects.put(handleNextStep());

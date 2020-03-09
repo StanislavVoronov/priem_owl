@@ -19,7 +19,8 @@ import {
 	priemEducFormsTransactionSelector,
 	priemPayFormsTransactionSelector,
 	onChangeEducFormsAction,
-	onChangePayFormsAction, newPriemApplicationAdded,
+	onChangePayFormsAction,
+	newPriemApplicationAdded,
 } from '$store';
 import { IAdmDictionaryItem } from '$common';
 import ApplicationsFormView from './ApplicationsFormView';
@@ -98,7 +99,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		filial,
 		educForms,
 		payForms,
-		applications: []
+		applications: [],
 	};
 };
 

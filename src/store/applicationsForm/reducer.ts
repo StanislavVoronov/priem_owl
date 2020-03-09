@@ -25,23 +25,20 @@ const educLevelReducer = createReducer<IAdmDictionaryItem | null>(
 const profileReducer = createReducer<IAdmDictionaryItem[]>(
 	[
 		forAction(onChangeProfilesAction, (state, payload) => payload),
-		forAction(combineActions(onChangeDirectionAction, newPriemApplicationAdded), (state, payload) => []),
+		forAction(combineActions(onChangeDirectionAction), (state, payload) => []),
 	],
 	[],
 );
 
 const instituteReducer = createReducer<IAdmDictionaryItem | null>(
-	[
-		forAction(onChangeInstAction, (state, payload) => payload),
-		forAction(newPriemApplicationAdded, (state, payload) => null),
-	],
+	[forAction(onChangeInstAction, (state, payload) => payload)],
 	null,
 );
 
 const directionReducer = createReducer<IAdmDictionaryItem | null>(
 	[
 		forAction(onChangeDirectionAction, (state, payload) => payload),
-		forAction(combineActions(onChangeInstAction, newPriemApplicationAdded), state => null),
+		forAction(combineActions(onChangeInstAction), state => null),
 	],
 	null,
 );
@@ -49,7 +46,7 @@ const directionReducer = createReducer<IAdmDictionaryItem | null>(
 const payFormsReducer = createReducer<IAdmDictionaryItem[]>(
 	[
 		forAction(onChangePayFormsAction, (state, payload) => payload),
-		forAction(combineActions(onChangeDirectionAction, newPriemApplicationAdded), state => []),
+		forAction(combineActions(onChangeDirectionAction), state => []),
 	],
 	[],
 );
@@ -57,11 +54,10 @@ const payFormsReducer = createReducer<IAdmDictionaryItem[]>(
 const educFormsReducer = createReducer<IAdmDictionaryItem[]>(
 	[
 		forAction(onChangeEducFormsAction, (state, payload) => payload),
-		forAction(combineActions(onChangePayFormsAction, newPriemApplicationAdded), state => []),
+		forAction(combineActions(onChangePayFormsAction), state => []),
 	],
 	[],
 );
-
 
 const applicationsFormReducer = combineReducers<IApplicationForm>({
 	filial: filialReducer,

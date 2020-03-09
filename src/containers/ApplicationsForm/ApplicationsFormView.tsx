@@ -66,6 +66,7 @@ const ApplicationsFormView = (props: IProps) => {
 		addPriemApplication,
 	} = props;
 
+	console.log("institute", institute)
 	return (
 		<div className="flexColumn">
 			{/*{!disabledAddButton && (*/}
