@@ -8,9 +8,13 @@ import {
 	onChangeEducLevelAction,
 	onChangePayFormsAction,
 	addPriemApplication,
-	newPriemApplicationAdded,
+	newPriemAppAddedAction,
+	newAdmGroupsAddedAction,
+	applicationDeletedAction,
 } from './actions';
 import { combineActions, combineReducers, createReducer, forAction, byKeyReducer } from '@black_bird/utils';
+import { IAdmGroup } from './models';
+import { priemEducLevelsTransactionActions } from '$store';
 
 const filialReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(onChangeFilialAction, (state, payload) => payload)],
@@ -25,20 +29,26 @@ const educLevelReducer = createReducer<IAdmDictionaryItem | null>(
 const profileReducer = createReducer<IAdmDictionaryItem[]>(
 	[
 		forAction(onChangeProfilesAction, (state, payload) => payload),
-		forAction(combineActions(onChangeDirectionAction), (state, payload) => []),
+		forAction(combineActions(onChangeDirectionAction, newAdmGroupsAddedAction), (state, payload) => []),
 	],
 	[],
 );
 
 const instituteReducer = createReducer<IAdmDictionaryItem | null>(
-	[forAction(onChangeInstAction, (state, payload) => payload)],
+	[
+		forAction(onChangeInstAction, (state, payload) => payload),
+		forAction(
+			combineActions(onChangeEducLevelAction, newAdmGroupsAddedAction, priemEducLevelsTransactionActions.success),
+			(state, payload) => null,
+		),
+	],
 	null,
 );
 
 const directionReducer = createReducer<IAdmDictionaryItem | null>(
 	[
 		forAction(onChangeDirectionAction, (state, payload) => payload),
-		forAction(combineActions(onChangeInstAction), state => null),
+		forAction(combineActions(onChangeInstAction, newAdmGroupsAddedAction), state => null),
 	],
 	null,
 );
@@ -46,7 +56,7 @@ const directionReducer = createReducer<IAdmDictionaryItem | null>(
 const payFormsReducer = createReducer<IAdmDictionaryItem[]>(
 	[
 		forAction(onChangePayFormsAction, (state, payload) => payload),
-		forAction(combineActions(onChangeDirectionAction), state => []),
+		forAction(combineActions(onChangeDirectionAction, newAdmGroupsAddedAction), state => []),
 	],
 	[],
 );
@@ -54,7 +64,15 @@ const payFormsReducer = createReducer<IAdmDictionaryItem[]>(
 const educFormsReducer = createReducer<IAdmDictionaryItem[]>(
 	[
 		forAction(onChangeEducFormsAction, (state, payload) => payload),
-		forAction(combineActions(onChangePayFormsAction), state => []),
+		forAction(combineActions(onChangePayFormsAction, newAdmGroupsAddedAction), state => []),
+	],
+	[],
+);
+
+const admGroupsReducer = createReducer<IAdmGroup[]>(
+	[
+		forAction(newAdmGroupsAddedAction, (state, payload: IAdmGroup) => [...state, payload]),
+		forAction(applicationDeletedAction, (state, payload: number) => state.filter((item, index) => index !== payload)),
 	],
 	[],
 );
@@ -67,6 +85,7 @@ const applicationsFormReducer = combineReducers<IApplicationForm>({
 	direction: directionReducer,
 	profiles: profileReducer,
 	institute: instituteReducer,
+	applications: admGroupsReducer,
 });
 
 export default applicationsFormReducer;

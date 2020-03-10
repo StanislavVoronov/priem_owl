@@ -38,4 +38,4 @@ export const payFormsSaga = sagaEffects.rest(priemPayFormsTransactionActions, ({
 			payload.direction.ID,
 			payload.educForms.map(item => item.ID),
 		);
-	})
+	}, true)

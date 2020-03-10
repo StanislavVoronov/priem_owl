@@ -32,6 +32,6 @@ export const enrollAccountVerificationFormSelector = (state: IRootState) => {
 	return state.enrollAccountVerificationForm;
 };
 
-export const applicationFormSelector = (state: IRootState) => {
+export const applicationsFormSelector = (state: IRootState) => {
 	return state.applicationsForm;
 };

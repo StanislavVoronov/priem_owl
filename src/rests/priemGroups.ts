@@ -6,24 +6,30 @@ import { PriemApi, PriemRestApi } from '$services';
 
 interface IFetchResponse {
 	ID: number;
-	NAME: string;
+	NEED_DOC: string;
 }
 
 interface IFetchRequest {
 	filial: number;
 	inst: number;
-	dirs: number;
-	payForms: number[];
-	educForms: number[]
+	dir: number;
+	payForm: number;
+	educForm: number;
 }
 
-export const fetchPriemGroups = (filialId: number, instituteId: number, directionId: number, educForms: number[], payForms: number[]) => {
+export const fetchPriemGroups = (
+	filialId: number,
+	instituteId: number,
+	directionId: number,
+	educForm: number,
+	payForm: number,
+) => {
 	const payload = {
 		filial: filialId,
 		inst: instituteId,
-		dirs: directionId,
-		payForms,
-		educForms
+		dir: directionId,
+		educForm,
+		payForm,
 	};
 
 	return PriemApi.select<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemGroups, payload);

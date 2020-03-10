@@ -27,4 +27,4 @@ export const priemDirectionsTransactionSelector = createSelector(
 
 export const priemDirectionSaga = sagaEffects.rest(priemDirectionsTransactionActions, ({ payload }) => {
 	return fetchPriemDirections(payload.filial.ID, payload.educLevel.ID, payload.inst.ID);
-});
+}, true);

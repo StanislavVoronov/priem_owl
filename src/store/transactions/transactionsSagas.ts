@@ -5,6 +5,7 @@ import { priemProfilesSaga } from './priemProfilesTransaction';
 import { priemDirectionSaga } from './priemDirectionsTransaction';
 import { priemInstsSaga } from './priemInstitutesTransaction';
 import { priemFilialsSaga } from './priemFilialsTransaction';
+import { priemEducLevelSaga } from './priemEducLevelsTransaction';
 
 export const transactionsSagas = [
 	payFormsSaga,
@@ -14,4 +15,5 @@ export const transactionsSagas = [
 	priemDirectionSaga,
 	priemInstsSaga,
 	priemFilialsSaga,
+	priemEducLevelSaga,
 ];

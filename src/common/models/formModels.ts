@@ -6,6 +6,7 @@ import {
 	IAdmDictionaryItem,
 	VerificationMethod,
 } from '$common';
+import { IAdmGroup } from '$store';
 
 export interface IContactsForm {
 	regDoc: IDocument;
@@ -66,6 +67,7 @@ export interface IApplicationForm {
 	profiles: IAdmDictionaryItem[];
 	payForms: IAdmDictionaryItem[];
 	educForms: IAdmDictionaryItem[];
+	applications: IAdmGroup[];
 }
 export interface IRegForm {
 	lastName: string;

@@ -5,7 +5,7 @@ import { IFormField } from '@black_bird/components';
 import {
 	IRootState,
 	onChangeFilialAction,
-	applicationFormSelector,
+	applicationsFormSelector,
 	priemFilialsTransactionActions,
 	priemFilialsTransactionSelector,
 	priemInstitutesTransactionSelector,
@@ -20,7 +20,8 @@ import {
 	priemPayFormsTransactionSelector,
 	onChangeEducFormsAction,
 	onChangePayFormsAction,
-	newPriemApplicationAdded,
+	newPriemAppAddedAction,
+	submitApplicationFormAction, applicationDeletedAction, IAdmGroup,
 } from '$store';
 import { IAdmDictionaryItem } from '$common';
 import ApplicationsFormView from './ApplicationsFormView';
@@ -45,7 +46,7 @@ interface IStateToProps {
 
 	payForms: IAdmDictionaryItem[];
 	payFormDictionary: ITransaction<IAdmDictionaryItem>;
-	applications: any[];
+	applications: IAdmGroup[];
 	// disabledAddButton: boolean;
 }
 
@@ -59,6 +60,9 @@ interface IDispatchToProps {
 	onChangeEducForms: (item: IFormField<IAdmDictionaryItem[]>) => void;
 	onChangePayForms: (item: IFormField<IAdmDictionaryItem[]>) => void;
 	addPriemApplication: () => void;
+	submitApplicationsForm: () => void;
+	onDeleteApplication: (index: number) => void;
+
 }
 
 type Props = IStateToProps & IDispatchToProps;
@@ -81,8 +85,16 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	const profileDictionary = priemProfilesTransactionSelector(state);
 	const educFormDictionary = priemEducFormsTransactionSelector(state);
 	const payFormDictionary = priemPayFormsTransactionSelector(state);
-
-	const { filial, institute, profiles, educLevel, direction, educForms, payForms } = applicationFormSelector(state);
+	const {
+		filial,
+		institute,
+		profiles,
+		educLevel,
+		direction,
+		educForms,
+		payForms,
+		applications,
+	} = applicationsFormSelector(state);
 
 	return {
 		educFormDictionary,
@@ -99,7 +111,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		filial,
 		educForms,
 		payForms,
-		applications: [],
+		applications,
 	};
 };
 
@@ -112,7 +124,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {
 	onChangeProfiles: onChangeProfilesAction,
 	onChangeEducForms: onChangeEducFormsAction,
 	onChangePayForms: onChangePayFormsAction,
-	addPriemApplication: newPriemApplicationAdded,
+	addPriemApplication: newPriemAppAddedAction,
+	submitApplicationsForm: submitApplicationFormAction,
+	onDeleteApplication: applicationDeletedAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactsFormContainer);

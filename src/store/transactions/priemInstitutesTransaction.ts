@@ -23,4 +23,4 @@ export const priemInstitutesTransactionSelector = createSelector(
 
 export const priemInstsSaga = sagaEffects.rest(priemInstitutesTransactionActions, ({ payload }) => {
 	return fetchPriemInstitutes(payload.filial.ID, payload.eduLevel.ID);
-});
+}, true);

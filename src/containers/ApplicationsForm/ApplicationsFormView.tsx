@@ -1,6 +1,8 @@
 import React from 'react';
 import { isNotEmptyArray, ITransaction, noop, prop } from '@black_bird/utils';
 import { IAdmDictionaryItem } from '$common';
+import { ApplicationsTable } from './components';
+
 import classes from './styles.module.css';
 
 import { Button, IFormField, Select } from '@black_bird/components';
@@ -35,7 +37,8 @@ interface IProps {
 	applications: any[];
 	// disabledAddButton: boolean;
 	addPriemApplication: () => void;
-	// onDeleteApplication: (index: number) => void;
+	submitApplicationsForm: () => void;
+	onDeleteApplication: (index: number) => void;
 }
 
 const getId: any = prop('ID');
@@ -64,12 +67,15 @@ const ApplicationsFormView = (props: IProps) => {
 		onChangeEducForms,
 		onChangePayForms,
 		addPriemApplication,
+		applications,
+		submitApplicationsForm,
+		onDeleteApplication,
 	} = props;
 
-	console.log("institute", institute)
+	console.log('institute', institute, instituteDictionary.isFetching, instituteDictionary.result);
+
 	return (
 		<div className="flexColumn">
-			{/*{!disabledAddButton && (*/}
 			<Select
 				required
 				value={filial}
@@ -100,6 +106,7 @@ const ApplicationsFormView = (props: IProps) => {
 
 			{educLevel && (
 				<Select
+					isCleanable
 					required
 					value={institute}
 					onChange={onChangeInst}
@@ -182,62 +189,9 @@ const ApplicationsFormView = (props: IProps) => {
 				</Button>
 			) : null}
 
-			{/*{applications.length ? (*/}
-			{/*	<table className={classes.table}>*/}
-			{/*		<thead>*/}
-			{/*			<th align="center">*/}
-			{/*				<td>Приоритет</td>*/}
-			{/*			</th>*/}
-			{/*			<th align="center">*/}
-			{/*				<td>Филиал</td>*/}
-			{/*			</th>*/}
-			{/*			<th align="center">*/}
-			{/*				<td>Институт</td>*/}
-			{/*			</th>*/}
-			{/*			<th align="center">*/}
-			{/*				<td className={classes.td}>Направление подготовки</td>*/}
-			{/*			</th>*/}
-			{/*			<th align="center">*/}
-			{/*				<td>Профиль</td>*/}
-			{/*			</th>*/}
-			{/*			<th align="center">*/}
-			{/*				<td>Форма обучения</td>*/}
-			{/*			</th>*/}
-			{/*			<th align="center">*/}
-			{/*				<td>Форма финансирования</td>*/}
-			{/*			</th>*/}
-			{/*			<th>*/}
-			{/*				<td>{''}</td>*/}
-			{/*			</th>*/}
-			{/*		</thead>*/}
-			{/*		<tbody>*/}
-			{/*			{applications.map((item: IApplication, index: number) => (*/}
-			{/*				<tr>*/}
-			{/*					<td>{index + 1}</td>*/}
-			{/*					<td>{item.filial.name}</td>*/}
-			{/*					<td>{item.institute.id ? item.institute.name : '-'}</td>*/}
-			{/*					<td>{item.direction.name}</td>*/}
-			{/*					<td>{item.profile.id ? item.profile.name : '-'}</td>*/}
-			{/*					<td>{item.educationForm.name}</td>*/}
-			{/*					<td>{item.payForm.name}</td>*/}
-			{/*					<td onClick={this.onDeleteApplication(index)} className={classes.pointer}>*/}
-			{/*						<Delete className={classes.deleteButton} />*/}
-			{/*					</td>*/}
-			{/*				</tr>*/}
-			{/*			))}*/}
-			{/*		</tbody>*/}
-			{/*	</table>*/}
-			{/*) : null}*/}
-			{/*{disabledAddButton && (*/}
-			{/*	<span className={classes.header}>*/}
-			{/*		По правилам приема можно подать заявления только на три направления подготовки*/}
-			{/*	</span>*/}
-			{/*)}*/}
-			{/*{applications.length ? (*/}
-			{/*	<Button primary onClick={onComplete}>*/}
-			{/*		{'Далее'}*/}
-			{/*	</Button>*/}
-			{/*) : null}*/}
+			<ApplicationsTable onDelete={onDeleteApplication} applications={applications} />
+
+			{applications.length ? <Button onClick={submitApplicationsForm}>{'Далее'}</Button> : null}
 		</div>
 	);
 };

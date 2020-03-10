@@ -5,31 +5,22 @@ import { IAdmDictionaryItem } from '$common';
 import { ITransactionsState } from './transactionsModels';
 import { fetchPriemGroups } from '$rests';
 
-export interface IAdmGroup {
-	filial: IAdmDictionaryItem;
-	inst: IAdmDictionaryItem;
-	direction: IAdmDictionaryItem;
-	profiles: IAdmDictionaryItem[];
-	educForms: IAdmDictionaryItem;
-	payForms: IAdmDictionaryItem[];
-}
-
 export const priemAdmGroupsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemGroups,
 	(
 		filial: IAdmDictionaryItem,
 		inst: IAdmDictionaryItem,
 		direction: IAdmDictionaryItem,
-		educForms: IAdmDictionaryItem[],
-		payForms: IAdmDictionaryItem[],
+		educForm: IAdmDictionaryItem,
+		payForm: IAdmDictionaryItem,
 		key: string,
 	) => ({
 		key,
 		filial,
 		inst,
 		direction,
-		educForms,
-		payForms,
+		educForm,
+		payForm,
 	}),
 );
 
@@ -48,7 +39,7 @@ export const priemAdmGroupsSaga = sagaEffects.rest(priemAdmGroupsTransactionActi
 		payload.filial.ID,
 		payload.inst.ID,
 		payload.direction.ID,
-		payload.educForms.map(prop('ID')),
-		payload.payForms.map(prop('ID')),
+		payload.educForm.ID,
+		payload.payForm.ID,
 	);
 });

@@ -26,4 +26,4 @@ export const priemProfilesTransactionSelector = createSelector(
 
 export const priemProfilesSaga = sagaEffects.rest(priemProfilesTransactionActions, ({ payload }) => {
 	return fetchPriemProfiles(payload.filial.ID, payload.inst.ID, payload.direction.ID);
-});
+}, true);
