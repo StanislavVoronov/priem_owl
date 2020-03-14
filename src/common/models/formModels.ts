@@ -11,7 +11,7 @@ import { IAdmGroup } from '$store';
 export interface IContactsForm {
 	regDoc: IDocument;
 	liveDoc: IDocument;
-	needDormitory: boolean;
+	needHostel: boolean;
 	regIndex: string;
 	regRegion: string;
 	regLocality: string;
@@ -86,7 +86,8 @@ export interface IPersonForm {
 	document: IDocument;
 	isApplyPersonData: boolean;
 	photo: IDocument;
-	birthPlace: string;
+	birthplace: string;
+	codeDepartment: ''
 }
 export interface IDocumentsForm {
 	documents: IDocument[];
@@ -94,9 +95,9 @@ export interface IDocumentsForm {
 export interface ICreatePersonData {
 	npId: number;
 }
-export interface IAccountVerificationForm {
-	verificationMethod: VerificationMethod;
-	verificationCode: string;
+export interface IVerAccountForm {
+	verAccountMethod: VerificationMethod;
+	verAccountCode: string;
 }
 export type EnrollForms = IContactsForm & IEducationForm & IPersonForm & IDocument;
 

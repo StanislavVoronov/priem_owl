@@ -6,6 +6,11 @@ import { priemDirectionSaga } from './priemDirectionsTransaction';
 import { priemInstsSaga } from './priemInstitutesTransaction';
 import { priemFilialsSaga } from './priemFilialsTransaction';
 import { priemEducLevelSaga } from './priemEducLevelsTransaction';
+import { updatePhoneSaga } from './updatePhoneTransaction';
+import { createVerCodeSaga } from './createVerCodeTransaction';
+import { createPersonSaga } from './createPersonTransaction';
+import { updateAddressSaga } from './updateAdressTransaction';
+
 
 export const transactionsSagas = [
 	payFormsSaga,
@@ -16,4 +21,8 @@ export const transactionsSagas = [
 	priemInstsSaga,
 	priemFilialsSaga,
 	priemEducLevelSaga,
+	updatePhoneSaga,
+	createPersonSaga,
+	createVerCodeSaga,
+	updateAddressSaga,
 ];

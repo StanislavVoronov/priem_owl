@@ -52,7 +52,7 @@ export const AnyDocumentFormSchema = object().shape({
 });
 
 export const PersonFormSchema = object({
-	birthPlace: string()
+	birthplace: string()
 		.required(EMPTY_FIELD_MESSAGE)
 		.test({ message: RUS_FIELD_MESSAGE, test: value => RUS_ALPHABET.test(value) }),
 	isApplyPersonData: boolean().test({

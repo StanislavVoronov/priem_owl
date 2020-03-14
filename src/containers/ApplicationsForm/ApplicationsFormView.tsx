@@ -1,5 +1,5 @@
 import React from 'react';
-import { isNotEmptyArray, ITransaction, prop } from '@black_bird/utils';
+import { isEmptyArray, isNotEmptyArray, ITransaction, prop } from '@black_bird/utils';
 import { IAdmDictionaryItem } from '$common';
 import { ApplicationsTable } from './components';
 
@@ -72,6 +72,8 @@ const ApplicationsFormView = (props: IProps) => {
 		onDeleteApplication,
 		disabledAddButton,
 	} = props;
+
+	const nextButtonDisabled = false;  // isEmptyArray(applications)
 
 	return (
 		<Column>
@@ -191,7 +193,9 @@ const ApplicationsFormView = (props: IProps) => {
 
 			<ApplicationsTable onDelete={onDeleteApplication} applications={applications} />
 
-			{applications.length ? <Button onClick={submitApplicationsForm}>{'Далее'}</Button> : null}
+			<Button disabled={nextButtonDisabled} onClick={submitApplicationsForm}>
+				{'Далее'}
+			</Button>
 		</Column>
 	);
 };

@@ -28,8 +28,8 @@ export const isForeignerSelector = (state: IRootState) => {
 	return state.personForm.document.government.id !== 1;
 };
 
-export const enrollAccountVerificationFormSelector = (state: IRootState) => {
-	return state.enrollAccountVerificationForm;
+export const verAccountFormSelector = (state: IRootState) => {
+	return state.verAccountForm;
 };
 
 export const applicationsFormSelector = (state: IRootState) => {

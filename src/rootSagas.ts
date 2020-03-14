@@ -8,12 +8,18 @@ import {
 	fetchFullDictionaries,
 	fetchShortDictionaries,
 	regFormSagas,
+	createNewFolderSagas,
 	documentsFormSagas,
+	verAccountFormSagas,
+	createPersonContactsSagas
 } from '$operations';
 
 import { initAction, priemFilialsTransactionActions, transactionsSagas } from '$store';
 
 const rootSagas = [
+	...createPersonContactsSagas,
+	...createNewFolderSagas,
+	...verAccountFormSagas,
 	...transactionsSagas,
 	...documentsFormSagas,
 	...regFormSagas,

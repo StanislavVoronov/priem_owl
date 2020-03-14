@@ -4,3 +4,6 @@ export * from './educationFormSagas';
 export * from './applicationsFormSagas';
 export * from './dictionaries';
 export * from './documentsFormSagas';
+export * from './createNewFolderSagas';
+export * from './createPersonContactsSagas';
+export * from './verAccountFormSagas';

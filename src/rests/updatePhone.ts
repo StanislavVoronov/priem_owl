@@ -1,13 +1,14 @@
 import { PriemApi, PriemRestApi } from '$services';
+import { PhoneType } from '$common';
 
 export interface IUpdatePhoneRequest {
 	phone: string;
-	type: number;
+	type: PhoneType;
 }
 
 export interface IUpdatePhoneResponse {
 	ID: number;
 }
 
-export const updatePhoneRest = (phone: IUpdatePhoneRequest) =>
-	PriemApi.post<IUpdatePhoneRequest, IUpdatePhoneResponse>(PriemRestApi.UpdatePhone, phone);
+export const updatePhoneRest = (phone: string, type: PhoneType) =>
+	PriemApi.post<IUpdatePhoneRequest, IUpdatePhoneResponse>(PriemRestApi.UpdatePhone, { phone, type });

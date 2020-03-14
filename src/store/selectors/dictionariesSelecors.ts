@@ -1,5 +1,5 @@
 import { createSelector } from '@black_bird/utils';
-import { EDictionaryNameList, IDocument } from '$common';
+import { EDictionaryNameList, IDocument, validateDocument } from '$common';
 import { IRootState } from '../models';
 import { isForeignerSelector } from './formSelectors';
 import { DEFAULT_TRANSACTION } from './defaults';
@@ -37,7 +37,7 @@ export const getNeedDocuments = createSelector(
 		const dictionary = dictionaries[EDictionaryNameList.DocTypes] ? dictionaries[EDictionaryNameList.DocTypes].result : [];
 
 		return dictionary.filter((item: IDocument) => {
-			return isForeigner
+			return validateDocument(item) && isForeigner
 				? (item.type && item.type.need_foreigner) || needDocuments.includes(item.id)
 				: needDocuments.includes(item.id);
 		});

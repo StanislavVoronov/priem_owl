@@ -5,7 +5,7 @@ export * from './contactsForm';
 export * from './documentsForm';
 export * from './educationForm';
 export * from './enroll';
-export * from './accountVerification';
+export * from './verAccountForm';
 export * from './applicationsForm';
 export * from './models';
 export * from './rootReducer';

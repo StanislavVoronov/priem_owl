@@ -14,10 +14,10 @@ export interface ICreateVerificationCodeResponse {
 	count: number;
 }
 
-export const createVerificationCodeRest = (email: string, mobilePhone: string, typeTransport?: VerificationMethod) => {
+export const createVerCodeRest = (email: string, mobilePhone: string, typeTransport?: VerificationMethod) => {
 	const payload: ICreateVerificationCodeRequest = {
 		email,
-		mobile_phone: mobilePhone.replace(/[- )(]/g, ''),
+		mobile_phone: mobilePhone,
 	};
 
 	if (VerificationMethod.Email === typeTransport) {

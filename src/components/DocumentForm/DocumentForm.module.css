@@ -11,6 +11,9 @@
 
 .numWrapper {
 	display: grid;
+	column-gap: 12px;
 	grid-template-columns: 1fr max-content;
-	align-items: center;
+	align-items: end;
+	width: 100%;
+
 }

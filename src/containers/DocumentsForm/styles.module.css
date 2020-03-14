@@ -1,7 +1,7 @@
 .list {
 	list-style: none;
 	margin: 0;
-	padding: 12px 0;
+	padding: 0;
 }
 .list li {
 	padding: 8px 0;
@@ -48,4 +48,9 @@
 
 .wrapper {
 	padding:  0 8px;
+}
+
+.needDocTitle {
+	padding: 12px 0 4px 0;
+	font-weight: bold;
 }

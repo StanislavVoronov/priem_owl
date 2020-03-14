@@ -5,7 +5,7 @@ import {
 	IPersonForm,
 	IRegForm,
 	IDocumentsForm,
-	IAccountVerificationForm,
+	IVerAccountForm,
 	IApplicationForm,
 	IEnrollState,
 } from '$common';
@@ -18,7 +18,7 @@ export interface IRootState {
 	personForm: IPersonForm;
 	educationForm: IEducationForm;
 	documentsForm: IDocumentsForm;
-	enrollAccountVerificationForm: IAccountVerificationForm;
+	verAccountForm: IVerAccountForm;
 	applicationsForm: IApplicationForm;
 	transactions: ITransactionsState;
 }

@@ -9,14 +9,14 @@ import { contactsFormReducer } from './contactsForm';
 import { applicationsFormReducer } from './applicationsForm';
 import { educationFormReducer } from './educationForm';
 import transactionsReducer from './transactionReducer';
-import {documentsFormReducer} from './documentsForm';
-
+import { documentsFormReducer } from './documentsForm';
+import { verAccountFormReducer } from './verAccountForm';
 import { IRootState } from './models';
 const composeDevTools = composeWithDevTools({});
 
 export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) => () => {
 	return createStore(
-		combineReducers<any>({
+		combineReducers<IRootState>({
 			enroll: enrollReducer,
 			regForm: regFormReducer,
 			personForm: personFormReducer,
@@ -25,6 +25,7 @@ export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) 
 			applicationsForm: applicationsFormReducer,
 			dictionaries: dictionaryReducer,
 			documentsForm: documentsFormReducer,
+			verAccountForm: verAccountFormReducer,
 			transactions: transactionsReducer as any,
 		}),
 		composeDevTools(applyMiddleware(...middlewares)),

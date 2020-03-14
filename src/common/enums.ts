@@ -17,7 +17,17 @@ export enum Gender {
 }
 
 export enum VerificationMethod {
-	None,
-	Email,
-	Phone,
+	None = 0,
+	Email = 1,
+	Phone = 2,
+}
+
+export enum PhoneType {
+	Home = 1,
+	Mobile = 2,
+}
+
+export enum AddressType {
+	Reg = 1,
+	Live = 2
 }

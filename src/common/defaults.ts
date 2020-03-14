@@ -2,6 +2,8 @@ import { IDocument } from '$common';
 import { IContactsForm, IEducationForm, IPersonForm } from '$common';
 
 export const defaultDocument: IDocument = {
+	type: null,
+	subType: null,
 	government: { id: 1, name: 'Россия' },
 };
 
@@ -13,7 +15,8 @@ export const defaultPersonForm: IPersonForm = {
 	},
 	isApplyPersonData: false,
 	photo: { ...defaultDocument, docType: { id: 35, name: 'Фотография' } },
-	birthPlace: '',
+	birthplace: 'Moscow',
+	codeDepartment: ''
 };
 
 export const defaultEducationDataForm: IEducationForm = {

@@ -2,10 +2,7 @@ import React from 'react';
 import { RadioButtonGroup } from '$components';
 import { TextInput, IFormProps, Autocomplete, IFormField } from '@black_bird/components';
 import { ITransaction, prop } from '@black_bird/utils';
-import {
-	validateRequireTextField,
-	IFistNameDictionary,
-} from '$common';
+import { validateRequireTextField, IFistNameDictionary, IRegForm } from '$common';
 
 export const GENDERS = [
 	{ value: '1', label: 'Муж.', color: 'primary' },
@@ -15,21 +12,12 @@ export const GENDERS = [
 interface IProps {
 	firstNameDictionary: ITransaction<IFistNameDictionary>;
 	middleNameDictionary: ITransaction<IFistNameDictionary>;
-	form: IFormProps<any>;
+	form: IFormProps<IRegForm>;
 }
 
 const RegFormView = (props: IProps) => {
 	const { firstNameDictionary, middleNameDictionary } = props;
 	const { onChange, values } = props.form;
-
-	// const onChangeFirstName = (form: any) => (value: string) => {
-	// 	const firstNameDictionary = props.dictionaries[EDictionaryNameList.FirstNames];
-	// 	const name = firstNameDictionary.values.find((item: any) => item.name === value);
-	//
-	// 	if (name) {
-	// 		form.setFieldValue('gender', String(name.sex));
-	// 	}
-	// };
 	const defaultOnChange = (data: IFormField<string>) => {
 		const genderName = firstNameDictionary.result.find(item => item.name === data.value);
 
@@ -54,10 +42,18 @@ const RegFormView = (props: IProps) => {
 
 	return (
 		<>
-			<TextInput onChange={onChange} required name="lastName" label="Фамилия" placeholder="Введите фамилию" />
+			<TextInput
+				onChange={onChange}
+				defaultValue={values.lastName}
+				required
+				name="lastName"
+				label="Фамилия"
+				placeholder="Введите фамилию"
+			/>
 
 			<Autocomplete
 				title="Имя"
+				defaultValue={"stas"}
 				onChange={defaultOnChange}
 				name="firstName"
 				required
@@ -66,7 +62,8 @@ const RegFormView = (props: IProps) => {
 			/>
 
 			<Autocomplete
-				title="Имя"
+				title="Отчество"
+				defaultValue={values.middleName}
 				onChange={defaultOnChange}
 				name="middleName"
 				filterOptions={filterMiddleNames}
@@ -79,6 +76,7 @@ const RegFormView = (props: IProps) => {
 				validate={validateRequireTextField}
 				required
 				name="birthday"
+				value={values.birthday}
 				label="Дата рождения"
 				placeholder="дд.мм.гггг"
 				type="date"

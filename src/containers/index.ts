@@ -3,7 +3,7 @@ import { PersonForm } from './PersonForm';
 import { ContactsForm } from './ContactsForm';
 import { EducationForm } from './EducationForm';
 import { DocumentsForm } from './DocumentsForm';
-import { AccountVerificationForm } from './AccountVerificationForm';
+import { VerAccountForm } from './VerAccountForm';
 import { ApplicationsForm } from './ApplicationsForm';
 
 export {
@@ -12,6 +12,6 @@ export {
 	ContactsForm,
 	EducationForm,
 	DocumentsForm,
-	AccountVerificationForm,
+	VerAccountForm,
 	ApplicationsForm,
 };

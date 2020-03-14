@@ -40,8 +40,8 @@ export interface IAdmDictionaryItem {
 
 
 export interface IDocument {
-	type?: IDocType | null;
-	subType?: IDocType | null;
+	type: IDocType | null;
+	subType: IDocType | null;
 	government: IDictionary;
 	series?: string;
 	num?: string;

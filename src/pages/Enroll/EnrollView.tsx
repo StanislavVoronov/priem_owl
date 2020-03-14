@@ -10,7 +10,7 @@ import {
 	ContactsForm,
 	EducationForm,
 	DocumentsForm,
-	AccountVerificationForm,
+	VerAccountForm,
 	ApplicationsForm,
 } from '$containers';
 import { noop } from '$common';
@@ -50,7 +50,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 			}
 
 			case 6: {
-				return null; // AccountVerificationForm;
+				return  <VerAccountForm />;
 			}
 			default: {
 				return null;

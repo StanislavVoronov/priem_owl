@@ -13,3 +13,6 @@ export * from './priemEducFormsTransaction'
 export * from './priemProfilesTransaction'
 export * from './priemAdmGroups'
 export * from './transactionsSagas'
+export * from './updatePhoneTransaction';
+export * from './createPersonTransaction';
+export * from './updateAdressTransaction';

@@ -46,40 +46,8 @@
 // import { fetchPriemGroupsTransaction } from '../store/transactions/fetchPriemGroups';
 // import { createPriemApplicationTransaction } from '../store/transactions/createPriemApplication';
 //
-// export const sendVerificationCodeToPhone = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
-// 	dispatch,
-// 	getState,
-// ) => {
-// 	const data = contactsFormSelector(getState());
+
 //
-// 	dispatch(selectVerificationMethod(VerificationMethod.Phone));
-//
-// 	return dispatch(createVerificationCodeTransaction(data.email, data.mobPhone, VerificationMethod.Phone));
-// };
-//
-// export const sendVerificationCodeToEmail = (): ThunkAction<Promise<void>, IRootState, void, Action> => (
-// 	dispatch,
-// 	getState,
-// ) => {
-// 	const data = contactsFormSelector(getState());
-//
-// 	dispatch(selectVerificationMethod(VerificationMethod.Email));
-//
-// 	return dispatch(createVerificationCodeTransaction(data.email, data.mobPhone, VerificationMethod.Email));
-// };
-//
-// export const updatePhone = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
-// 	const data = contactsFormSelector(getState());
-//
-// 	return data.homePhone
-// 		? dispatch(
-// 				updatePhoneTransaction({
-// 					phone: data.homePhone,
-// 					type: 1,
-// 				}),
-// 		  )
-// 		: Promise.resolve();
-// };
 //
 // const createPerson = (): ThunkAction<Promise<void>, IRootState, void, Action> => (dispatch, getState) => {
 // 	const state = getState();
@@ -106,7 +74,7 @@
 // 		fname: registrationForm.firstName,
 // 		mname: registrationForm.middleName,
 // 		birthdate: moment(registrationForm.birthday).format('DD-MM-YYYY'),
-// 		birthplace: personForm.birthPlace,
+// 		birthplace: personForm.birthplace,
 // 		need_hostel: contactsForm.needDormitory ? ServerBoolean.True : ServerBoolean.False,
 // 		sex: Number(registrationForm.gender),
 // 		hight_first: educationForm.firstHighEducation ? ServerBoolean.True : ServerBoolean.False,
@@ -172,98 +140,10 @@
 // 	]).then(() => Promise.resolve());
 // };
 //
-// export const priemFilials = (): ThunkAction<void, IRootState, void, Action> => dispatch => {
-// 	dispatch(fetchPriemFilialsTransaction()).then(response => {
-// 		dispatch(onChangeFilial(response[0]));
-// 	});
-// };
 //
 // //
-// // export const onChangeEducationLevel = (educationLevel: ISelectItem): ThunkAction<void, IRootState, void, Action> => (
-// // 	dispatch,
-// // 	getState,
-// // ) => {
-// // 	const { currentFilial, currentInstitute } = applicationFormSelector(getState());
-// // 	dispatch(changeCurrentEducationLevel(educationLevel));
 // //
-// // 	if (currentFilial && currentInstitute) {
-// // 		dispatch(
-// // 			fetchPriemDirectionsTransaction({
-// // 				filialId: currentFilial.id,
-// // 				instituteId: currentInstitute.id,
-// // 				educationLevelId: educationLevel.id,
-// // 			}),
-// // 		).then(response => {
-// // 			console.log('fetchPriemDirectionsTransaction', response);
-// // 		});
-// // 	}
-// // };
 // //
-// // export const onChangeDirection = (direction: ISelectItem): ThunkAction<void, IRootState, void, Action> => (
-// // 	dispatch,
-// // 	getState,
-// // ) => {
-// // 	const { currentFilial, currentInstitute } = applicationFormSelector(getState());
-// // 	dispatch(changeCurrentDirection(direction));
-// //
-// // 	if (currentFilial && currentInstitute) {
-// // 		dispatch(
-// // 			fetchPriemProfilesTransaction({
-// // 				filialId: currentFilial.id,
-// // 				instituteId: currentInstitute.id,
-// // 				directionId: direction.id,
-// // 			}),
-// // 		).then(response => {
-// // 			console.log('fetchPriemProfilesTransaction', response);
-// // 		});
-// // 	}
-// // };
-// //
-// // export const onChangeProfile = (profile: ISelectItem): ThunkAction<void, IRootState, void, Action> => (
-// // 	dispatch,
-// // 	getState,
-// // ) => {
-// // 	const { currentFilial, currentInstitute, currentDirection } = applicationFormSelector(getState());
-// // 	dispatch(changeCurrentProfile(profile));
-// //
-// // 	if (currentFilial && currentInstitute && currentDirection) {
-// // 		dispatch(
-// // 			fetchPriemEducationFormsTransaction({
-// // 				filialId: currentFilial.id,
-// // 				instituteId: currentInstitute.id,
-// // 				directionId: currentDirection.id,
-// // 				profileId: profile.id,
-// // 			}),
-// // 		).then(response => {
-// // 			console.log('fetchPriemProfilesTransaction', response);
-// // 		});
-// // 	}
-// // };
-// //
-// // export const onChangeEducationForm = (educationForm: ISelectItem): ThunkAction<void, IRootState, void, Action> => (
-// // 	dispatch,
-// // 	getState,
-// // ) => {
-// // 	const state = getState();
-// //
-// // 	const { currentFilial, currentInstitute, currentDirection, currentProfile } = applicationFormSelector(state);
-// //
-// // 	dispatch(changeCurrentEducationForm(educationForm));
-// //
-// // 	if (currentFilial && currentInstitute && currentDirection && currentProfile) {
-// // 		dispatch(
-// // 			fetchPriemPayFormsTransaction({
-// // 				filialId: currentFilial.id,
-// // 				instituteId: currentInstitute.id,
-// // 				directionId: currentDirection.id,
-// // 				profileId: currentProfile.id,
-// // 				educationFormId: educationForm.id,
-// // 			}),
-// // 		).then(response => {
-// // 			console.log('fetchPriemPayFormsTransaction', response);
-// // 		});
-// // 	}
-// // };
 // //
 // // export const onChangePayForm = (payForms: ISelectItem[]): ThunkAction<void, IRootState, void, Action> => (
 // // 	dispatch,
@@ -346,9 +226,6 @@
 // // 	dispatch(fetchPriemPayFormsActions.success([]));
 // // };
 // //
-// // export const onDeleteApplication = (index: number): ThunkAction<void, IRootState, void, Action> => dispatch => {
-// // 	dispatch(deleteApplication(index));
-// // };
 // // export const createNewPersonFolder = (): ThunkAction<Promise<void>, IRootState, void, Action> => dispatch => {
 // // 	return dispatch(createPerson())
 // // 		.then(() => {
