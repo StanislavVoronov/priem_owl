@@ -61,7 +61,7 @@ const ContactsFormView = (props: IProps) => {
 							onChange={onChange}
 							value={values.needHostel}
 							label="Нуждаюсь в предоставлении общежития"
-							name="needDormitory"
+							name="needHostel"
 						/>
 
 						<Checkbox

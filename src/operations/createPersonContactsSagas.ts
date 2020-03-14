@@ -3,7 +3,7 @@ import { contactsFormSelector, createPersonTransactionActions, updateAddressTran
 import { AddressType } from '$common';
 
 const prepareAddress = (street: string, home: string, block: string, flat: string) => {
-	return `${street ? ', ул.' + street : ''}${home ? ', д.' + home : ''}${block ? ', кор.' + block : ''}${
+	return `${street ? ', ул. ' + street : ''}${home ? ', д. ' + home : ''}${block ? ', кор. ' + block : ''}${
 		flat ? ', кв.' + flat : ''
 	}`;
 };
