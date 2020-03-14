@@ -9,6 +9,7 @@ import { contactsFormReducer } from './contactsForm';
 import { applicationsFormReducer } from './applicationsForm';
 import { educationFormReducer } from './educationForm';
 import transactionsReducer from './transactionReducer';
+import {documentsFormReducer} from './documentsForm';
 
 import { IRootState } from './models';
 const composeDevTools = composeWithDevTools({});
@@ -23,7 +24,8 @@ export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) 
 			educationForm: educationFormReducer,
 			applicationsForm: applicationsFormReducer,
 			dictionaries: dictionaryReducer,
-			transactions: transactionsReducer,
+			documentsForm: documentsFormReducer,
+			transactions: transactionsReducer as any,
 		}),
 		composeDevTools(applyMiddleware(...middlewares)),
 	);

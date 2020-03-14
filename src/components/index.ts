@@ -15,6 +15,12 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import List from '@material-ui/core/List';
+
+import DeleteIcon from '@material-ui/icons/Delete';
+
 import Title from './Typography/Title';
 
 export * from './Buttons';
@@ -39,8 +45,12 @@ export {
 	LoadingText,
 	EnrollHeader,
 	ExpandMoreIcon,
+	ExpandLessIcon,
 	Typography,
 	ExpansionPanelDetails,
 	ExpansionPanelSummary,
+	DeleteIcon,
 	ExpansionPanel,
+	ListSubheader,
+	List,
 };

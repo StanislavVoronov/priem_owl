@@ -1,10 +1,8 @@
-import { createAction } from 'redux-actions';
-import { IDocumentsForm } from '$common';
+import { IDocument, IDocumentsForm } from '$common';
+import { createAction } from '@black_bird/utils';
 
-const NAMESPACE = 'EnrollDocumentsForm';
+const NAMESPACE = 'DOCUMENTS_FORM';
 
-export const submitDocumentsForm = createAction(`${NAMESPACE}/submitDocumentsForm`, (values: IDocumentsForm) => values);
-export const setPriemGroupNeedDocument = createAction(
-	`${NAMESPACE}/priemGroupNeedDocAction`,
-	(value: boolean) => value,
-);
+export const submitDocumentsForm = createAction(`${NAMESPACE}/SUBMIT`, (documents: IDocument[]) => documents);
+export const admNeedDocChangedStatusAction = createAction(`${NAMESPACE}/NEED_ADM_DOC`, (status: boolean) => status);
+export const newDocumentAdded = createAction(`${NAMESPACE}/NEW_DOC_ADDED`, (doc: IDocument) => doc);

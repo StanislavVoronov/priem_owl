@@ -17,14 +17,4 @@ export interface ITransactionsState {
 	priemPayForms: ITransaction<any>;
 	priemProfiles: ITransaction<IAdmDictionaryItem>;
 	priemAdmGroups: Record<string, ITransaction<IAdmDictionaryItem>>
-	// updatePhone: Record<string, ITransaction<any>>;
-	// updateAddress: Record<string, ITransaction<any>>;
-	// createVerificationCode: ITransaction<ICreateVerificationCodeResponse>;
-	// uploadDocuments: Record<string, ITransaction<any>>;
-	// fetchPriemInstitutes: ITransaction<ISelectItem>;
-	// priemEducLevels: ITransaction<ISelectItem>;
-	// fetchPriemPayForms: ITransaction<ISelectItem>;
-	// fetchPriemGroups: ITransaction<IPriemGroup>;
-	// fetchPriemEducationForms: ITransaction<ISelectItem>;
-	// createPriemApplications: Record<string, ITransaction<any>>;
 }

@@ -90,7 +90,6 @@ export interface IPersonForm {
 }
 export interface IDocumentsForm {
 	documents: IDocument[];
-	priemGroupNeedDoc: boolean;
 }
 export interface ICreatePersonData {
 	npId: number;

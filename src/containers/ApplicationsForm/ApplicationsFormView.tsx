@@ -1,11 +1,11 @@
 import React from 'react';
-import { isNotEmptyArray, ITransaction, noop, prop } from '@black_bird/utils';
+import { isNotEmptyArray, ITransaction, prop } from '@black_bird/utils';
 import { IAdmDictionaryItem } from '$common';
 import { ApplicationsTable } from './components';
 
 import classes from './styles.module.css';
 
-import { Button, IFormField, Select } from '@black_bird/components';
+import { Button, Column, IFormField, Select } from '@black_bird/components';
 
 interface IProps {
 	filialDictionary: ITransaction<IAdmDictionaryItem>;
@@ -35,7 +35,7 @@ interface IProps {
 	payForms: IAdmDictionaryItem[];
 	payFormDictionary: ITransaction<IAdmDictionaryItem>;
 	applications: any[];
-	// disabledAddButton: boolean;
+	disabledAddButton: boolean;
 	addPriemApplication: () => void;
 	submitApplicationsForm: () => void;
 	onDeleteApplication: (index: number) => void;
@@ -70,12 +70,11 @@ const ApplicationsFormView = (props: IProps) => {
 		applications,
 		submitApplicationsForm,
 		onDeleteApplication,
+		disabledAddButton,
 	} = props;
 
-	console.log('institute', institute, instituteDictionary.isFetching, instituteDictionary.result);
-
 	return (
-		<div className="flexColumn">
+		<Column>
 			<Select
 				required
 				value={filial}
@@ -183,8 +182,9 @@ const ApplicationsFormView = (props: IProps) => {
 				/>
 			)}
 
+			{disabledAddButton && <div className={classes.repeatAppText}>Заявление уже было добавлено ранее</div>}
 			{isNotEmptyArray(payForms) ? (
-				<Button disabled={false} classes={{ root: classes.addDocButton }} onClick={addPriemApplication}>
+				<Button disabled={disabledAddButton} classes={{ root: classes.addDocButton }} onClick={addPriemApplication}>
 					Добавить заявление
 				</Button>
 			) : null}
@@ -192,7 +192,7 @@ const ApplicationsFormView = (props: IProps) => {
 			<ApplicationsTable onDelete={onDeleteApplication} applications={applications} />
 
 			{applications.length ? <Button onClick={submitApplicationsForm}>{'Далее'}</Button> : null}
-		</div>
+		</Column>
 	);
 };
 

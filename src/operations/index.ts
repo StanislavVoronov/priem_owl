@@ -3,3 +3,4 @@ export * from './regFormSagas';
 export * from './educationFormSagas';
 export * from './applicationsFormSagas';
 export * from './dictionaries';
+export * from './documentsFormSagas';

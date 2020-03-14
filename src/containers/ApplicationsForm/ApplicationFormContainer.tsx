@@ -21,10 +21,13 @@ import {
 	onChangeEducFormsAction,
 	onChangePayFormsAction,
 	newPriemAppAddedAction,
-	submitApplicationFormAction, applicationDeletedAction, IAdmGroup,
+	submitApplicationFormAction,
+	applicationDeletedAction,
+	IAdmGroup,
 } from '$store';
 import { IAdmDictionaryItem } from '$common';
 import ApplicationsFormView from './ApplicationsFormView';
+import { disabledAddButtonSelector } from './selectors';
 
 interface IStateToProps {
 	filialDictionary: ITransaction<IAdmDictionaryItem>;
@@ -47,7 +50,7 @@ interface IStateToProps {
 	payForms: IAdmDictionaryItem[];
 	payFormDictionary: ITransaction<IAdmDictionaryItem>;
 	applications: IAdmGroup[];
-	// disabledAddButton: boolean;
+	disabledAddButton: boolean;
 }
 
 interface IDispatchToProps {
@@ -62,7 +65,6 @@ interface IDispatchToProps {
 	addPriemApplication: () => void;
 	submitApplicationsForm: () => void;
 	onDeleteApplication: (index: number) => void;
-
 }
 
 type Props = IStateToProps & IDispatchToProps;
@@ -85,6 +87,8 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	const profileDictionary = priemProfilesTransactionSelector(state);
 	const educFormDictionary = priemEducFormsTransactionSelector(state);
 	const payFormDictionary = priemPayFormsTransactionSelector(state);
+
+	const disabledAddButton = disabledAddButtonSelector(state);
 	const {
 		filial,
 		institute,
@@ -95,6 +99,8 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		payForms,
 		applications,
 	} = applicationsFormSelector(state);
+
+	console.log("disabled", disabledAddButton);
 
 	return {
 		educFormDictionary,
@@ -112,6 +118,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		educForms,
 		payForms,
 		applications,
+		disabledAddButton,
 	};
 };
 

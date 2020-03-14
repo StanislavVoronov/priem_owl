@@ -46,7 +46,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return <ApplicationsForm />;
 			}
 			case 5: {
-				return null;
+				return <DocumentsForm />;
 			}
 
 			case 6: {

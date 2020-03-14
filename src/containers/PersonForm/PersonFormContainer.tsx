@@ -9,7 +9,7 @@ import {
 	personFormSelector,
 	getGovernmentDictionary,
 	getPersonTypesDocDictionary,
-	getTypesDocsDictionary,
+	getDocTypesDictionary,
 	IRootState,
 	submitPersonFormAction,
 } from '$store';
@@ -46,7 +46,7 @@ const PersonFormContainer = (props: IProps) => {
 
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
 	const personTypesDocsDictionary = getPersonTypesDocDictionary(state);
-	const typesDocsDictionary = getTypesDocsDictionary(state);
+	const typesDocsDictionary = getDocTypesDictionary(state);
 	const governmentDictionary = getGovernmentDictionary(state);
 
 	const form = personFormSelector(state);

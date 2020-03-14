@@ -27,20 +27,6 @@ const transactionsReducer = combineReducers({
 	priemPayForms: priemPayFormsReducer,
 	priemProfiles: priemProfilesReducer,
 	priemAdmGroups: priemAdmGroupsReducer,
-	// createVerificationCode: createVerificationCodeReducer,
-	// uploadDocuments: uploadDocumentsReducer,
-	// createPerson: createPersonReducer,
-	// updateAddress: updateAddressReducer,
-	// updatePhone,
-	// priemFilials: fetchPriemFilialsReducer,
-	// priemInstitutes: fetchPriemInstitutesReducer,
-	// priemEducLevels: fetchPriemEducationLevelsReducer,
-	// priemDirections: fetchPriemDirectionsReducer,
-	// fetchPriemProfiles: fetchPriemProfilesReducer,
-	// fetchPriemPayForms: fetchPriemPayFormsReducer,
-	// priemEducForms: fetchPriemEducationFormsReducer,
-	// createPriemApplications: createPriemApplicationsReducer,
-	// fetchPriemGroups: fetchPriemGroupsReducer,
 });
 
 

@@ -17,7 +17,7 @@ export interface IRootState {
 	contactsForm: IContactsForm;
 	personForm: IPersonForm;
 	educationForm: IEducationForm;
-	enrollDocumentsForm: IDocumentsForm;
+	documentsForm: IDocumentsForm;
 	enrollAccountVerificationForm: IAccountVerificationForm;
 	applicationsForm: IApplicationForm;
 	transactions: ITransactionsState;

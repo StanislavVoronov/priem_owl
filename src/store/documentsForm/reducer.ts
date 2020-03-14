@@ -1,26 +1,17 @@
-import { handleActions } from 'redux-actions';
-import { IDocumentsForm } from '$common';
-import { setPriemGroupNeedDocument, submitDocumentsForm } from './actions';
+import { createReducer, forAction, combineReducers } from '@black_bird/utils';
+import { defaultDocument, IDocument } from '$common';
+import { admNeedDocChangedStatusAction, newDocumentAdded, submitDocumentsForm } from './actions';
 
-const enrollDocumentsFormReducer = handleActions<IDocumentsForm, any>(
-	{
-		[submitDocumentsForm.toString()]: (state, action) => {
-			return {
-				...state,
-				...action.payload,
-			};
-		},
-		[setPriemGroupNeedDocument.toString()]: (state, action) => {
-			return {
-				...state,
-				priemGroupNeedDocument: action.payload,
-			};
-		},
-	},
-	{
-		documents: [],
-		priemGroupNeedDoc: false,
-	},
+const documentsReducer = createReducer<IDocument[]>(
+	[forAction(submitDocumentsForm, (state, payload) => payload)],
+	[defaultDocument],
 );
 
-export default enrollDocumentsFormReducer;
+const admNeedDocReducer = createReducer<boolean>(
+	[forAction(admNeedDocChangedStatusAction, (state, payload) => payload)],
+	false,
+);
+
+const documentsFormReducer = combineReducers({ needDocStatus: admNeedDocReducer, documents: documentsReducer });
+
+export default documentsFormReducer;

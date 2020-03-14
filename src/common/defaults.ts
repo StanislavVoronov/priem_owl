@@ -8,7 +8,7 @@ export const defaultDocument: IDocument = {
 export const defaultPersonForm: IPersonForm = {
 	document: {
 		...defaultDocument,
-		type: { id: 1, name: 'Документ, удостоверяющий личность', need_info: 1, has_number: 1 },
+		type: { id: 1, name: 'Документ, удостоверяющий личность', need_info: 1, has_num: 1 },
 		subType: { id: 1, name: 'Паспорт гражданина РФ' },
 	},
 	isApplyPersonData: false,
@@ -19,7 +19,7 @@ export const defaultPersonForm: IPersonForm = {
 export const defaultEducationDataForm: IEducationForm = {
 	document: {
 		...defaultDocument,
-		type: { id: 2, name: 'Документ об предыдущем образовании', need_info: 1, has_number: 1 },
+		type: { id: 2, name: 'Документ об предыдущем образовании', need_info: 1, has_num: 1 },
 	},
 	firstHighEducation: true,
 	coolnessTypes: [],

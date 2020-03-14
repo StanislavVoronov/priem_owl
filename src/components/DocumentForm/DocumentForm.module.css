@@ -1,6 +1,16 @@
 .form {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0 24px;
-    width: 100%;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 0 24px;
+	width: 100%;
+}
+
+.hasNumberCheckbox {
+	font-size: 12px;
+}
+
+.numWrapper {
+	display: grid;
+	grid-template-columns: 1fr max-content;
+	align-items: center;
 }

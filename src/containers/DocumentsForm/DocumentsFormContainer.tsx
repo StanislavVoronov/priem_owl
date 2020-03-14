@@ -2,38 +2,42 @@ import * as React from 'react';
 import DocumentsFormView from './DocumentsFormView';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import {
-	enrollDocumentsFormSelector,
-	educationFormSelector,
-	enrollIsForeignerSelector,
+	documentsFormSelector,
+	isForeignerSelector,
 	getEducTypeDocDictionary,
 	getGovernmentDictionary,
-	getPrevEducTypesDocDictionary,
+	getDocTypesDictionary,
 	IRootState,
+	getPersonTypesDocDictionary,
 	submitDocumentsForm,
+	getNeedDocuments,
 } from '$store';
-import { IDictionary, IDocumentsForm, IEducationForm } from '$common';
+import { defaultDocument, IDictionary, IDocument } from '$common';
 import { ITransaction } from '@black_bird/utils';
 
 interface IStateToProps {
-	form: IEducationForm;
+	docTypesDictionary: ITransaction<IDictionary>;
 	governmentDictionary: ITransaction<IDictionary>;
-	preEducDictionary: ITransaction<IDictionary>;
 	educationDictionary: ITransaction<IDictionary>;
+	personDocDictionary: ITransaction<IDictionary>;
+	requireDocs: IDocument[];
+	documents: IDocument[];
+}
 
-	dictionaries: any;
-	foreigner: boolean;
+interface IDispatchProps {
+	onSubmit: (documents: IDocument[]) => void;
 }
-interface IDispatchToProps {
-	submitDocumentsForm: (values: IDocumentsForm) => void;
-}
+type IProps = IStateToProps & IDispatchProps;
 
 interface IState {
-	requiredDocuments: number[];
+	documents: IDocument[];
+	expendList: number[];
 }
-type IProps = IStateToProps & IDispatchToProps;
+
 class DocumentsFormContainer extends React.Component<IProps, IState> {
 	state = {
-		requiredDocuments: [],
+		documents: this.props.documents,
+		expendList: [0],
 	};
 	componentDidMount(): void {
 		// const dictionaryDocTypes =[]
@@ -45,26 +49,82 @@ class DocumentsFormContainer extends React.Component<IProps, IState> {
 		// this.setState({ requiredDocuments: [9, 10, ...needDocuments] });
 	}
 
-	submit = (values: IDocumentsForm) => {
-		this.props.submitDocumentsForm(values);
-
+	togglePanel = (index: number) => () => {
+		// if (this.state.panelStatus.includes(index)) {
+		// 	this.setState({ panelStatus: this.state.panelStatus.filter(item => item !== index) });
+		// } else {
+		// 	this.setState({ panelStatus: [...this.state.panelStatus, index] });
+		// }
 	};
+	onChangeData = (data: IDocument, index: number) => {
+		this.setState(state => ({
+			...state,
+			documents: state.documents.map((item, key) => {
+				if (key === index) {
+					return data;
+				}
+
+				return item;
+			}),
+		}));
+	};
+	deleteDoc = (index: number) => {
+		this.setState(state => ({ ...state, documents: state.documents.filter((item, key) => key !== index) }));
+	};
+	onToggleItem = (index: number) => {
+		const { expendList } = this.state;
+		const exists = expendList.some((item, key) => key === index);
+
+		const newExpendedList = exists ? expendList.filter((item, key) => key !== index) : [...expendList, index];
+
+		this.setState(state => ({ ...state, expendList: newExpendedList }));
+	};
+	onSubmit = () => {
+		this.props.onSubmit(this.state.documents);
+	};
+
+	addDoc = () => {
+		this.setState(state => ({
+			...state,
+			expendList: [...state.expendList, state.documents.length],
+			documents: [...state.documents, defaultDocument],
+		}));
+	};
+
 	render() {
-		return null
-		// return <DocumentsFormView requiredDocuments={this.state.requiredDocuments} {...this.props} submit={this.submit} />;
+		return (
+			<DocumentsFormView
+				{...this.props}
+				onToggleItem={this.onToggleItem}
+				onChangeData={this.onChangeData}
+				expendList={this.state.expendList}
+				deleteDoc={this.deleteDoc}
+				addDoc={this.addDoc}
+				onSubmit={this.onSubmit}
+				documents={this.state.documents}
+			/>
+		);
 	}
 }
-const mapStateToProps: MapStateToProps<any, {}, IRootState> = state => {
-	const prevEducDictionary = getPrevEducTypesDocDictionary(state);
+const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
 	const educationDictionary = getEducTypeDocDictionary(state);
 	const governmentDictionary = getGovernmentDictionary(state);
+	const docTypesDictionary = getDocTypesDictionary(state);
+	const personDocDictionary = getPersonTypesDocDictionary(state);
+	const requireDocs = getNeedDocuments(state);
+	const form = documentsFormSelector(state);
 
-	const documents = enrollDocumentsFormSelector(state);
-	const foreigner = enrollIsForeignerSelector(state);
+	return {
+		educationDictionary,
+		docTypesDictionary,
+		governmentDictionary,
+		personDocDictionary,
+		documents: form.documents,
+		requireDocs,
+	};
+};
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = {
+	onSubmit: submitDocumentsForm,
+};
 
-	return { educationDictionary, governmentDictionary, prevEducDictionary, form: educationFormSelector, foreigner };
-};
-const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {
-	submitDocumentsForm,
-};
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentsFormContainer);

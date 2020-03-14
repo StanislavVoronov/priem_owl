@@ -1,0 +1,39 @@
+.expansionPanel {
+	padding: 0 8px;
+}
+
+.panelDetails {
+	margin: 0 0 52px 0;
+	height: 100%;
+	padding: 0;
+}
+
+.deleteIcon {
+	margin-left: 12px;
+	cursor: pointer;
+}
+
+.wrapper {
+	background-color: #f5f5f5;
+}
+
+.panelExpanded {
+	margin: 0;
+}
+.header {
+	margin-top: 24px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	cursor: default;
+}
+.closedPanel {
+	padding: 12px 0;
+}
+.openPanel {
+	padding: 8px 0 0 0;
+}
+.expansionIcon {
+	margin-left: 4px;
+	cursor: pointer;
+}

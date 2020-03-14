@@ -20,11 +20,11 @@ export const educationFormSelector = (state: IRootState) => {
 	return state.educationForm;
 };
 
-export const enrollDocumentsFormSelector = (state: IRootState) => {
-	return state.enrollDocumentsForm;
+export const documentsFormSelector = (state: IRootState) => {
+	return state.documentsForm;
 };
 
-export const enrollIsForeignerSelector = (state: IRootState) => {
+export const isForeignerSelector = (state: IRootState) => {
 	return state.personForm.document.government.id !== 1;
 };
 

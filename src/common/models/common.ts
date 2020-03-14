@@ -18,7 +18,7 @@ export interface IDictionaryName {
 export interface IDocType extends IDictionary {
 	scanable?: number;
 	need_info?: number;
-	has_number?: number;
+	has_num?: number;
 	need_foreigner?: number;
 }
 
