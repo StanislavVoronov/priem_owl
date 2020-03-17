@@ -1,3 +1,5 @@
+import { isNull, omitBy } from '$common';
+
 export class JsonRequest {
 	host: string = '';
 	path: string = '';
@@ -9,7 +11,7 @@ export class JsonRequest {
 		const body = new FormData();
 		body.append('api', api);
 
-		body.append('values', JSON.stringify(payload));
+		body.append('values', JSON.stringify(omitBy(payload, isNull)));
 
 		this.body = body;
 	}

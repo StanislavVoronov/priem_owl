@@ -7,7 +7,7 @@ class EnrollApi extends JsonRequest {
 	public static path = '/priem_enroll_verify';
 
 	static post = <Q, R>(api: ENROLL_API_NAMES, payload: Q): Promise<R> => {
-		const Request = new JsonRequest(EnrollApi.host, EnrollApi.path, api, omitBy(payload, isNull));
+		const Request = new JsonRequest(EnrollApi.host, EnrollApi.path, api, payload);
 
 		return Request.post();
 	};

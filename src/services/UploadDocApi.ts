@@ -1,6 +1,7 @@
 import { JsonRequest } from './JsonRequest';
+import { isNull, omitBy } from '$common';
 
-export class UploadDocument extends JsonRequest {
+export class UploadDocApi extends JsonRequest {
 	host: string = '';
 	path: string = '';
 	body: any = '';
@@ -11,7 +12,7 @@ export class UploadDocument extends JsonRequest {
 		const body = new FormData();
 		body.append('api', api);
 
-		body.append('values', JSON.stringify(payload));
+		body.append('values', JSON.stringify(omitBy(payload, isNull)));
 
 		if (doc) {
 			const page = new Blob([doc], { type: doc.type });
