@@ -7,7 +7,7 @@ import {
 	createTransactionReducer,
 	sagaEffects,
 } from '@black_bird/utils';
-import { fetchPriemPayForms } from '$rests';
+import { priemPayFormsRest } from '$rests';
 
 export const priemPayFormsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemPayForms,
@@ -32,7 +32,7 @@ export const priemPayFormsTransactionSelector = createSelector(
 );
 
 export const payFormsSaga = sagaEffects.rest(priemPayFormsTransactionActions, ({ payload }) => {
-		return fetchPriemPayForms(
+		return priemPayFormsRest(
 			payload.filial.ID,
 			payload.inst.ID,
 			payload.direction.ID,

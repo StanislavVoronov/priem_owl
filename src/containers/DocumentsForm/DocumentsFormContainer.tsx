@@ -49,13 +49,6 @@ class DocumentsFormContainer extends React.Component<IProps, IState> {
 		// this.setState({ requiredDocuments: [9, 10, ...needDocuments] });
 	}
 
-	togglePanel = (index: number) => () => {
-		// if (this.state.panelStatus.includes(index)) {
-		// 	this.setState({ panelStatus: this.state.panelStatus.filter(item => item !== index) });
-		// } else {
-		// 	this.setState({ panelStatus: [...this.state.panelStatus, index] });
-		// }
-	};
 	onChangeData = (data: IDocument, index: number) => {
 		this.setState(state => ({
 			...state,

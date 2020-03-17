@@ -53,7 +53,7 @@ const RegFormView = (props: IProps) => {
 
 			<Autocomplete
 				title="Имя"
-				defaultValue={"stas"}
+				defaultValue={values.firstName}
 				onChange={defaultOnChange}
 				name="firstName"
 				required

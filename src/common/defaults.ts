@@ -3,6 +3,7 @@ import { IContactsForm, IEducationForm, IPersonForm } from '$common';
 
 export const defaultDocument: IDocument = {
 	type: null,
+	file: null,
 	subType: null,
 	government: { id: 1, name: 'Россия' },
 };

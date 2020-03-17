@@ -27,8 +27,16 @@ const DocumentItem = (props: IProps) => {
 		deleteDoc(index);
 	};
 	const onTogglePanel = () => {
-		console.log(index);
 		onToggle(index);
+	};
+
+	const onChangeDepartment = (data: IFormField) => {
+		const newDoc = {
+			...document,
+			[data.name]: data.value,
+		};
+
+		onChange(newDoc, index);
 	};
 
 	const { type, subType } = document;
@@ -37,8 +45,7 @@ const DocumentItem = (props: IProps) => {
 		<ExpansionPanel
 			expanded={expanded}
 			className={classes.wrapper}
-			classes={{ root: classes.expansionPanel, expanded: classes.panelExpanded }}
-			key={`${index}--${document.series}-${document.num}`}>
+			classes={{ root: classes.expansionPanel, expanded: classes.panelExpanded }}>
 			<div
 				className={classNames(classes.header, { [classes.openPanel]: expanded }, { [classes.closedPanel]: !expanded })}>
 				<b>
@@ -81,10 +88,9 @@ const DocumentItem = (props: IProps) => {
 						<React.Fragment>
 							{type && type.id === 1 && subType && subType.id === 1 ? (
 								<TextInput
-									onChange={onChangeData}
-									name={`documents[${index}].codeDepartment`}
+									name="codeDepartment"
+									onChange={onChangeDepartment}
 									label="Код подразделения"
-									type="number"
 									placeholder={'Введите код подразделения'}
 								/>
 							) : null}

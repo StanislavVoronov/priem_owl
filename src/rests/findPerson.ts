@@ -12,7 +12,7 @@ export interface IFindPersonRequest {
 export interface IFindPersonResponse {
 	ID: number;
 }
-export const fetchFindPerson = (data: IPerson) => {
+export const findPersonRest = (data: IPerson) => {
 	const { firstName, birthday, lastName, middleName = '' } = data;
 
 	const payload = {

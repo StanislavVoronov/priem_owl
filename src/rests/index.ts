@@ -13,3 +13,4 @@ export * from './priemPayForms';
 export * from './priemGroups';
 export * from './createPerson';
 export * from './updateAddress';
+export * from './uploadDocument';

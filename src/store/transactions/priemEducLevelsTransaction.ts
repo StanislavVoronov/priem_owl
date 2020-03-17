@@ -7,7 +7,7 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { ITransactionsState } from './transactionsModels';
-import { fetchPriemEducLevels } from '$rests';
+import { priemEducLevelsRest } from '$rests';
 
 export const priemEducLevelsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemEducationLevels,
@@ -22,5 +22,5 @@ export const priemEducLevelsTransactionSelector = createSelector(
 );
 
 export const priemEducLevelSaga = sagaEffects.rest(priemEducLevelsTransactionActions, ({ payload }) => {
-	return fetchPriemEducLevels(payload.filial.ID);
+	return priemEducLevelsRest(payload.filial.ID);
 }, true);

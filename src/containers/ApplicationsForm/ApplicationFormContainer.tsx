@@ -99,9 +99,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		payForms,
 		applications,
 	} = applicationsFormSelector(state);
-
-	console.log("disabled", disabledAddButton);
-
+	
 	return {
 		educFormDictionary,
 		payFormDictionary,

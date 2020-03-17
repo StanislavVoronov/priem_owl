@@ -46,13 +46,7 @@ const DocumentsFormView = (props: IProps) => {
 
 	return (
 		<>
-			<List
-				component="div"
-				subheader={
-					<div className={classes.needDocTitle}>
-						Список необходимых документов
-					</div>
-				}>
+			<List component="div" subheader={<div className={classes.needDocTitle}>Список необходимых документов</div>}>
 				<ul className={classes.list}>
 					<li className={classes.tick}>Документ, удостоверающий личность</li>
 					<li className={classes.tick}>Документ о регистрации места жительства</li>
@@ -65,13 +59,13 @@ const DocumentsFormView = (props: IProps) => {
 				</ul>
 			</List>
 			{documents.map((doc: IDocument, index: number) => {
-				const { type } = doc;
+				const { type, subType } = doc;
 
 				const subTypesDictionary = getSubTypeDictionary(type && type.id, personDocDictionary, educationDictionary);
 
 				return (
 					<DocumentItem
-						key={`${type && type.id}-${doc.series}-${doc.num}-${index}`}
+						key={`${index}`}
 						governmentDictionary={governmentDictionary.result}
 						docTypesDictionary={props.docTypesDictionary.result}
 						subDocTypesDictionary={subTypesDictionary}

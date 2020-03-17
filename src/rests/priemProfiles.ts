@@ -6,16 +6,18 @@ interface IPriemProfilesResponse {
 }
 
 interface IPriemProfilesRequest {
-	FILIAL: number;
-	INST: number;
-	DIR: number;
+	filial: number;
+	inst: number;
+	dir: number;
+	noPayForms: number[]
 }
 
-export const fetchPriemProfiles = (filialId: number, instituteId: number, directionId: number) => {
+export const priemProfilesRest = (filial: number, inst: number, dir: number, noPayForms: number[] = [16, 20]) => {
 	const payload = {
-		FILIAL: filialId,
-		INST: instituteId,
-		DIR: directionId,
+		filial,
+		inst,
+		dir,
+		noPayForms,
 	};
 
 	return PriemApi.select<IPriemProfilesRequest, IPriemProfilesResponse>(PriemRestApi.FetchPriemProfiles, payload);

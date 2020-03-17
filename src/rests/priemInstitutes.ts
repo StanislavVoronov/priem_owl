@@ -5,12 +5,14 @@ interface IFetchResponse {
 }
 interface IFetchRequest {
 	filial: number;
-	eduLevel: number;
+	educLevel: number;
+	noPayForms: number[]
 }
-export const fetchPriemInstitutes = (filialId: number, eduLevelId: number) => {
+export const priemInstRest = (filialId: number, eduLevelId: number, noPayForms: number[] = [16, 20]) => {
 	const payload = {
 		filial: filialId,
-		eduLevel: eduLevelId
+		educLevel: eduLevelId,
+		noPayForms,
 	};
 
 	return PriemApi.select<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemInstitutes, payload);

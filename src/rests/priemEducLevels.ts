@@ -7,18 +7,16 @@ interface IPriemEducLevelsResponse {
 
 interface IPriemEducLevelsRequest {
 	filial: number;
+	noPayForms: number[]
 }
 
-interface IPayload {
-	filialId: number;
-}
-
-export const fetchPriemEducLevels = (
-	filialId: number
+export const priemEducLevelsRest = (
+	filial: number, noPayForms: number[] = [16, 20]
 ) => {
 
 	const payload = {
-		filial: filialId,
+		filial,
+		noPayForms
 	};
 
 	return PriemApi.select<IPriemEducLevelsRequest, IPriemEducLevelsResponse>(PriemRestApi.FetchPriemEducationLevels, payload)

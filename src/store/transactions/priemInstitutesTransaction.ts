@@ -7,7 +7,7 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { ITransactionsState } from './transactionsModels';
-import { fetchPriemInstitutes } from '$rests';
+import { priemInstRest } from '$rests';
 
 export const priemInstitutesTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemInstitutes,
@@ -22,5 +22,5 @@ export const priemInstitutesTransactionSelector = createSelector(
 );
 
 export const priemInstsSaga = sagaEffects.rest(priemInstitutesTransactionActions, ({ payload }) => {
-	return fetchPriemInstitutes(payload.filial.ID, payload.eduLevel.ID);
+	return priemInstRest(payload.filial.ID, payload.eduLevel.ID);
 }, true);

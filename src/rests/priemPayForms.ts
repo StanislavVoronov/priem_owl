@@ -1,7 +1,3 @@
-import { IServerError, IDictionary, priemEducFormsTransactionActions } from '$common';
-import { ThunkAction } from 'redux-thunk';
-import { IRootState } from '$store';
-import { Action } from 'redux';
 import { PriemApi, PriemRestApi } from '$services';
 
 interface IFetchResponse {
@@ -10,18 +6,20 @@ interface IFetchResponse {
 }
 
 interface IFetchRequest {
-	FILIAL: number;
-	INST: number;
-	DIR: number;
-	FOE: number[];
+	filial: number;
+	inst: number;
+	dir: number;
+	educForms: number[];
+	noPayForms: number[],
 }
 
-export const fetchPriemPayForms = (filialId: number, instituteId: number, directionId: number, educForms: number[]) => {
+export const priemPayFormsRest = (filial: number, inst: number, dir: number, educForms: number[], noPayForms: number[] = [16, 20]) => {
 	const payload = {
-		FILIAL: filialId,
-		INST: instituteId,
-		DIR: directionId,
-		FOE: educForms,
+		filial,
+		inst,
+		dir,
+		noPayForms,
+		educForms,
 	};
 
 	return PriemApi.select<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemPayForms, payload);

@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { verAccountFormSelector, IRootState, submitVerAccountForm, createPersonTransactionSelector } from '$store';
 import {
-	IVerAccountForm,
-	IServerError,
-	ITransaction,
-} from '$common';
+	verAccountFormSelector,
+	IRootState,
+	submitVerAccountForm,
+	createPersonTransactionSelector,
+	updateAddressTransactionSelector,
+} from '$store';
+import { IVerAccountForm, IServerError, ITransaction, AddressType } from '$common';
 import VerAccountFormView from './VerAccountFormView';
 import { Form, IFormField, IFormProps } from '@black_bird/components';
 import { prop } from '@black_bird/utils';
@@ -27,7 +29,7 @@ class AccountVerificationContainer extends React.Component<IProps> {
 	};
 
 	render() {
-		const { loading, onSubmit, error, form} = this.props;
+		const { loading, onSubmit, error, form } = this.props;
 
 		return (
 			<Form
@@ -44,13 +46,20 @@ class AccountVerificationContainer extends React.Component<IProps> {
 }
 const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = state => {
 	const form = verAccountFormSelector(state);
-	const createPersonDataITransaction = createPersonTransactionSelector(state);
-
+	const createPersonDataTransaction = createPersonTransactionSelector(state);
+	const updateLiveAddressTransaction = updateAddressTransactionSelector(state, AddressType.Live);
+	const updateRegAddressTransaction = updateAddressTransactionSelector(state, AddressType.Reg);
 
 	return {
 		form,
-		loading: createPersonDataITransaction.isFetching,
-		error: createPersonDataITransaction.exception,
+		loading:
+			createPersonDataTransaction.isFetching ||
+			(updateLiveAddressTransaction && updateLiveAddressTransaction.isFetching) ||
+			(updateRegAddressTransaction && updateRegAddressTransaction.isFetching),
+		error:
+			createPersonDataTransaction.exception ||
+			updateLiveAddressTransaction.exception ||
+			updateRegAddressTransaction.exception,
 	};
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {

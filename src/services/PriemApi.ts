@@ -1,14 +1,13 @@
-import { JsonRequest, PriemRestApi } from '$services';
+import { PriemRestApi } from '$services';
+import { isNull, omitBy } from '$common';
+import { JsonRequest } from './JsonRequest';
+import { UploadDocument } from './UploadDocument';
 
-interface IPriemApiResponse<R> {
-	result: R;
-	error: any;
-}
 class PriemApi {
 	static root: string = '/dev-bin';
 	static path: string = '/priem_api.fcgi';
 	static check = <Q, R>(api: string, payload: Q, extraData: object = {}): Promise<R[]> => {
-		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, payload, extraData);
+		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, payload);
 
 		return Request.post().then((response: { result: R[] }) => Promise.resolve(response.result));
 	};
@@ -17,8 +16,13 @@ class PriemApi {
 
 		return Request.post().then((response: { result: R[] }) => Promise.resolve(response.result));
 	};
-	static post = <Q, R>(api: PriemRestApi, payload: Q, extraData: object = {}): Promise<R> => {
-		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, payload, extraData);
+	static post = <Q, R>(api: PriemRestApi, payload: Q): Promise<R> => {
+		const Request = new JsonRequest(PriemApi.root, PriemApi.path, api, omitBy(payload, isNull));
+
+		return Request.post();
+	};
+	static uploadDoc = <Q, R>(api: PriemRestApi, payload: Q, doc: File | null = null): Promise<R> => {
+		const Request = new UploadDocument(PriemApi.root, PriemApi.path, api, omitBy(payload, isNull), doc);
 
 		return Request.post();
 	};

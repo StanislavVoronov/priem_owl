@@ -1,4 +1,3 @@
-
 import { PriemApi, PriemRestApi } from '$services';
 
 interface IFetchResponse {
@@ -7,18 +6,19 @@ interface IFetchResponse {
 }
 
 interface IFetchRequest {
-	FILIAL: number;
-	INST: number;
-	DIR: number;
+	filial: number;
+	inst: number;
+	dir: number;
+	noPayForms: number[]
 }
 
-export const fetchPriemEducForms = (filialId: number, instituteId: number, directionId: number) => {
+export const priemEducFormsRest = (filial: number, inst: number, dir: number, noPayForms: number[] = [16, 20]) => {
 	const payload = {
-		FILIAL: filialId,
-		INST: instituteId,
-		DIR: directionId,
+		filial,
+		inst,
+		dir,
+		noPayForms,
 	};
 
 	return PriemApi.select<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemEducationForms, payload);
 };
-

@@ -11,8 +11,9 @@ export * from './priemPayFormsTransaction';
 export * from './transactionsModels'
 export * from './priemEducFormsTransaction'
 export * from './priemProfilesTransaction'
-export * from './priemAdmGroups'
+export * from './priemAdmGroupsTransaction'
 export * from './transactionsSagas'
 export * from './updatePhoneTransaction';
 export * from './createPersonTransaction';
 export * from './updateAdressTransaction';
+export * from './uploadDocumentsTransaction';

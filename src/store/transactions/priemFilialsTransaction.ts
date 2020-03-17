@@ -6,7 +6,7 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { ITransactionsState } from './transactionsModels';
-import { fetchPriemFilials } from '$rests';
+import { priemFilialsRest } from '$rests';
 
 export const priemFilialsTransactionActions = createTransactionActions('PRIEM_FILIALS');
 
@@ -17,4 +17,4 @@ export const priemFilialsTransactionSelector = createSelector(
 	(state: ITransactionsState) => state.priemFilials,
 );
 
-export const priemFilialsSaga = sagaEffects.rest(priemFilialsTransactionActions, () => fetchPriemFilials());
+export const priemFilialsSaga = sagaEffects.rest(priemFilialsTransactionActions, () => priemFilialsRest());

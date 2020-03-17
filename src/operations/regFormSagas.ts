@@ -9,7 +9,7 @@ import {
 	handleNextStep,
 	isUniqueLoginTransactionSelector,
 } from '$store';
-import { fetchCheckLogin, fetchCreateLogin, fetchFindPerson } from '$rests';
+import { checkLoginRest, createLoginRest, findPersonRest } from '$rests';
 import { cyrillToLatin, generatePassword } from '$common';
 
 function* createNewLogin() {
@@ -31,7 +31,7 @@ function* createNewLogin() {
 			try {
 				yield sagaEffects.put(checkLoginTransactionActions.request());
 
-				const result = yield sagaEffects.call(fetchCheckLogin, login);
+				const result = yield sagaEffects.call(checkLoginRest, login);
 
 				yield sagaEffects.put(checkLoginTransactionActions.success(result));
 			} catch (e) {
@@ -50,8 +50,8 @@ function* createNewLogin() {
 
 export const regFormSagas = [
 	sagaEffects.takeEvery(submitRegFormAction, createNewLogin),
-	sagaEffects.rest(checkLoginTransactionActions, ({ payload }) => fetchCheckLogin(payload.login)),
-	sagaEffects.rest(findPersonTransactionActions, ({ payload }) => fetchFindPerson(payload.data)),
+	sagaEffects.rest(checkLoginTransactionActions, ({ payload }) => checkLoginRest(payload.login)),
+	sagaEffects.rest(findPersonTransactionActions, ({ payload }) => findPersonRest(payload.data)),
 
 	sagaEffects.takeLatest(generateUserPasswordAction, function*({ payload }: any) {
 		const password = generatePassword();
@@ -64,7 +64,7 @@ export const regFormSagas = [
 		}
 	}),
 	sagaEffects.rest(createLoginTransactionActions, ({ payload }) => {
-		return fetchCreateLogin(payload.login, payload.password);
+		return createLoginRest(payload.login, payload.password);
 	}),
 	sagaEffects.takeEvery(createLoginTransactionActions.success, function*() {
 		const data = yield sagaEffects.select(regFormSelector);

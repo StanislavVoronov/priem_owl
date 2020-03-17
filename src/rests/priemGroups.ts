@@ -17,7 +17,7 @@ interface IFetchRequest {
 	educForm: number;
 }
 
-export const fetchPriemGroups = (
+export const priemAdmGroupsRest = (
 	filialId: number,
 	instituteId: number,
 	directionId: number,

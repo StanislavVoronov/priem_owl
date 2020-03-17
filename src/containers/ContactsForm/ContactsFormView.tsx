@@ -17,8 +17,6 @@ const ContactsFormView = (props: IProps) => {
 	const { form, governmentDictionary } = props;
 	const { values, onChange } = form;
 
-	console.log('governmentDictionary', governmentDictionary);
-
 	return (
 		<>
 			<H2>Адрес регистрации</H2>

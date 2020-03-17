@@ -1,21 +1,21 @@
-export class JsonRequest {
+export class UploadDocument {
 	host: string = '';
 	path: string = '';
 	body: any = '';
 
-	constructor(host: string, path: string, api: string, payload: any, fileName?: string) {
+	constructor(host: string, path: string, api: string, payload: any, doc: File | null) {
 		this.host = host;
 		this.path = path;
 		const body = new FormData();
 		body.append('api', api);
-		if (payload) {
-			if (fileName) {
-				body.append('values', payload, fileName);
-			} else {
-				body.append('values', JSON.stringify(payload));
-			}
-		}
 
+		body.append('values', JSON.stringify(payload));
+
+		if (doc) {
+			const page = new Blob([doc], { type: doc.type });
+
+			body.append('page', page);
+		}
 		this.body = body;
 	}
 	post = (): any => {

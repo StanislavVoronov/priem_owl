@@ -19,4 +19,5 @@ export interface ITransactionsState {
 	priemAdmGroups: Record<string, ITransaction<IAdmDictionaryItem>>;
 	updatePhones: Record<string, ITransaction<string>>;
 	updateAddresses: Record<string, ITransaction<string>>;
+	uploadDocuments: Record<string, ITransaction<string>>;
 }

@@ -10,7 +10,7 @@ export interface ICreateLoginResponse {
 	count: number;
 }
 
-export const fetchCreateLogin = (login: string, password: string) =>
+export const createLoginRest = (login: string, password: string) =>
 	PriemApi.post<ICreateLoginRequest, ICreateLoginResponse>(PriemRestApi.AddEnroll, {
 		login,
 		password,

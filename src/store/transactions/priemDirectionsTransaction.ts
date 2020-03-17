@@ -7,7 +7,7 @@ import {
 	createTransactionReducer,
 	sagaEffects,
 } from '@black_bird/utils';
-import { fetchPriemDirections } from '$rests';
+import { priemDirectionRest } from '$rests';
 
 export const priemDirectionsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemDirections,
@@ -26,5 +26,5 @@ export const priemDirectionsTransactionSelector = createSelector(
 );
 
 export const priemDirectionSaga = sagaEffects.rest(priemDirectionsTransactionActions, ({ payload }) => {
-	return fetchPriemDirections(payload.filial.ID, payload.educLevel.ID, payload.inst.ID);
+	return priemDirectionRest(payload.filial.ID, payload.educLevel.ID, payload.inst.ID);
 }, true);

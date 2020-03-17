@@ -11,12 +11,15 @@ import {
 	createNewFolderSagas,
 	documentsFormSagas,
 	verAccountFormSagas,
-	createPersonContactsSagas
+	createPersonContactsSagas,
+	uploadDocumentsSagas,
 } from '$operations';
 
 import { initAction, priemFilialsTransactionActions, transactionsSagas } from '$store';
 
 const rootSagas = [
+	...uploadDocumentsSagas,
+	...createPersonContactsSagas,
 	...createPersonContactsSagas,
 	...createNewFolderSagas,
 	...verAccountFormSagas,

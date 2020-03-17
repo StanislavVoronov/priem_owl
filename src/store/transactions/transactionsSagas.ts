@@ -1,6 +1,6 @@
 import { payFormsSaga } from './priemPayFormsTransaction';
 import { educFormsSaga } from './priemEducFormsTransaction';
-import { priemAdmGroupsSaga } from './priemAdmGroups';
+import { priemAdmGroupsSaga } from './priemAdmGroupsTransaction';
 import { priemProfilesSaga } from './priemProfilesTransaction';
 import { priemDirectionSaga } from './priemDirectionsTransaction';
 import { priemInstsSaga } from './priemInstitutesTransaction';
@@ -10,6 +10,7 @@ import { updatePhoneSaga } from './updatePhoneTransaction';
 import { createVerCodeSaga } from './createVerCodeTransaction';
 import { createPersonSaga } from './createPersonTransaction';
 import { updateAddressSaga } from './updateAdressTransaction';
+import { uploadDocumentsSaga } from './uploadDocumentsTransaction';
 
 
 export const transactionsSagas = [
@@ -25,4 +26,5 @@ export const transactionsSagas = [
 	createPersonSaga,
 	createVerCodeSaga,
 	updateAddressSaga,
+	uploadDocumentsSaga,
 ];

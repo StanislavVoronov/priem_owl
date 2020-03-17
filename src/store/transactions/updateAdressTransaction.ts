@@ -21,8 +21,8 @@ export const updateAddressesReducer = createTransactionReducer(updateAddressTran
 
 export const updateAddressTransactionSelector = createSelector(
 	prop('transactions'),
-	(state: any, key: string) => key,
-	(state: ITransactionsState, phone: string) => state.updateAddresses[phone],
+	(state: any, key: AddressType) => key,
+	(state: ITransactionsState, phone: AddressType) => state.updateAddresses[phone],
 );
 
 export const updateAddressSaga = sagaEffects.rest(updateAddressTransactionActions, function*({ payload }) {

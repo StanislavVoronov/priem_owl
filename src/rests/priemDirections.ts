@@ -9,18 +9,20 @@ interface IPriemDirectionsRequest {
 	filial: number;
 	inst: number;
 	educLevel: number;
+	noPayForms: number[]
 }
 
-interface IPayload {
-	filialId: number;
-	instId: number;
-	educLevelId: number;
-}
-export const fetchPriemDirections = (filialId: number, educLevelId: number, instId: number) => {
+export const priemDirectionRest = (
+	filial: number,
+	educLevel: number,
+	inst: number,
+	noPayForms: number[] = [16, 20],
+) => {
 	const payload = {
-		filial: filialId,
-		inst: instId,
-		educLevel: educLevelId,
+		filial,
+		inst,
+		educLevel,
+		noPayForms,
 	};
 
 	return PriemApi.select<IPriemDirectionsRequest, IPriemDirectionsResponse>(PriemRestApi.FetchPriemDirections, payload);

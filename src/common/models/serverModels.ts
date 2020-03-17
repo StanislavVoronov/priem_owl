@@ -64,7 +64,7 @@ export interface IPriemApiServerResponse {
 }
 
 export interface IUploadDocRequest {
-	mime: string | null;
+	mime: string;
 	type: number;
 	stype: number | null;
 	seria: string;

@@ -28,11 +28,6 @@ export interface IGovernmentSelectItem extends IDictionary {
 	phone_code: string;
 }
 
-export interface IClasses {
-	classes: any;
-}
-
-
 export interface IAdmDictionaryItem {
 	ID: number;
 	NAME: string;
@@ -47,7 +42,7 @@ export interface IDocument {
 	num?: string;
 	issieBy?: string;
 	date?: string;
-	file?: File;
+	file: File | null;
 	codeDepartment?: string;
 	[key: string]: any
 }

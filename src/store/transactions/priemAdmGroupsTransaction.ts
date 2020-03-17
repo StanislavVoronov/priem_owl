@@ -3,7 +3,7 @@ import { TRANSACTION_NAMES } from '$actions';
 import { createSelector, prop } from '@black_bird/utils';
 import { IAdmDictionaryItem } from '$common';
 import { ITransactionsState } from './transactionsModels';
-import { fetchPriemGroups } from '$rests';
+import { priemAdmGroupsRest } from '$rests';
 
 export const priemAdmGroupsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemGroups,
@@ -35,7 +35,7 @@ export const priemAdmGroupsTransactionSelector = createSelector(
 );
 
 export const priemAdmGroupsSaga = sagaEffects.rest(priemAdmGroupsTransactionActions, ({ payload }) => {
-	return fetchPriemGroups(
+	return priemAdmGroupsRest(
 		payload.filial.ID,
 		payload.inst.ID,
 		payload.direction.ID,
