@@ -1,4 +1,4 @@
-import { PriemApi, PriemRestApi } from '$services';
+import { PriemApi, PRIEM_API_NAMES } from '$services';
 
 interface IPriemEducLevelsResponse {
 	ID: number;
@@ -19,5 +19,5 @@ export const priemEducLevelsRest = (
 		noPayForms
 	};
 
-	return PriemApi.select<IPriemEducLevelsRequest, IPriemEducLevelsResponse>(PriemRestApi.FetchPriemEducationLevels, payload)
+	return PriemApi.select<IPriemEducLevelsRequest, IPriemEducLevelsResponse>(PRIEM_API_NAMES.FetchPriemEducationLevels, payload)
 };

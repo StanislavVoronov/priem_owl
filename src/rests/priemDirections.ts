@@ -1,4 +1,4 @@
-import { PriemApi, PriemRestApi } from '$services';
+import { PriemApi, PRIEM_API_NAMES } from '$services';
 
 interface IPriemDirectionsResponse {
 	ID: number;
@@ -25,5 +25,5 @@ export const priemDirectionRest = (
 		noPayForms,
 	};
 
-	return PriemApi.select<IPriemDirectionsRequest, IPriemDirectionsResponse>(PriemRestApi.FetchPriemDirections, payload);
+	return PriemApi.select<IPriemDirectionsRequest, IPriemDirectionsResponse>(PRIEM_API_NAMES.FetchPriemDirections, payload);
 };

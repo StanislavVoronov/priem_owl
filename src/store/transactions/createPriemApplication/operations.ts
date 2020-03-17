@@ -3,7 +3,7 @@ import { IRootState } from '$store';
 import { Action } from 'redux';
 import { createPriemApplicationActions } from '$common';
 
-import { PriemRestApi, PriemApi } from '$services';
+import { PRIEM_API_NAMES, PriemApi } from '$services';
 import { IServerError } from '$common';
 
 interface ICreatePriemApplication {
@@ -34,7 +34,7 @@ export const createPriemApplicationTransaction = (
 	dispatch(createPriemApplicationActions.request(data.admId));
 
 	return PriemApi.check<ICreatePriemApplicationRequest, ICreatePriemApplicationResponse>(
-		PriemRestApi.AddPriemApplication,
+		PRIEM_API_NAMES.AddPriemApplication,
 		payload,
 	)
 		.then(response => {

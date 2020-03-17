@@ -1,7 +1,7 @@
 import { IDocument, IUploadDocRequest, uploadDocumentsActions } from '$common';
 
 import moment from 'moment';
-import { PriemApi, PriemRestApi } from '$services';
+import { PriemApi, PRIEM_API_NAMES } from '$services';
 
 export const uploadDocumentRest = (doc: IDocument) => {
 	const document: IUploadDocRequest = {
@@ -15,5 +15,5 @@ export const uploadDocumentRest = (doc: IDocument) => {
 		iss_gov: doc.government ? doc.government.id : 1,
 	};
 
-	return PriemApi.uploadDoc(PriemRestApi.AddDocuments, document, doc.file);
+	return PriemApi.uploadDoc(PRIEM_API_NAMES.AddDocuments, document, doc.file);
 };

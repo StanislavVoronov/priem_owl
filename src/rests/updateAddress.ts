@@ -1,7 +1,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { IRootState } from '$store';
 import { Action } from 'redux';
-import { PriemApi, PriemRestApi } from '$services';
+import { PriemApi, PRIEM_API_NAMES } from '$services';
 
 export interface IContactRequest {
 	address: string;
@@ -17,5 +17,5 @@ export const updateAddressRest = (address: string, type: number) => {
 		type,
 	};
 
-	return PriemApi.post<IContactRequest, IContactResponse>(PriemRestApi.UpdateAddress, payload);
+	return PriemApi.post<IContactRequest, IContactResponse>(PRIEM_API_NAMES.UpdateAddress, payload);
 };

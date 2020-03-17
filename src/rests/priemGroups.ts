@@ -2,7 +2,7 @@ import { IServerError, IDictionary, priemEducFormsTransactionActions } from '$co
 import { ThunkAction } from 'redux-thunk';
 import { IRootState } from '$store';
 import { Action } from 'redux';
-import { PriemApi, PriemRestApi } from '$services';
+import { PriemApi, PRIEM_API_NAMES } from '$services';
 
 interface IFetchResponse {
 	ID: number;
@@ -32,5 +32,5 @@ export const priemAdmGroupsRest = (
 		payForm,
 	};
 
-	return PriemApi.select<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemGroups, payload);
+	return PriemApi.select<IFetchRequest, IFetchResponse>(PRIEM_API_NAMES.FetchPriemGroups, payload);
 };

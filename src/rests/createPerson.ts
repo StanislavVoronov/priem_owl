@@ -1,4 +1,4 @@
-import { EnrollRestApi, PriemEnroll } from '$services';
+import { ENROLL_API_NAMES, EnrollApi } from '$services';
 import { ReactText } from 'react';
 import { IDictionary, moment, ServerBoolean } from '$common';
 
@@ -53,5 +53,5 @@ export const createPersonRest = (data: ICreatePersonPayload) => {
 		cheat_type: 0,
 	};
 
-	return PriemEnroll.post<ICreatePersonDataRequest, ICreatePersonDataResponse>(EnrollRestApi.SetNewNp, payload);
+	return EnrollApi.post<ICreatePersonDataRequest, ICreatePersonDataResponse>(ENROLL_API_NAMES.SetNewNp, payload);
 };

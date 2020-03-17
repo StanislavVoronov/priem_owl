@@ -3,18 +3,13 @@ export class JsonRequest {
 	path: string = '';
 	body: any = '';
 
-	constructor(host: string, path: string, api: string, payload: any, fileName?: string) {
+	constructor(host: string, path: string, api: string, payload: any) {
 		this.host = host;
 		this.path = path;
 		const body = new FormData();
 		body.append('api', api);
-		if (payload) {
-			if (fileName) {
-				body.append('values', payload, fileName);
-			} else {
-				body.append('values', JSON.stringify(payload));
-			}
-		}
+
+		body.append('values', JSON.stringify(payload));
 
 		this.body = body;
 	}

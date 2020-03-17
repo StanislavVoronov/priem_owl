@@ -1,4 +1,4 @@
-import { PriemApi, PriemRestApi } from '$services';
+import { PriemApi, PRIEM_API_NAMES } from '$services';
 
 interface IPriemProfilesResponse {
 	ID: number;
@@ -20,5 +20,5 @@ export const priemProfilesRest = (filial: number, inst: number, dir: number, noP
 		noPayForms,
 	};
 
-	return PriemApi.select<IPriemProfilesRequest, IPriemProfilesResponse>(PriemRestApi.FetchPriemProfiles, payload);
+	return PriemApi.select<IPriemProfilesRequest, IPriemProfilesResponse>(PRIEM_API_NAMES.FetchPriemProfiles, payload);
 };

@@ -1,4 +1,4 @@
-import { PriemApi, PriemRestApi } from '$services';
+import { PriemApi, PRIEM_API_NAMES } from '$services';
 interface IFetchResponse {
 	ID: number;
 	NAME: string;
@@ -15,5 +15,5 @@ export const priemInstRest = (filialId: number, eduLevelId: number, noPayForms: 
 		noPayForms,
 	};
 
-	return PriemApi.select<IFetchRequest, IFetchResponse>(PriemRestApi.FetchPriemInstitutes, payload);
+	return PriemApi.select<IFetchRequest, IFetchResponse>(PRIEM_API_NAMES.FetchPriemInstitutes, payload);
 };

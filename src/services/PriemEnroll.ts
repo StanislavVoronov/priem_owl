@@ -1,30 +1,16 @@
-import { EnrollRestApi } from './restApiNames';
+import { ENROLL_API_NAMES } from './restApiNames';
+import { JsonRequest } from './JsonRequest';
+import { isNull, omitBy } from '$common';
 
-class PriemEnroll {
+class EnrollApi extends JsonRequest {
 	public static host = 'https://monitoring.mgutm.ru/dev-bin';
 	public static path = '/priem_enroll_verify';
 
-	public static post = <Request, Response>(api: EnrollRestApi, payload: Request): Promise<Response> => {
-		const body = new FormData();
-		body.append('api', api);
-		body.append('values', JSON.stringify(payload));
+	static post = <Q, R>(api: ENROLL_API_NAMES, payload: Q): Promise<R> => {
+		const Request = new JsonRequest(EnrollApi.host, EnrollApi.path, api, omitBy(payload, isNull));
 
-		return fetch(`${PriemEnroll.host}${PriemEnroll.path}`, {
-			method: 'POST',
-			credentials: 'include',
-			body,
-		})
-			.then(response => {
-				return response.json();
-			})
-			.then(data => {
-				if (data.error) {
-					return Promise.reject({ message: data.error.string, type: data.error.id });
-				}
-
-				return Promise.resolve(data);
-			});
+		return Request.post();
 	};
 }
 
-export default PriemEnroll;
+export default EnrollApi;

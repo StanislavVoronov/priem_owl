@@ -1,5 +1,5 @@
 import PriemApi from './PriemApi';
-import PriemEnroll from './PriemEnroll';
+import EnrollApi from './PriemEnroll';
 export * from './restApiNames';
 
-export { PriemApi, PriemEnroll };
+export { PriemApi, EnrollApi };

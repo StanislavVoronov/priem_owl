@@ -1,4 +1,4 @@
-import { PriemApi, PriemRestApi } from '$services';
+import { PriemApi, PRIEM_API_NAMES } from '$services';
 
 interface ICheckLoginRequest {
 	login: string | number;
@@ -10,5 +10,5 @@ export interface ICheckLoginResponse {
 export const checkLoginRest = (login: string) => {
 	const payload = { login };
 
-	return PriemApi.check<ICheckLoginRequest, ICheckLoginResponse>(PriemRestApi.CheckUniqueLogin, payload)
+	return PriemApi.check<ICheckLoginRequest, ICheckLoginResponse>(PRIEM_API_NAMES.CheckUniqueLogin, payload)
 };

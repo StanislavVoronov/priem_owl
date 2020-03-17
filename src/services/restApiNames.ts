@@ -1,4 +1,4 @@
-export enum PriemRestApi {
+export enum PRIEM_API_NAMES {
 	FindPerson = 'findNPUID',
 	UpdateAddress = 'uDATA_PLACE_INFO',
 	CheckUniqueLogin = 'testUniqueEnroll',
@@ -16,7 +16,7 @@ export enum PriemRestApi {
 	AddPriemApplication = 'iDATA_APPLICATIONS',
 }
 
-export enum EnrollRestApi {
+export enum ENROLL_API_NAMES {
 	VerNewNp = 'vernewnp',
 	SetNp = 'setnp',
 	SetNewNp = 'setnewnp',

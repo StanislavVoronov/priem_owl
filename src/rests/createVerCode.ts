@@ -1,6 +1,6 @@
 import { VerificationMethod } from '$common';
 
-import { EnrollRestApi, PriemEnroll } from '$services';
+import { ENROLL_API_NAMES, EnrollApi } from '$services';
 
 export interface ICreateVerificationCodeRequest {
 	email: string;
@@ -26,8 +26,8 @@ export const createVerCodeRest = (email: string, mobilePhone: string, typeTransp
 		payload.not_use_email = 1;
 	}
 
-	return PriemEnroll.post<ICreateVerificationCodeRequest, ICreateVerificationCodeResponse>(
-		EnrollRestApi.VerNewNp,
+	return EnrollApi.post<ICreateVerificationCodeRequest, ICreateVerificationCodeResponse>(
+		ENROLL_API_NAMES.VerNewNp,
 		payload,
 	);
 };

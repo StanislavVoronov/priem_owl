@@ -1,4 +1,4 @@
-import { PriemApi, PriemRestApi } from '$services';
+import { PriemApi, PRIEM_API_NAMES } from '$services';
 
 interface ICreateLoginRequest {
 	login: string;
@@ -11,7 +11,7 @@ export interface ICreateLoginResponse {
 }
 
 export const createLoginRest = (login: string, password: string) =>
-	PriemApi.post<ICreateLoginRequest, ICreateLoginResponse>(PriemRestApi.AddEnroll, {
+	PriemApi.post<ICreateLoginRequest, ICreateLoginResponse>(PRIEM_API_NAMES.AddEnroll, {
 		login,
 		password,
 	});

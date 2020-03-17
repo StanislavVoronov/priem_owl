@@ -1,6 +1,6 @@
 import { IPerson } from '$common';
 import moment from 'moment';
-import { PriemApi, PriemRestApi } from '$services';
+import { PriemApi, PRIEM_API_NAMES } from '$services';
 
 export interface IFindPersonRequest {
 	fname: string;
@@ -22,5 +22,5 @@ export const findPersonRest = (data: IPerson) => {
 		birthdate: moment(birthday).format('YYYY-MM-DD'),
 	};
 
-	return PriemApi.check<IFindPersonRequest, IFindPersonResponse>(PriemRestApi.FindPerson, payload);
+	return PriemApi.check<IFindPersonRequest, IFindPersonResponse>(PRIEM_API_NAMES.FindPerson, payload);
 };

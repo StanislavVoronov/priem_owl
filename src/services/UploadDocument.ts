@@ -1,11 +1,13 @@
-export class UploadDocument {
+import { JsonRequest } from './JsonRequest';
+
+export class UploadDocument extends JsonRequest {
 	host: string = '';
 	path: string = '';
 	body: any = '';
 
 	constructor(host: string, path: string, api: string, payload: any, doc: File | null) {
-		this.host = host;
-		this.path = path;
+		super(host, path, api, payload);
+
 		const body = new FormData();
 		body.append('api', api);
 
@@ -16,23 +18,7 @@ export class UploadDocument {
 
 			body.append('page', page);
 		}
+
 		this.body = body;
 	}
-	post = (): any => {
-		return fetch(`${this.host}${this.path}`, {
-			method: 'POST',
-			credentials: 'include',
-			body: this.body,
-		})
-			.then(response => {
-				return response.json();
-			})
-			.then((data: any) => {
-				if (data.error) {
-					throw new Error(data.error.string);
-				}
-
-				return Promise.resolve(data);
-			});
-	};
 }
