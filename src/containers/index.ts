@@ -6,12 +6,4 @@ import { DocumentsForm } from './DocumentsForm';
 import { VerAccountForm } from './VerAccountForm';
 import { ApplicationsForm } from './ApplicationsForm';
 
-export {
-	RegistrationForm,
-	PersonForm,
-	ContactsForm,
-	EducationForm,
-	DocumentsForm,
-	VerAccountForm,
-	ApplicationsForm,
-};
+export { RegistrationForm, PersonForm, ContactsForm, EducationForm, DocumentsForm, VerAccountForm, ApplicationsForm };

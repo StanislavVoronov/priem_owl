@@ -50,7 +50,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 			}
 
 			case 6: {
-				return  <VerAccountForm />;
+				return <VerAccountForm />;
 			}
 			default: {
 				return null;

@@ -1,6 +1,3 @@
 import DocumentItem from './DocumentItem';
 
-
-export {
-	DocumentItem
-}
+export { DocumentItem };

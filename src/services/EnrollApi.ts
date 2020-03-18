@@ -1,6 +1,5 @@
 import { ENROLL_API_NAMES } from './restApiNames';
 import { JsonRequest } from './JsonRequest';
-import { isNull, omitBy } from '$common';
 
 class EnrollApi extends JsonRequest {
 	public static host = 'https://monitoring.mgutm.ru/dev-bin';

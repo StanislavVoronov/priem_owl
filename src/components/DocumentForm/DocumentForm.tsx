@@ -22,7 +22,7 @@ interface IDocumentFormProps {
 	endFields?: ReactElement<any> | null;
 }
 
-class DocumentForm extends React.PureComponent<IDocumentFormProps, { hasNumber: boolean; file: File | null }> {
+class DocumentForm extends React.PureComponent<IDocumentFormProps, { hasNumber: boolean }> {
 	static defaultProps = {
 		selectDocType: noop,
 		selectDocSubType: noop,
@@ -35,7 +35,6 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { hasNumber: 
 	};
 	state = {
 		hasNumber: false,
-		file: null,
 	};
 	onChangeHasNumber = () => {
 		this.setState({ hasNumber: !this.state.hasNumber });
@@ -58,15 +57,9 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { hasNumber: 
 			name,
 			value: {
 				...document,
-				[field.name]: {
-					name: field.value.name,
-					lastModified: field.value.lastModified,
-					type: field.value.type,
-					size: field.value.size,
-				},
+				[field.name]: field.value,
 			},
 		});
-		this.setState({ file: field.value });
 	};
 
 	render() {
@@ -187,7 +180,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { hasNumber: 
 					) : null}
 					{endFields}
 				</Column>
-				<DownloadFile name="file" file={this.state.file} onChange={this.onDownloadFile} title={fileTitle} />
+				<DownloadFile name="file" file={file} onChange={this.onDownloadFile} title={fileTitle} />
 			</div>
 		);
 	}

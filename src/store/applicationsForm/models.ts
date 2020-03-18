@@ -8,5 +8,5 @@ export interface IAdmGroup {
 	educForm: IAdmDictionaryItem;
 	payForm: IAdmDictionaryItem;
 	educLevel: IAdmDictionaryItem;
-	admGroup: IAdmDictionaryItem
+	admGroup: IAdmDictionaryItem;
 }

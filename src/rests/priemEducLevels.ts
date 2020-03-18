@@ -7,17 +7,17 @@ interface IPriemEducLevelsResponse {
 
 interface IPriemEducLevelsRequest {
 	filial: number;
-	noPayForms: number[]
+	noPayForms: number[];
 }
 
-export const priemEducLevelsRest = (
-	filial: number, noPayForms: number[] = [16, 20]
-) => {
-
+export const priemEducLevelsRest = (filial: number, noPayForms: number[] = [16, 20]) => {
 	const payload = {
 		filial,
-		noPayForms
+		noPayForms,
 	};
 
-	return PriemApi.select<IPriemEducLevelsRequest, IPriemEducLevelsResponse>(PRIEM_API_NAMES.FetchPriemEducationLevels, payload)
+	return PriemApi.select<IPriemEducLevelsRequest, IPriemEducLevelsResponse>(
+		PRIEM_API_NAMES.FetchPriemEducationLevels,
+		payload,
+	);
 };

@@ -15,7 +15,6 @@ import {
 } from '$store';
 import { IRegForm, IFistNameDictionary } from '$common';
 
-
 interface IStateToProps {
 	firstNameDictionary: ITransaction<IFistNameDictionary>;
 	middleNameDictionary: ITransaction<IFistNameDictionary>;
@@ -45,12 +44,12 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 	};
 
 	render() {
-		const { onSubmit, data, error, loading } = this.props;
+		const { onSubmit, data, error, loading = true } = this.props;
 
 		return (
 			<Form
 				error={error}
-				loading={loading}
+				loading={true}
 				loadingText="Поиск личного дела"
 				renderForm={this.renderForm}
 				onSubmit={onSubmit}

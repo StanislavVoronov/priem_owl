@@ -4,7 +4,6 @@ import { IRootState } from '../models';
 import { isForeignerSelector } from './formSelectors';
 import { DEFAULT_TRANSACTION } from './defaults';
 
-
 export const dictionaryStateSelector = (state: IRootState) => {
 	return state.dictionaries;
 };
@@ -34,7 +33,9 @@ export const getNeedDocuments = createSelector(
 	isForeignerSelector,
 	(dictionaries, isForeigner) => {
 		const needDocuments = [9, 10];
-		const dictionary = dictionaries[EDictionaryNameList.DocTypes] ? dictionaries[EDictionaryNameList.DocTypes].result : [];
+		const dictionary = dictionaries[EDictionaryNameList.DocTypes]
+			? dictionaries[EDictionaryNameList.DocTypes].result
+			: [];
 
 		return dictionary.filter((item: IDocument) => {
 			return validateDocument(item) && isForeigner

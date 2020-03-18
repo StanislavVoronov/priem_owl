@@ -9,7 +9,7 @@ interface IFetchRequest {
 	filial: number;
 	inst: number;
 	dir: number;
-	noPayForms: number[]
+	noPayForms: number[];
 }
 
 export const priemEducFormsRest = (filial: number, inst: number, dir: number, noPayForms: number[] = [16, 20]) => {

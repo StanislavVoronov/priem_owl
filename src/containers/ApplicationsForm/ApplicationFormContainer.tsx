@@ -99,7 +99,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		payForms,
 		applications,
 	} = applicationsFormSelector(state);
-	
+
 	return {
 		educFormDictionary,
 		payFormDictionary,

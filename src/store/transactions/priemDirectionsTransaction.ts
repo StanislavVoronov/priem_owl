@@ -25,6 +25,10 @@ export const priemDirectionsTransactionSelector = createSelector(
 	(state: ITransactionsState) => state.priemDirections,
 );
 
-export const priemDirectionSaga = sagaEffects.rest(priemDirectionsTransactionActions, ({ payload }) => {
-	return priemDirectionRest(payload.filial.ID, payload.educLevel.ID, payload.inst.ID);
-}, true);
+export const priemDirectionSaga = sagaEffects.rest(
+	priemDirectionsTransactionActions,
+	({ payload }) => {
+		return priemDirectionRest(payload.filial.ID, payload.educLevel.ID, payload.inst.ID);
+	},
+	true,
+);

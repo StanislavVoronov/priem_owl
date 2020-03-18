@@ -24,7 +24,7 @@
 	color: red;
 }
 
-.deleteDocButtonContainer{
+.deleteDocButtonContainer {
 	padding: 32px 0;
 	display: flex;
 	flex: 1;
@@ -45,9 +45,8 @@
 	background-color: #6da324;
 }
 
-
 .wrapper {
-	padding:  0 8px;
+	padding: 0 8px;
 }
 
 .needDocTitle {

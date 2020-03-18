@@ -73,7 +73,7 @@ const ContactsFormView = (props: IProps) => {
 			/>
 
 			{!isRegAddressEqualLive && (
-				<Wrapper margin = 'huge'>
+				<Wrapper margin="huge">
 					<H2>Адрес проживания</H2>
 					<DocumentForm
 						name="liveDoc"
@@ -129,7 +129,7 @@ const ContactsFormView = (props: IProps) => {
 
 			<TextInput
 				onChange={onChange}
-				value = {values.email}
+				value={values.email}
 				label="Электронная почта"
 				name="email"
 				helperText="Необходимо для подтверждения учетной записи"
@@ -141,8 +141,14 @@ const ContactsFormView = (props: IProps) => {
 			{/*title="Страна оператора сотовой связи"*/}
 			{/*options={governmentDictionary ? governmentDictionary.values : []}*/}
 			{/*/>*/}
-			<TextInput onChange={onChange} value = {values.mobPhone} name="mobPhone" label="Мобильный телефон" required={true} />
-			<TextInput onChange={onChange} value = {values.homePhone} name="homePhone" label="Домашний телефон" />
+			<TextInput
+				onChange={onChange}
+				value={values.mobPhone}
+				name="mobPhone"
+				label="Мобильный телефон"
+				required={true}
+			/>
+			<TextInput onChange={onChange} value={values.homePhone} name="homePhone" label="Домашний телефон" />
 		</>
 	);
 };

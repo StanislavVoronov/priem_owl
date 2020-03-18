@@ -6,7 +6,7 @@ import { ITransactionsState } from './transactionsModels';
 import { uploadDocumentRest } from '$rests';
 
 export const uploadDocumentTransactionActions = createTransactionActions(
-	TRANSACTION_NAMES.FetchPriemGroups,
+	TRANSACTION_NAMES.UploadDocument,
 	(document: IDocument, key: string) => ({
 		key,
 		document,

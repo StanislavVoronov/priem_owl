@@ -31,11 +31,15 @@ export const priemPayFormsTransactionSelector = createSelector(
 	(state: ITransactionsState) => state.priemPayForms,
 );
 
-export const payFormsSaga = sagaEffects.rest(priemPayFormsTransactionActions, ({ payload }) => {
+export const payFormsSaga = sagaEffects.rest(
+	priemPayFormsTransactionActions,
+	({ payload }) => {
 		return priemPayFormsRest(
 			payload.filial.ID,
 			payload.inst.ID,
 			payload.direction.ID,
 			payload.educForms.map(item => item.ID),
 		);
-	}, true)
+	},
+	true,
+);

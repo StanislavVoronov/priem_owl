@@ -1,23 +1,23 @@
 .logo {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    height: 64px;
-    position: absolute;
-    top: 0;
-    left: 14px;
-    cursor: pointer;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	height: 64px;
+	position: absolute;
+	top: 0;
+	left: 14px;
+	cursor: pointer;
 }
 
 .link {
-    font-size: 1rem;
+	font-size: 1rem;
 }
 
 .nav {
-    display: grid;
-    height: 100%;
-    padding: 4px 60px;
-    align-items: center;
-    grid-gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 125px));
-    background-color: #e8f0ff;
+	display: grid;
+	height: 100%;
+	padding: 4px 60px;
+	align-items: center;
+	grid-gap: 20px;
+	grid-template-columns: repeat(auto-fit, minmax(100px, 125px));
+	background-color: #e8f0ff;
 }

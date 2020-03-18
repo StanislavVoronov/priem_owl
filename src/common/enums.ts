@@ -29,5 +29,5 @@ export enum PhoneType {
 
 export enum AddressType {
 	Reg = 1,
-	Live = 2
+	Live = 2,
 }

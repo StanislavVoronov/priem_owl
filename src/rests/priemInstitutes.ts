@@ -6,7 +6,7 @@ interface IFetchResponse {
 interface IFetchRequest {
 	filial: number;
 	educLevel: number;
-	noPayForms: number[]
+	noPayForms: number[];
 }
 export const priemInstRest = (filialId: number, eduLevelId: number, noPayForms: number[] = [16, 20]) => {
 	const payload = {

@@ -73,7 +73,7 @@ const ApplicationsFormView = (props: IProps) => {
 		disabledAddButton,
 	} = props;
 
-	const nextButtonDisabled = false;  // isEmptyArray(applications)
+	const nextButtonDisabled = false; // isEmptyArray(applications)
 
 	return (
 		<Column>

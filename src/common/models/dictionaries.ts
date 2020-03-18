@@ -3,7 +3,7 @@ export interface IDictionary {
 	name: string;
 }
 
-export interface IFistNameDictionary extends IDictionary{
+export interface IFistNameDictionary extends IDictionary {
 	type: number;
 	sex: number;
 }

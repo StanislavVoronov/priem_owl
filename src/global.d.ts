@@ -1,12 +1,12 @@
 declare module '*.css' {
 	interface IClassNames {
-		[className: string]: string
+		[className: string]: string;
 	}
 	const classNames: IClassNames;
 	export = classNames;
 }
 
-declare module "*.png" {
+declare module '*.png' {
 	const content: string;
 	export default content;
 }

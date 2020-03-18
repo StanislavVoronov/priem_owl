@@ -21,6 +21,10 @@ export const priemEducLevelsTransactionSelector = createSelector(
 	(state: ITransactionsState) => state.priemEducLevels,
 );
 
-export const priemEducLevelSaga = sagaEffects.rest(priemEducLevelsTransactionActions, ({ payload }) => {
-	return priemEducLevelsRest(payload.filial.ID);
-}, true);
+export const priemEducLevelSaga = sagaEffects.rest(
+	priemEducLevelsTransactionActions,
+	({ payload }) => {
+		return priemEducLevelsRest(payload.filial.ID);
+	},
+	true,
+);

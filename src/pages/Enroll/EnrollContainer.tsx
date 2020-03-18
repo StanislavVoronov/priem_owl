@@ -28,7 +28,6 @@ interface IDispatchToProps {
 type IProps = IStateToProps & IDispatchToProps;
 
 class EnrollContainer extends React.Component<IProps, IState> {
-
 	public componentDidCatch(error: any, info: any) {
 		// You can also log the error to an error reporting service
 	}

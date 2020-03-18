@@ -1,9 +1,12 @@
 import { createSelector, createTransactionActions, createTransactionReducer, prop } from '@black_bird/utils';
 import { TRANSACTION_NAMES } from '$actions';
-import { ITransactionsState } from './transactionsModels'
+import { ITransactionsState } from './transactionsModels';
 import { IRegForm } from '$common';
 
-export const findPersonTransactionActions = createTransactionActions(TRANSACTION_NAMES.FindPerson, (data: IRegForm) => ({ data }));
+export const findPersonTransactionActions = createTransactionActions(
+	TRANSACTION_NAMES.FindPerson,
+	(data: IRegForm) => ({ data }),
+);
 
 export const findPersonReducer = createTransactionReducer(findPersonTransactionActions);
 

@@ -6,10 +6,10 @@ import { UploadDocApi } from './UploadDocApi';
 class PriemApi {
 	static host: string = '/dev-bin';
 	static path: string = '/priem_api.fcgi';
-	static check = <Q, R>(api: string, payload: Q, extraData: object = {}): Promise<R[]> => {
+	static check = <Q, R>(api: string, payload: Q): Promise<R[]> => {
 		const Request = new JsonRequest(PriemApi.host, PriemApi.path, api, payload);
 
-		return Request.post();
+		return Request.post().then((item: any) => Promise.resolve(item.result));
 	};
 	static select = <Q, R>(api: string, payload?: Q): Promise<R[]> => {
 		const Request = new JsonRequest(PriemApi.host, PriemApi.path, api, payload);

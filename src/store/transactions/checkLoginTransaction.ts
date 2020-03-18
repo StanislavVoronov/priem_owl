@@ -9,7 +9,7 @@ export const checkLoginTransactionActions = createTransactionActions(TRANSACTION
 export const checkLoginReducer = createTransactionReducer(checkLoginTransactionActions);
 
 export const isUniqueLoginTransactionSelector = createSelector(prop('transactions'), (state: ITransactionsState) => {
-	const { isFetching, exception, result } = state.checkLogin;
+	const { isFetching, exception, result }: any = state.checkLogin;
 
 	return { isFetching, exception, result: result.length ? result[0].COUNT === 0 : false };
 });

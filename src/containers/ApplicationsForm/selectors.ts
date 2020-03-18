@@ -1,9 +1,9 @@
-import { createSelector, isNotVoid} from '@black_bird/utils';
+import { createSelector, isNotVoid } from '@black_bird/utils';
 import { applicationsFormSelector } from '$store';
 import { IAdmDictionaryItem } from '$common';
 
 const idIs = (first: IAdmDictionaryItem | null, second: IAdmDictionaryItem | null) => {
-	return isNotVoid(first) && isNotVoid(second) && first!.ID === second!.ID
+	return isNotVoid(first) && isNotVoid(second) && first!.ID === second!.ID;
 };
 export const disabledAddButtonSelector = createSelector(applicationsFormSelector, applicationsForm => {
 	const { filial, institute, profiles, educLevel, direction, educForms, payForms, applications } = applicationsForm;

@@ -9,7 +9,7 @@ interface IPriemDirectionsRequest {
 	filial: number;
 	inst: number;
 	educLevel: number;
-	noPayForms: number[]
+	noPayForms: number[];
 }
 
 export const priemDirectionRest = (
@@ -25,5 +25,8 @@ export const priemDirectionRest = (
 		noPayForms,
 	};
 
-	return PriemApi.select<IPriemDirectionsRequest, IPriemDirectionsResponse>(PRIEM_API_NAMES.FetchPriemDirections, payload);
+	return PriemApi.select<IPriemDirectionsRequest, IPriemDirectionsResponse>(
+		PRIEM_API_NAMES.FetchPriemDirections,
+		payload,
+	);
 };

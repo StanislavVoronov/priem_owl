@@ -9,7 +9,7 @@ interface IPriemProfilesRequest {
 	filial: number;
 	inst: number;
 	dir: number;
-	noPayForms: number[]
+	noPayForms: number[];
 }
 
 export const priemProfilesRest = (filial: number, inst: number, dir: number, noPayForms: number[] = [16, 20]) => {

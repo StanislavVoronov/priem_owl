@@ -87,7 +87,7 @@ export interface IPersonForm {
 	isApplyPersonData: boolean;
 	photo: IDocument;
 	birthplace: string;
-	codeDepartment: ''
+	codeDepartment: '';
 }
 export interface IDocumentsForm {
 	documents: IDocument[];

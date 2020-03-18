@@ -33,7 +33,6 @@ export interface IAdmDictionaryItem {
 	NAME: string;
 }
 
-
 export interface IDocument {
 	type: IDocType | null;
 	subType: IDocType | null;
@@ -44,7 +43,7 @@ export interface IDocument {
 	date?: string;
 	file: File | null;
 	codeDepartment?: string;
-	[key: string]: any
+	[key: string]: any;
 }
 
 export interface IStylable {

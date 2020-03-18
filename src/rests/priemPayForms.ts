@@ -10,10 +10,16 @@ interface IFetchRequest {
 	inst: number;
 	dir: number;
 	educForms: number[];
-	noPayForms: number[],
+	noPayForms: number[];
 }
 
-export const priemPayFormsRest = (filial: number, inst: number, dir: number, educForms: number[], noPayForms: number[] = [16, 20]) => {
+export const priemPayFormsRest = (
+	filial: number,
+	inst: number,
+	dir: number,
+	educForms: number[],
+	noPayForms: number[] = [16, 20],
+) => {
 	const payload = {
 		filial,
 		inst,

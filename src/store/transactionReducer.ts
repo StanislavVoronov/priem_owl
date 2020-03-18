@@ -14,7 +14,7 @@ import {
 	priemAdmGroupsReducer,
 	createPersonReducer,
 	updateAddressesReducer,
-	uploadDocumentsReducer
+	uploadDocumentsReducer,
 } from './transactions';
 
 const transactionsReducer = combineReducers({
@@ -32,7 +32,7 @@ const transactionsReducer = combineReducers({
 	priemAdmGroups: priemAdmGroupsReducer,
 	createPerson: createPersonReducer,
 	updateAddresses: updateAddressesReducer,
-	uploadDocuments: uploadDocumentsReducer
+	uploadDocuments: uploadDocumentsReducer,
 });
 
 export default transactionsReducer;

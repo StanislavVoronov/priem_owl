@@ -12,7 +12,6 @@ import { createPersonSaga } from './createPersonTransaction';
 import { updateAddressSaga } from './updateAdressTransaction';
 import { uploadDocumentsSaga } from './uploadDocumentsTransaction';
 
-
 export const transactionsSagas = [
 	payFormsSaga,
 	educFormsSaga,

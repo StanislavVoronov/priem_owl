@@ -1,4 +1,3 @@
 import DocumentForm from './DocumentForm';
 
-
-export { DocumentForm }
+export { DocumentForm };

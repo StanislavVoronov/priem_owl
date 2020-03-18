@@ -3,7 +3,4 @@ import { IContactsForm } from '$common';
 
 const NAMESPACE = 'ContactsForm';
 
-export const submitContactsFormAction = createAction(
-	`${NAMESPACE}/SUBMIT`,
-	(form: IContactsForm) => form,
-);
+export const submitContactsFormAction = createAction(`${NAMESPACE}/SUBMIT`, (form: IContactsForm) => form);
