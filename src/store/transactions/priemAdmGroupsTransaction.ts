@@ -13,9 +13,9 @@ export const priemAdmGroupsTransactionActions = createTransactionActions(
 		direction: IAdmDictionaryItem,
 		educForm: IAdmDictionaryItem,
 		payForm: IAdmDictionaryItem,
-		key: string,
+		admGroup: string,
 	) => ({
-		key,
+		admGroup,
 		filial,
 		inst,
 		direction,
@@ -25,7 +25,7 @@ export const priemAdmGroupsTransactionActions = createTransactionActions(
 );
 
 export const priemAdmGroupsReducer = createTransactionReducer(priemAdmGroupsTransactionActions, {
-	mapToKey: payload => payload.key,
+	mapToKey: payload => payload.admGroup,
 });
 
 export const priemAdmGroupsTransactionSelector = createSelector(

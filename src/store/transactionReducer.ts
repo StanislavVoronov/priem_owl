@@ -16,6 +16,7 @@ import {
 	updateAddressesReducer,
 	uploadDocumentsReducer,
 	priemLogoutReducer,
+	createApplicationReducer,
 } from './transactions';
 
 const transactionsReducer = combineReducers({
@@ -35,6 +36,7 @@ const transactionsReducer = combineReducers({
 	updateAddresses: updateAddressesReducer,
 	uploadDocuments: uploadDocumentsReducer,
 	priemLogout: priemLogoutReducer,
+	createApplications: createApplicationReducer,
 });
 
 export default transactionsReducer;

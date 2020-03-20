@@ -1,24 +1,23 @@
 import * as React from 'react';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import {
-	verAccountFormSelector,
+	createAppsTransactionSelector,
+	createPersonTransactionSelector,
 	IRootState,
 	submitVerAccountForm,
-	createPersonTransactionSelector,
 	updateAddressTransactionSelector,
-	createAppsTransactionSelector,
 	uploadDocumentsTransactionSelector,
-	priemLogoutTransactionSelector,
+	verAccountFormSelector,
 } from '$store';
-import { IVerAccountForm, IServerError, AddressType } from '$common';
+import { AddressType, IVerAccountForm } from '$common';
 import VerAccountFormView from './VerAccountFormView';
 import { Form, IFormField, IFormProps } from '@black_bird/components';
-import { prop, TransactionStatus } from '@black_bird/utils';
+import { IException, prop, TransactionStatus } from '@black_bird/utils';
 import classes from './styles.module.css';
 
 interface IMapStateToProps {
 	form: IVerAccountForm;
-	error: IServerError | null;
+	error?: IException | null;
 	loading: boolean;
 	folderCreated: boolean;
 }
@@ -60,11 +59,11 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = state
 	const updateRegAddressTransaction = updateAddressTransactionSelector(state, AddressType.Reg);
 	const appsTransactions = createAppsTransactionSelector(state);
 	const docsTransactions = uploadDocumentsTransactionSelector(state);
-	const priemLogout = priemLogoutTransactionSelector(state);
+	const appException = Object.values(appsTransactions).find(item => item.exception);
+	const docException = Object.values(docsTransactions).find(item => item.exception);
 
 	return {
 		form,
-		folderCreated: priemLogout.status === TransactionStatus.COMPLETED,
 		loading:
 			createPersonDataTransaction.isFetching ||
 			(updateLiveAddressTransaction && updateLiveAddressTransaction.isFetching) ||
@@ -73,10 +72,17 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = state
 			Object.values(docsTransactions).some(item => item.isFetching),
 		error:
 			createPersonDataTransaction.exception ||
-			updateLiveAddressTransaction.exception ||
-			updateRegAddressTransaction.exception ||
-			Object.values(appsTransactions).find(item => item.exception !== null) ||
-			Object.values(docsTransactions).find(item => item.exception !== null),
+			(updateLiveAddressTransaction && updateLiveAddressTransaction.exception) ||
+			(updateRegAddressTransaction && updateRegAddressTransaction.exception) ||
+			(appException && appException.exception) ||
+			(docException && docException.exception) ||
+			null,
+		folderCreated:
+			createPersonDataTransaction.status === TransactionStatus.COMPLETED &&
+			(updateLiveAddressTransaction && updateLiveAddressTransaction.status === TransactionStatus.COMPLETED) &&
+			(updateRegAddressTransaction && updateRegAddressTransaction.status === TransactionStatus.COMPLETED) &&
+			Object.values(appsTransactions).every(item => item.status === TransactionStatus.COMPLETED) &&
+			Object.values(docsTransactions).every(item => item.status === TransactionStatus.COMPLETED),
 	};
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {

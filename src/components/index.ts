@@ -2,7 +2,6 @@ import { Stepper, Step, StepLabel, StepContent } from '@material-ui/core/';
 import { EnrollHeader } from './EnrollHeader';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import Checkbox from './Checkbox';
 import { RadioButtonGroup } from './RadioButtonGroup/';
 import { H2 } from './Typography/Headers';
 import StepButton from '@material-ui/core/StepButton';
@@ -24,7 +23,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Title from './Typography/Title';
 
 export * from './Buttons';
-export * from './Inputs';
 
 export {
 	Stepper,
@@ -35,7 +33,6 @@ export {
 	FormControl,
 	FormControlLabel,
 	H2,
-	Checkbox,
 	StepButton,
 	WebPhoto,
 	CardMedia,

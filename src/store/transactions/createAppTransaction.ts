@@ -13,16 +13,16 @@ import { IAdmDictionaryItem } from '$common';
 
 export const createAppTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.CreateApplication,
-	(adm: IAdmDictionaryItem, prof: IAdmDictionaryItem, priority: number, key: string) => ({
+	(adm: IAdmDictionaryItem, prof: IAdmDictionaryItem, priority: number, app: string) => ({
 		adm: adm.ID,
 		prof: prof.ID,
 		priority,
-		key
+		app
 	}),
 );
 
 export const createApplicationReducer = createTransactionReducer(createAppTransactionActions, {
-	mapToKey: payload => payload.key,
+	mapToKey: payload => payload.app,
 });
 
 export const createAppsTransactionSelector = createSelector(

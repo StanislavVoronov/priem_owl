@@ -18,9 +18,9 @@
 		"url": "http://monitoring.mgutm.ru:81/stas/priem_owl.git"
 	},
 	"dependencies": {
-		"@black_bird/components": "0.0.97",
+		"@black_bird/components": "0.0.99",
 		"@black_bird/dictionaries": "^0.0.13",
-		"@black_bird/utils": "^0.0.60",
+		"@black_bird/utils": "^0.0.61",
 		"@babel/core": "^7.8.7",
 		"@mgutm-fcu/auth": "^0.21.26",
 		"classnames": "^2.2.6",

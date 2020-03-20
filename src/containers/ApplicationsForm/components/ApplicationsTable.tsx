@@ -10,7 +10,6 @@ interface IProps {
 
 const ApplicationsTable = (props: IProps) => {
 	const { applications, onDelete } = props;
-	const disabledAddButton = false;
 
 	const renderApplication = (item: IAdmGroup, index: number) => {
 		return (
@@ -56,11 +55,6 @@ const ApplicationsTable = (props: IProps) => {
 					<tbody>{applications.map(renderApplication)}</tbody>
 				</table>
 			) : null}
-			{disabledAddButton && (
-				<span className={classes.header}>
-					По правилам приема можно подать заявления только на три направления подготовки
-				</span>
-			)}
 		</>
 	);
 };

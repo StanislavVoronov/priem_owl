@@ -7,14 +7,14 @@ import { uploadDocumentRest } from '$rests';
 
 export const uploadDocumentTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.UploadDocument,
-	(document: IDocument, key: string) => ({
-		key,
+	(document: IDocument, docKey: string) => ({
+		docKey,
 		document,
 	}),
 );
 
 export const uploadDocumentsReducer = createTransactionReducer(uploadDocumentTransactionActions, {
-	mapToKey: payload => payload.key,
+	mapToKey: payload => payload.docKey,
 });
 
 export const uploadDocumentTransactionSelector = createSelector(

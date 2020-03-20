@@ -7,8 +7,9 @@ import {
 } from '@black_bird/utils';
 import { ITransactionsState } from './transactionsModels';
 import { priemFilialsRest } from '$rests';
+import { TRANSACTION_NAMES } from '$actions';
 
-export const priemFilialsTransactionActions = createTransactionActions('PRIEM_FILIALS');
+export const priemFilialsTransactionActions = createTransactionActions(TRANSACTION_NAMES.FetchPriemFilials);
 
 export const priemFilialsReducer = createTransactionReducer(priemFilialsTransactionActions);
 

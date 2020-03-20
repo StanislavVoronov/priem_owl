@@ -22,5 +22,5 @@ export const findPersonRest = (data: IPerson) => {
 		birthdate: moment(birthday).format('YYYY-MM-DD'),
 	};
 
-	return PriemApi.check<IFindPersonRequest, IFindPersonResponse>(PRIEM_API_NAMES.FindPerson, payload);
+	return PriemApi.select<IFindPersonRequest, IFindPersonResponse>(PRIEM_API_NAMES.FindPerson, payload);
 };

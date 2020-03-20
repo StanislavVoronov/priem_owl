@@ -10,5 +10,5 @@ export interface ICheckLoginResponse {
 export const checkLoginRest = (login: string) => {
 	const payload = { login };
 
-	return PriemApi.check<ICheckLoginRequest, ICheckLoginResponse>(PRIEM_API_NAMES.CheckUniqueLogin, payload);
+	return PriemApi.select<ICheckLoginRequest, ICheckLoginResponse>(PRIEM_API_NAMES.CheckUniqueLogin, payload);
 };

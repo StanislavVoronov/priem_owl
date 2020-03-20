@@ -19,11 +19,13 @@ export const uploadDocumentsSagas = [
 		const { regDoc, liveDoc } = yield sagaEffects.select(contactsFormSelector);
 
 		yield sagaEffects.all(
-			[...documents, educForm.document, personForm.documet, regDoc, liveDoc].filter(Boolean).map((doc: IDocument) => {
-				const id = [doc.type ? doc.type.id : '', doc.subType ? doc.subType.id : '', doc.series, doc.num].join('-');
+			[...documents, educForm.document, personForm.document, regDoc, liveDoc]
+				.filter(item => item && item.file !== null)
+				.map((doc: IDocument) => {
+					const id = [doc.type ? doc.type.id : '', doc.subType ? doc.subType.id : '', doc.series, doc.num].join('-');
 
-				return sagaEffects.put(uploadDocumentTransactionActions.trigger(doc, id));
-			}),
+					return sagaEffects.put(uploadDocumentTransactionActions.trigger(doc, id));
+				}),
 		);
 	}),
 ];

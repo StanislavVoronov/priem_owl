@@ -1,5 +1,4 @@
-import { IDictionary, IServerError } from '$common';
-import { Action, ActionFunctionAny } from 'redux-actions';
+import { IDictionary } from '$common';
 
 export interface IDictionaryTypeFilter {
 	type: number;

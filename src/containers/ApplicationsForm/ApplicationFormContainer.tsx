@@ -89,6 +89,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	const payFormDictionary = priemPayFormsTransactionSelector(state);
 
 	const disabledAddButton = disabledAddButtonSelector(state);
+
 	const {
 		filial,
 		institute,

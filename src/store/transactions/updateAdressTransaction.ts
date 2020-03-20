@@ -12,11 +12,11 @@ import { AddressType } from '$common';
 
 export const updateAddressTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.UpdateAddress,
-	(address: string, type: AddressType) => ({ address, type }),
+	(address: string, kind: AddressType) => ({ address, kind }),
 );
 
 export const updateAddressesReducer = createTransactionReducer(updateAddressTransactionActions, {
-	mapToKey: payload => payload.type,
+	mapToKey: payload => payload.kind,
 });
 
 export const updateAddressTransactionSelector = createSelector(
@@ -31,5 +31,5 @@ export const updateAddressesTransactionSelector = createSelector(
 );
 
 export const updateAddressSaga = sagaEffects.rest(updateAddressTransactionActions, function*({ payload }) {
-	return updateAddressRest(payload.address, payload.type);
+	return updateAddressRest(payload.address, payload.kind);
 });

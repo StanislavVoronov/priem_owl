@@ -9,3 +9,4 @@ export * from './createPersonContactsSagas';
 export * from './verAccountFormSagas';
 export * from './uploadDocumentsSagas';
 export * from './createApplication';
+export * from './priemLogout';

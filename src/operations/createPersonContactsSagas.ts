@@ -8,7 +8,8 @@ const prepareAddress = (street: string, home: string, block: string, flat: strin
 	}`;
 };
 export const createPersonContactsSagas = [
-	sagaEffects.takeEvery(createPersonTransactionActions.success, function*() {
+	sagaEffects.takeLatest(createPersonTransactionActions.success, function*() {
+		console.log('contacts');
 		const {
 			regDoc,
 			liveDoc,

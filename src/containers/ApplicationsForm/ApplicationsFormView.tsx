@@ -73,7 +73,7 @@ const ApplicationsFormView = (props: IProps) => {
 		disabledAddButton,
 	} = props;
 
-	const nextButtonDisabled = false; // isEmptyArray(applications)
+	const nextButtonDisabled = isEmptyArray(applications);
 
 	return (
 		<Column>
@@ -185,11 +185,18 @@ const ApplicationsFormView = (props: IProps) => {
 			)}
 
 			{disabledAddButton && <div className={classes.repeatAppText}>Заявление уже было добавлено ранее</div>}
+			{disabledAddButton && (
+				<span className={classes.header}>
+					По правилам приема можно подать заявления только на три направления подготовки
+				</span>
+			)}
 			{isNotEmptyArray(payForms) ? (
 				<Button disabled={disabledAddButton} classes={{ root: classes.addDocButton }} onClick={addPriemApplication}>
 					Добавить заявление
 				</Button>
 			) : null}
+
+
 
 			<ApplicationsTable onDelete={onDeleteApplication} applications={applications} />
 

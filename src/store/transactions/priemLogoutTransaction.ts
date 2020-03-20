@@ -7,8 +7,9 @@ import {
 } from '@black_bird/utils';
 import { ITransactionsState } from './transactionsModels';
 import { priemLogoutRest } from '$rests';
+import { TRANSACTION_NAMES } from '$actions';
 
-export const priemLogoutTransactionActions = createTransactionActions('PRIEM_FILIALS');
+export const priemLogoutTransactionActions = createTransactionActions(TRANSACTION_NAMES.PriemLogout);
 
 export const priemLogoutReducer = createTransactionReducer(priemLogoutTransactionActions);
 

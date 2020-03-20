@@ -6,10 +6,11 @@
 }
 
 .folder {
+	padding: 44px;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	color: darkgreen;
-	font-size: 16px;
+	color: green;
+	font-size: 18px;
 }

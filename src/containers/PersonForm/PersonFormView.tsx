@@ -1,8 +1,8 @@
-import { IContactsForm, IDictionary, IPerson, IPersonForm } from '$common';
+import { IDictionary, IPersonForm } from '$common';
 import { DocumentForm } from '$components';
 import React from 'react';
 import { IFormProps, TextInput, Checkbox } from '@black_bird/components';
-import { ITransaction, prop } from '@black_bird/utils';
+import { ITransaction } from '@black_bird/utils';
 
 interface IProps {
 	personTypesDocsDictionary: ITransaction<IDictionary>;

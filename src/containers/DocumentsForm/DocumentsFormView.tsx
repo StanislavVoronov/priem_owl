@@ -42,7 +42,8 @@ const DocumentsFormView = (props: IProps) => {
 
 	const addButtonDisabled = documents.map(validateDocument).includes(false);
 
-	const nextButtonDisabled = false; // requireDocs.filter(item => !documents.some(doc => (doc.type && doc.type.id) === item.id)).length > 0;
+	const nextButtonDisabled =
+		requireDocs.filter(item => !documents.some(doc => (doc.type && doc.type.id) === item.id)).length > 0;
 
 	return (
 		<>
