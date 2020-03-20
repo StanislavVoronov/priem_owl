@@ -17,7 +17,7 @@ import {
 	priemLogoutSagas,
 } from '$operations';
 
-import { initAction, priemFilialsTransactionActions, transactionsSagas } from '$store';
+import { createLoginTransactionActions, initAction, priemFilialsTransactionActions, transactionsSagas } from '$store';
 
 const rootSagas = [
 	...priemLogoutSagas,
@@ -39,7 +39,7 @@ const rootSagas = [
 		yield sagaEffects.put(priemFilialsTransactionActions.trigger());
 	}),
 
-	sagaEffects.takeLatest(/*createLoginTransactionActions.success */ initAction, fetchFullDictionaries),
+	sagaEffects.takeLatest(createLoginTransactionActions.success, fetchFullDictionaries),
 ];
 
 export default rootSagas;

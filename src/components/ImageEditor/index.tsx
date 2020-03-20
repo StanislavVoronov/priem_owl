@@ -38,7 +38,6 @@ class ImageEditor extends React.PureComponent<IProps, IState> {
 		height: window.innerHeight / 2.5,
 	};
 	public setScale = (event: React.ChangeEvent<{}>, scale: number | number[]) => {
-		console.log('scale', scale);
 		this.setState(state => ({ ...state, scale: scale[0] <= 0.5 ? state.scale[0] : scale[0] }));
 	};
 	public setRotateLeft = () => {
