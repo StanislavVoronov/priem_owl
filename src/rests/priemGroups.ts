@@ -1,7 +1,3 @@
-import { IServerError, IDictionary, priemEducFormsTransactionActions } from '$common';
-import { ThunkAction } from 'redux-thunk';
-import { IRootState } from '$store';
-import { Action } from 'redux';
 import { PriemApi, PRIEM_API_NAMES } from '$services';
 
 interface IFetchResponse {

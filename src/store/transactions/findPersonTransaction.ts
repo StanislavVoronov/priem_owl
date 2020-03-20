@@ -1,7 +1,14 @@
-import { createSelector, createTransactionActions, createTransactionReducer, prop } from '@black_bird/utils';
+import {
+	createSelector,
+	createTransactionActions,
+	createTransactionReducer,
+	prop,
+	sagaEffects,
+} from '@black_bird/utils';
 import { TRANSACTION_NAMES } from '$actions';
 import { ITransactionsState } from './transactionsModels';
 import { IRegForm } from '$common';
+import { findPersonRest } from '$rests';
 
 export const findPersonTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FindPerson,
@@ -25,3 +32,7 @@ export const isPersonFoundTransactionSelector = createSelector(prop('transaction
 		result: isFound && result[0],
 	};
 });
+
+export const findPersonSaga = sagaEffects.rest(findPersonTransactionActions, ({ payload }) =>
+	findPersonRest(payload.data),
+);

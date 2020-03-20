@@ -11,8 +11,18 @@ import { createVerCodeSaga } from './createVerCodeTransaction';
 import { createPersonSaga } from './createPersonTransaction';
 import { updateAddressSaga } from './updateAdressTransaction';
 import { uploadDocumentsSaga } from './uploadDocumentsTransaction';
+import { createApplicationSaga } from './createAppTransaction';
+import { createLoginSaga } from './createLoginTransaction';
+import { findPersonSaga } from './findPersonTransaction';
+import { checkLoginSaga } from './checkLoginTransaction';
+import { priemLogoutSaga } from './priemLogoutTransaction';
 
 export const transactionsSagas = [
+	priemLogoutSaga,
+	checkLoginSaga,
+	createLoginSaga,
+	findPersonSaga,
+	createApplicationSaga,
 	payFormsSaga,
 	educFormsSaga,
 	priemAdmGroupsSaga,

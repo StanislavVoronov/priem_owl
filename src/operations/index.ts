@@ -8,3 +8,4 @@ export * from './createNewFolderSagas';
 export * from './createPersonContactsSagas';
 export * from './verAccountFormSagas';
 export * from './uploadDocumentsSagas';
+export * from './createApplication';

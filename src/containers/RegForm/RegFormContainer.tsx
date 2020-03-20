@@ -28,11 +28,6 @@ interface IDispatchToProps {
 
 type Props = IStateToProps & IDispatchToProps;
 class EnrollRegistrationContainer extends React.Component<Props> {
-	onSubmit = (values: IRegForm) => {
-		console.log('submit', values);
-		this.props.onSubmit(values);
-	};
-
 	renderForm = (form: IFormProps<IRegForm>) => {
 		return (
 			<RegFormView
@@ -44,12 +39,12 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 	};
 
 	render() {
-		const { onSubmit, data, error, loading = true } = this.props;
+		const { onSubmit, data, error, loading } = this.props;
 
 		return (
 			<Form
 				error={error}
-				loading={true}
+				loading={loading}
 				loadingText="Поиск личного дела"
 				renderForm={this.renderForm}
 				onSubmit={onSubmit}

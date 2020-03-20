@@ -50,24 +50,3 @@ export interface IStylable {
 	classes: Record<string, string>;
 }
 
-export interface IInvalidData<T> {
-	validation: Record<keyof T, string>;
-}
-
-export interface ITransaction<T> {
-	loading: boolean;
-	result: T[];
-	error: IServerError | null;
-}
-
-export interface ITransactionActions<R, S, F> {
-	request: ActionFunctionAny<Action<R>>;
-	success: ActionFunctionAny<Action<S>>;
-	failure: ActionFunctionAny<Action<F>>;
-}
-
-export interface ITransactionActions<R, S, F> {
-	request: ActionFunctionAny<Action<R>>;
-	success: ActionFunctionAny<Action<S>>;
-	failure: ActionFunctionAny<Action<F>>;
-}

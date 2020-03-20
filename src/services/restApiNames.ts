@@ -14,6 +14,7 @@ export enum PRIEM_API_NAMES {
 	FetchPriemEducationForms = 'ADM_FOE',
 	FetchPriemGroups = 'ADM_ID',
 	AddPriemApplication = 'iDATA_APPLICATIONS',
+	PriemLogout = 'enrollLogout'
 }
 
 export enum ENROLL_API_NAMES {

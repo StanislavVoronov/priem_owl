@@ -6,16 +6,21 @@ import {
 	submitVerAccountForm,
 	createPersonTransactionSelector,
 	updateAddressTransactionSelector,
+	createAppsTransactionSelector,
+	uploadDocumentsTransactionSelector,
+	priemLogoutTransactionSelector,
 } from '$store';
-import { IVerAccountForm, IServerError, ITransaction, AddressType } from '$common';
+import { IVerAccountForm, IServerError, AddressType } from '$common';
 import VerAccountFormView from './VerAccountFormView';
 import { Form, IFormField, IFormProps } from '@black_bird/components';
-import { prop } from '@black_bird/utils';
+import { prop, TransactionStatus } from '@black_bird/utils';
+import classes from './styles.module.css';
 
 interface IMapStateToProps {
 	form: IVerAccountForm;
 	error: IServerError | null;
 	loading: boolean;
+	folderCreated: boolean;
 }
 
 interface IDispatchToProps {
@@ -29,7 +34,11 @@ class AccountVerificationContainer extends React.Component<IProps> {
 	};
 
 	render() {
-		const { loading, onSubmit, error, form } = this.props;
+		const { loading, onSubmit, error, form, folderCreated } = this.props;
+
+		if (folderCreated) {
+			return <div className={classes.folder}>Документы на поступление успешно отправлены</div>;
+		}
 
 		return (
 			<Form
@@ -49,17 +58,25 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = state
 	const createPersonDataTransaction = createPersonTransactionSelector(state);
 	const updateLiveAddressTransaction = updateAddressTransactionSelector(state, AddressType.Live);
 	const updateRegAddressTransaction = updateAddressTransactionSelector(state, AddressType.Reg);
+	const appsTransactions = createAppsTransactionSelector(state);
+	const docsTransactions = uploadDocumentsTransactionSelector(state);
+	const priemLogout = priemLogoutTransactionSelector(state);
 
 	return {
 		form,
+		folderCreated: priemLogout.status === TransactionStatus.COMPLETED,
 		loading:
 			createPersonDataTransaction.isFetching ||
 			(updateLiveAddressTransaction && updateLiveAddressTransaction.isFetching) ||
-			(updateRegAddressTransaction && updateRegAddressTransaction.isFetching),
+			(updateRegAddressTransaction && updateRegAddressTransaction.isFetching) ||
+			Object.values(appsTransactions).some(item => item.isFetching) ||
+			Object.values(docsTransactions).some(item => item.isFetching),
 		error:
 			createPersonDataTransaction.exception ||
 			updateLiveAddressTransaction.exception ||
-			updateRegAddressTransaction.exception,
+			updateRegAddressTransaction.exception ||
+			Object.values(appsTransactions).find(item => item.exception !== null) ||
+			Object.values(docsTransactions).find(item => item.exception !== null),
 	};
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {

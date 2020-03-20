@@ -20,4 +20,6 @@ export interface ITransactionsState {
 	updatePhones: Record<string, ITransaction<string>>;
 	updateAddresses: Record<string, ITransaction<string>>;
 	uploadDocuments: Record<string, ITransaction<string>>;
+	createApplications: Record<string, ITransaction<string>>;
+	priemLogout: ITransaction<any>;
 }

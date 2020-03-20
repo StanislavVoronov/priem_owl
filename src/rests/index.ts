@@ -14,3 +14,5 @@ export * from './priemGroups';
 export * from './createPerson';
 export * from './updateAddress';
 export * from './uploadDocument';
+export * from './createApplication';
+export * from './priemLogout';

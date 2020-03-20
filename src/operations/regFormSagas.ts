@@ -50,9 +50,6 @@ function* createNewLogin() {
 
 export const regFormSagas = [
 	sagaEffects.takeEvery(submitRegFormAction, createNewLogin),
-	sagaEffects.rest(checkLoginTransactionActions, ({ payload }) => checkLoginRest(payload.login)),
-	sagaEffects.rest(findPersonTransactionActions, ({ payload }) => findPersonRest(payload.data)),
-
 	sagaEffects.takeLatest(generateUserPasswordAction, function*({ payload }: any) {
 		const password = generatePassword();
 
@@ -62,9 +59,6 @@ export const regFormSagas = [
 		if (isEmptyArray(payload.response)) {
 			yield sagaEffects.put(handleNextStep());
 		}
-	}),
-	sagaEffects.rest(createLoginTransactionActions, ({ payload }) => {
-		return createLoginRest(payload.login, payload.password);
 	}),
 	sagaEffects.takeEvery(createLoginTransactionActions.success, function*() {
 		const data = yield sagaEffects.select(regFormSelector);

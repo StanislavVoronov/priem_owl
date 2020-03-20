@@ -17,10 +17,15 @@ export const uploadDocumentsReducer = createTransactionReducer(uploadDocumentTra
 	mapToKey: payload => payload.key,
 });
 
-export const uploadDocumentsTransactionSelector = createSelector(
+export const uploadDocumentTransactionSelector = createSelector(
 	prop('transactions'),
 	(_: any, id: string) => id,
 	(state: ITransactionsState, id) => state.uploadDocuments[id],
+);
+
+export const uploadDocumentsTransactionSelector = createSelector(
+	prop('transactions'),
+	(state: ITransactionsState) => state.uploadDocuments,
 );
 
 export const uploadDocumentsSaga = sagaEffects.rest(uploadDocumentTransactionActions, ({ payload }) => {

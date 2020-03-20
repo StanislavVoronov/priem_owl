@@ -17,3 +17,5 @@ export * from './updatePhoneTransaction';
 export * from './createPersonTransaction';
 export * from './updateAdressTransaction';
 export * from './uploadDocumentsTransaction';
+export * from './createAppTransaction';
+export * from './priemLogoutTransaction';

@@ -1,4 +1,4 @@
-import { IDocument, IUploadDocRequest, uploadDocumentsActions } from '$common';
+import { IDocument, IUploadDocRequest } from '$common';
 
 import moment from 'moment';
 import { PriemApi, PRIEM_API_NAMES } from '$services';

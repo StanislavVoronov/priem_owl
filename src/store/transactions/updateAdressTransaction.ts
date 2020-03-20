@@ -25,6 +25,11 @@ export const updateAddressTransactionSelector = createSelector(
 	(state: ITransactionsState, phone: AddressType) => state.updateAddresses[phone],
 );
 
+export const updateAddressesTransactionSelector = createSelector(
+	prop('transactions'),
+	(state: ITransactionsState) => state.updateAddresses,
+);
+
 export const updateAddressSaga = sagaEffects.rest(updateAddressTransactionActions, function*({ payload }) {
 	return updateAddressRest(payload.address, payload.type);
 });
