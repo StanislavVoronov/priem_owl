@@ -2,7 +2,7 @@ import React from 'react';
 import { IDocument, IDocumentsForm, IDictionary, validateDocument } from '$common';
 import { always, cond, equals, ITransaction, T, propEq } from '@black_bird/utils';
 import { DocumentItem } from './components';
-import { Button } from '@black_bird/components';
+import { Button, Row } from '@black_bird/components';
 import classes from './styles.module.css';
 import { List, ListSubheader } from '$components';
 const getSubTypeDictionary = cond([
@@ -30,6 +30,7 @@ const DocumentsFormView = (props: IProps) => {
 		documents,
 		addDoc,
 		personDocDictionary,
+		docTypesDictionary,
 		expendList,
 		educationDictionary,
 		deleteDoc,
@@ -43,7 +44,7 @@ const DocumentsFormView = (props: IProps) => {
 	const addButtonDisabled = documents.map(validateDocument).includes(false);
 
 	const nextButtonDisabled =
-		requireDocs.filter(item => !documents.some(doc => (doc.type && doc.type.id) === item.id)).length > 0;
+		requireDocs.filter((item) => !documents.some((doc) => (doc.type && doc.type.id) === item.id)).length > 0;
 
 	return (
 		<>
@@ -52,8 +53,8 @@ const DocumentsFormView = (props: IProps) => {
 					<li className={classes.tick}>Документ, удостоверающий личность</li>
 					<li className={classes.tick}>Документ о регистрации места жительства</li>
 					<li className={classes.tick}>Документ о предыдущем образовании</li>
-					{requireDocs.map(item => (
-						<li className={documents.some(doc => doc.type && doc.type.id === item.id) ? classes.tick : classes.cross}>
+					{requireDocs.map((item) => (
+						<li className={documents.some((doc) => doc.type && doc.type.id === item.id) ? classes.tick : classes.cross}>
 							{item.name}
 						</li>
 					))}
@@ -67,8 +68,8 @@ const DocumentsFormView = (props: IProps) => {
 				return (
 					<DocumentItem
 						key={`${index}`}
-						governmentDictionary={governmentDictionary.result}
-						docTypesDictionary={props.docTypesDictionary.result}
+						governmentDictionary={governmentDictionary}
+						docTypesDictionary={docTypesDictionary}
 						subDocTypesDictionary={subTypesDictionary}
 						expanded={expendList.some(equals(index))}
 						onChange={onChangeData}
@@ -82,9 +83,11 @@ const DocumentsFormView = (props: IProps) => {
 			<Button margin="huge" disabled={addButtonDisabled} classes={{ root: classes.addDoc }} onClick={addDoc}>
 				Добавить новый документ
 			</Button>
-			<Button disabled={nextButtonDisabled} margin="huge" onClick={onSubmit}>
-				Далее
-			</Button>
+			<Row hAlign="center" vAlign="center" margin="dense">
+				<Button disabled={nextButtonDisabled} margin="huge" onClick={onSubmit}>
+					Последний шаг
+				</Button>
+			</Row>
 		</>
 	);
 };

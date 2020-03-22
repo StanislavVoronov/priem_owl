@@ -13,12 +13,12 @@ import {
 	VerAccountForm,
 	ApplicationsForm,
 } from '$containers';
+import { IProxyElementProps, ProxyElement } from '@black_bird/components';
 import { noop } from '$common';
 
 interface IProps {
 	loading: boolean;
-	handleNext: () => void;
-	handleStep: (index: number) => () => void;
+	handleStep: (index: number) => void;
 	activeStep: number;
 	passedStep: number;
 	steps: string[];
@@ -28,7 +28,11 @@ export class EnrollView extends React.PureComponent<IProps> {
 		passedStep: 0,
 	};
 
-	renderForm = (step: number) => {
+	handleStep = (step: number) => () => {
+		this.props.handleStep(step);
+	};
+
+	renderStepContent = (step: number) => {
 		switch (step) {
 			case 0: {
 				return <RegistrationForm />;
@@ -59,6 +63,8 @@ export class EnrollView extends React.PureComponent<IProps> {
 	};
 
 	render() {
+		const { activeStep, passedStep } = this.props;
+
 		return (
 			<>
 				<EnrollHeader />
@@ -70,22 +76,15 @@ export class EnrollView extends React.PureComponent<IProps> {
 					orientation={'vertical'}>
 					{!this.props.loading ? (
 						this.props.steps.map((label, index) => (
-							<Step style={index <= this.props.passedStep ? { cursor: 'pointer' } : { cursor: 'default' }} key={label}>
-								<StepButton
-									className={classes.stepButton}
-									disabled={index <= this.props.passedStep}
-									onClick={index <= this.props.passedStep ? this.props.handleStep(index) : noop}>
-									<span className={index === this.props.activeStep ? styles.currentStepLabel : ''}>{label}</span>
+							<Step disabled={passedStep < index} expanded={activeStep === index} active={activeStep === index}>
+								<StepButton className={classes.stepButton} onClick={this.handleStep(index)}>
+									<span>{label}</span>
 								</StepButton>
-								<StepContent>{this.renderForm(index)}</StepContent>
+								<StepContent>{this.renderStepContent(this.props.activeStep)}</StepContent>
 							</Step>
 						))
 					) : (
 						<LoadingText>Подготовка формы</LoadingText>
-					)}
-
-					{this.props.activeStep >= this.props.steps.length && (
-						<Title color="green">Процесс подачи документов для поступления в Университет успешно завершен!</Title>
 					)}
 				</Stepper>
 			</>

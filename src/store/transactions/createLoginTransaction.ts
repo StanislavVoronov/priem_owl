@@ -18,7 +18,7 @@ export const createLoginReducer = createTransactionReducer(createLoginTransactio
 
 export const createLoginTransactionSelector = createSelector(prop('transactions'), (state: ITransactionsState) => {
 	const { isFetching, exception, result } = state.createLogin;
-	const npId = result.length > 0 ? result[0].id : 0;
+	const npId = result.length ? result[0].id : 0;
 
 	return { isFetching, exception, result: npId };
 });

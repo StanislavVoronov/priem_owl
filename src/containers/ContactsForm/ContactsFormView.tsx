@@ -25,7 +25,7 @@ const ContactsFormView = (props: IProps) => {
 				onChange={onChange}
 				document={values.regDoc}
 				governmentTitle={'Страна'}
-				dictionaryGovernment={governmentDictionary && governmentDictionary.result}
+				dictionaryGovernment={governmentDictionary}
 				fileTitle="Файл регистрации места жительства"
 				endFields={
 					<React.Fragment>
@@ -80,7 +80,7 @@ const ContactsFormView = (props: IProps) => {
 						onChange={onChange}
 						document={values.liveDoc}
 						governmentTitle={'Страна'}
-						dictionaryGovernment={governmentDictionary && governmentDictionary.result}
+						dictionaryGovernment={governmentDictionary}
 						fileTitle="Файл временного места жительства"
 						endFields={
 							<>

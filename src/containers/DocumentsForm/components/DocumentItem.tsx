@@ -3,7 +3,8 @@ import classes from './DocumentItem.module.css';
 import classNames from 'classnames';
 import React from 'react';
 import { IDictionary, IDocument } from '$common';
-import { IFormField, TextInput, Button } from '@black_bird/components';
+import { ITransaction } from '@black_bird/utils';
+import { IFormField, TextInput } from '@black_bird/components';
 import { PanelDetails } from './styled';
 
 interface IProps {
@@ -13,9 +14,9 @@ interface IProps {
 	expanded: boolean;
 	onToggle: (index: number) => void;
 	deleteDoc: (index: number) => void;
-	governmentDictionary: IDictionary[];
-	subDocTypesDictionary: IDictionary[];
-	docTypesDictionary: IDictionary[];
+	governmentDictionary: ITransaction<IDictionary>;
+	subDocTypesDictionary: ITransaction<IDictionary>;
+	docTypesDictionary: ITransaction<IDictionary>;
 }
 
 const DocumentItem = (props: IProps) => {

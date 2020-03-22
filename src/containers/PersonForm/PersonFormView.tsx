@@ -21,9 +21,9 @@ export const PersonFormView = (props: IProps) => {
 			document={document}
 			onChange={onChange}
 			governmentTitle="Гражданство"
-			dictionaryGovernment={governmentDictionary.result}
+			dictionaryGovernment={governmentDictionary}
 			fileTitle="Файл документа, удостоверяющего личность"
-			dictionarySubTypes={personTypesDocsDictionary.result}
+			dictionarySubTypes={personTypesDocsDictionary}
 			subTitle="Тип документа удостоверяющего личность"
 			endFields={
 				<React.Fragment>

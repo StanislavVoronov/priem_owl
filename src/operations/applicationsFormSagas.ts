@@ -1,6 +1,6 @@
 import {
 	applicationsFormSelector,
-	handleNextStep,
+	navigateToStep,
 	onChangeDirectionAction,
 	onChangeEducFormsAction,
 	onChangeEducLevelAction,
@@ -68,7 +68,7 @@ export const applicationFormSagas = [
 		}
 	}),
 	sagaEffects.takeEvery(submitApplicationFormAction, function*() {
-		yield sagaEffects.put(handleNextStep());
+		yield sagaEffects.put(navigateToStep());
 	}),
 	sagaEffects.takeEvery(priemAdmGroupsTransactionActions.success, function*({ payload }) {
 		const { response }: any = payload;

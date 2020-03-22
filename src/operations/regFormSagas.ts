@@ -6,8 +6,9 @@ import {
 	createLoginTransactionActions,
 	generateUserPasswordAction,
 	findPersonTransactionActions,
-	handleNextStep,
+	navigateToStep,
 	isUniqueLoginTransactionSelector,
+	goToNextStep,
 } from '$store';
 import { checkLoginRest, createLoginRest, findPersonRest } from '$rests';
 import { cyrillToLatin, generatePassword } from '$common';
@@ -50,17 +51,17 @@ function* createNewLogin() {
 
 export const regFormSagas = [
 	sagaEffects.takeEvery(submitRegFormAction, createNewLogin),
-	sagaEffects.takeLatest(generateUserPasswordAction, function*({ payload }: any) {
+	sagaEffects.takeLatest(generateUserPasswordAction, function* ({ payload }: any) {
 		const password = generatePassword();
 
 		yield sagaEffects.put(createLoginTransactionActions.trigger(payload, password));
 	}),
-	sagaEffects.takeLatest(findPersonTransactionActions.success, function*({ payload }: any) {
+	sagaEffects.takeLatest(findPersonTransactionActions.success, function* ({ payload }: any) {
 		if (isEmptyArray(payload.response)) {
-			yield sagaEffects.put(handleNextStep());
+			yield sagaEffects.put(goToNextStep());
 		}
 	}),
-	sagaEffects.takeEvery(createLoginTransactionActions.success, function*() {
+	sagaEffects.takeEvery(createLoginTransactionActions.success, function* () {
 		const data = yield sagaEffects.select(regFormSelector);
 
 		yield sagaEffects.put(findPersonTransactionActions.trigger(data));

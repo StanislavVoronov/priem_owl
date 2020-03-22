@@ -5,8 +5,7 @@ import { NEW_PERSON_STEPS } from '../../dictionaries';
 
 import { IRootState, enrollSelector } from '$store';
 import { IDictionaryConfig } from '@black_bird/dictionaries';
-import { initAction, handleNextStep } from '$store';
-import { getFirstNamesDictionary } from '../../store/selectors';
+import { initAction, navigateToStep, getFirstNamesDictionary } from '$store';
 import { ITransaction, noop } from '@black_bird/utils';
 
 interface IState {
@@ -15,7 +14,6 @@ interface IState {
 
 interface IStateToProps {
 	firstNameDictionary: ITransaction<any>;
-	personId: number;
 	step: number;
 	passedStep: number;
 }
@@ -23,7 +21,7 @@ interface IStateToProps {
 interface IDispatchToProps {
 	init: () => void;
 	createNewPersonFolder: () => Promise<void>;
-	handleNextStep: () => void;
+	handleStep: (step: number) => void;
 }
 type IProps = IStateToProps & IDispatchToProps;
 
@@ -36,12 +34,9 @@ class EnrollContainer extends React.Component<IProps, IState> {
 		this.props.init();
 	}
 
-	handleStep = (step: number) => () => {
-		this.props.handleNextStep();
-	};
-
-	handleNext = () => {
-		this.props.handleNextStep();
+	handleStep = (step: number) => {
+		console.log('step', step);
+		this.props.handleStep(step);
 	};
 
 	render() {
@@ -53,29 +48,26 @@ class EnrollContainer extends React.Component<IProps, IState> {
 			<EnrollView
 				steps={NEW_PERSON_STEPS}
 				loading={loading}
-				handleNext={this.handleNext}
-				activeStep={step}
 				handleStep={this.handleStep}
+				activeStep={step}
 				passedStep={passedStep}
 			/>
 		);
 	}
 }
 
-const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
+const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) => {
 	const firstNameDictionary = getFirstNamesDictionary(state);
 
 	const enroll = enrollSelector(state);
 
-	// const { result } = fromTransaction.createLogin(state);
-
-	return { personId: 0, firstNameDictionary, step: enroll.step, passedStep: enroll.passedStep };
+	return { firstNameDictionary, step: enroll.step, passedStep: enroll.passedStep };
 };
 
 const mapDispatchToProps = {
 	createNewPersonFolder: noop,
 	init: initAction,
-	handleNextStep,
+	handleStep: navigateToStep,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EnrollContainer);

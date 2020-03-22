@@ -35,7 +35,7 @@ const rootSagas = [
 	...applicationFormSagas,
 	...classifiersSagas,
 	sagaEffects.takeEvery(initAction, fetchShortDictionaries),
-	sagaEffects.takeEvery(initAction, function*() {
+	sagaEffects.takeEvery(createLoginTransactionActions.success, function* () {
 		yield sagaEffects.put(priemFilialsTransactionActions.trigger());
 	}),
 

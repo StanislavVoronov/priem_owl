@@ -39,10 +39,10 @@ const PersonFormContainer = (props: IProps) => {
 		);
 	};
 
-	return <Form onSubmit={props.submit} buttonText="Далее" renderForm={renderForm} initialValues={props.form} />;
+	return <Form onSubmit={props.submit} buttonText="Следующий шаг" renderForm={renderForm} initialValues={props.form} />;
 };
 
-const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
+const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) => {
 	const personTypesDocsDictionary = getPersonTypesDocDictionary(state);
 	const typesDocsDictionary = getDocTypesDictionary(state);
 	const governmentDictionary = getGovernmentDictionary(state);

@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { TextInput, Select, IFormField, Column, DownloadFile, Checkbox } from '@black_bird/components';
 import { noop, IDocument, validateRequireTextField } from '$common';
-import { isNotEmptyArray } from '@black_bird/utils';
+import { isNotEmptyArray, ITransaction } from '@black_bird/utils';
 import classes from './DocumentForm.module.css';
 
 type IDictionary = Record<any, any>;
@@ -10,9 +10,9 @@ interface IDocumentFormProps {
 	document: IDocument;
 	onChange: (data: IFormField) => void;
 	name: string;
-	dictionaryTypes?: IDictionary[];
-	dictionarySubTypes?: IDictionary[];
-	dictionaryGovernment?: IDictionary[];
+	dictionaryTypes?: ITransaction<IDictionary>;
+	dictionarySubTypes?: ITransaction<IDictionary>;
+	dictionaryGovernment?: ITransaction<IDictionary>;
 	governmentTitle: string;
 	title: string;
 	subTitle: string;
@@ -22,7 +22,7 @@ interface IDocumentFormProps {
 	endFields?: ReactElement<any> | null;
 }
 
-class DocumentForm extends React.PureComponent<IDocumentFormProps, { hasNumber: boolean }> {
+class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: boolean }> {
 	static defaultProps = {
 		selectDocType: noop,
 		selectDocSubType: noop,
@@ -34,10 +34,10 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { hasNumber: 
 		fileTitle: '',
 	};
 	state = {
-		hasNumber: false,
+		noNumber: false,
 	};
 	onChangeHasNumber = () => {
-		this.setState({ hasNumber: !this.state.hasNumber });
+		this.setState({ noNumber: !this.state.noNumber });
 	};
 	onChange = (field: IFormField) => {
 		const { document, onChange, name } = this.props;
@@ -67,6 +67,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { hasNumber: 
 			name,
 			dictionaryGovernment,
 			governmentTitle,
+			dictionaryTypes,
 			dictionarySubTypes,
 			subTitle,
 			fileTitle,
@@ -75,6 +76,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { hasNumber: 
 			startFields,
 		} = this.props;
 		const { type, file = null, government, subType, num, series, issieBy } = this.props.document;
+		const { noNumber } = this.state;
 		const needInfo = type && type.need_info;
 		const hasNumber = (type && type.has_num) || false;
 
@@ -82,37 +84,40 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { hasNumber: 
 			<div className={classes.form}>
 				<Column>
 					{startFields}
-					{isNotEmptyArray(dictionaryGovernment) && governmentTitle && (
+					{governmentTitle && (
 						<Select
 							name="government"
 							value={government}
 							required
+							error={dictionaryGovernment?.exception?.comment}
 							onChange={this.onChange}
-							options={dictionaryGovernment}
+							options={dictionaryGovernment?.result}
 							placeholder={`Выберите ${governmentTitle.toLowerCase()}`}
 							title={governmentTitle}
 						/>
 					)}
 
-					{this.props.dictionaryTypes && title && (
+					{title && (
 						<Select
 							onChange={this.onChange}
 							value={type}
 							name="type"
 							required
-							options={this.props.dictionaryTypes}
+							error={dictionaryTypes?.exception?.comment}
+							options={dictionaryTypes?.result}
 							placeholder={`Выберите ${this.props.title.toLowerCase()}`}
 							title={this.props.title}
 						/>
 					)}
 
-					{isNotEmptyArray(dictionarySubTypes) && subTitle && (
+					{subTitle && (
 						<Select
 							onChange={this.onChange}
 							name="subType"
 							required
 							value={subType}
-							options={this.props.dictionarySubTypes}
+							error={dictionarySubTypes?.exception?.comment}
+							options={dictionarySubTypes?.result}
 							placeholder={`Выберите ${this.props.subTitle.toLowerCase()}`}
 							title={this.props.subTitle}
 						/>
@@ -134,7 +139,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { hasNumber: 
 						{hasNumber ? (
 							<TextInput
 								required={!!hasNumber}
-								disabled={this.state.hasNumber}
+								disabled={noNumber}
 								value={num}
 								onChange={this.onChange}
 								validate={validateRequireTextField}
@@ -149,7 +154,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { hasNumber: 
 								<Checkbox
 									name="hasNumber"
 									margin="none"
-									value={this.state.hasNumber}
+									value={this.state.noNumber}
 									className={classes.hasNumberCheckbox}
 									onChange={this.onChangeHasNumber}
 									label="Нет номера"

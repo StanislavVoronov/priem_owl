@@ -19,6 +19,7 @@ interface IStateToProps {
 	firstNameDictionary: ITransaction<IFistNameDictionary>;
 	middleNameDictionary: ITransaction<IFistNameDictionary>;
 	error: IException | null;
+	disabledForm: boolean;
 	loading: boolean;
 	data: IRegForm;
 }
@@ -39,7 +40,7 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 	};
 
 	render() {
-		const { onSubmit, data, error, loading } = this.props;
+		const { onSubmit, data, error, loading, disabledForm} = this.props;
 
 		return (
 			<Form
@@ -47,6 +48,7 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 				loading={loading}
 				loadingText="Поиск личного дела"
 				renderForm={this.renderForm}
+				disabled = {disabledForm}
 				onSubmit={onSubmit}
 				initialValues={data}
 				buttonText="Проверить"
@@ -67,6 +69,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 		firstNameDictionary,
 		middleNameDictionary,
 		data,
+		disabledForm: createLoginTransaction.result > 0,
 		error: uniqueLoginTransaction.exception || createLoginTransaction.exception || findPersonTransaction.exception,
 		loading: uniqueLoginTransaction.isFetching || createLoginTransaction.isFetching || findPersonTransaction.isFetching,
 	};

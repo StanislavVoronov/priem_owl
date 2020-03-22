@@ -2,7 +2,7 @@ import { sagaEffects } from '@black_bird/utils';
 import {
 	contactsFormSelector,
 	createVerCodeTransactionActions,
-	handleNextStep,
+	navigateToStep,
 	submitDocumentsForm,
 	verAccountFormSelector,
 } from '$store';
@@ -14,6 +14,6 @@ export const documentsFormSagas = [
 
 		yield sagaEffects.put(createVerCodeTransactionActions.trigger(email, mobPhone, verAccountMethod));
 
-		yield sagaEffects.put(handleNextStep());
+		yield sagaEffects.put(navigateToStep());
 	}),
 ];

@@ -8,7 +8,7 @@ export const styles = {
 	},
 	dropZone: {
 		display: 'flex',
-		height: '100%',
+		height: '90%',
 		padding: 20,
 		flexDirection: 'column' as any,
 		justifyContent: 'center',

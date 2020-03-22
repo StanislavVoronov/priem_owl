@@ -61,7 +61,6 @@ module.exports = function(webpackEnv) {
 				options: {
 					ident: 'postcss',
 					plugins: () => [
-						require('postcss-flexbugs-fixes'),
 						require('postcss-preset-env')({
 							autoprefixer: {
 								flexbox: 'no-2009',

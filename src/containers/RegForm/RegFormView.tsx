@@ -1,7 +1,7 @@
 import React from 'react';
 import { RadioButtonGroup } from '$components';
 import { TextInput, IFormProps, Autocomplete, IFormField } from '@black_bird/components';
-import { ITransaction, prop } from '@black_bird/utils';
+import { has, ITransaction, prop } from '@black_bird/utils';
 import { validateRequireTextField, IFistNameDictionary, IRegForm } from '$common';
 
 export const GENDERS = [
@@ -17,9 +17,9 @@ interface IProps {
 
 const RegFormView = (props: IProps) => {
 	const { firstNameDictionary, middleNameDictionary } = props;
-	const { onChange, values } = props.form;
+	const { onChange, values, errors } = props.form;
 	const defaultOnChange = (data: IFormField<string>) => {
-		const genderName = firstNameDictionary.result.find(item => item.name === data.value);
+		const genderName = firstNameDictionary.result.find((item) => item.name === data.value);
 
 		if (genderName) {
 			onChange(data, [{ name: 'gender', value: String(genderName.sex) }]);
@@ -40,6 +40,8 @@ const RegFormView = (props: IProps) => {
 			: items;
 	};
 
+	console.log("erros", errors);
+
 	return (
 		<>
 			<TextInput
@@ -52,6 +54,8 @@ const RegFormView = (props: IProps) => {
 			/>
 
 			<Autocomplete
+				error={has('firstName')(errors)}
+				helperText={errors?.firstName}
 				title="Имя"
 				defaultValue={values.firstName}
 				onChange={defaultOnChange}
@@ -63,6 +67,8 @@ const RegFormView = (props: IProps) => {
 
 			<Autocomplete
 				title="Отчество"
+				error={has('middleName')(errors)}
+				helperText={errors?.middleName}
 				defaultValue={values.middleName}
 				onChange={defaultOnChange}
 				name="middleName"
@@ -75,6 +81,8 @@ const RegFormView = (props: IProps) => {
 				onChange={onChange}
 				validate={validateRequireTextField}
 				required
+				error={has('birthday')(errors)}
+				helperText={errors?.birthday}
 				name="birthday"
 				value={values.birthday}
 				label="Дата рождения"
@@ -83,6 +91,8 @@ const RegFormView = (props: IProps) => {
 			/>
 
 			<RadioButtonGroup
+				error={has('gender')(errors)}
+				helperText={errors?.gender}
 				value={values.gender}
 				onChange={onChange}
 				validate={validateRequireTextField}

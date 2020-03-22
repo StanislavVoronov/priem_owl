@@ -23,9 +23,9 @@ const EducationFormView = (props: IProps) => {
 				fileTitle="Файл документа о предыдущем образовании"
 				title={'Предыдущее образование'}
 				subTitle="Документ о предыдущем образовании"
-				dictionarySubTypes={educTypeDocDictionary.result}
+				dictionarySubTypes={educTypeDocDictionary}
 				governmentTitle="Государство"
-				dictionaryGovernment={governmentDictionary.result}
+				dictionaryGovernment={governmentDictionary}
 				startFields={
 					<>
 						<Checkbox

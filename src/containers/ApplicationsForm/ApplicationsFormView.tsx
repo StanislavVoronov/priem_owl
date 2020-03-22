@@ -144,6 +144,7 @@ const ApplicationsFormView = (props: IProps) => {
 					getOptionValue={getId}
 					getOptionLabel={prop('NAME')}
 					name="profile"
+					error={profileDictionary.exception?.message}
 					options={profileDictionary.result}
 					placeholder={`Выберите профиль`}
 					title={'Профиль'}
@@ -160,6 +161,7 @@ const ApplicationsFormView = (props: IProps) => {
 					getOptionValue={getId}
 					getOptionLabel={prop('NAME')}
 					name="educForm"
+					error={educFormDictionary.exception?.message}
 					options={educFormDictionary.result}
 					placeholder={`Выберите форму обучения`}
 					title={'Форма обучения'}
@@ -176,6 +178,7 @@ const ApplicationsFormView = (props: IProps) => {
 					getOptionValue={getId}
 					getOptionLabel={prop('NAME')}
 					name="payForm"
+					error={payFormDictionary.exception?.message}
 					options={payFormDictionary.result}
 					placeholder={`Выберите форму финансироавания`}
 					title={'Форма финансирования'}
@@ -196,12 +199,10 @@ const ApplicationsFormView = (props: IProps) => {
 				</Button>
 			) : null}
 
-
-
 			<ApplicationsTable onDelete={onDeleteApplication} applications={applications} />
 
 			<Button disabled={nextButtonDisabled} onClick={submitApplicationsForm}>
-				{'Далее'}
+				Следующий шаг
 			</Button>
 		</Column>
 	);

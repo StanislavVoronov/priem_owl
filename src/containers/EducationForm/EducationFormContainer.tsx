@@ -44,7 +44,7 @@ class EducationFormContainer extends React.PureComponent<Props> {
 		return (
 			<Form
 				onSubmit={this.props.submit}
-				buttonText="Далее"
+				buttonText="Следующий шаг"
 				renderForm={this.renderForm}
 				initialValues={this.props.form}
 			/>
