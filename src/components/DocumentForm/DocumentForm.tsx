@@ -37,7 +37,13 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 		noNumber: false,
 	};
 	onChangeHasNumber = () => {
+
 		this.setState({ noNumber: !this.state.noNumber });
+
+		this.props.onChange({
+			name: 'num',
+			value: this.state.noNumber ? '' : '-'
+		})
 	};
 	onChange = (field: IFormField) => {
 		const { document, onChange, name } = this.props;
