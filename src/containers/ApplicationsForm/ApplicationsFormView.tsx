@@ -204,11 +204,8 @@ const ApplicationsFormView = (props: IProps) => {
 
 			{isNotEmptyArray(applications) ? (
 				<>
-					<div
-						className={classNames(
-							classes.headerPanel,
-						)}>
-						<h2>Список заявлений</h2>
+					<div className={classNames(classes.headerPanel)}>
+						<div className={classes.appHeader}>Список заявлений</div>
 						{display ? (
 							<ExpandLessIcon
 								titleAccess="Свернуть"
