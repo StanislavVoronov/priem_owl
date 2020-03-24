@@ -6,7 +6,7 @@ import { ITransaction } from '@black_bird/utils';
 import { DocumentForm, H2 } from '$components';
 
 interface IProps {
-	governmentDictionary: ITransaction<IDictionary>;
+	governmentDictionary: ITransaction<IDictionary[]>;
 	form: IFormProps<IContactsForm>;
 	// loading: boolean;
 	// error: IServerError | null;
@@ -146,7 +146,7 @@ const ContactsFormView = (props: IProps) => {
 				value={values.mobPhone}
 				name="mobPhone"
 				label="Мобильный телефон"
-				required={true}
+				required
 			/>
 			<TextInput onChange={onChange} value={values.homePhone} name="homePhone" label="Домашний телефон" />
 		</>

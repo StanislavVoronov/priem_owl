@@ -1,4 +1,6 @@
 import { ITransactionsState } from '$store';
+import { ITransaction } from '@black_bird/utils';
+
 import {
 	IEducationForm,
 	IContactsForm,

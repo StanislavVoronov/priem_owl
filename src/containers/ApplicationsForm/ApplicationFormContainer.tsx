@@ -24,31 +24,32 @@ import {
 	submitApplicationFormAction,
 	applicationDeletedAction,
 	IAdmGroup,
+	IAdmTransactionList,
 } from '$store';
 import { IAdmDictionaryItem } from '$common';
 import ApplicationsFormView from './ApplicationsFormView';
 import { disabledAddButtonSelector } from './selectors';
 
 interface IStateToProps {
-	filialDictionary: ITransaction<IAdmDictionaryItem>;
+	filialDictionary: IAdmTransactionList;
 	filial: IAdmDictionaryItem | null;
 	institute: IAdmDictionaryItem | null;
-	instituteDictionary: ITransaction<IAdmDictionaryItem>;
+	instituteDictionary: IAdmTransactionList;
 
 	educLevel: IAdmDictionaryItem | null;
-	educLevelDictionary: ITransaction<IAdmDictionaryItem>;
+	educLevelDictionary: IAdmTransactionList;
 
 	direction: IAdmDictionaryItem | null;
-	directionDictionary: ITransaction<IAdmDictionaryItem>;
+	directionDictionary: IAdmTransactionList;
 
 	profiles: IAdmDictionaryItem[];
-	profileDictionary: ITransaction<IAdmDictionaryItem>;
+	profileDictionary: IAdmTransactionList;
 
 	educForms: IAdmDictionaryItem[];
-	educFormDictionary: ITransaction<IAdmDictionaryItem>;
+	educFormDictionary: IAdmTransactionList;
 
 	payForms: IAdmDictionaryItem[];
-	payFormDictionary: ITransaction<IAdmDictionaryItem>;
+	payFormDictionary: IAdmTransactionList;
 	applications: IAdmGroup[];
 	disabledAddButton: boolean;
 }
@@ -79,7 +80,7 @@ class ContactsFormContainer extends React.PureComponent<Props> {
 	}
 }
 
-const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
+const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) => {
 	const filialDictionary = priemFilialsTransactionSelector(state);
 	const instituteDictionary = priemInstitutesTransactionSelector(state);
 	const educLevelDictionary = priemEducLevelsTransactionSelector(state);

@@ -2,7 +2,7 @@ import React from 'react';
 import { IDocument, IDocumentsForm, IDictionary, validateDocument } from '$common';
 import { always, cond, equals, ITransaction, T, propEq } from '@black_bird/utils';
 import { DocumentItem } from './components';
-import { Button, Row } from '@black_bird/components';
+import { Button, Row, Wrapper } from '@black_bird/components';
 import classes from './styles.module.css';
 import { List, ListSubheader } from '$components';
 const getSubTypeDictionary = cond([
@@ -12,10 +12,10 @@ const getSubTypeDictionary = cond([
 ]);
 
 interface IProps extends IDocumentsForm {
-	docTypesDictionary: ITransaction<IDictionary>;
-	governmentDictionary: ITransaction<IDictionary>;
-	educationDictionary: ITransaction<IDictionary>;
-	personDocDictionary: ITransaction<IDictionary>;
+	docTypesDictionary: ITransaction<IDictionary[]>;
+	governmentDictionary: ITransaction<IDictionary[]>;
+	educationDictionary: ITransaction<IDictionary[]>;
+	personDocDictionary: ITransaction<IDictionary[]>;
 	addDoc: () => void;
 	deleteDoc: (index: number) => void;
 	onToggleItem: (index: number) => void;
@@ -80,14 +80,14 @@ const DocumentsFormView = (props: IProps) => {
 					/>
 				);
 			})}
-			<Button margin="huge" disabled={addButtonDisabled} classes={{ root: classes.addDoc }} onClick={addDoc}>
-				Добавить новый документ
-			</Button>
-			<Row hAlign="center" vAlign="center" margin="dense">
+			<Wrapper margin="huge" className={classes.buttonWrapper}>
+				<Button margin="huge" disabled={addButtonDisabled} classes={{ root: classes.addDoc }} onClick={addDoc}>
+					Добавить новый документ
+				</Button>
 				<Button disabled={nextButtonDisabled} margin="huge" onClick={onSubmit}>
 					Последний шаг
 				</Button>
-			</Row>
+			</Wrapper>
 		</>
 	);
 };

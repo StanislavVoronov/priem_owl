@@ -14,9 +14,9 @@ import { ITransaction } from '@black_bird/utils';
 import EducationFormView from './EducationFormView';
 
 interface IPropsState {
-	governmentDictionary: ITransaction<IDictionary>;
-	prevEducDictionary: ITransaction<IDictionary>;
-	educTypeDocDictionary: ITransaction<IDictionary>;
+	governmentDictionary: ITransaction<IDictionary[]>;
+	prevEducDictionary: ITransaction<IDictionary[]>;
+	educTypeDocDictionary: ITransaction<IDictionary[]>;
 	form: IEducationForm;
 }
 

@@ -5,15 +5,15 @@ import { IFormProps, TextInput, Checkbox } from '@black_bird/components';
 import { ITransaction } from '@black_bird/utils';
 
 interface IProps {
-	personTypesDocsDictionary: ITransaction<IDictionary>;
-	typesDocsDictionary: ITransaction<IDictionary>;
-	governmentDictionary: ITransaction<IDictionary>;
+	personTypesDocsDictionary: ITransaction<IDictionary[]>;
+	typesDocsDictionary: ITransaction<IDictionary[]>;
+	governmentDictionary: ITransaction<IDictionary[]>;
 	form: IFormProps<IPersonForm>;
 }
 
 export const PersonFormView = (props: IProps) => {
 	const { values, onChange } = props.form;
-	const { personTypesDocsDictionary, typesDocsDictionary, governmentDictionary } = props;
+	const { personTypesDocsDictionary, governmentDictionary } = props;
 	const { document } = values;
 
 	return (
@@ -34,7 +34,6 @@ export const PersonFormView = (props: IProps) => {
 							defaultValue={values.codeDepartment}
 							name="codeDepartment"
 							label="Код подразделения"
-							type="number"
 							placeholder="Введите код подразделения"
 						/>
 					)}

@@ -3,6 +3,8 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import {
 	createAppsTransactionSelector,
 	createPersonTransactionSelector,
+	createVerCodeTransactionActions,
+	createVerCodeTransactionSelector,
 	IRootState,
 	submitVerAccountForm,
 	updateAddressTransactionSelector,
@@ -12,11 +14,12 @@ import {
 import { AddressType, IVerAccountForm } from '$common';
 import VerAccountFormView from './VerAccountFormView';
 import { Form, IFormField, IFormProps } from '@black_bird/components';
-import { IException, prop, TransactionStatus } from '@black_bird/utils';
+import { IException, ITransaction, prop, TransactionStatus } from '@black_bird/utils';
 import classes from './styles.module.css';
 
 interface IMapStateToProps {
 	form: IVerAccountForm;
+	createCodeTransaction: ITransaction<unknown>;
 	error?: IException | null;
 	loading: boolean;
 	folderCreated: boolean;
@@ -33,7 +36,7 @@ class AccountVerificationContainer extends React.Component<IProps> {
 	};
 
 	render() {
-		const { loading, onSubmit, error, form, folderCreated } = this.props;
+		const { loading, onSubmit, createCodeTransaction, error, form, folderCreated } = this.props;
 
 		if (folderCreated) {
 			return <div className={classes.folder}>Документы на поступление успешно отправлены</div>;
@@ -43,7 +46,9 @@ class AccountVerificationContainer extends React.Component<IProps> {
 			<Form
 				onSubmit={onSubmit}
 				loading={loading}
-				loadingText="Формирование личного дела"
+				loadingText={
+					createCodeTransaction.isFetching ? 'Отправка кода подтверждения учетной записи' : 'Формирование личного дела'
+				}
 				buttonText="Отправить документы для поступления"
 				renderForm={this.renderForm}
 				error={error}
@@ -52,15 +57,16 @@ class AccountVerificationContainer extends React.Component<IProps> {
 		);
 	}
 }
-const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = state => {
+const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = (state) => {
 	const form = verAccountFormSelector(state);
 	const createPersonDataTransaction = createPersonTransactionSelector(state);
 	const updateLiveAddressTransaction = updateAddressTransactionSelector(state, AddressType.Live);
 	const updateRegAddressTransaction = updateAddressTransactionSelector(state, AddressType.Reg);
 	const appsTransactions = createAppsTransactionSelector(state);
 	const docsTransactions = uploadDocumentsTransactionSelector(state);
-	const appException = Object.values(appsTransactions).find(item => item.exception);
-	const docException = Object.values(docsTransactions).find(item => item.exception);
+	const appException = Object.values(appsTransactions).find((item) => item.exception);
+	const docException = Object.values(docsTransactions).find((item) => item.exception);
+	const createCodeTransaction = createVerCodeTransactionSelector(state);
 
 	return {
 		form,
@@ -68,10 +74,12 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = state
 			createPersonDataTransaction.isFetching ||
 			(updateLiveAddressTransaction && updateLiveAddressTransaction.isFetching) ||
 			(updateRegAddressTransaction && updateRegAddressTransaction.isFetching) ||
-			Object.values(appsTransactions).some(item => item.isFetching) ||
-			Object.values(docsTransactions).some(item => item.isFetching),
+			Object.values(appsTransactions).some((item) => item.isFetching) ||
+			Object.values(docsTransactions).some((item) => item.isFetching),
+		createCodeTransaction,
 		error:
 			createPersonDataTransaction.exception ||
+			createCodeTransaction.exception ||
 			(updateLiveAddressTransaction && updateLiveAddressTransaction.exception) ||
 			(updateRegAddressTransaction && updateRegAddressTransaction.exception) ||
 			(appException && appException.exception) ||
@@ -79,10 +87,12 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = state
 			null,
 		folderCreated:
 			createPersonDataTransaction.status === TransactionStatus.COMPLETED &&
-			(updateLiveAddressTransaction && updateLiveAddressTransaction.status === TransactionStatus.COMPLETED) &&
-			(updateRegAddressTransaction && updateRegAddressTransaction.status === TransactionStatus.COMPLETED) &&
-			Object.values(appsTransactions).every(item => item.status === TransactionStatus.COMPLETED) &&
-			Object.values(docsTransactions).every(item => item.status === TransactionStatus.COMPLETED),
+			updateLiveAddressTransaction &&
+			updateLiveAddressTransaction.status === TransactionStatus.COMPLETED &&
+			updateRegAddressTransaction &&
+			updateRegAddressTransaction.status === TransactionStatus.COMPLETED &&
+			Object.values(appsTransactions).every((item) => item.status === TransactionStatus.COMPLETED) &&
+			Object.values(docsTransactions).every((item) => item.status === TransactionStatus.COMPLETED),
 	};
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {

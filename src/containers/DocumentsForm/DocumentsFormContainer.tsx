@@ -9,17 +9,17 @@ import {
 	getDocTypesDictionary,
 	IRootState,
 	getPersonTypesDocDictionary,
-	submitDocumentsForm,
+	submitDocumentsFormAction,
 	getNeedDocuments,
 } from '$store';
 import { defaultDocument, IDictionary, IDocument } from '$common';
 import { ITransaction } from '@black_bird/utils';
 
 interface IStateToProps {
-	docTypesDictionary: ITransaction<IDictionary>;
-	governmentDictionary: ITransaction<IDictionary>;
-	educationDictionary: ITransaction<IDictionary>;
-	personDocDictionary: ITransaction<IDictionary>;
+	docTypesDictionary: ITransaction<IDictionary[]>;
+	governmentDictionary: ITransaction<IDictionary[]>;
+	educationDictionary: ITransaction<IDictionary[]>;
+	personDocDictionary: ITransaction<IDictionary[]>;
 	requireDocs: IDocument[];
 	documents: IDocument[];
 }
@@ -117,7 +117,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state =>
 	};
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = {
-	onSubmit: submitDocumentsForm,
+	onSubmit: submitDocumentsFormAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentsFormContainer);

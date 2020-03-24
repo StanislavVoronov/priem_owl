@@ -10,9 +10,9 @@ interface IDocumentFormProps {
 	document: IDocument;
 	onChange: (data: IFormField) => void;
 	name: string;
-	dictionaryTypes?: ITransaction<IDictionary>;
-	dictionarySubTypes?: ITransaction<IDictionary>;
-	dictionaryGovernment?: ITransaction<IDictionary>;
+	dictionaryTypes?: ITransaction<IDictionary[]>;
+	dictionarySubTypes?: ITransaction<IDictionary[]>;
+	dictionaryGovernment?: ITransaction<IDictionary[]>;
 	governmentTitle: string;
 	title: string;
 	subTitle: string;

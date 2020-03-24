@@ -14,9 +14,9 @@ interface IProps {
 	expanded: boolean;
 	onToggle: (index: number) => void;
 	deleteDoc: (index: number) => void;
-	governmentDictionary: ITransaction<IDictionary>;
-	subDocTypesDictionary: ITransaction<IDictionary>;
-	docTypesDictionary: ITransaction<IDictionary>;
+	governmentDictionary: ITransaction<IDictionary[]>;
+	subDocTypesDictionary: ITransaction<IDictionary[]>;
+	docTypesDictionary: ITransaction<IDictionary[]>;
 }
 
 const DocumentItem = (props: IProps) => {

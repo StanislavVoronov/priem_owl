@@ -67,9 +67,6 @@ export const applicationFormSagas = [
 			}
 		}
 	}),
-	sagaEffects.takeEvery(submitApplicationFormAction, function*() {
-		yield sagaEffects.put(navigateToStep());
-	}),
 	sagaEffects.takeEvery(priemAdmGroupsTransactionActions.success, function*({ payload }) {
 		const { response }: any = payload;
 		const { filial, institute, direction, educLevel, profiles } = yield sagaEffects.select(applicationsFormSelector);

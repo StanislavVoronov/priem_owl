@@ -16,7 +16,7 @@ export const defaultPersonForm: IPersonForm = {
 	},
 	isApplyPersonData: false,
 	photo: { ...defaultDocument, docType: { id: 35, name: 'Фотография' } },
-	birthplace: 'Moscow',
+	birthplace: '',
 	codeDepartment: '',
 };
 

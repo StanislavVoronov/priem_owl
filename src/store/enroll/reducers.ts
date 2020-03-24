@@ -1,11 +1,26 @@
-import { createReducer, forAction, combineReducers } from '@black_bird/utils';
+import { createReducer, forAction, combineReducers, combineActions } from '@black_bird/utils';
 import { goToNextStep, navigateToStep } from './actions';
+import { submitPersonFormAction } from '../personForm';
+import { submitContactsFormAction } from '../contactsForm';
+import { submitEducationFormAction } from '../educationForm';
+import { submitDocumentsFormAction } from '../documentsForm';
+import { submitApplicationFormAction } from '../applicationsForm';
 
 const enrollReducerNextStep = createReducer(
 	[
-		forAction(goToNextStep, (state) => {
-			return state + 1;
-		}),
+		forAction(
+			combineActions(
+				goToNextStep,
+				submitPersonFormAction,
+				submitContactsFormAction,
+				submitEducationFormAction,
+				submitDocumentsFormAction,
+				submitApplicationFormAction,
+			),
+			(state) => {
+				return state + 1;
+			},
+		),
 		forAction(navigateToStep, (state, payload) => {
 			return payload;
 		}),
@@ -15,9 +30,19 @@ const enrollReducerNextStep = createReducer(
 
 const enrollReducerPassedStep = createReducer(
 	[
-		forAction(goToNextStep, (state) => {
-			return state + 1;
-		}),
+		forAction(
+			combineActions(
+				goToNextStep,
+				submitPersonFormAction,
+				submitContactsFormAction,
+				submitEducationFormAction,
+				submitDocumentsFormAction,
+				submitApplicationFormAction,
+			),
+			(state) => {
+				return state + 1;
+			},
+		),
 	],
 	0,
 );

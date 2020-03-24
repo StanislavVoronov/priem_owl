@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { isEmptyArray, isNotEmptyArray, ITransaction, prop } from '@black_bird/utils';
 import { IAdmDictionaryItem } from '$common';
 import { ApplicationsTable } from './components';
 
 import classes from './styles.module.css';
 
-import { Button, Column, IFormField, Select } from '@black_bird/components';
+import { Button, Column, IFormField, Select, TextInput, Wrapper } from '@black_bird/components';
+import { IAdmTransactionList } from '$store';
+import classNames from 'classnames';
+import { DeleteIcon, DocumentForm, ExpandLessIcon, ExpandMoreIcon, ExpansionPanel } from '$components';
+import { PanelDetails } from '../DocumentsForm/components/styled';
 
 interface IProps {
-	filialDictionary: ITransaction<IAdmDictionaryItem>;
-	instituteDictionary: ITransaction<IAdmDictionaryItem>;
+	filialDictionary: IAdmTransactionList;
+	instituteDictionary: IAdmTransactionList;
 	filial: IAdmDictionaryItem | null;
 	institute: IAdmDictionaryItem | null;
 
@@ -17,23 +21,23 @@ interface IProps {
 	onChangeInst: (item: IFormField<IAdmDictionaryItem>) => void;
 	onChangeEducLevel: (item: IFormField<IAdmDictionaryItem>) => void;
 	educLevel: IAdmDictionaryItem | null;
-	educLevelDictionary: ITransaction<IAdmDictionaryItem>;
+	educLevelDictionary: ITransaction<IAdmDictionaryItem[]>;
 
 	onChangeDirection: (item: IFormField<IAdmDictionaryItem>) => void;
 	direction: IAdmDictionaryItem | null;
-	directionDictionary: ITransaction<IAdmDictionaryItem>;
+	directionDictionary: IAdmTransactionList;
 
 	onChangeProfiles: (item: IFormField<IAdmDictionaryItem[]>) => void;
 	profiles: IAdmDictionaryItem[];
-	profileDictionary: ITransaction<IAdmDictionaryItem>;
+	profileDictionary: IAdmTransactionList;
 
 	onChangeEducForms: (item: IFormField<IAdmDictionaryItem[]>) => void;
 	educForms: IAdmDictionaryItem[];
-	educFormDictionary: ITransaction<IAdmDictionaryItem>;
+	educFormDictionary: IAdmTransactionList;
 
 	onChangePayForms: (item: IFormField<IAdmDictionaryItem[]>) => void;
 	payForms: IAdmDictionaryItem[];
-	payFormDictionary: ITransaction<IAdmDictionaryItem>;
+	payFormDictionary: IAdmTransactionList;
 	applications: any[];
 	disabledAddButton: boolean;
 	addPriemApplication: () => void;
@@ -44,6 +48,10 @@ interface IProps {
 const getId: any = prop('ID');
 
 const ApplicationsFormView = (props: IProps) => {
+	const [display, changeDisplay] = useState(false);
+	const onToggle = () => {
+		changeDisplay(!display);
+	};
 	const {
 		filialDictionary,
 		institute,
@@ -193,17 +201,46 @@ const ApplicationsFormView = (props: IProps) => {
 					По правилам приема можно подать заявления только на три направления подготовки
 				</span>
 			)}
-			{isNotEmptyArray(payForms) ? (
-				<Button disabled={disabledAddButton} classes={{ root: classes.addDocButton }} onClick={addPriemApplication}>
-					Добавить заявление
-				</Button>
+
+			{isNotEmptyArray(applications) ? (
+				<>
+					<div
+						className={classNames(
+							classes.headerPanel,
+						)}>
+						<h2>Список заявлений</h2>
+						{display ? (
+							<ExpandLessIcon
+								titleAccess="Свернуть"
+								className={classes.expansionIcon}
+								fontSize="small"
+								onClick={onToggle}
+							/>
+						) : (
+							<ExpandMoreIcon
+								titleAccess="Развернуть"
+								className={classes.expansionIcon}
+								fontSize="small"
+								onClick={onToggle}
+							/>
+						)}
+					</div>
+					{display ? <ApplicationsTable onDelete={onDeleteApplication} applications={applications} /> : null}
+				</>
 			) : null}
 
-			<ApplicationsTable onDelete={onDeleteApplication} applications={applications} />
+			<Wrapper margin="normal" className={classes.buttonWrapper}>
+				<Button
+					disabled={disabledAddButton || isEmptyArray(payForms)}
+					classes={{ root: classes.addDocButton }}
+					onClick={addPriemApplication}>
+					Добавить заявление
+				</Button>
 
-			<Button disabled={nextButtonDisabled} onClick={submitApplicationsForm}>
-				Следующий шаг
-			</Button>
+				<Button disabled={nextButtonDisabled} onClick={submitApplicationsForm}>
+					Следующий шаг
+				</Button>
+			</Wrapper>
 		</Column>
 	);
 };

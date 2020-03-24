@@ -7,7 +7,7 @@ import { IContactsForm, IDictionary } from '$common';
 import { ITransaction } from '@black_bird/utils';
 
 interface IPropsState {
-	governmentDictionary: ITransaction<IDictionary>;
+	governmentDictionary: ITransaction<IDictionary[]>;
 	form: IContactsForm;
 }
 

@@ -17,9 +17,9 @@ import { PersonFormView } from './PersonFormView';
 
 interface IStateToProps {
 	form: IPersonForm;
-	personTypesDocsDictionary: ITransaction<IDictionary>;
-	typesDocsDictionary: ITransaction<IDictionary>;
-	governmentDictionary: ITransaction<IDictionary>;
+	personTypesDocsDictionary: ITransaction<IDictionary[]>;
+	typesDocsDictionary: ITransaction<IDictionary[]>;
+	governmentDictionary: ITransaction<IDictionary[]>;
 }
 interface IDispatchToProps {
 	submit: (values: IPersonForm) => void;

@@ -1,8 +1,1 @@
-import { sagaEffects } from '@black_bird/utils';
-import { navigateToStep, submitPersonFormAction } from '$store';
-
-export const personFormSagas = [
-	sagaEffects.takeEvery(submitPersonFormAction, function*() {
-		yield sagaEffects.put(navigateToStep());
-	}),
-];
+export const personFormSagas = [];

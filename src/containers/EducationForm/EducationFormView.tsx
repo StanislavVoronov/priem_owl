@@ -6,9 +6,9 @@ import { IFormProps, Select, Checkbox } from '@black_bird/components';
 
 interface IProps {
 	form: IFormProps<IEducationForm>;
-	governmentDictionary: ITransaction<IDictionary>;
-	prevEducDictionary: ITransaction<IDictionary>;
-	educTypeDocDictionary: ITransaction<IDictionary>;
+	governmentDictionary: ITransaction<IDictionary[]>;
+	prevEducDictionary: ITransaction<IDictionary[]>;
+	educTypeDocDictionary: ITransaction<IDictionary[]>;
 }
 
 const EducationFormView = (props: IProps) => {

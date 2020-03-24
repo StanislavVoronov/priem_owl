@@ -53,3 +53,9 @@
 	padding: 12px 0 4px 0;
 	font-weight: bold;
 }
+
+.buttonWrapper {
+	display: grid;
+	grid-template-columns: repeat(2, max-content);
+	column-gap: 40px;
+}

@@ -16,8 +16,8 @@ import {
 import { IRegForm, IFistNameDictionary } from '$common';
 
 interface IStateToProps {
-	firstNameDictionary: ITransaction<IFistNameDictionary>;
-	middleNameDictionary: ITransaction<IFistNameDictionary>;
+	firstNameDictionary: ITransaction<IFistNameDictionary[]>;
+	middleNameDictionary: ITransaction<IFistNameDictionary[]>;
 	error: IException | null;
 	disabledForm: boolean;
 	loading: boolean;
@@ -40,7 +40,7 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 	};
 
 	render() {
-		const { onSubmit, data, error, loading, disabledForm} = this.props;
+		const { onSubmit, data, error, loading, disabledForm } = this.props;
 
 		return (
 			<Form
@@ -48,7 +48,7 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 				loading={loading}
 				loadingText="Поиск личного дела"
 				renderForm={this.renderForm}
-				disabled = {disabledForm}
+				disabled={disabledForm}
 				onSubmit={onSubmit}
 				initialValues={data}
 				buttonText="Проверить"
@@ -56,7 +56,7 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 		);
 	}
 }
-const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
+const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) => {
 	const firstNameDictionary = getFirstNamesDictionary(state);
 	const middleNameDictionary = getMiddleNamesDictionary(state);
 

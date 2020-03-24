@@ -10,8 +10,8 @@ export const GENDERS = [
 ];
 
 interface IProps {
-	firstNameDictionary: ITransaction<IFistNameDictionary>;
-	middleNameDictionary: ITransaction<IFistNameDictionary>;
+	firstNameDictionary: ITransaction<IFistNameDictionary[]>;
+	middleNameDictionary: ITransaction<IFistNameDictionary[]>;
 	form: IFormProps<IRegForm>;
 }
 
