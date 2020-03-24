@@ -17,7 +17,14 @@ import {
 	priemLogoutSagas,
 } from '$operations';
 
-import { createLoginTransactionActions, initAction, priemFilialsTransactionActions, transactionsSagas } from '$store';
+import {
+	createLoginTransactionActions,
+	findPersonTransactionActions,
+	initAction,
+	isPersonFoundTransactionSelector,
+	priemFilialsTransactionActions,
+	transactionsSagas,
+} from '$store';
 
 const rootSagas = [
 	...priemLogoutSagas,
@@ -39,7 +46,13 @@ const rootSagas = [
 		yield sagaEffects.put(priemFilialsTransactionActions.trigger());
 	}),
 
-	sagaEffects.takeLatest(createLoginTransactionActions.success, fetchFullDictionaries),
+	sagaEffects.takeLatest(findPersonTransactionActions.success, function* () {
+		const personExists = yield sagaEffects.select(isPersonFoundTransactionSelector);
+
+		if (!personExists) {
+			yield fetchFullDictionaries();
+		}
+	}),
 ];
 
 export default rootSagas;

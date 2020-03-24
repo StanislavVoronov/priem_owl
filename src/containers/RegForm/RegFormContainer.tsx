@@ -46,12 +46,12 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 			<Form
 				error={error}
 				loading={loading}
-				loadingText="Поиск личного дела"
+				loadingText="Поиск абитуриента"
 				renderForm={this.renderForm}
 				disabled={disabledForm}
 				onSubmit={onSubmit}
 				initialValues={data}
-				buttonText="Проверить"
+				buttonText="Проверить личное дело"
 			/>
 		);
 	}
