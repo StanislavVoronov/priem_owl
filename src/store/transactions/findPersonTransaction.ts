@@ -26,7 +26,7 @@ export const isPersonFoundTransactionSelector = createSelector(prop('transaction
 		exception: isFound
 			? {
 					message:
-						'Абитуриент уже зарегистрирован в системе. Просьба, обратиться в приемную комиссию для подачи заявлений на поступление',
+						'Абитуриент уже зарегистрирован в системе. Просьба обратиться в приемную комиссию для дополнительной информации',
 			  }
 			: exception,
 		result: isFound && result[0],
