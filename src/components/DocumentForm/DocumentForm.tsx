@@ -103,19 +103,6 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 						/>
 					)}
 
-					{governmentTitle && (
-						<Select
-							name="government"
-							value={government}
-							required
-							error={dictionaryGovernment?.exception?.comment}
-							onChange={this.onChange}
-							options={dictionaryGovernment?.result}
-							placeholder={`Выберите ${governmentTitle.toLowerCase()}`}
-							title={governmentTitle}
-						/>
-					)}
-
 					{subTitle && (
 						<Select
 							onChange={this.onChange}
@@ -126,6 +113,19 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 							options={dictionarySubTypes?.result}
 							placeholder={`Выберите ${this.props.subTitle.toLowerCase()}`}
 							title={this.props.subTitle}
+						/>
+					)}
+
+					{governmentTitle && (
+						<Select
+							name="government"
+							value={government}
+							required
+							error={dictionaryGovernment?.exception?.comment}
+							onChange={this.onChange}
+							options={dictionaryGovernment?.result}
+							placeholder={`Выберите ${governmentTitle.toLowerCase()}`}
+							title={governmentTitle}
 						/>
 					)}
 
