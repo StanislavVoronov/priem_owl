@@ -8,6 +8,7 @@ import {
 import { ITransactionsState } from './transactionsModels';
 import { priemFilialsRest } from '$rests';
 import { TRANSACTION_NAMES } from '$actions';
+import { disabledPayFormSelector } from '../selectors';
 
 export const priemFilialsTransactionActions = createTransactionActions(TRANSACTION_NAMES.FetchPriemFilials);
 
@@ -18,4 +19,8 @@ export const priemFilialsTransactionSelector = createSelector(
 	(state: ITransactionsState) => state.priemFilials,
 );
 
-export const priemFilialsSaga = sagaEffects.rest(priemFilialsTransactionActions, () => priemFilialsRest());
+export const priemFilialsSaga = sagaEffects.rest(priemFilialsTransactionActions, function* () {
+	const payForms = yield sagaEffects.select(disabledPayFormSelector);
+
+	return priemFilialsRest(payForms);
+});

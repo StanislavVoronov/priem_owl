@@ -7,10 +7,9 @@ import {
 	onChangeEducFormsAction,
 	onChangeEducLevelAction,
 	onChangePayFormsAction,
-	addPriemApplication,
-	newPriemAppAddedAction,
 	newAdmGroupsAddedAction,
 	applicationDeletedAction,
+	disabledPayFormsUpdated,
 } from './actions';
 import { combineActions, combineReducers, createReducer, forAction, byKeyReducer } from '@black_bird/utils';
 import { IAdmGroup } from './models';
@@ -48,7 +47,7 @@ const instituteReducer = createReducer<IAdmDictionaryItem | null>(
 const directionReducer = createReducer<IAdmDictionaryItem | null>(
 	[
 		forAction(onChangeDirectionAction, (state, payload) => payload),
-		forAction(combineActions(onChangeInstAction, newAdmGroupsAddedAction), state => null),
+		forAction(combineActions(onChangeInstAction, newAdmGroupsAddedAction), (state) => null),
 	],
 	null,
 );
@@ -56,7 +55,7 @@ const directionReducer = createReducer<IAdmDictionaryItem | null>(
 const payFormsReducer = createReducer<IAdmDictionaryItem[]>(
 	[
 		forAction(onChangePayFormsAction, (state, payload) => payload),
-		forAction(combineActions(onChangeDirectionAction, newAdmGroupsAddedAction), state => []),
+		forAction(combineActions(onChangeDirectionAction, newAdmGroupsAddedAction), (state) => []),
 	],
 	[],
 );
@@ -64,9 +63,14 @@ const payFormsReducer = createReducer<IAdmDictionaryItem[]>(
 const educFormsReducer = createReducer<IAdmDictionaryItem[]>(
 	[
 		forAction(onChangeEducFormsAction, (state, payload) => payload),
-		forAction(combineActions(onChangePayFormsAction, newAdmGroupsAddedAction), state => []),
+		forAction(combineActions(onChangePayFormsAction, newAdmGroupsAddedAction), (state) => []),
 	],
 	[],
+);
+
+const disabledPayFormsReducer = createReducer<number[]>(
+	[forAction(disabledPayFormsUpdated, (state, payload) => payload)],
+	[16, 20],
 );
 
 const admGroupsReducer = createReducer<IAdmGroup[]>(
@@ -86,6 +90,7 @@ const applicationsFormReducer = combineReducers<IApplicationForm>({
 	profiles: profileReducer,
 	institute: instituteReducer,
 	applications: admGroupsReducer,
+	disabledPayForms: disabledPayFormsReducer,
 });
 
 export default applicationsFormReducer;

@@ -47,9 +47,9 @@ const rootSagas = [
 	}),
 
 	sagaEffects.takeLatest(findPersonTransactionActions.success, function* () {
-		const personExists = yield sagaEffects.select(isPersonFoundTransactionSelector);
+		const { result } = yield sagaEffects.select(isPersonFoundTransactionSelector);
 
-		if (!personExists) {
+		if (!result) {
 			yield fetchFullDictionaries();
 		}
 	}),

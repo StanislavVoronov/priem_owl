@@ -37,13 +37,12 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 		noNumber: false,
 	};
 	onChangeHasNumber = () => {
-
 		this.setState({ noNumber: !this.state.noNumber });
 
 		this.props.onChange({
 			name: 'num',
-			value: this.state.noNumber ? '' : '-'
-		})
+			value: this.state.noNumber ? '' : '-',
+		});
 	};
 	onChange = (field: IFormField) => {
 		const { document, onChange, name } = this.props;
@@ -90,18 +89,6 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 			<div className={classes.form}>
 				<Column>
 					{startFields}
-					{governmentTitle && (
-						<Select
-							name="government"
-							value={government}
-							required
-							error={dictionaryGovernment?.exception?.comment}
-							onChange={this.onChange}
-							options={dictionaryGovernment?.result}
-							placeholder={`Выберите ${governmentTitle.toLowerCase()}`}
-							title={governmentTitle}
-						/>
-					)}
 
 					{title && (
 						<Select
@@ -113,6 +100,19 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 							options={dictionaryTypes?.result}
 							placeholder={`Выберите ${this.props.title.toLowerCase()}`}
 							title={this.props.title}
+						/>
+					)}
+
+					{governmentTitle && (
+						<Select
+							name="government"
+							value={government}
+							required
+							error={dictionaryGovernment?.exception?.comment}
+							onChange={this.onChange}
+							options={dictionaryGovernment?.result}
+							placeholder={`Выберите ${governmentTitle.toLowerCase()}`}
+							title={governmentTitle}
 						/>
 					)}
 

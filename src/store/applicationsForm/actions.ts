@@ -55,4 +55,9 @@ export const newAdmGroupsAddedAction = createAction(
 	(admGroup: IAdmGroup) => admGroup,
 );
 
+export const disabledPayFormsUpdated = createAction(
+	`${NAMESPACE}/DISABLED_PAY_FORMS_UPDATED`,
+	(payForms: number[]) => payForms,
+);
+
 export const submitApplicationFormAction = createAction(`${NAMESPACE}/SUBMIT`);

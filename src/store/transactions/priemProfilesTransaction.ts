@@ -8,6 +8,7 @@ import {
 } from '@black_bird/utils';
 import { ITransactionsState } from './transactionsModels';
 import { priemProfilesRest } from '$rests';
+import { disabledPayFormSelector } from '../selectors';
 
 export const priemProfilesTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemProfiles,
@@ -26,8 +27,10 @@ export const priemProfilesTransactionSelector = createSelector(
 
 export const priemProfilesSaga = sagaEffects.rest(
 	priemProfilesTransactionActions,
-	({ payload }) => {
-		return priemProfilesRest(payload.filial.ID, payload.inst.ID, payload.direction.ID);
+	function*({ payload }) {
+		const payForms = yield sagaEffects.select(disabledPayFormSelector);
+
+		return priemProfilesRest(payload.filial.ID, payload.inst.ID, payload.direction.ID, payForms);
 	},
 	true,
 );

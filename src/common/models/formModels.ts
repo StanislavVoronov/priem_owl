@@ -68,6 +68,7 @@ export interface IApplicationForm {
 	payForms: IAdmDictionaryItem[];
 	educForms: IAdmDictionaryItem[];
 	applications: IAdmGroup[];
+	disabledPayForms: number[];
 }
 export interface IRegForm {
 	lastName: string;

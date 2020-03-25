@@ -35,3 +35,7 @@ export const verAccountFormSelector = (state: IRootState) => {
 export const applicationsFormSelector = (state: IRootState) => {
 	return state.applicationsForm;
 };
+
+export const disabledPayFormSelector = (state: IRootState) => {
+	return state.applicationsForm.disabledPayForms;
+};

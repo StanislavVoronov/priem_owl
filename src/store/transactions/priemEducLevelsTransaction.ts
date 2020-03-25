@@ -8,6 +8,7 @@ import {
 } from '@black_bird/utils';
 import { ITransactionsState } from './transactionsModels';
 import { priemEducLevelsRest } from '$rests';
+import { disabledPayFormSelector } from '../selectors';
 
 export const priemEducLevelsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemEducationLevels,
@@ -23,8 +24,10 @@ export const priemEducLevelsTransactionSelector = createSelector(
 
 export const priemEducLevelSaga = sagaEffects.rest(
 	priemEducLevelsTransactionActions,
-	({ payload }) => {
-		return priemEducLevelsRest(payload.filial.ID);
+	function*({ payload }) {
+		const payForms = yield sagaEffects.select(disabledPayFormSelector);
+
+		return priemEducLevelsRest(payload.filial.ID, payForms);
 	},
 	true,
 );

@@ -40,8 +40,6 @@ const RegFormView = (props: IProps) => {
 			: items;
 	};
 
-	console.log("erros", errors);
-
 	return (
 		<>
 			<TextInput

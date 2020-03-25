@@ -21,7 +21,6 @@ const EducationFormView = (props: IProps) => {
 				document={values.document}
 				onChange={onChange}
 				fileTitle="Файл документа о предыдущем образовании"
-				title={'Предыдущее образование'}
 				subTitle="Документ о предыдущем образовании"
 				dictionarySubTypes={educTypeDocDictionary}
 				governmentTitle="Государство"
