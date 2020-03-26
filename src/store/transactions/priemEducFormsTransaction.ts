@@ -37,7 +37,7 @@ export const educFormsSaga = sagaEffects.rest(
 	function*({ payload })  {
 		const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
-		return priemEducFormsRest(payload.filial.ID, payload.inst.ID, payload.direction.ID, payForms);
+		return yield priemEducFormsRest(payload.filial.ID, payload.inst.ID, payload.direction.ID, payForms);
 	},
 	true,
 );

@@ -31,7 +31,7 @@ export const priemDirectionSaga = sagaEffects.rest(
 	function*({ payload }) {
 		const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
-		return priemDirectionRest(payload.filial.ID, payload.educLevel.ID, payload.inst.ID, payForms);
+		return yield priemDirectionRest(payload.filial.ID, payload.educLevel.ID, payload.inst.ID, payForms);
 	},
 	true,
 );

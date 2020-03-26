@@ -27,7 +27,7 @@ export const priemEducLevelSaga = sagaEffects.rest(
 	function*({ payload }) {
 		const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
-		return priemEducLevelsRest(payload.filial.ID, payForms);
+		return yield priemEducLevelsRest(payload.filial.ID, payForms);
 	},
 	true,
 );

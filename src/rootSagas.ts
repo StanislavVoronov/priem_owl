@@ -42,15 +42,12 @@ const rootSagas = [
 	...applicationFormSagas,
 	...classifiersSagas,
 	sagaEffects.takeEvery(initAction, fetchShortDictionaries),
-	sagaEffects.takeEvery(createLoginTransactionActions.success, function* () {
-		yield sagaEffects.put(priemFilialsTransactionActions.trigger());
-	}),
-
 	sagaEffects.takeLatest(findPersonTransactionActions.success, function* () {
 		const { result } = yield sagaEffects.select(isPersonFoundTransactionSelector);
 
 		if (!result) {
 			yield fetchFullDictionaries();
+			yield sagaEffects.put(priemFilialsTransactionActions.trigger());
 		}
 	}),
 ];

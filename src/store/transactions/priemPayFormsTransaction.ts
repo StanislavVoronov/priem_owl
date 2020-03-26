@@ -37,7 +37,7 @@ export const payFormsSaga = sagaEffects.rest(
 	function* ({ payload }) {
 		const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
-		return priemPayFormsRest(
+		return yield priemPayFormsRest(
 			payload.filial.ID,
 			payload.inst.ID,
 			payload.direction.ID,
