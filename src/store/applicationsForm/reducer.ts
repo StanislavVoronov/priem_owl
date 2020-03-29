@@ -71,6 +71,8 @@ const payFormsReducer = createReducer<IAdmDictionaryItem[]>(
 		forAction(onChangePayFormsAction, (state, payload) => payload),
 		forAction(
 			combineActions(
+				onChangeInstAction,
+				onChangeFilialAction,
 				onChangeDirectionAction,
 				onChangeEducLevelAction,
 				onChangeEducFormsAction,
