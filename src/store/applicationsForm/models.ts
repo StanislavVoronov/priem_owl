@@ -1,4 +1,4 @@
-import { IAdmDictionaryItem } from '$common';
+import { IAdmDictionaryItem, IAdmGroupItem } from '$common';
 
 export interface IAdmGroup {
 	filial: IAdmDictionaryItem;
@@ -8,5 +8,5 @@ export interface IAdmGroup {
 	educForm: IAdmDictionaryItem;
 	payForm: IAdmDictionaryItem;
 	educLevel: IAdmDictionaryItem;
-	admGroup: IAdmDictionaryItem;
+	admGroup: IAdmGroupItem;
 }

@@ -32,6 +32,11 @@ export interface IAdmDictionaryItem {
 	NAME: string;
 }
 
+export interface IAdmGroupItem {
+	ID: number;
+	NEED_DOC: number;
+}
+
 export interface IDocument {
 	type: IDocType | null;
 	subType: IDocType | null;

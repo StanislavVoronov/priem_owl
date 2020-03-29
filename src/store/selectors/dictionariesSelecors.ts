@@ -1,7 +1,7 @@
 import { createSelector } from '@black_bird/utils';
 import { EDictionaryNameList, IDocument, validateDocument } from '$common';
 import { IRootState } from '../models';
-import { isForeignerSelector } from './formSelectors';
+import { applicationsFormSelector, isForeignerSelector } from './formSelectors';
 import { DEFAULT_TRANSACTION } from './defaults';
 
 export const dictionaryStateSelector = (state: IRootState) => {
@@ -31,7 +31,10 @@ export const getEducTypeDocDictionary = createSelector(
 export const getNeedDocuments = createSelector(
 	dictionaryStateSelector,
 	isForeignerSelector,
-	(dictionaries, isForeigner) => {
+	applicationsFormSelector,
+	(dictionaries, isForeigner, applicationsForm) => {
+		const needSpravka = applicationsForm.applications.some((item) => item.admGroup.NEED_DOC > 0);
+
 		const needDocuments = [9, 10];
 		const dictionary = dictionaries[EDictionaryNameList.DocTypes]
 			? dictionaries[EDictionaryNameList.DocTypes].result
