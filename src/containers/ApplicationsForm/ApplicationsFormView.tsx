@@ -82,127 +82,128 @@ const ApplicationsFormView = (props: IProps) => {
 	} = props;
 
 	const nextButtonDisabled = isEmptyArray(applications);
-	const countExceeded = new Set(applications.map((item) => item.dir.ID)).size > 2;
+	const countExceeded = direction
+		? new Set([direction.ID, ...applications.map((item) => item.dir.ID)]).size > 3
+		: false;
+
 
 	return (
 		<Column>
-			{countExceeded ? (
-				<span className={classes.warningText}>
-					По правилам приема возможно подать заявления только на три направления подготовки
-				</span>
-			) : (
-				<>
-					<Select
-						required
-						value={filial}
-						onChange={onChangeFilial}
-						getOptionValue={getId}
-						getOptionLabel={prop('NAME')}
-						name="filial"
-						options={filialDictionary.result}
-						placeholder={`Выберите филиал`}
-						title={'Филиал'}
-						loading={filialDictionary.isFetching}
-					/>
+			<Select
+				required
+				value={filial}
+				onChange={onChangeFilial}
+				getOptionValue={getId}
+				getOptionLabel={prop('NAME')}
+				name="filial"
+				options={filialDictionary.result}
+				placeholder={`Выберите филиал`}
+				title={'Филиал'}
+				loading={filialDictionary.isFetching}
+			/>
 
-					{filial && (
-						<Select
-							required
-							value={educLevel}
-							onChange={onChangeEducLevel}
-							getOptionValue={getId}
-							getOptionLabel={prop('NAME')}
-							name="educLevel"
-							options={educLevelDictionary.result}
-							placeholder={`Выберите уровень образования`}
-							title={'Уровень образования'}
-							loading={educLevelDictionary.isFetching}
-						/>
-					)}
-
-					{educLevel && (
-						<Select
-							isCleanable
-							required
-							value={institute}
-							onChange={onChangeInst}
-							getOptionValue={getId}
-							getOptionLabel={prop('NAME')}
-							name="inst"
-							options={instituteDictionary.result}
-							placeholder={`Выберите институт`}
-							title={'Институт'}
-							loading={instituteDictionary.isFetching}
-						/>
-					)}
-
-					{institute && (
-						<Select
-							required
-							value={direction}
-							onChange={onChangeDirection}
-							getOptionValue={getId}
-							getOptionLabel={prop('NAME')}
-							name="direction"
-							options={directionDictionary.result}
-							placeholder={`Выберите направление подготовки`}
-							title={'Направление подготовки'}
-							loading={directionDictionary.isFetching}
-						/>
-					)}
-
-					{direction && (
-						<Select
-							required
-							value={profiles}
-							onChange={onChangeProfiles}
-							getOptionValue={getId}
-							getOptionLabel={prop('NAME')}
-							name="profile"
-							error={profileDictionary.exception?.message}
-							options={profileDictionary.result}
-							placeholder={`Выберите профиль`}
-							title={'Профиль'}
-							isMulti
-							loading={profileDictionary.isFetching}
-						/>
-					)}
-
-					{isNotEmptyArray(profiles) && (
-						<Select
-							required
-							value={educForms}
-							onChange={onChangeEducForms}
-							getOptionValue={getId}
-							getOptionLabel={prop('NAME')}
-							name="educForm"
-							error={educFormDictionary.exception?.message}
-							options={educFormDictionary.result}
-							placeholder={`Выберите форму обучения`}
-							title={'Форма обучения'}
-							isMulti
-							loading={educFormDictionary.isFetching}
-						/>
-					)}
-
-					{isNotEmptyArray(educForms) && (
-						<Select
-							required
-							value={payForms}
-							onChange={onChangePayForms}
-							getOptionValue={getId}
-							getOptionLabel={prop('NAME')}
-							name="payForm"
-							error={payFormDictionary.exception?.message}
-							options={payFormDictionary.result}
-							placeholder={`Выберите форму финансироавания`}
-							title={'Форма финансирования'}
-							isMulti
-							loading={payFormDictionary.isFetching}
-						/>
-					)}
-				</>
+			{filial && (
+				<Select
+					required
+					value={educLevel}
+					onChange={onChangeEducLevel}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="educLevel"
+					options={educLevelDictionary.result}
+					placeholder={`Выберите уровень образования`}
+					title={'Уровень образования'}
+					loading={educLevelDictionary.isFetching}
+				/>
 			)}
+
+			{educLevel && (
+				<Select
+					isCleanable
+					required
+					value={institute}
+					onChange={onChangeInst}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="inst"
+					options={instituteDictionary.result}
+					placeholder={`Выберите институт`}
+					title={'Институт'}
+					loading={instituteDictionary.isFetching}
+				/>
+			)}
+
+			{institute && (
+				<Select
+					required
+					value={direction}
+					onChange={onChangeDirection}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="direction"
+					options={directionDictionary.result}
+					placeholder={`Выберите направление подготовки`}
+					title={'Направление подготовки'}
+					loading={directionDictionary.isFetching}
+				/>
+			)}
+			{countExceeded && (
+				<span className={classes.warningText}>
+					По правилам приема возможно подать заявления только на три различных направления подготовки
+				</span>
+			)}
+
+			{!countExceeded && direction && (
+				<Select
+					required
+					value={profiles}
+					onChange={onChangeProfiles}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="profile"
+					error={profileDictionary.exception?.message}
+					options={profileDictionary.result}
+					placeholder={`Выберите профиль`}
+					title={'Профиль'}
+					isMulti
+					loading={profileDictionary.isFetching}
+				/>
+			)}
+
+			{isNotEmptyArray(profiles) && (
+				<Select
+					required
+					value={educForms}
+					onChange={onChangeEducForms}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="educForm"
+					error={educFormDictionary.exception?.message}
+					options={educFormDictionary.result}
+					placeholder={`Выберите форму обучения`}
+					title={'Форма обучения'}
+					isMulti
+					loading={educFormDictionary.isFetching}
+				/>
+			)}
+
+			{isNotEmptyArray(educForms) && (
+				<Select
+					required
+					value={payForms}
+					onChange={onChangePayForms}
+					getOptionValue={getId}
+					getOptionLabel={prop('NAME')}
+					name="payForm"
+					error={payFormDictionary.exception?.message}
+					options={payFormDictionary.result}
+					placeholder={`Выберите форму финансироавания`}
+					title={'Форма финансирования'}
+					isMulti
+					loading={payFormDictionary.isFetching}
+				/>
+			)}
+
 			{disabledAddButton && <div className={classes.repeatAppText}>Заявление уже было добавлено ранее</div>}
 
 			<Wrapper margin="normal" className={classes.buttonWrapper}>
