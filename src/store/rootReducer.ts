@@ -15,6 +15,7 @@ import { IRootState } from './models';
 const composeDevTools = composeWithDevTools({});
 
 export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) => () => {
+
 	return createStore(
 		combineReducers<IRootState>({
 			enroll: enrollReducer,
@@ -28,6 +29,9 @@ export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) 
 			verAccountForm: verAccountFormReducer,
 			transactions: transactionsReducer as any,
 		}),
-		composeDevTools(applyMiddleware(...middlewares)),
+
+		process.env.PRIEM_BUILD !== 'production'
+			? composeDevTools(applyMiddleware(...middlewares))
+			: applyMiddleware(...middlewares),
 	);
 };

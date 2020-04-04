@@ -3,10 +3,9 @@ import { disabledPayFormsUpdated, firstHighEducChanged } from '$store';
 
 export const educationFormSagas = [
 	sagaEffects.takeLatest(firstHighEducChanged, function* ({ payload }) {
-		console.log('value', payload);
 		const disabledPayForms = [16, 20];
 
-		if (payload) {
+		if (!payload) {
 			disabledPayForms.push(14);
 		}
 

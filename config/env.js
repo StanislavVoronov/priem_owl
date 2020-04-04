@@ -43,7 +43,7 @@ function getClientEnvironment(publicUrl) {
 	.reduce(
 		(env, key) => {
 			env[key] = process.env[key];
-			
+
 			return env;
 		},
 		{
