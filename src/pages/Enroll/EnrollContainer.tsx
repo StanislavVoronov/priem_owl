@@ -35,7 +35,6 @@ class EnrollContainer extends React.Component<IProps, IState> {
 	}
 
 	handleStep = (step: number) => {
-		console.log('step', step);
 		this.props.handleStep(step);
 	};
 
