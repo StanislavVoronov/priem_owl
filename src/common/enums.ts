@@ -31,3 +31,9 @@ export enum AddressType {
 	Reg = 1,
 	Live = 2,
 }
+
+export enum DOCUMENT_TYPE {
+	DIPLOMA_F_SIDE_MARKS = 9,
+	DIPLOMA_S_SIDE_MARKS = 10,
+	SPRAVKA_086= 27,
+}
