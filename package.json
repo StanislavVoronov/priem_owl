@@ -10,8 +10,8 @@
 		"update": "git pull origin",
 		"lint": "tslint src/**/*.{tsx,ts} --fix",
 		"build": "rm -rf owl && node scripts/build.js",
-		"watch": "tsc --watch",
-		"prepush": "tsc && tslint --project ./tsconfig.json"
+		"watch": "tsc --noEmit --watch",
+		"prepush": "tsc --noEmit && tslint --project ./tsconfig.json"
 	},
 	"repository": {
 		"type": "git",
