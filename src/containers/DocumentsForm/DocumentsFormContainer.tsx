@@ -12,7 +12,7 @@ import {
 	submitDocumentsFormAction,
 	getNeedDocuments,
 } from '$store';
-import { defaultDocument, IDictionary, IDocument } from '$common';
+import { defaultDocument, IDictionary, IDocType, IDocument } from '$common';
 import { ITransaction } from '@black_bird/utils';
 
 interface IStateToProps {
@@ -20,7 +20,7 @@ interface IStateToProps {
 	governmentDictionary: ITransaction<IDictionary[]>;
 	educationDictionary: ITransaction<IDictionary[]>;
 	personDocDictionary: ITransaction<IDictionary[]>;
-	requireDocs: IDocument[];
+	requireDocs: IDocType[];
 	documents: IDocument[];
 }
 

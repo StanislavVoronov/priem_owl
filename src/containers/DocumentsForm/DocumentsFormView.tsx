@@ -1,5 +1,5 @@
 import React from 'react';
-import { IDocument, IDocumentsForm, IDictionary, validateDocument } from '$common';
+import { IDocument, IDocumentsForm, IDictionary, validateDocument, IDocType } from '$common';
 import { always, cond, equals, ITransaction, T, propEq } from '@black_bird/utils';
 import { DocumentItem } from './components';
 import { Button, Row, Wrapper } from '@black_bird/components';
@@ -22,7 +22,7 @@ interface IProps extends IDocumentsForm {
 	onChangeData: (data: IDocument, index: number) => void;
 	expendList: number[];
 	onSubmit: () => void;
-	requireDocs: IDocument[];
+	requireDocs: IDocType[];
 }
 
 const DocumentsFormView = (props: IProps) => {
@@ -54,7 +54,7 @@ const DocumentsFormView = (props: IProps) => {
 					<li className={classes.tick}>Документ о регистрации места жительства</li>
 					<li className={classes.tick}>Документ о предыдущем образовании</li>
 					{requireDocs.map((item) => (
-						<li className={documents.some((doc) => doc.type && doc.type.id === item.id) ? classes.tick : classes.cross}>
+						<li className={documents.some((doc) => validateDocument(doc) && (doc.type && doc.type.id === item.id)) ? classes.tick : classes.cross}>
 							{item.name}
 						</li>
 					))}

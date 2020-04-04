@@ -3,6 +3,7 @@ import { Form, IFormProps } from '@black_bird/components';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import {
 	educationFormSelector,
+	firstHighEducChanged,
 	getEducTypeDocDictionary,
 	getGovernmentDictionary,
 	getPrevEducTypesDocDictionary,
@@ -22,13 +23,14 @@ interface IPropsState {
 
 interface IDispatchToProps {
 	submit: (form: IContactsForm) => void;
+	onChangeFirstHighEduc: (value: boolean) => void;
 }
 
 type Props = IPropsState & IDispatchToProps;
 
 class EducationFormContainer extends React.PureComponent<Props> {
 	renderForm = (form: IFormProps<any>) => {
-		const { educTypeDocDictionary, governmentDictionary, prevEducDictionary } = this.props;
+		const { educTypeDocDictionary, governmentDictionary, prevEducDictionary, onChangeFirstHighEduc } = this.props;
 
 		return (
 			<EducationFormView
@@ -36,6 +38,7 @@ class EducationFormContainer extends React.PureComponent<Props> {
 				form={form}
 				governmentDictionary={governmentDictionary}
 				educTypeDocDictionary={educTypeDocDictionary}
+				onChangeFirstHighEduc={onChangeFirstHighEduc}
 			/>
 		);
 	};
@@ -52,7 +55,7 @@ class EducationFormContainer extends React.PureComponent<Props> {
 	}
 }
 
-const mapStateToProps: MapStateToProps<IPropsState, {}, IRootState> = state => {
+const mapStateToProps: MapStateToProps<IPropsState, {}, IRootState> = (state) => {
 	const governmentDictionary = getGovernmentDictionary(state);
 	const prevEducDictionary = getPrevEducTypesDocDictionary(state);
 	const educTypeDocDictionary = getEducTypeDocDictionary(state);
@@ -64,6 +67,7 @@ const mapStateToProps: MapStateToProps<IPropsState, {}, IRootState> = state => {
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {
 	submit: submitEducationFormAction,
+	onChangeFirstHighEduc: firstHighEducChanged,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EducationFormContainer);

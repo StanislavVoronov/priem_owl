@@ -41,7 +41,7 @@ export const getNeedDocuments = createSelector(
 			needDocuments.push(DOCUMENT_TYPE.SPRAVKA_086);
 		}
 
-		const dictionary = dictionaries[EDictionaryNameList.DocTypes]
+		const dictionary: IDocType[] = dictionaries[EDictionaryNameList.DocTypes]
 			? dictionaries[EDictionaryNameList.DocTypes].result
 			: [];
 
