@@ -68,7 +68,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 		return (
 			<>
 				<EnrollHeader />
-				<h2 className={styles.namePageTitle}>Электронная подача документов для поступления в Университет</h2>
+				<h2 className={styles.namePageTitle}>Подача документов для поступения в Университет</h2>
 				<Stepper
 					classes={{ root: classes.root }}
 					className={classes.stepper}

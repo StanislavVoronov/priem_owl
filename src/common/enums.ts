@@ -5,6 +5,7 @@ export enum EDictionaryNameList {
 	CoolnessTypes = 'directory_coolness_types',
 	DocTypes = 'directory_doc_types',
 	EducationDocTypes = 'directory_doc_subtypes_education_doc',
+	SubDocTypes = 'directory_doc_subtypes_education_doc',
 	Governments = 'directory_goverments',
 	PreviousEducation = 'directory_prev_educations',
 	PriemSpecialCategories = 'directory_cheat_types',
@@ -35,5 +36,5 @@ export enum AddressType {
 export enum DOCUMENT_TYPE {
 	DIPLOMA_F_SIDE_MARKS = 9,
 	DIPLOMA_S_SIDE_MARKS = 10,
-	SPRAVKA_086= 27,
+	SPRAVKA_086 = 27,
 }

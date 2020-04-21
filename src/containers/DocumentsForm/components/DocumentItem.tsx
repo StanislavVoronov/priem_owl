@@ -2,7 +2,7 @@ import { DocumentForm, ExpandMoreIcon, DeleteIcon, ExpansionPanel, ExpandLessIco
 import classes from './DocumentItem.module.css';
 import classNames from 'classnames';
 import React from 'react';
-import { IDictionary, IDocument } from '$common';
+import { IDictionary, IDocument, isEmpty } from '$common';
 import { ITransaction } from '@black_bird/utils';
 import { IFormField, TextInput } from '@black_bird/components';
 import { PanelDetails } from './styled';
@@ -83,7 +83,7 @@ const DocumentItem = (props: IProps) => {
 					fileTitle="Файл документа"
 					title="Тип документа"
 					dictionaryTypes={docTypesDictionary}
-					subTitle={'Название документа'}
+					subTitle={isEmpty(subDocTypesDictionary.result) ? undefined : 'Название документа'}
 					dictionarySubTypes={subDocTypesDictionary}
 					endFields={
 						<React.Fragment>

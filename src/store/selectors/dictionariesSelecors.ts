@@ -35,7 +35,7 @@ export const getNeedDocuments = createSelector(
 	(dictionaries, isForeigner, applicationsForm) => {
 		const needSpravka = applicationsForm.applications.some((item) => item.admGroup.NEED_DOC > 0);
 
-		const needDocuments = [DOCUMENT_TYPE.DIPLOMA_F_SIDE_MARKS, DOCUMENT_TYPE.DIPLOMA_S_SIDE_MARKS];
+		const needDocuments: DOCUMENT_TYPE[] = [];
 
 		if (needSpravka) {
 			needDocuments.push(DOCUMENT_TYPE.SPRAVKA_086);
@@ -54,6 +54,11 @@ export const getNeedDocuments = createSelector(
 export const getPrevEducTypesDocDictionary = createSelector(
 	dictionaryStateSelector,
 	(state) => state[EDictionaryNameList.PreviousEducation] || DEFAULT_TRANSACTION,
+);
+
+export const getSubTypesDocDictionary = createSelector(
+	dictionaryStateSelector,
+	(state) => state[EDictionaryNameList.SubDocTypes] || DEFAULT_TRANSACTION,
 );
 
 export const getDocTypesDictionary = createSelector(

@@ -11,6 +11,7 @@ import {
 	getPersonTypesDocDictionary,
 	submitDocumentsFormAction,
 	getNeedDocuments,
+	getSubTypesDocDictionary,
 } from '$store';
 import { defaultDocument, IDictionary, IDocType, IDocument } from '$common';
 import { ITransaction } from '@black_bird/utils';
@@ -18,8 +19,7 @@ import { ITransaction } from '@black_bird/utils';
 interface IStateToProps {
 	docTypesDictionary: ITransaction<IDictionary[]>;
 	governmentDictionary: ITransaction<IDictionary[]>;
-	educationDictionary: ITransaction<IDictionary[]>;
-	personDocDictionary: ITransaction<IDictionary[]>;
+	subTypesDocDictionary: ITransaction<IDictionary[]>;
 	requireDocs: IDocType[];
 	documents: IDocument[];
 }
@@ -50,7 +50,7 @@ class DocumentsFormContainer extends React.Component<IProps, IState> {
 	}
 
 	onChangeData = (data: IDocument, index: number) => {
-		this.setState(state => ({
+		this.setState((state) => ({
 			...state,
 			documents: state.documents.map((item, key) => {
 				if (key === index) {
@@ -62,7 +62,7 @@ class DocumentsFormContainer extends React.Component<IProps, IState> {
 		}));
 	};
 	deleteDoc = (index: number) => {
-		this.setState(state => ({ ...state, documents: state.documents.filter((item, key) => key !== index) }));
+		this.setState((state) => ({ ...state, documents: state.documents.filter((item, key) => key !== index) }));
 	};
 	onToggleItem = (index: number) => {
 		const { expendList } = this.state;
@@ -70,14 +70,14 @@ class DocumentsFormContainer extends React.Component<IProps, IState> {
 
 		const newExpendedList = exists ? expendList.filter((item, key) => key !== index) : [...expendList, index];
 
-		this.setState(state => ({ ...state, expendList: newExpendedList }));
+		this.setState((state) => ({ ...state, expendList: newExpendedList }));
 	};
 	onSubmit = () => {
 		this.props.onSubmit(this.state.documents);
 	};
 
 	addDoc = () => {
-		this.setState(state => ({
+		this.setState((state) => ({
 			...state,
 			expendList: [...state.expendList, state.documents.length],
 			documents: [...state.documents, defaultDocument],
@@ -99,19 +99,17 @@ class DocumentsFormContainer extends React.Component<IProps, IState> {
 		);
 	}
 }
-const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = state => {
-	const educationDictionary = getEducTypeDocDictionary(state);
+const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) => {
 	const governmentDictionary = getGovernmentDictionary(state);
 	const docTypesDictionary = getDocTypesDictionary(state);
-	const personDocDictionary = getPersonTypesDocDictionary(state);
 	const requireDocs = getNeedDocuments(state);
 	const form = documentsFormSelector(state);
+	const subTypesDocDictionary = getSubTypesDocDictionary(state);
 
 	return {
-		educationDictionary,
+		subTypesDocDictionary,
 		docTypesDictionary,
 		governmentDictionary,
-		personDocDictionary,
 		documents: form.documents,
 		requireDocs,
 	};

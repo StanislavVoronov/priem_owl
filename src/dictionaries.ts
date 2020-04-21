@@ -39,6 +39,11 @@ export const FULL_DICTIONARY_LIST = [
 		filter: (item: IDictionaryTypeFilter) => item.type === 2,
 	},
 	{
+		name: EDictionaryNameList.SubDocTypes,
+		dictionary: 'directory_doc_subtypes',
+		columns: ['id', 'name', 'type'],
+	},
+	{
 		name: EDictionaryNameList.FirstNames,
 		dictionary: 'directory_names',
 		columns: ['id', 'name', 'type', 'sex'],
@@ -61,6 +66,5 @@ export const NEW_PERSON_STEPS = [
 	'Образование',
 	'Заявления',
 	'Документы',
-	'Подтверждение личного дела',
+	'Отправка документов',
 ];
-// 'Заявления',

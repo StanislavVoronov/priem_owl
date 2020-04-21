@@ -86,7 +86,6 @@ const ApplicationsFormView = (props: IProps) => {
 		? new Set([direction.ID, ...applications.map((item) => item.dir.ID)]).size > 3
 		: false;
 
-
 	return (
 		<Column>
 			<Select
@@ -110,6 +109,7 @@ const ApplicationsFormView = (props: IProps) => {
 					getOptionValue={getId}
 					getOptionLabel={prop('NAME')}
 					name="educLevel"
+					error={educLevelDictionary.exception?.comment}
 					options={educLevelDictionary.result}
 					placeholder={`Выберите уровень образования`}
 					title={'Уровень образования'}
@@ -124,6 +124,7 @@ const ApplicationsFormView = (props: IProps) => {
 					value={institute}
 					onChange={onChangeInst}
 					getOptionValue={getId}
+					error={instituteDictionary.exception?.comment}
 					getOptionLabel={prop('NAME')}
 					name="inst"
 					options={instituteDictionary.result}
@@ -142,6 +143,7 @@ const ApplicationsFormView = (props: IProps) => {
 					getOptionLabel={prop('NAME')}
 					name="direction"
 					options={directionDictionary.result}
+					error={directionDictionary.exception?.comment}
 					placeholder={`Выберите направление подготовки`}
 					title={'Направление подготовки'}
 					loading={directionDictionary.isFetching}

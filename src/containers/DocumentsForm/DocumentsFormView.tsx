@@ -14,8 +14,7 @@ const getSubTypeDictionary = cond([
 interface IProps extends IDocumentsForm {
 	docTypesDictionary: ITransaction<IDictionary[]>;
 	governmentDictionary: ITransaction<IDictionary[]>;
-	educationDictionary: ITransaction<IDictionary[]>;
-	personDocDictionary: ITransaction<IDictionary[]>;
+	subTypesDocDictionary: ITransaction<IDictionary[]>;
 	addDoc: () => void;
 	deleteDoc: (index: number) => void;
 	onToggleItem: (index: number) => void;
@@ -29,10 +28,9 @@ const DocumentsFormView = (props: IProps) => {
 	const {
 		documents,
 		addDoc,
-		personDocDictionary,
+		subTypesDocDictionary,
 		docTypesDictionary,
 		expendList,
-		educationDictionary,
 		deleteDoc,
 		onToggleItem,
 		onChangeData,
@@ -54,23 +52,32 @@ const DocumentsFormView = (props: IProps) => {
 					<li className={classes.tick}>Документ о регистрации места жительства</li>
 					<li className={classes.tick}>Документ о предыдущем образовании</li>
 					{requireDocs.map((item) => (
-						<li className={documents.some((doc) => validateDocument(doc) && (doc.type && doc.type.id === item.id)) ? classes.tick : classes.cross}>
+						<li
+							className={
+								documents.some((doc) => validateDocument(doc) && doc.type && doc.type.id === item.id)
+									? classes.tick
+									: classes.cross
+							}>
 							{item.name}
 						</li>
 					))}
 				</ul>
 			</List>
+
 			{documents.map((doc: IDocument, index: number) => {
 				const { type, subType } = doc;
 
-				const subTypesDictionary = getSubTypeDictionary(type && type.id, personDocDictionary, educationDictionary);
+				const filteredSubTypesDocDictionary = {
+					...subTypesDocDictionary,
+					result: subTypesDocDictionary.result.filter((item) => item.type === type?.id),
+				};
 
 				return (
 					<DocumentItem
 						key={`${index}`}
 						governmentDictionary={governmentDictionary}
 						docTypesDictionary={docTypesDictionary}
-						subDocTypesDictionary={subTypesDictionary}
+						subDocTypesDictionary={filteredSubTypesDocDictionary}
 						expanded={expendList.some(equals(index))}
 						onChange={onChangeData}
 						index={index}
