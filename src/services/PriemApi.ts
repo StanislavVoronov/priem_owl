@@ -12,7 +12,7 @@ class PriemApi {
 		return Request.post().then((item: any) => Promise.resolve(item.result));
 	};
 
-	static post = <Q, R>(api: PRIEM_API_NAMES, payload: Q): Promise<R> => {
+	static post = <Q, R>(api: PRIEM_API_NAMES, payload?: Q): Promise<R> => {
 		const Request = new JsonRequest(PriemApi.host, PriemApi.path, api, payload);
 
 		return Request.post();

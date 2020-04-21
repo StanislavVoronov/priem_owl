@@ -16,3 +16,4 @@ export * from './updateAddress';
 export * from './uploadDocument';
 export * from './createApplication';
 export * from './priemLogout';
+export * from './updateCoolness';

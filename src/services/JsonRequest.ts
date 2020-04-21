@@ -10,8 +10,9 @@ export class JsonRequest {
 		this.path = path;
 		const body = new FormData();
 		body.append('api', api);
-
-		body.append('values', JSON.stringify(omitBy(payload, isNull)));
+		if (payload) {
+			body.append('values', JSON.stringify(omitBy(payload, isNull)));
+		}
 
 		this.body = body;
 	}
@@ -21,7 +22,7 @@ export class JsonRequest {
 			credentials: 'include',
 			body: this.body,
 		})
-			.then(response => {
+			.then((response) => {
 				return response.json();
 			})
 			.then((data: any) => {
