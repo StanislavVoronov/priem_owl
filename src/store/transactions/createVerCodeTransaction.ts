@@ -9,7 +9,9 @@ export const createVerCodeTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.CreateVerificationCode,
 	(email: string, phone: string, method: VerificationMethod) => ({ email, phone, method }),
 );
-export const createVerCodeReducer = createTransactionReducer(createVerCodeTransactionActions);
+export const createVerCodeReducer = createTransactionReducer(createVerCodeTransactionActions, {
+	cleanActions: [createVerCodeTransactionActions.trigger],
+});
 
 export const createVerCodeTransactionSelector = createSelector(
 	prop('transactions'),

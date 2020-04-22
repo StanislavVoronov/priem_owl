@@ -171,13 +171,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 
 					{needInfo ? (
 						<>
-							<TextInput
-								onChange={this.onChange}
-								required
-								type="date"
-								name={`${name}docDate`}
-								label="Дата выдачи документа"
-							/>
+							<TextInput onChange={this.onChange} required type="date" name="date" label="Дата выдачи документа" />
 							<TextInput
 								required
 								value={issieBy}

@@ -23,7 +23,7 @@ export interface ICreatePersonPayload {
 	lastName: string;
 	firstName: string;
 	middleName?: string;
-	birthDate: string;
+	birthday: string;
 	birthplace: string;
 	needHostel: boolean;
 	gender: string;
@@ -44,7 +44,7 @@ export const createPersonRest = (data: ICreatePersonPayload) => {
 		lname: data.lastName,
 		fname: data.firstName,
 		mname: data.middleName || '',
-		birthdate: moment(data.birthDate).format('DD-MM-YYYY'),
+		birthdate: moment(data.birthday).format('DD-MM-YYYY'),
 		birthplace: data.birthplace,
 		need_hostel: data.needHostel ? ServerBoolean.True : ServerBoolean.False,
 		sex: Number(data.gender),

@@ -11,7 +11,7 @@ export const uploadDocumentRest = (doc: IDocument) => {
 		seria: doc.series || '-',
 		num: doc.num || '-',
 		iss_org: doc.issieBy ? `${doc.issieBy}${doc.codeDepartment ? ' ' + doc.codeDepartment : ''}` : '-',
-		iss_date: doc.date ? moment(doc.docDate).format('DD-MM-YYYY') : '01-01-1970',
+		iss_date: doc.date ? moment(doc.date).format('DD-MM-YYYY') : '01-01-1970',
 		iss_gov: doc.government ? doc.government.id : 1,
 	};
 

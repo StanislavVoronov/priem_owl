@@ -10,6 +10,7 @@ import { ITransactionsState } from './transactionsModels';
 import { createApplicationRest, createPersonRest } from '$rests';
 import { createPersonTransactionActions } from '$store';
 import { IAdmDictionaryItem } from '$common';
+import { APPLICATION_FLOW } from '../../common/constants';
 
 export const createAppTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.CreateApplication,
@@ -17,20 +18,17 @@ export const createAppTransactionActions = createTransactionActions(
 		adm: adm.ID,
 		prof: prof.ID,
 		priority,
-		app
+		app,
 	}),
 );
 
 export const createApplicationReducer = createTransactionReducer(createAppTransactionActions, {
-	mapToKey: payload => payload.app,
+	mapToKey: (payload) => payload.app,
 });
 
-export const createAppsTransactionSelector = createSelector(
-	prop('transactions'),
-	(state: ITransactionsState) => {
-		return state.createApplications
-	},
-);
+export const createAppsTransactionSelector = createSelector(prop('transactions'), (state: ITransactionsState) => {
+	return state.createApplications;
+});
 
 export const createAppTransactionSelector = createSelector(
 	prop('transactions'),
@@ -43,5 +41,5 @@ export const createAppTransactionSelector = createSelector(
 );
 
 export const createApplicationSaga = sagaEffects.rest(createAppTransactionActions, ({ payload }) =>
-	 createApplicationRest(payload.adm, payload.prof, payload.priority)
+	createApplicationRest(payload.adm, payload.prof, payload.priority, APPLICATION_FLOW),
 );

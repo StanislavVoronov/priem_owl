@@ -137,3 +137,5 @@ export const ARRAY_RUS_ALPHABET = new Array(
 	'Э',
 	'э',
 );
+
+export const APPLICATION_FLOW = 2;
