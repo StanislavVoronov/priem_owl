@@ -22,24 +22,12 @@ export const FULL_DICTIONARY_LIST = [
 	},
 	{ dictionary: EDictionaryNameList.Governments, columns: ['id', 'name', 'phone_code'] },
 	{
-		name: EDictionaryNameList.PersonDocTypes,
-		dictionary: 'directory_doc_subtypes',
-		columns: ['id', 'name', 'type'],
-		filter: (item: IDictionaryTypeFilter) => item.type === 1,
-	},
-	{
 		dictionary: EDictionaryNameList.DocTypes,
 		columns: ['id', 'name', 'scanable', 'need_info', 'need_foreigner', 'has_num'],
 		filter: (item: IDictionaryScanableFilter) => item.scanable === 1,
 	},
 	{
-		name: EDictionaryNameList.EducationDocTypes,
-		dictionary: 'directory_doc_subtypes',
-		columns: ['id', 'name', 'type'],
-		filter: (item: IDictionaryTypeFilter) => item.type === 2,
-	},
-	{
-		name: EDictionaryNameList.SubDocTypes,
+		name: EDictionaryNameList.DocSubTypes,
 		dictionary: 'directory_doc_subtypes',
 		columns: ['id', 'name', 'type'],
 	},

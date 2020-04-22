@@ -15,8 +15,8 @@ interface IProps {
 
 const EducationFormView = (props: IProps) => {
 	const onChangeFirstHigh = useCallback((data: IFormField) => {
-		 props.onChangeFirstHighEduc(data.value);
-		 props.form.onChange(data);
+		props.onChangeFirstHighEduc(data.value);
+		props.form.onChange(data);
 	}, []);
 
 	const { governmentDictionary, prevEducDictionary, form, educTypeDocDictionary } = props;
@@ -24,6 +24,11 @@ const EducationFormView = (props: IProps) => {
 
 	return (
 		<>
+			<a
+				target="_blank"
+				href="https://monitoring.mgutm.ru/dev/priem/%D0%9E%D0%91%D0%AF%D0%97%D0%90%D0%A2%D0%95%D0%9B%D0%AC%D0%A1%D0%A2%D0%92%D0%9E.pdf">
+				Отсутствует документ о предыдущем образовании
+			</a>
 			<DocumentForm
 				document={values.document}
 				onChange={onChange}

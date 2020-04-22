@@ -18,15 +18,23 @@ export const getMiddleNamesDictionary = createSelector(
 	(state) => state[EDictionaryNameList.MiddleNames] || DEFAULT_TRANSACTION,
 );
 
-export const getPersonTypesDocDictionary = createSelector(
-	dictionaryStateSelector,
-	(state) => state[EDictionaryNameList.PersonDocTypes] || DEFAULT_TRANSACTION,
-);
+export const getPersonTypesDocDictionary = createSelector(dictionaryStateSelector, (state) => {
+	const transaction = state[EDictionaryNameList.DocSubTypes];
+	if (transaction) {
+		return { ...transaction, result: transaction.result.filter((item: any) => item.type === 1) };
+	}
 
-export const getEducTypeDocDictionary = createSelector(
-	dictionaryStateSelector,
-	(state) => state[EDictionaryNameList.EducationDocTypes] || DEFAULT_TRANSACTION,
-);
+	return DEFAULT_TRANSACTION;
+});
+
+export const getEducTypeDocDictionary = createSelector(dictionaryStateSelector, (state) => {
+	const transaction = state[EDictionaryNameList.DocSubTypes];
+	if (transaction) {
+		return { ...transaction, result: transaction.result.filter((item: any) => item.type === 2) };
+	}
+
+	return DEFAULT_TRANSACTION;
+});
 
 export const getNeedDocuments = createSelector(
 	dictionaryStateSelector,
@@ -58,7 +66,7 @@ export const getPrevEducTypesDocDictionary = createSelector(
 
 export const getSubTypesDocDictionary = createSelector(
 	dictionaryStateSelector,
-	(state) => state[EDictionaryNameList.SubDocTypes] || DEFAULT_TRANSACTION,
+	(state) => state[EDictionaryNameList.DocSubTypes] || DEFAULT_TRANSACTION,
 );
 
 export const getDocTypesDictionary = createSelector(

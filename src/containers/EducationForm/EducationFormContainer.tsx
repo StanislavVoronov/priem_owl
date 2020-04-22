@@ -7,6 +7,7 @@ import {
 	getEducTypeDocDictionary,
 	getGovernmentDictionary,
 	getPrevEducTypesDocDictionary,
+	getSubTypesDocDictionary,
 	IRootState,
 	submitEducationFormAction,
 } from '$store';
