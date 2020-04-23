@@ -13,11 +13,11 @@ import {
 	isPersonFoundTransactionSelector,
 	createLoginTransactionSelector,
 } from '$store';
-import { IRegForm, IFistNameDictionary } from '$common';
+import { IRegForm, INamesDictionary } from '$common';
 
 interface IStateToProps {
-	firstNameDictionary: ITransaction<IFistNameDictionary[]>;
-	middleNameDictionary: ITransaction<IFistNameDictionary[]>;
+	firstNameDictionary: ITransaction<INamesDictionary[]>;
+	middleNameDictionary: ITransaction<INamesDictionary[]>;
 	error: IException | null;
 	disabledForm: boolean;
 	loading: boolean;

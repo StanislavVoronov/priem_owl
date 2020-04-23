@@ -2,7 +2,7 @@ import React from 'react';
 import { RadioButtonGroup } from '$components';
 import { TextInput, IFormProps, Autocomplete, IFormField } from '@black_bird/components';
 import { has, ITransaction, prop } from '@black_bird/utils';
-import { validateRequireTextField, IFistNameDictionary, IRegForm } from '$common';
+import { validateRequireTextField, INamesDictionary, IRegForm } from '$common';
 
 export const GENDERS = [
 	{ value: '1', label: 'Муж.', color: 'primary' },
@@ -10,8 +10,8 @@ export const GENDERS = [
 ];
 
 interface IProps {
-	firstNameDictionary: ITransaction<IFistNameDictionary[]>;
-	middleNameDictionary: ITransaction<IFistNameDictionary[]>;
+	firstNameDictionary: ITransaction<INamesDictionary[]>;
+	middleNameDictionary: ITransaction<INamesDictionary[]>;
 	form: IFormProps<IRegForm>;
 }
 

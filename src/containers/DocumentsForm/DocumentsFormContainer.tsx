@@ -13,14 +13,14 @@ import {
 	getNeedDocuments,
 	getSubTypesDocDictionary,
 } from '$store';
-import { defaultDocument, IDictionary, IDocType, IDocument } from '$common';
+import { defaultDocument, IDictionary, IDocument } from '$common';
 import { ITransaction } from '@black_bird/utils';
 
 interface IStateToProps {
 	docTypesDictionary: ITransaction<IDictionary[]>;
 	governmentDictionary: ITransaction<IDictionary[]>;
 	subTypesDocDictionary: ITransaction<IDictionary[]>;
-	requireDocs: IDocType[];
+	requireDocs: IDictionary[];
 	documents: IDocument[];
 }
 

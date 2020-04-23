@@ -1,10 +1,5 @@
-export interface IDictionary {
-	id: number;
-	name: string;
-	type?: number;
-}
+import { IDictionary } from './common';
 
-export interface IFistNameDictionary extends IDictionary {
-	type: number;
+export interface INamesDictionary extends IDictionary {
 	sex: number;
 }

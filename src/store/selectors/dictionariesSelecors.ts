@@ -1,5 +1,5 @@
 import { createSelector } from '@black_bird/utils';
-import { DOCUMENT_TYPE, EDictionaryNameList, IDocType, IDocument, validateDocument } from '$common';
+import { DOCUMENT_TYPE, EDictionaryNameList, IDictionary, IDocument, validateDocument } from '$common';
 import { IRootState } from '../models';
 import { applicationsFormSelector, isForeignerSelector } from './formSelectors';
 import { DEFAULT_TRANSACTION } from './defaults';
@@ -49,11 +49,11 @@ export const getNeedDocuments = createSelector(
 			needDocuments.push(DOCUMENT_TYPE.SPRAVKA_086);
 		}
 
-		const dictionary: IDocType[] = dictionaries[EDictionaryNameList.DocTypes]
+		const dictionary: IDictionary[] = dictionaries[EDictionaryNameList.DocTypes]
 			? dictionaries[EDictionaryNameList.DocTypes].result
 			: [];
 
-		return dictionary.filter((item: IDocType) => {
+		return dictionary.filter((item: IDictionary) => {
 			return (isForeigner && item?.need_foreigner) || needDocuments.includes(item.id);
 		});
 	},

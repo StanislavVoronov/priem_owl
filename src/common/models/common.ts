@@ -1,24 +1,13 @@
-import { IDictionary } from '$common';
-
-export interface IDictionaryTypeFilter {
-	type: number;
-}
-
-export interface IDictionaryScanableFilter {
-	scanable: number;
-}
-
-export interface IDictionaryName {
+export interface IDictionary {
+	id: number;
 	name: string;
-	sex: number;
-	type: number;
-}
-
-export interface IDocType extends IDictionary {
+	type?: number;
 	scanable?: number;
 	need_info?: number;
 	has_num?: number;
 	need_foreigner?: number;
+	hide?: number;
+	complex?: number;
 }
 
 export interface IGovernmentSelectItem extends IDictionary {
@@ -38,8 +27,8 @@ export interface IAdmGroupItem {
 }
 
 export interface IDocument {
-	type: IDocType | null;
-	subType: IDocType | null;
+	type: IDictionary | null;
+	subType: IDictionary | null;
 	government: IDictionary;
 	series?: string;
 	num?: string;
@@ -53,4 +42,3 @@ export interface IDocument {
 export interface IStylable {
 	classes: Record<string, string>;
 }
-

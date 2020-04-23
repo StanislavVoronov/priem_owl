@@ -1,17 +1,17 @@
-import { EDictionaryNameList, IDictionaryScanableFilter, IDictionaryTypeFilter } from '$common';
+import { EDictionaryNameList, IDictionary } from '$common';
 
 export const SHORT_DICTIONARY_LIST = [
 	{
 		name: EDictionaryNameList.FirstNames,
 		dictionary: 'directory_names',
 		columns: ['id', 'name', 'type', 'sex'],
-		filter: (item: IDictionaryTypeFilter) => item.type === 0,
+		filter: (item: IDictionary) => item.type === 0,
 	},
 	{
 		name: EDictionaryNameList.MiddleNames,
 		dictionary: 'directory_names',
 		columns: ['id', 'name', 'type', 'sex'],
-		filter: (item: IDictionaryTypeFilter) => item.type === 1,
+		filter: (item: IDictionary) => item.type === 1,
 	},
 ];
 
@@ -24,18 +24,19 @@ export const FULL_DICTIONARY_LIST = [
 	{
 		dictionary: EDictionaryNameList.DocTypes,
 		columns: ['id', 'name', 'scanable', 'need_info', 'need_foreigner', 'has_num'],
-		filter: (item: IDictionaryScanableFilter) => item.scanable === 1,
+		filter: (item: IDictionary) => item.scanable === 1,
 	},
 	{
 		name: EDictionaryNameList.DocSubTypes,
 		dictionary: 'directory_doc_subtypes',
-		columns: ['id', 'name', 'type'],
+		columns: ['id', 'name', 'type', 'hide'],
+		filter: (item: IDictionary) => item.hide === 0,
 	},
 	{
 		name: EDictionaryNameList.FirstNames,
 		dictionary: 'directory_names',
 		columns: ['id', 'name', 'type', 'sex'],
-		filter: (item: IDictionaryTypeFilter) => item.type === 0,
+		filter: (item: IDictionary) => item.type === 0,
 	},
 	{
 		dictionary: EDictionaryNameList.PreviousEducation,
