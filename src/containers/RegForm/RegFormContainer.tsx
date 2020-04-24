@@ -43,7 +43,7 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 	};
 
 	render() {
-		const { onSubmit, data, error, loading, disabledForm } = this.props;
+		const { onSubmit, data, error, loading } = this.props;
 
 		return (
 			<Form
