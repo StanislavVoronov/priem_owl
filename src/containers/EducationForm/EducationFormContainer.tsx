@@ -7,12 +7,11 @@ import {
 	getEducTypeDocDictionary,
 	getGovernmentDictionary,
 	getPrevEducTypesDocDictionary,
-	getSubTypesDocDictionary,
 	IRootState,
 	submitEducationFormAction,
 } from '$store';
-import { IContactsForm, IDictionary, IEducationForm } from '$common';
-import { ITransaction } from '@black_bird/utils';
+import { IContactsForm, IDictionary, IEducationForm, IPersonForm } from '$common';
+import { isVoid, ITransaction } from '@black_bird/utils';
 import EducationFormView from './EducationFormView';
 
 interface IPropsState {
@@ -30,6 +29,10 @@ interface IDispatchToProps {
 type Props = IPropsState & IDispatchToProps;
 
 class EducationFormContainer extends React.PureComponent<Props> {
+	disabledForm = ({ values }: { values: IEducationForm }) => {
+		return isVoid(values.document.file);
+	};
+
 	renderForm = (form: IFormProps<any>) => {
 		const { educTypeDocDictionary, governmentDictionary, prevEducDictionary, onChangeFirstHighEduc } = this.props;
 
@@ -45,12 +48,15 @@ class EducationFormContainer extends React.PureComponent<Props> {
 	};
 
 	render() {
+		const { form, submit } = this.props;
+
 		return (
 			<Form
-				onSubmit={this.props.submit}
+				disabled={this.disabledForm}
+				onSubmit={submit}
 				buttonText="Следующий шаг"
 				renderForm={this.renderForm}
-				initialValues={this.props.form}
+				initialValues={form}
 			/>
 		);
 	}

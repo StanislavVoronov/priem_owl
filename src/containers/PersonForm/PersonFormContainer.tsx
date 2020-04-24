@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, IFormProps } from '@black_bird/components';
-import { ITransaction } from '@black_bird/utils';
+import { isVoid, ITransaction } from '@black_bird/utils';
 
 import { IDictionary, IPersonForm } from '$common';
 
@@ -28,6 +28,9 @@ interface IDispatchToProps {
 type IProps = IStateToProps & IDispatchToProps;
 
 const PersonFormContainer = (props: IProps) => {
+	const disabledForm = ({ values }: { values: IPersonForm }) => {
+		return isVoid(values.document.file);
+	};
 	const renderForm = (form: IFormProps<any>) => {
 		return (
 			<PersonFormView
@@ -39,7 +42,15 @@ const PersonFormContainer = (props: IProps) => {
 		);
 	};
 
-	return <Form onSubmit={props.submit} buttonText="Следующий шаг" renderForm={renderForm} initialValues={props.form} />;
+	return (
+		<Form
+			onSubmit={props.submit}
+			disabled={disabledForm}
+			buttonText="Следующий шаг"
+			renderForm={renderForm}
+			initialValues={props.form}
+		/>
+	);
 };
 
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) => {

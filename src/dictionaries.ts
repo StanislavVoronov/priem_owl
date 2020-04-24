@@ -29,8 +29,7 @@ export const FULL_DICTIONARY_LIST = [
 	{
 		name: EDictionaryNameList.DocSubTypes,
 		dictionary: 'directory_doc_subtypes',
-		columns: ['id', 'name', 'type', 'hide'],
-		filter: (item: IDictionary) => item.hide === 0,
+		columns: ['id', 'name', 'type', 'hide', 'complex'],
 	},
 	{
 		name: EDictionaryNameList.FirstNames,

@@ -29,6 +29,9 @@ interface IDispatchToProps {
 
 type Props = IStateToProps & IDispatchToProps;
 class EnrollRegistrationContainer extends React.Component<Props> {
+	disabledForm = () => {
+		return this.props.disabledForm;
+	};
 	renderForm = (form: IFormProps<IRegForm>) => {
 		return (
 			<RegFormView
@@ -48,7 +51,7 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 				loading={loading}
 				loadingText="Поиск абитуриента"
 				renderForm={this.renderForm}
-				disabled={disabledForm}
+				disabled={this.disabledForm}
 				onSubmit={onSubmit}
 				initialValues={data}
 				buttonText="Проверить личное дело"

@@ -3,8 +3,8 @@ import { Form, IFormProps } from '@black_bird/components';
 import ContactsFormView from './ContactsFormView';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { contactsFormSelector, getGovernmentDictionary, IRootState, submitContactsFormAction } from '$store';
-import { IContactsForm, IDictionary } from '$common';
-import { ITransaction } from '@black_bird/utils';
+import { IContactsForm, IDictionary, IPersonForm } from '$common';
+import { isVoid, ITransaction } from '@black_bird/utils';
 
 interface IPropsState {
 	governmentDictionary: ITransaction<IDictionary[]>;
@@ -18,6 +18,9 @@ interface IDispatchToProps {
 type Props = IPropsState & IDispatchToProps;
 
 class ContactsFormContainer extends React.PureComponent<Props> {
+	disabledForm = ({ values }: { values: IContactsForm }) => {
+		return isVoid(values.regDoc.file);
+	};
 	renderForm = (form: IFormProps<any>) => {
 		return <ContactsFormView form={form} governmentDictionary={this.props.governmentDictionary} />;
 	};
@@ -25,6 +28,7 @@ class ContactsFormContainer extends React.PureComponent<Props> {
 	render() {
 		return (
 			<Form
+				disabled={this.disabledForm}
 				onSubmit={this.props.submit}
 				buttonText="Следующий шаг"
 				renderForm={this.renderForm}
@@ -34,7 +38,7 @@ class ContactsFormContainer extends React.PureComponent<Props> {
 	}
 }
 
-const mapStateToProps: MapStateToProps<IPropsState, {}, IRootState> = state => {
+const mapStateToProps: MapStateToProps<IPropsState, {}, IRootState> = (state) => {
 	const governmentDictionary = getGovernmentDictionary(state);
 
 	const form = contactsFormSelector(state);
