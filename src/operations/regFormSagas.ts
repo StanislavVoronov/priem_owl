@@ -56,7 +56,11 @@ function* createNewLogin() {
 export const regFormSagas = [
 	sagaEffects.takeEvery(submitRegFormAction, function* ({ payload }) {
 		if (payload.verAccountCode) {
-			yield sagaEffects.put(setExistPersonVerCodeTrnActions.trigger(payload.verAccountCode));
+			const data = yield sagaEffects.select(isPersonFoundTransactionSelector);
+
+			yield sagaEffects.put(
+				setExistPersonVerCodeTrnActions.trigger(data.result.ID, payload.verAccountCode),
+			);
 		} else {
 			yield sagaEffects.call(createNewLogin);
 		}

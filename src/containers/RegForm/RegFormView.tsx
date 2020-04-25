@@ -3,6 +3,7 @@ import { RadioButtonGroup } from '$components';
 import { TextInput, IFormProps, Autocomplete, IFormField } from '@black_bird/components';
 import { has, ITransaction, prop } from '@black_bird/utils';
 import { validateRequireTextField, INamesDictionary, IRegForm } from '$common';
+import classes from './RegForm.module.css';
 
 export const GENDERS = [
 	{ value: '1', label: 'Муж.', color: 'primary' },
@@ -103,14 +104,19 @@ const RegFormView = (props: IProps) => {
 				items={GENDERS}
 			/>
 			{email && (
-				<TextInput
-					name="verAccountCode"
-					onChange={onChange}
-					value={values.verAccountCode}
-					required
-					label="Код подтверждения"
-					helperText={`Код подтверждения был напрален на электронную почту: ${email}`}
-				/>
+				<>
+					<div className={classes.title}>
+						Личное дело абитуриента существует в приемной комиссии
+					</div>
+					<TextInput
+						name="verAccountCode"
+						onChange={onChange}
+						value={values.verAccountCode}
+						required
+						label="Код подтверждения"
+						helperText={`Код подтверждения был напрален на электронную почту: ${email}`}
+					/>
+				</>
 			)}
 		</>
 	);

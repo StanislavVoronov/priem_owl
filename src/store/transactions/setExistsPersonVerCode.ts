@@ -12,19 +12,23 @@ import { setExistPersonVerCodeRest } from '$rests';
 
 export const setExistPersonVerCodeTrnActions = createTransactionActions(
 	TRANSACTION_NAMES.SET_EXIST_PERSON_VER_CODE,
-	(code: string) => ({
+	(npId: number, code: string) => ({
 		code,
+		npId,
 	}),
 );
 export const setExistPersonVerCodeReducer = createTransactionReducer(
 	setExistPersonVerCodeTrnActions,
 );
 
-export const setExistPersonVerCodeTrnSelector = createSelector(transactionSelector, prop('verNp'));
+export const setExistPersonVerCodeTrnSelector = createSelector(
+	transactionSelector,
+	prop('setExistPersonVerCode'),
+);
 
 export const setExistPersonVerCodeTrnSaga = sagaEffects.rest(
 	setExistPersonVerCodeTrnActions,
 	function* ({ payload }) {
-		return yield setExistPersonVerCodeRest(payload.code);
+		return yield setExistPersonVerCodeRest(payload.npId, payload.code);
 	},
 );
