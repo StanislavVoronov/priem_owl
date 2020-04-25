@@ -42,8 +42,6 @@ const RegFormView = (props: IProps) => {
 			: items;
 	};
 
-	console.log('email', email);
-
 	return (
 		<>
 			<TextInput
