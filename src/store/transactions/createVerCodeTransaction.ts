@@ -4,6 +4,7 @@ import { TRANSACTION_NAMES } from '$actions';
 import { ITransactionsState } from './transactionsModels';
 import { VerificationMethod } from '$common';
 import { createVerCodeRest } from '$rests';
+import { transactionSelector } from './selectors';
 
 export const createVerCodeTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.CreateVerificationCode,
@@ -14,10 +15,13 @@ export const createVerCodeReducer = createTransactionReducer(createVerCodeTransa
 });
 
 export const createVerCodeTransactionSelector = createSelector(
-	prop('transactions'),
-	(state: ITransactionsState) => state.createVerCode,
+	transactionSelector,
+	(state) => state.createVerCode,
 );
 
-export const createVerCodeSaga = sagaEffects.rest(createVerCodeTransactionActions, ({ payload }) => {
-	return createVerCodeRest(payload.email, payload.phone, payload.method);
-});
+export const createVerCodeSaga = sagaEffects.rest(
+	createVerCodeTransactionActions,
+	({ payload }) => {
+		return createVerCodeRest(payload.email, payload.phone, payload.method);
+	},
+);

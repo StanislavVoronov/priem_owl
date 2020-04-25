@@ -11,6 +11,7 @@ import { createApplicationRest, createPersonRest } from '$rests';
 import { createPersonTransactionActions } from '$store';
 import { IAdmDictionaryItem } from '$common';
 import { APPLICATION_FLOW } from '../../common/constants';
+import { transactionSelector } from './selectors';
 
 export const createAppTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.CreateApplication,
@@ -26,14 +27,17 @@ export const createApplicationReducer = createTransactionReducer(createAppTransa
 	mapToKey: (payload) => payload.app,
 });
 
-export const createAppsTransactionSelector = createSelector(prop('transactions'), (state: ITransactionsState) => {
-	return state.createApplications;
-});
+export const createAppsTransactionSelector = createSelector(
+	prop('transactions'),
+	(state: ITransactionsState) => {
+		return state.createApplications;
+	},
+);
 
 export const createAppTransactionSelector = createSelector(
-	prop('transactions'),
+	transactionSelector,
 	(state: any, id: string) => id,
-	(state: ITransactionsState, id: string) => {
+	(state, id: string) => {
 		const { isFetching, exception, result } = state.createApplications[id];
 
 		return { isFetching, exception, result };

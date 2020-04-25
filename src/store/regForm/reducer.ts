@@ -7,8 +7,12 @@ const initial = {
 	firstName: '',
 	birthday: '',
 	gender: '',
+	verAccountCode: '',
 };
 
-const regFormReducer = createReducer([forAction(submitRegFormAction, (state, payload) => payload)], initial);
+const regFormReducer = createReducer(
+	[forAction(submitRegFormAction, (state, payload) => payload)],
+	initial,
+);
 
 export default regFormReducer;

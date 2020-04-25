@@ -8,14 +8,18 @@ import {
 import { TRANSACTION_NAMES } from '$actions';
 import { ITransactionsState } from './transactionsModels';
 import { checkLoginRest } from '$rests';
+import { transactionSelector } from './selectors';
 
-export const checkLoginTransactionActions = createTransactionActions(TRANSACTION_NAMES.CheckLogin, (login: string) => ({
-	login,
-}));
+export const checkLoginTransactionActions = createTransactionActions(
+	TRANSACTION_NAMES.CheckLogin,
+	(login: string) => ({
+		login,
+	}),
+);
 
 export const checkLoginReducer = createTransactionReducer(checkLoginTransactionActions);
 
-export const isUniqueLoginTransactionSelector = createSelector(prop('transactions'), (state: ITransactionsState) => {
+export const isUniqueLoginTransactionSelector = createSelector(transactionSelector, (state) => {
 	const { isFetching, exception, result }: any = state.checkLogin;
 
 	return { isFetching, exception, result: result.length ? result[0].COUNT === 0 : false };

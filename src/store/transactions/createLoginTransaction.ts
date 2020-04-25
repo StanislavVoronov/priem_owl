@@ -8,6 +8,7 @@ import {
 import { TRANSACTION_NAMES } from '$actions';
 import { ITransactionsState } from './transactionsModels';
 import { createLoginRest } from '$rests';
+import { transactionSelector } from './selectors';
 
 export const createLoginTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.CreateLogin,
@@ -16,7 +17,7 @@ export const createLoginTransactionActions = createTransactionActions(
 
 export const createLoginReducer = createTransactionReducer(createLoginTransactionActions);
 
-export const createLoginTransactionSelector = createSelector(prop('transactions'), (state: ITransactionsState) => {
+export const createLoginTransactionSelector = createSelector(transactionSelector, (state) => {
 	const { isFetching, exception, result } = state.createLogin;
 	const npId = result.id || 0;
 

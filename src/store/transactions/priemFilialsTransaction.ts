@@ -9,6 +9,7 @@ import { ITransactionsState } from './transactionsModels';
 import { priemFilialsRest } from '$rests';
 import { TRANSACTION_NAMES } from '$actions';
 import { disabledPayFormSelector } from '../selectors';
+import { transactionSelector } from './selectors';
 
 export const priemFilialsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemFilials,
@@ -17,8 +18,8 @@ export const priemFilialsTransactionActions = createTransactionActions(
 export const priemFilialsReducer = createTransactionReducer(priemFilialsTransactionActions);
 
 export const priemFilialsTransactionSelector = createSelector(
-	prop('transactions'),
-	(state: ITransactionsState) => state.priemFilials,
+	transactionSelector,
+	prop('priemFilials'),
 );
 
 export const priemFilialsSaga = sagaEffects.rest(

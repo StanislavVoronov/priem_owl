@@ -4,6 +4,7 @@ import { createSelector, prop } from '@black_bird/utils';
 import { IAdmDictionaryItem } from '$common';
 import { ITransactionsState } from './transactionsModels';
 import { priemAdmGroupsRest } from '$rests';
+import { transactionSelector } from './selectors';
 
 export const priemAdmGroupsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemGroups,
@@ -25,21 +26,24 @@ export const priemAdmGroupsTransactionActions = createTransactionActions(
 );
 
 export const priemAdmGroupsReducer = createTransactionReducer(priemAdmGroupsTransactionActions, {
-	mapToKey: payload => payload.admGroup,
+	mapToKey: (payload) => payload.admGroup,
 });
 
 export const priemAdmGroupsTransactionSelector = createSelector(
-	prop('transactions'),
+	transactionSelector,
 	(_: any, id: string) => id,
-	(state: ITransactionsState, id) => state.priemAdmGroups[id],
+	(state, id) => state.priemAdmGroups[id],
 );
 
-export const priemAdmGroupsSaga = sagaEffects.rest(priemAdmGroupsTransactionActions, ({ payload }) => {
-	return priemAdmGroupsRest(
-		payload.filial.ID,
-		payload.inst.ID,
-		payload.direction.ID,
-		payload.educForm.ID,
-		payload.payForm.ID,
-	);
-});
+export const priemAdmGroupsSaga = sagaEffects.rest(
+	priemAdmGroupsTransactionActions,
+	({ payload }) => {
+		return priemAdmGroupsRest(
+			payload.filial.ID,
+			payload.inst.ID,
+			payload.direction.ID,
+			payload.educForm.ID,
+			payload.payForm.ID,
+		);
+	},
+);

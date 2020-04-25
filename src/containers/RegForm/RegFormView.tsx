@@ -13,10 +13,11 @@ interface IProps {
 	firstNameDictionary: ITransaction<INamesDictionary[]>;
 	middleNameDictionary: ITransaction<INamesDictionary[]>;
 	form: IFormProps<IRegForm>;
+	email?: string;
 }
 
 const RegFormView = (props: IProps) => {
-	const { firstNameDictionary, middleNameDictionary } = props;
+	const { firstNameDictionary, email, middleNameDictionary } = props;
 	const { onChange, values, errors } = props.form;
 	const defaultOnChange = (data: IFormField<string>) => {
 		const genderName = firstNameDictionary.result.find((item) => item.name === data.value);
@@ -39,6 +40,8 @@ const RegFormView = (props: IProps) => {
 			  })
 			: items;
 	};
+
+	console.log('email', email);
 
 	return (
 		<>
@@ -99,6 +102,16 @@ const RegFormView = (props: IProps) => {
 				required
 				items={GENDERS}
 			/>
+			{email && (
+				<TextInput
+					name="verAccountCode"
+					onChange={onChange}
+					value={values.verAccountCode}
+					required
+					label="Код подтверждения"
+					helperText={`Код подтверждения был напрален на электронную почту: ${email}`}
+				/>
+			)}
 		</>
 	);
 };

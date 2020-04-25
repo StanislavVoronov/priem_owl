@@ -76,6 +76,7 @@ export interface IRegForm {
 	middleName: string;
 	birthday: string;
 	gender: string;
+	verAccountCode: string;
 }
 
 export interface IForm<T extends object> {

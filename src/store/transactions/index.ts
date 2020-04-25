@@ -19,3 +19,5 @@ export * from './updateAdressTransaction';
 export * from './uploadDocumentsTransaction';
 export * from './createAppTransaction';
 export * from './priemLogoutTransaction';
+export * from './verificaitonExistPerson';
+export * from './verificationPersonContacts';

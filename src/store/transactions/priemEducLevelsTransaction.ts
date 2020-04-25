@@ -9,6 +9,7 @@ import {
 import { ITransactionsState } from './transactionsModels';
 import { priemEducLevelsRest } from '$rests';
 import { disabledPayFormSelector } from '../selectors';
+import { transactionSelector } from './selectors';
 
 export const priemEducLevelsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemEducationLevels,
@@ -18,13 +19,13 @@ export const priemEducLevelsTransactionActions = createTransactionActions(
 export const priemEducLevelsReducer = createTransactionReducer(priemEducLevelsTransactionActions);
 
 export const priemEducLevelsTransactionSelector = createSelector(
-	prop('transactions'),
-	(state: ITransactionsState) => state.priemEducLevels,
+	transactionSelector,
+	prop('priemEducLevels'),
 );
 
 export const priemEducLevelSaga = sagaEffects.rest(
 	priemEducLevelsTransactionActions,
-	function*({ payload }) {
+	function* ({ payload }) {
 		const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
 		return yield priemEducLevelsRest(payload.filial.ID, payForms);

@@ -1,5 +1,10 @@
 import { ITransaction } from '@black_bird/utils';
-import { ICheckLoginResponse, ICreateLoginResponse, IFindPersonResponse } from '$rests';
+import {
+	ICheckLoginResponse,
+	ICreateLoginResponse,
+	IFindPersonResponse,
+	IVerPersonContactsResponse,
+} from '$rests';
 import { ICreatePersonData, IPriemGroup, IDictionary, IAdmDictionaryItem } from '$common';
 
 export type IAdmTransactionList = ITransaction<IAdmDictionaryItem[]>;
@@ -24,4 +29,7 @@ export interface ITransactionsState {
 	uploadDocuments: Record<string, ITransaction<string>>;
 	createApplications: Record<string, ITransaction<string>>;
 	priemLogout: ITransaction<any>;
+	verNp: ITransaction<{ ver_id: number }>;
+	verPersonContacts: ITransaction<IVerPersonContactsResponse>;
+	setExistPersonVerCode: ITransaction<any>;
 }

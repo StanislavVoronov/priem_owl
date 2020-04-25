@@ -9,6 +9,7 @@ import { TRANSACTION_NAMES } from '$actions';
 import { ITransactionsState } from './transactionsModels';
 import { IRegForm } from '$common';
 import { findPersonRest } from '$rests';
+import { transactionSelector } from './selectors';
 
 export const findPersonTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FindPerson,
@@ -17,7 +18,7 @@ export const findPersonTransactionActions = createTransactionActions(
 
 export const findPersonReducer = createTransactionReducer(findPersonTransactionActions);
 
-export const isPersonFoundTransactionSelector = createSelector(prop('transactions'), (state: ITransactionsState) => {
+export const isPersonFoundTransactionSelector = createSelector(transactionSelector, (state) => {
 	const { isFetching, exception, result } = state.findPerson;
 	const isFound = Array.isArray(result) && result.length > 0;
 

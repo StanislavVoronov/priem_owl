@@ -10,6 +10,12 @@ class EnrollApi extends JsonRequest {
 
 		return Request.post();
 	};
+
+	static select = <Q, R>(api: ENROLL_API_NAMES, payload: Q): Promise<R> => {
+		const Request = new JsonRequest(EnrollApi.host, EnrollApi.path, api, payload);
+
+		return Request.select();
+	};
 }
 
 export default EnrollApi;

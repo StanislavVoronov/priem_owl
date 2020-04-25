@@ -9,6 +9,7 @@ import { TRANSACTION_NAMES } from '$actions';
 import { ITransactionsState } from '$store';
 import { updateAddressRest } from '$rests';
 import { AddressType } from '$common';
+import { transactionSelector } from './selectors';
 
 export const updateAddressTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.UpdateAddress,
@@ -16,7 +17,7 @@ export const updateAddressTransactionActions = createTransactionActions(
 );
 
 export const updateAddressesReducer = createTransactionReducer(updateAddressTransactionActions, {
-	mapToKey: payload => payload.kind,
+	mapToKey: (payload) => payload.kind,
 });
 
 export const updateAddressTransactionSelector = createSelector(
@@ -26,10 +27,12 @@ export const updateAddressTransactionSelector = createSelector(
 );
 
 export const updateAddressesTransactionSelector = createSelector(
-	prop('transactions'),
-	(state: ITransactionsState) => state.updateAddresses,
+	transactionSelector,
+	prop('updateAddresses'),
 );
 
-export const updateAddressSaga = sagaEffects.rest(updateAddressTransactionActions, function*({ payload }) {
+export const updateAddressSaga = sagaEffects.rest(updateAddressTransactionActions, function* ({
+	payload,
+}) {
 	return updateAddressRest(payload.address, payload.kind);
 });

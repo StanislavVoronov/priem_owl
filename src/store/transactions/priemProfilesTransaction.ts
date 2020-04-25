@@ -9,6 +9,7 @@ import {
 import { ITransactionsState } from './transactionsModels';
 import { priemProfilesRest } from '$rests';
 import { disabledPayFormSelector } from '../selectors';
+import { transactionSelector } from './selectors';
 
 export const priemProfilesTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemProfiles,
@@ -21,16 +22,21 @@ export const priemProfilesTransactionActions = createTransactionActions(
 export const priemProfilesReducer = createTransactionReducer(priemProfilesTransactionActions);
 
 export const priemProfilesTransactionSelector = createSelector(
-	prop('transactions'),
-	(state: ITransactionsState) => state.priemProfiles,
+	transactionSelector,
+	prop('priemProfiles'),
 );
 
 export const priemProfilesSaga = sagaEffects.rest(
 	priemProfilesTransactionActions,
-	function*({ payload }) {
+	function* ({ payload }) {
 		const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
-		return yield priemProfilesRest(payload.filial.ID, payload.inst.ID, payload.direction.ID, payForms);
+		return yield priemProfilesRest(
+			payload.filial.ID,
+			payload.inst.ID,
+			payload.direction.ID,
+			payForms,
+		);
 	},
 	true,
 );

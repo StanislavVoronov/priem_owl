@@ -9,6 +9,7 @@ import {
 } from '@black_bird/utils';
 import { priemDirectionRest } from '$rests';
 import { disabledPayFormSelector } from '../selectors';
+import { transactionSelector } from './selectors';
 
 export const priemDirectionsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemDirections,
@@ -22,16 +23,21 @@ export const priemDirectionsTransactionActions = createTransactionActions(
 export const priemDirectionsReducer = createTransactionReducer(priemDirectionsTransactionActions);
 
 export const priemDirectionsTransactionSelector = createSelector(
-	prop('transactions'),
-	(state: ITransactionsState) => state.priemDirections,
+	transactionSelector,
+	prop('priemDirections'),
 );
 
 export const priemDirectionSaga = sagaEffects.rest(
 	priemDirectionsTransactionActions,
-	function*({ payload }) {
+	function* ({ payload }) {
 		const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
-		return yield priemDirectionRest(payload.filial.ID, payload.educLevel.ID, payload.inst.ID, payForms);
+		return yield priemDirectionRest(
+			payload.filial.ID,
+			payload.educLevel.ID,
+			payload.inst.ID,
+			payForms,
+		);
 	},
 	true,
 );

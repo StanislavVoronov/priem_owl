@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { IException, ITransaction } from '@black_bird/utils';
+import { IException, isNotVoid, ITransaction } from '@black_bird/utils';
 import { Form, IFormProps } from '@black_bird/components';
 import RegFormView from './RegFormView';
 import {
@@ -12,16 +12,19 @@ import {
 	isUniqueLoginTransactionSelector,
 	isPersonFoundTransactionSelector,
 	createLoginTransactionSelector,
+	verPersonContactsTrnSelector,
+	verPersonTrnSelector,
 } from '$store';
 import { IRegForm, INamesDictionary } from '$common';
+import { setExistPersonVerCodeTrnSelector } from '../../store/transactions/setExistsPersonVerCode';
 
 interface IStateToProps {
 	firstNameDictionary: ITransaction<INamesDictionary[]>;
 	middleNameDictionary: ITransaction<INamesDictionary[]>;
 	error: IException | null;
-	disabledForm: boolean;
 	loading: boolean;
-	data: IRegForm;
+	form: IRegForm;
+	email?: string;
 }
 interface IDispatchToProps {
 	onSubmit: (values: IRegForm) => void;
@@ -30,31 +33,33 @@ interface IDispatchToProps {
 type Props = IStateToProps & IDispatchToProps;
 class EnrollRegistrationContainer extends React.Component<Props> {
 	disabledForm = () => {
-		return this.props.disabledForm;
+		return this.props.loading;
 	};
 	renderForm = (form: IFormProps<IRegForm>) => {
+		const { firstNameDictionary, email, middleNameDictionary } = this.props;
+
 		return (
 			<RegFormView
 				form={form}
-				firstNameDictionary={this.props.firstNameDictionary}
-				middleNameDictionary={this.props.middleNameDictionary}
+				email={email}
+				firstNameDictionary={firstNameDictionary}
+				middleNameDictionary={middleNameDictionary}
 			/>
 		);
 	};
-
 	render() {
-		const { onSubmit, data, error, loading } = this.props;
+		const { onSubmit, form, email, error, loading } = this.props;
 
 		return (
 			<Form
 				error={error}
 				loading={loading}
-				loadingText="Поиск абитуриента"
+				loadingText="Поиск личного дела"
 				renderForm={this.renderForm}
 				disabled={this.disabledForm}
 				onSubmit={onSubmit}
-				initialValues={data}
-				buttonText="Проверить личное дело"
+				initialValues={form}
+				buttonText={email ? 'Подтвердить учетную запись' : 'Проверить личное дело'}
 			/>
 		);
 	}
@@ -65,19 +70,30 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) 
 
 	const uniqueLoginTransaction = isUniqueLoginTransactionSelector(state);
 	const createLoginTransaction = createLoginTransactionSelector(state);
-	const data = regFormSelector(state);
+	const form = regFormSelector(state);
 	const findPersonTransaction = isPersonFoundTransactionSelector(state);
+	const verPersonContacts = verPersonContactsTrnSelector(state);
+	const verPerson = verPersonTrnSelector(state);
+	const setExistPersonVerCode = setExistPersonVerCodeTrnSelector(state);
 
 	return {
 		firstNameDictionary,
 		middleNameDictionary,
-		data,
-		disabledForm: findPersonTransaction.exception !== null,
-		error: uniqueLoginTransaction.exception || createLoginTransaction.exception,
+		form,
+		email: verPersonContacts.result?.email,
+		error:
+			uniqueLoginTransaction.exception ||
+			createLoginTransaction.exception ||
+			verPerson.exception ||
+			verPersonContacts.exception ||
+			setExistPersonVerCode.exception,
 		loading:
 			uniqueLoginTransaction.isFetching ||
 			createLoginTransaction.isFetching ||
-			findPersonTransaction.isFetching,
+			findPersonTransaction.isFetching ||
+			verPersonContacts.isFetching ||
+			setExistPersonVerCode.isFetching ||
+			verPerson.isFetching,
 	};
 };
 

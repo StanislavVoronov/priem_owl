@@ -8,14 +8,17 @@ import {
 import { ITransactionsState } from './transactionsModels';
 import { priemLogoutRest } from '$rests';
 import { TRANSACTION_NAMES } from '$actions';
+import { transactionSelector } from './selectors';
 
-export const priemLogoutTransactionActions = createTransactionActions(TRANSACTION_NAMES.PriemLogout);
+export const priemLogoutTransactionActions = createTransactionActions(
+	TRANSACTION_NAMES.PriemLogout,
+);
 
 export const priemLogoutReducer = createTransactionReducer(priemLogoutTransactionActions);
 
 export const priemLogoutTransactionSelector = createSelector(
-	prop('transactions'),
-	(state: ITransactionsState) => state.priemLogout,
+	transactionSelector,
+	prop('priemLogout'),
 );
 
 export const priemLogoutSaga = sagaEffects.rest(priemLogoutTransactionActions, priemLogoutRest);

@@ -9,9 +9,13 @@ import {
 	navigateToStep,
 	isUniqueLoginTransactionSelector,
 	goToNextStep,
+	verPersonTrnActions,
+	isPersonFoundTransactionSelector,
+	verPersonContactsTrnActions,
 } from '$store';
 import { checkLoginRest, createLoginRest, findPersonRest } from '$rests';
 import { cyrillToLatin, generatePassword } from '$common';
+import { setExistPersonVerCodeTrnActions } from '../store/transactions/setExistsPersonVerCode';
 
 function* createNewLogin() {
 	const data = yield sagaEffects.select(regFormSelector);
@@ -50,7 +54,13 @@ function* createNewLogin() {
 }
 
 export const regFormSagas = [
-	sagaEffects.takeEvery(submitRegFormAction, createNewLogin),
+	sagaEffects.takeEvery(submitRegFormAction, function* ({ payload }) {
+		if (payload.verAccountCode) {
+			yield sagaEffects.put(setExistPersonVerCodeTrnActions.trigger(payload.verAccountCode));
+		} else {
+			yield sagaEffects.call(createNewLogin);
+		}
+	}),
 	sagaEffects.takeLatest(generateUserPasswordAction, function* ({ payload }: any) {
 		const password = generatePassword();
 
@@ -59,11 +69,19 @@ export const regFormSagas = [
 	sagaEffects.takeLatest(findPersonTransactionActions.success, function* ({ payload }: any) {
 		if (isEmptyArray(payload.response)) {
 			yield sagaEffects.put(goToNextStep());
+		} else {
+			const npId = yield sagaEffects.select(isPersonFoundTransactionSelector);
+
+			yield sagaEffects.put(verPersonTrnActions.trigger(npId.result.ID));
+			yield sagaEffects.put(verPersonContactsTrnActions.trigger(npId.result.ID));
 		}
 	}),
 	sagaEffects.takeEvery(createLoginTransactionActions.success, function* () {
 		const data = yield sagaEffects.select(regFormSelector);
 
 		yield sagaEffects.put(findPersonTransactionActions.trigger(data));
+	}),
+	sagaEffects.takeEvery(setExistPersonVerCodeTrnActions.success, function* () {
+		yield sagaEffects.put(goToNextStep());
 	}),
 ];

@@ -20,6 +20,8 @@ export enum PRIEM_API_NAMES {
 
 export enum ENROLL_API_NAMES {
 	VerNewNp = 'vernewnp',
+	VerNp = 'vernp',
 	SetNp = 'setnp',
 	SetNewNp = 'setnewnp',
+	VerPersonContacts = 'npverdata',
 }

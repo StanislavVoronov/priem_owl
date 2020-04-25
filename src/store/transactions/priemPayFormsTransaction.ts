@@ -9,6 +9,7 @@ import {
 } from '@black_bird/utils';
 import { priemPayFormsRest } from '$rests';
 import { disabledPayFormSelector } from '../selectors';
+import { transactionSelector } from './selectors';
 
 export const priemPayFormsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemPayForms,
@@ -28,8 +29,8 @@ export const priemPayFormsTransactionActions = createTransactionActions(
 export const priemPayFormsReducer = createTransactionReducer(priemPayFormsTransactionActions);
 
 export const priemPayFormsTransactionSelector = createSelector(
-	prop('transactions'),
-	(state: ITransactionsState) => state.priemPayForms,
+	transactionSelector,
+	prop('priemPayForms'),
 );
 
 export const payFormsSaga = sagaEffects.rest(

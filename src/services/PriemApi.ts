@@ -9,7 +9,7 @@ class PriemApi {
 	static select = <Q, R>(api: string, payload?: Q): Promise<R[]> => {
 		const Request = new JsonRequest(PriemApi.host, PriemApi.path, api, payload);
 
-		return Request.post().then((item: any) => Promise.resolve(item.result));
+		return Request.select();
 	};
 
 	static post = <Q, R>(api: PRIEM_API_NAMES, payload?: Q): Promise<R> => {
@@ -17,7 +17,11 @@ class PriemApi {
 
 		return Request.post();
 	};
-	static uploadDoc = <Q, R>(api: PRIEM_API_NAMES, payload: Q, doc: File | null = null): Promise<R> => {
+	static uploadDoc = <Q, R>(
+		api: PRIEM_API_NAMES,
+		payload: Q,
+		doc: File | null = null,
+	): Promise<R> => {
 		const Request = new UploadDocApi(PriemApi.host, PriemApi.path, api, payload, doc);
 
 		return Request.post();
