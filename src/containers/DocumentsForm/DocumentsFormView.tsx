@@ -15,6 +15,7 @@ interface IProps extends IDocumentsForm {
 	docTypesDictionary: ITransaction<IDictionary[]>;
 	governmentDictionary: ITransaction<IDictionary[]>;
 	subTypesDocDictionary: ITransaction<IDictionary[]>;
+	cheatTypesDictionary: ITransaction<IDictionary[]>;
 	addDoc: () => void;
 	deleteDoc: (index: number) => void;
 	onToggleItem: (index: number) => void;
@@ -37,6 +38,7 @@ const DocumentsFormView = (props: IProps) => {
 		governmentDictionary,
 		onSubmit,
 		requireDocs,
+		cheatTypesDictionary,
 	} = props;
 
 	const addButtonDisabled = documents.map(validateDocument).includes(false);
@@ -65,19 +67,13 @@ const DocumentsFormView = (props: IProps) => {
 			</List>
 
 			{documents.map((doc: IDocument, index: number) => {
-				const { type, subType } = doc;
-
-				const filteredSubTypesDocDictionary = {
-					...subTypesDocDictionary,
-					result: subTypesDocDictionary.result.filter((item) => item.type === type?.id),
-				};
-
 				return (
 					<DocumentItem
-						key={`${index}`}
+						cheatTypesDictionary={cheatTypesDictionary}
+						key={`${doc.type?.id}${index}${doc.subType?.id}`}
 						governmentDictionary={governmentDictionary}
 						docTypesDictionary={docTypesDictionary}
-						subDocTypesDictionary={filteredSubTypesDocDictionary}
+						subDocTypesDictionary={subTypesDocDictionary}
 						expanded={expendList.some(equals(index))}
 						onChange={onChangeData}
 						index={index}
@@ -91,8 +87,8 @@ const DocumentsFormView = (props: IProps) => {
 				<Button margin="huge" disabled={addButtonDisabled} classes={{ root: classes.addDoc }} onClick={addDoc}>
 					Добавить новый документ
 				</Button>
-				<Button disabled={nextButtonDisabled} margin="huge" onClick={onSubmit}>
-					Последний шаг
+				<Button disabled={nextButtonDisabled || addButtonDisabled} margin="huge" onClick={onSubmit}>
+					Следующий шаг
 				</Button>
 			</Wrapper>
 		</>

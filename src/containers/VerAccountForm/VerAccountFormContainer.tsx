@@ -11,10 +11,10 @@ import {
 	uploadDocumentsTransactionSelector,
 	verAccountFormSelector,
 } from '$store';
-import { AddressType, IVerAccountForm } from '$common';
+import { AddressType, IContactsForm, IVerAccountForm } from '$common';
 import VerAccountFormView from './VerAccountFormView';
 import { Form, IFormField, IFormProps } from '@black_bird/components';
-import { IException, ITransaction, prop, TransactionStatus } from '@black_bird/utils';
+import { IException, isEmpty, ITransaction, prop, TransactionStatus } from '@black_bird/utils';
 import classes from './styles.module.css';
 
 interface IMapStateToProps {
@@ -34,7 +34,9 @@ class AccountVerificationContainer extends React.Component<IProps> {
 	renderForm = (form: IFormProps<any>) => {
 		return <VerAccountFormView value={prop('verAccountCode')(form.values)} onChange={form.onChange} />;
 	};
-
+	disabledForm = ({ values }: { values: IVerAccountForm }) => {
+		return isEmpty(values.verAccountCode);
+	};
 	render() {
 		const { loading, onSubmit, createCodeTransaction, error, form, folderCreated } = this.props;
 
@@ -46,6 +48,7 @@ class AccountVerificationContainer extends React.Component<IProps> {
 			<Form
 				onSubmit={onSubmit}
 				loading={loading}
+				disabled={this.disabledForm}
 				loadingText={
 					createCodeTransaction.isFetching ? 'Отправка кода подтверждения учетной записи' : 'Формирование личного дела'
 				}

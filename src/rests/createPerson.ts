@@ -29,15 +29,13 @@ export interface ICreatePersonPayload {
 	gender: string;
 	highFirst: string;
 	bestPrevEdu: IDictionary | null;
-	cheatType: number;
+	cheatType?: number;
 }
 export interface ICreatePersonDataResponse {
 	np_uid: number;
 }
 
 export const createPersonRest = (data: ICreatePersonPayload) => {
-	console.log('createPersonRest', data);
-
 	const payload = {
 		email_code: data.verEmailCode,
 		phone_code: data.verPhoneCode,
@@ -50,8 +48,11 @@ export const createPersonRest = (data: ICreatePersonPayload) => {
 		sex: Number(data.gender),
 		hight_first: data.highFirst ? ServerBoolean.True : ServerBoolean.False,
 		best_prev_edu: data.bestPrevEdu ? data.bestPrevEdu.id : 0,
-		cheat_type: 0,
+		cheat_type: data.cheatType || 0,
 	};
 
-	return EnrollApi.post<ICreatePersonDataRequest, ICreatePersonDataResponse>(ENROLL_API_NAMES.SetNewNp, payload);
+	return EnrollApi.post<ICreatePersonDataRequest, ICreatePersonDataResponse>(
+		ENROLL_API_NAMES.SetNewNp,
+		payload,
+	);
 };

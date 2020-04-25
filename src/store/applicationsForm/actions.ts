@@ -45,8 +45,10 @@ export const onChangePayFormsAction = createAction(
 	(item: IFormField<IAdmDictionaryItem[]>) => item.value,
 );
 
-export const applicationDeletedAction = createAction(`${NAMESPACE}/APPLICATION_DELETED`, (index: number) => index);
-export const updatePriemGroups = createAction(`${NAMESPACE}/updatePriemGroups`, (values: IPriemGroup[]) => values);
+export const applicationDeletedAction = createAction(
+	`${NAMESPACE}/APPLICATION_DELETED`,
+	(index: number) => index,
+);
 
 export const newPriemAppAddedAction = createAction(`${NAMESPACE}/NEW_PRIEM_APPLICATION_ADDED`);
 
@@ -55,9 +57,10 @@ export const newAdmGroupsAddedAction = createAction(
 	(admGroup: IAdmGroup) => admGroup,
 );
 
-export const disabledPayFormsUpdated = createAction(
-	`${NAMESPACE}/DISABLED_PAY_FORMS_UPDATED`,
-	(payForms: number[]) => payForms,
-);
+export const disabledFreePayFormAction = createAction(`${NAMESPACE}/DISABLED_FREE_FORM`);
+
+export const openLigotaPriemAction = createAction(`${NAMESPACE}/OPEN_LOGOTA_PRIEM`);
+
+export const closeLigotaPriemAction = createAction(`${NAMESPACE}/CLOSE_LOGOTA_PRIEM`);
 
 export const submitApplicationFormAction = createAction(`${NAMESPACE}/SUBMIT`);

@@ -1,18 +1,22 @@
 import { sagaEffects } from '@black_bird/utils';
 import {
-	contactsFormSelector,
-	createVerCodeTransactionActions,
-	navigateToStep,
+	closeLigotaPriemAction,
+	documentsFormSelector,
+	getLigotaDocument,
+	openLigotaPriemAction,
 	submitDocumentsFormAction,
-	verAccountFormSelector,
 } from '$store';
+import { IDocument, IDocumentsForm } from '$common';
 
+export function* checkLigotaPriemStatus() {
+	const data: IDocument = yield sagaEffects.select(getLigotaDocument);
+
+	if (data.cheatType) {
+		yield sagaEffects.put(openLigotaPriemAction());
+	} else {
+		yield sagaEffects.put(closeLigotaPriemAction());
+	}
+}
 export const documentsFormSagas = [
-	sagaEffects.takeEvery(submitDocumentsFormAction, function*() {
-		const { verAccountMethod } = yield sagaEffects.select(verAccountFormSelector);
-		const { mobPhone, email } = yield sagaEffects.select(contactsFormSelector);
-
-		yield sagaEffects.put(createVerCodeTransactionActions.trigger(email, mobPhone, verAccountMethod));
-
-	}),
+	sagaEffects.takeEvery(submitDocumentsFormAction, checkLigotaPriemStatus),
 ];

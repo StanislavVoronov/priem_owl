@@ -8,8 +8,7 @@ import classes from './styles.module.css';
 import { Button, Column, IFormField, Select, TextInput, Wrapper } from '@black_bird/components';
 import { IAdmGroup, IAdmTransactionList } from '$store';
 import classNames from 'classnames';
-import { DeleteIcon, DocumentForm, ExpandLessIcon, ExpandMoreIcon, ExpansionPanel } from '$components';
-import { PanelDetails } from '../DocumentsForm/components/styled';
+import { ExpandLessIcon, ExpandMoreIcon, ExpansionPanel } from '$components';
 
 interface IProps {
 	filialDictionary: IAdmTransactionList;
@@ -151,7 +150,8 @@ const ApplicationsFormView = (props: IProps) => {
 			)}
 			{countExceeded && (
 				<span className={classes.warningText}>
-					По правилам приема возможно подать заявления только на три различных направления подготовки
+					По правилам приема возможно подать заявления только на три различных направления
+					подготовки
 				</span>
 			)}
 
@@ -206,7 +206,9 @@ const ApplicationsFormView = (props: IProps) => {
 				/>
 			)}
 
-			{disabledAddButton && <div className={classes.repeatAppText}>Заявление уже было добавлено ранее</div>}
+			{disabledAddButton && (
+				<div className={classes.repeatAppText}>Заявление уже было добавлено ранее</div>
+			)}
 
 			<Wrapper margin="normal" className={classes.buttonWrapper}>
 				<Button
@@ -241,7 +243,9 @@ const ApplicationsFormView = (props: IProps) => {
 							/>
 						)}
 					</div>
-					{display ? <ApplicationsTable onDelete={onDeleteApplication} applications={applications} /> : null}
+					{display ? (
+						<ApplicationsTable onDelete={onDeleteApplication} applications={applications} />
+					) : null}
 				</>
 			) : null}
 		</Column>

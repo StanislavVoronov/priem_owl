@@ -10,7 +10,9 @@ import { priemFilialsRest } from '$rests';
 import { TRANSACTION_NAMES } from '$actions';
 import { disabledPayFormSelector } from '../selectors';
 
-export const priemFilialsTransactionActions = createTransactionActions(TRANSACTION_NAMES.FetchPriemFilials);
+export const priemFilialsTransactionActions = createTransactionActions(
+	TRANSACTION_NAMES.FetchPriemFilials,
+);
 
 export const priemFilialsReducer = createTransactionReducer(priemFilialsTransactionActions);
 
@@ -19,8 +21,12 @@ export const priemFilialsTransactionSelector = createSelector(
 	(state: ITransactionsState) => state.priemFilials,
 );
 
-export const priemFilialsSaga = sagaEffects.rest(priemFilialsTransactionActions, function* () {
-	const payForms = yield sagaEffects.select(disabledPayFormSelector);
+export const priemFilialsSaga = sagaEffects.rest(
+	priemFilialsTransactionActions,
+	function* () {
+		const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
-	return yield priemFilialsRest(payForms);
-});
+		return yield priemFilialsRest(payForms);
+	},
+	true,
+);

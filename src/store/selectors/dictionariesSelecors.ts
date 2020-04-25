@@ -76,6 +76,11 @@ export const getDocTypesDictionary = createSelector(
 	(state) => state[EDictionaryNameList.DocTypes] || DEFAULT_TRANSACTION,
 );
 
+export const getCheatTypesDictionary = createSelector(
+	dictionaryStateSelector,
+	(state) => state[EDictionaryNameList.CheatTypes] || DEFAULT_TRANSACTION,
+);
+
 export const getGovernmentDictionary = createSelector(
 	dictionaryStateSelector,
 	(state) => state[EDictionaryNameList.Governments] || DEFAULT_TRANSACTION,

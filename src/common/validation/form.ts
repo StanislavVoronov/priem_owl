@@ -10,10 +10,10 @@ export const validateDocument = (document: IDocument): boolean => {
 		return false;
 	}
 	if (document.type && document.type.has_num) {
-		return document.num ? !!document.num : false;
+		return document.num ? document.num.length > 0 : false;
 	}
 	if (document.type && document.type.need_info) {
-		return !!(document.issieBy && document.date && document.series);
+		return ![document.issieBy, document.date, document.series].includes('');
 	}
 
 	return true;
@@ -27,5 +27,5 @@ export const validateRusTextField = (value: string = '') => {
 };
 
 export const validateRequireRusText = (value: string) => {
-	return [validateRequireTextField(value), validateRusTextField(value)].find(item => not(isNil(item)));
+	return [validateRequireTextField(value), validateRusTextField(value)].find((item) => not(isNil(item)));
 };

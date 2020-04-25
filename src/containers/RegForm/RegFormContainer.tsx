@@ -72,9 +72,12 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) 
 		firstNameDictionary,
 		middleNameDictionary,
 		data,
-		disabledForm: createLoginTransaction.result > 0,
-		error: uniqueLoginTransaction.exception || createLoginTransaction.exception || findPersonTransaction.exception,
-		loading: uniqueLoginTransaction.isFetching || createLoginTransaction.isFetching || findPersonTransaction.isFetching,
+		disabledForm: findPersonTransaction.exception !== null,
+		error: uniqueLoginTransaction.exception || createLoginTransaction.exception,
+		loading:
+			uniqueLoginTransaction.isFetching ||
+			createLoginTransaction.isFetching ||
+			findPersonTransaction.isFetching,
 	};
 };
 

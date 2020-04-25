@@ -9,107 +9,112 @@ import {
 	onChangePayFormsAction,
 	newAdmGroupsAddedAction,
 	applicationDeletedAction,
-	disabledPayFormsUpdated,
+	disabledFreePayFormAction,
+	openLigotaPriemAction,
+	closeLigotaPriemAction,
 } from './actions';
-import { combineActions, combineReducers, createReducer, forAction, byKeyReducer } from '@black_bird/utils';
+import { combineReducers, createReducer, forAction } from '@black_bird/utils';
 import { IAdmGroup } from './models';
-import { priemEducLevelsTransactionActions } from '$store';
+import { priemEducLevelsTransactionActions, priemFilialsTransactionActions } from '$store';
 
 const filialReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(onChangeFilialAction, (state, payload) => payload)],
 	null,
+	{ cleanActions: [priemFilialsTransactionActions.trigger] },
 );
 
 const educLevelReducer = createReducer<IAdmDictionaryItem | null>(
-	[
-		forAction(onChangeEducLevelAction, (state, payload) => payload),
-		forAction(combineActions(onChangeFilialAction), (state) => null),
-	],
+	[forAction(onChangeEducLevelAction, (state, payload) => payload)],
 	null,
+	{ cleanActions: [priemFilialsTransactionActions.trigger, onChangeFilialAction] },
 );
 
 const profileReducer = createReducer<IAdmDictionaryItem[]>(
-	[
-		forAction(onChangeProfilesAction, (state, payload) => payload),
-		forAction(
-			combineActions(onChangeEducLevelAction, onChangeDirectionAction, newAdmGroupsAddedAction),
-			(state, payload) => [],
-		),
-	],
+	[forAction(onChangeProfilesAction, (state, payload) => payload)],
 	[],
+	{
+		cleanActions: [
+			onChangeEducLevelAction,
+			onChangeDirectionAction,
+			newAdmGroupsAddedAction,
+			priemFilialsTransactionActions.trigger,
+		],
+	},
 );
 
 const instituteReducer = createReducer<IAdmDictionaryItem | null>(
-	[
-		forAction(onChangeInstAction, (state, payload) => payload),
-		forAction(
-			combineActions(
-				onChangeEducLevelAction,
-				onChangeFilialAction,
-				newAdmGroupsAddedAction,
-				priemEducLevelsTransactionActions.success,
-			),
-			(state, payload) => null,
-		),
-	],
+	[forAction(onChangeInstAction, (state, payload) => payload)],
 	null,
+	{
+		cleanActions: [
+			onChangeEducLevelAction,
+			onChangeFilialAction,
+			newAdmGroupsAddedAction,
+			priemEducLevelsTransactionActions.success,
+		],
+	},
 );
 
 const directionReducer = createReducer<IAdmDictionaryItem | null>(
-	[
-		forAction(onChangeDirectionAction, (state, payload) => payload),
-		forAction(
-			combineActions(onChangeInstAction, onChangeFilialAction, onChangeEducLevelAction, newAdmGroupsAddedAction),
-			(state) => null,
-		),
-	],
+	[forAction(onChangeDirectionAction, (state, payload) => payload)],
 	null,
+	{
+		cleanActions: [
+			onChangeInstAction,
+			onChangeFilialAction,
+			onChangeEducLevelAction,
+			newAdmGroupsAddedAction,
+		],
+	},
 );
 
 const payFormsReducer = createReducer<IAdmDictionaryItem[]>(
-	[
-		forAction(onChangePayFormsAction, (state, payload) => payload),
-		forAction(
-			combineActions(
-				onChangeInstAction,
-				onChangeFilialAction,
-				onChangeDirectionAction,
-				onChangeEducLevelAction,
-				onChangeEducFormsAction,
-				newAdmGroupsAddedAction,
-			),
-			(state) => [],
-		),
-	],
+	[forAction(onChangePayFormsAction, (state, payload) => payload)],
 	[],
+	{
+		cleanActions: [
+			onChangeInstAction,
+			onChangeFilialAction,
+			onChangeDirectionAction,
+			onChangeEducLevelAction,
+			onChangeEducFormsAction,
+			newAdmGroupsAddedAction,
+		],
+	},
 );
 
 const educFormsReducer = createReducer<IAdmDictionaryItem[]>(
-	[
-		forAction(onChangeEducFormsAction, (state, payload) => payload),
-		forAction(
-			combineActions(
-				onChangeEducLevelAction,
-				onChangeFilialAction,
-				onChangeInstAction,
-				onChangeDirectionAction,
-				newAdmGroupsAddedAction,
-			),
-			(state) => [],
-		),
-	],
+	[forAction(onChangeEducFormsAction, (state, payload) => payload)],
 	[],
+	{
+		cleanActions: [
+			onChangeEducLevelAction,
+			onChangeFilialAction,
+			onChangeInstAction,
+			onChangeDirectionAction,
+			newAdmGroupsAddedAction,
+		],
+	},
 );
 
-const disabledPayFormsReducer = createReducer<number[]>(
-	[forAction(disabledPayFormsUpdated, (state, payload) => payload)],
-	[16, 20],
+const availablePayFormsReducers = createReducer<number[]>(
+	[
+		forAction(disabledFreePayFormAction, (state) => Array.from(new Set([...state, 14]))),
+		forAction(openLigotaPriemAction, (state, payload) =>
+			state.filter((item) => item !== 16 && item !== 20),
+		),
+		forAction(closeLigotaPriemAction, (state) => Array.from(new Set([...state, 16, 20]))),
+	],
+
+	[],
 );
 
 const admGroupsReducer = createReducer<IAdmGroup[]>(
 	[
 		forAction(newAdmGroupsAddedAction, (state, payload: IAdmGroup) => [...state, payload]),
-		forAction(applicationDeletedAction, (state, payload: number) => state.filter((item, index) => index !== payload)),
+		forAction(applicationDeletedAction, (state, payload: number) =>
+			state.filter((item, index) => index !== payload),
+		),
 	],
 	[],
 );
@@ -123,7 +128,7 @@ const applicationsFormReducer = combineReducers<IApplicationForm>({
 	profiles: profileReducer,
 	institute: instituteReducer,
 	applications: admGroupsReducer,
-	disabledPayForms: disabledPayFormsReducer,
+	disabledPayForms: availablePayFormsReducers,
 });
 
 export default applicationsFormReducer;

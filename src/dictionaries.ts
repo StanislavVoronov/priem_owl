@@ -42,7 +42,7 @@ export const FULL_DICTIONARY_LIST = [
 		columns: ['id', 'name'],
 	},
 	{
-		dictionary: EDictionaryNameList.PriemSpecialCategories,
+		dictionary: EDictionaryNameList.CheatTypes,
 		columns: ['id', 'name'],
 	},
 ];
@@ -52,7 +52,7 @@ export const NEW_PERSON_STEPS = [
 	'Персональные данные',
 	'Контактные данные',
 	'Образование',
-	'Заявления',
 	'Документы',
+	'Заявления',
 	'Отправка документов',
 ];

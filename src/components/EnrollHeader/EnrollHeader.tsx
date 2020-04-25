@@ -9,6 +9,7 @@ import DateRangeIcon from '@material-ui/icons/DateRange';
 import SchoolIcon from '@material-ui/icons/School';
 import GroupIcon from '@material-ui/icons/Group';
 import classes from './EnrollHeader.module.css';
+import styles from '../../pages/Enroll/styles.module.css';
 
 class EnrollHeader extends React.PureComponent {
 	onNavIconClick = (href: string) => () => {
@@ -22,81 +23,83 @@ class EnrollHeader extends React.PureComponent {
 		return (
 			<div className={classes.container}>
 				<img className={classes.logo} onClick={this.onLogoClick} src={Logo} />
-				<BottomNavigation showLabels className={classes.nav}>
-					<BottomNavigationAction
-						className={classes.nav}
-						label={
-							<a className={classes.link} href="http://mgutm.ru/entrant_2012/aktualnii_dokumenti.php" target="_blank">
-								Правила приема
-							</a>
-						}
-						icon={
-							<ImportContactsIcon
-								onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/aktualnii_dokumenti.php')}
-								fontSize="large"
-								color="primary"
-							/>
-						}
-					/>
-					<BottomNavigationAction
-						className={classes.nav}
-						label={
-							<a className={classes.link} href="http://mgutm.ru/entrant/doc.php" target="_blank">
-								Необходимые документы
-							</a>
-						}
-						icon={
-							<DescriptionIcon
-								fontSize="large"
-								color="primary"
-								onClick={this.onNavIconClick('http://mgutm.ru/entrant/doc.php')}
-							/>
-						}
-					/>
-					<BottomNavigationAction
-						className={classes.nav}
-						label={
-							<a
-								className={classes.link}
-								onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/naprovleniya_podgotovki.php')}
-								href="http://mgutm.ru/entrant_2012/naprovleniya_podgotovki.php"
-								target="_blank">
-								Направления подготовки
-							</a>
-						}
-						icon={<CategoryIcon fontSize="large" color="primary" />}
-					/>
-					<BottomNavigationAction
-						label={
-							<a
-								className={classes.link}
-								onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/plan-kalendar-priema.php')}
-								href="http://mgutm.ru/entrant_2012/plan-kalendar-priema.php"
-								target="_blank">
-								Календарь приема
-							</a>
-						}
-						icon={<DateRangeIcon fontSize="large" color="primary" />}
-					/>
-					<BottomNavigationAction
-						label={
-							<a className={classes.link} href="http://mgutm.ru/exams/" target="_blank">
-								Вступительные испытания
-							</a>
-						}
-						onClick={this.onNavIconClick('http://mgutm.ru/exams/')}
-						icon={<SchoolIcon fontSize="large" color="primary" />}
-					/>
-					<BottomNavigationAction
-						label={
-							<a className={classes.link} href="http://mgutm.ru/entrant_2012/plan.php" target="_blank">
-								План приема
-							</a>
-						}
-						onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/plan.php')}
-						icon={<GroupIcon fontSize="large" color="primary" />}
-					/>
-				</BottomNavigation>
+				<h2 className={styles.namePageTitle}>Подача документов для поступления в Университет</h2>
+
+				{/*<BottomNavigation showLabels className={classes.nav}>*/}
+				{/*	<BottomNavigationAction*/}
+				{/*		className={classes.nav}*/}
+				{/*		label={*/}
+				{/*			<a className={classes.link} href="http://mgutm.ru/entrant_2012/aktualnii_dokumenti.php" target="_blank">*/}
+				{/*				Правила приема*/}
+				{/*			</a>*/}
+				{/*		}*/}
+				{/*		icon={*/}
+				{/*			<ImportContactsIcon*/}
+				{/*				onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/aktualnii_dokumenti.php')}*/}
+				{/*				fontSize="large"*/}
+				{/*				color="primary"*/}
+				{/*			/>*/}
+				{/*		}*/}
+				{/*	/>*/}
+				{/*	<BottomNavigationAction*/}
+				{/*		className={classes.nav}*/}
+				{/*		label={*/}
+				{/*			<a className={classes.link} href="http://mgutm.ru/entrant/doc.php" target="_blank">*/}
+				{/*				Необходимые документы*/}
+				{/*			</a>*/}
+				{/*		}*/}
+				{/*		icon={*/}
+				{/*			<DescriptionIcon*/}
+				{/*				fontSize="large"*/}
+				{/*				color="primary"*/}
+				{/*				onClick={this.onNavIconClick('http://mgutm.ru/entrant/doc.php')}*/}
+				{/*			/>*/}
+				{/*		}*/}
+				{/*	/>*/}
+				{/*	<BottomNavigationAction*/}
+				{/*		className={classes.nav}*/}
+				{/*		label={*/}
+				{/*			<a*/}
+				{/*				className={classes.link}*/}
+				{/*				onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/naprovleniya_podgotovki.php')}*/}
+				{/*				href="http://mgutm.ru/entrant_2012/naprovleniya_podgotovki.php"*/}
+				{/*				target="_blank">*/}
+				{/*				Направления подготовки*/}
+				{/*			</a>*/}
+				{/*		}*/}
+				{/*		icon={<CategoryIcon fontSize="large" color="primary" />}*/}
+				{/*	/>*/}
+				{/*	<BottomNavigationAction*/}
+				{/*		label={*/}
+				{/*			<a*/}
+				{/*				className={classes.link}*/}
+				{/*				onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/plan-kalendar-priema.php')}*/}
+				{/*				href="http://mgutm.ru/entrant_2012/plan-kalendar-priema.php"*/}
+				{/*				target="_blank">*/}
+				{/*				Календарь приема*/}
+				{/*			</a>*/}
+				{/*		}*/}
+				{/*		icon={<DateRangeIcon fontSize="large" color="primary" />}*/}
+				{/*	/>*/}
+				{/*	<BottomNavigationAction*/}
+				{/*		label={*/}
+				{/*			<a className={classes.link} href="http://mgutm.ru/exams/" target="_blank">*/}
+				{/*				Вступительные испытания*/}
+				{/*			</a>*/}
+				{/*		}*/}
+				{/*		onClick={this.onNavIconClick('http://mgutm.ru/exams/')}*/}
+				{/*		icon={<SchoolIcon fontSize="large" color="primary" />}*/}
+				{/*	/>*/}
+				{/*	<BottomNavigationAction*/}
+				{/*		label={*/}
+				{/*			<a className={classes.link} href="http://mgutm.ru/entrant_2012/plan.php" target="_blank">*/}
+				{/*				План приема*/}
+				{/*			</a>*/}
+				{/*		}*/}
+				{/*		onClick={this.onNavIconClick('http://mgutm.ru/entrant_2012/plan.php')}*/}
+				{/*		icon={<GroupIcon fontSize="large" color="primary" />}*/}
+				{/*	/>*/}
+				{/*</BottomNavigation>*/}
 			</div>
 		);
 	}

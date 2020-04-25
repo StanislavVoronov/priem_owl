@@ -1,4 +1,5 @@
 import { IRootState } from '$store';
+import { createSelector } from '@black_bird/utils';
 
 export const regFormSelector = (state: IRootState) => {
 	return state.regForm;
@@ -39,3 +40,7 @@ export const applicationsFormSelector = (state: IRootState) => {
 export const disabledPayFormSelector = (state: IRootState) => {
 	return state.applicationsForm.disabledPayForms;
 };
+
+export const getLigotaDocument = createSelector(documentsFormSelector, (data) => {
+	return data.documents.find((item) => item.cheatType && item.cheatType.id);
+});

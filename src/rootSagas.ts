@@ -18,11 +18,9 @@ import {
 } from '$operations';
 
 import {
-	createLoginTransactionActions,
 	findPersonTransactionActions,
 	initAction,
 	isPersonFoundTransactionSelector,
-	priemFilialsTransactionActions,
 	transactionsSagas,
 } from '$store';
 
@@ -47,7 +45,6 @@ const rootSagas = [
 
 		if (!result) {
 			yield fetchFullDictionaries();
-			yield sagaEffects.put(priemFilialsTransactionActions.trigger());
 		}
 	}),
 ];

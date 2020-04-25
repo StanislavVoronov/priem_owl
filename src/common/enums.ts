@@ -6,7 +6,7 @@ export enum EDictionaryNameList {
 	DocSubTypes = 'directory_doc_subtypes',
 	Governments = 'directory_goverments',
 	PreviousEducation = 'directory_prev_educations',
-	PriemSpecialCategories = 'directory_cheat_types',
+	CheatTypes = 'directory_cheat_types',
 }
 
 export enum Gender {

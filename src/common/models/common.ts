@@ -36,6 +36,7 @@ export interface IDocument {
 	date?: string;
 	file: File | null;
 	codeDepartment?: string;
+	cheatType?: IDictionary | null;
 	[key: string]: any;
 }
 

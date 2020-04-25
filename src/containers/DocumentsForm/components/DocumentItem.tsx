@@ -17,10 +17,21 @@ interface IProps {
 	governmentDictionary: ITransaction<IDictionary[]>;
 	subDocTypesDictionary: ITransaction<IDictionary[]>;
 	docTypesDictionary: ITransaction<IDictionary[]>;
+	cheatTypesDictionary?: ITransaction<IDictionary[]>;
 }
 
 const DocumentItem = (props: IProps) => {
-	const { onChange, index, deleteDoc, expanded, subDocTypesDictionary, onToggle, document, docTypesDictionary } = props;
+	const {
+		onChange,
+		index,
+		deleteDoc,
+		expanded,
+		subDocTypesDictionary,
+		cheatTypesDictionary,
+		onToggle,
+		document,
+		docTypesDictionary,
+	} = props;
 	const onChangeData = (data: IFormField) => {
 		onChange(data.value, index);
 	};
@@ -31,16 +42,7 @@ const DocumentItem = (props: IProps) => {
 		onToggle(index);
 	};
 
-	const onChangeDepartment = (data: IFormField) => {
-		const newDoc = {
-			...document,
-			[data.name]: data.value,
-		};
-
-		onChange(newDoc, index);
-	};
-
-	const { type, subType } = document;
+	const { type } = document;
 
 	return (
 		<ExpansionPanel
@@ -85,18 +87,7 @@ const DocumentItem = (props: IProps) => {
 					dictionaryTypes={docTypesDictionary}
 					subTitle={isEmpty(subDocTypesDictionary.result) ? undefined : 'Название документа'}
 					dictionarySubTypes={subDocTypesDictionary}
-					endFields={
-						<React.Fragment>
-							{type && type.id === 1 && subType && subType.id === 1 ? (
-								<TextInput
-									name="codeDepartment"
-									onChange={onChangeDepartment}
-									label="Код подразделения"
-									placeholder={'Введите код подразделения'}
-								/>
-							) : null}
-						</React.Fragment>
-					}
+					dictionaryCheatTypes={cheatTypesDictionary}
 				/>
 			</PanelDetails>
 		</ExpansionPanel>

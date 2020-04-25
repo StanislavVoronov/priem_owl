@@ -12,6 +12,7 @@ import {
 	submitDocumentsFormAction,
 	getNeedDocuments,
 	getSubTypesDocDictionary,
+	getCheatTypesDictionary,
 } from '$store';
 import { defaultDocument, IDictionary, IDocument } from '$common';
 import { ITransaction } from '@black_bird/utils';
@@ -20,6 +21,7 @@ interface IStateToProps {
 	docTypesDictionary: ITransaction<IDictionary[]>;
 	governmentDictionary: ITransaction<IDictionary[]>;
 	subTypesDocDictionary: ITransaction<IDictionary[]>;
+	cheatTypesDictionary: ITransaction<IDictionary[]>;
 	requireDocs: IDictionary[];
 	documents: IDocument[];
 }
@@ -39,15 +41,6 @@ class DocumentsFormContainer extends React.Component<IProps, IState> {
 		documents: this.props.documents,
 		expendList: [0],
 	};
-	componentDidMount(): void {
-		// const dictionaryDocTypes =[]
-		//
-		// const needDocuments =
-		// 	dictionaryDocTypes && this.props.foreigner
-		// 		? dictionaryDocTypes.values.filter((item: any) => item.need_foreigner).map((item: any) => item.id)
-		// 		: [];
-		// this.setState({ requiredDocuments: [9, 10, ...needDocuments] });
-	}
 
 	onChangeData = (data: IDocument, index: number) => {
 		this.setState((state) => ({
@@ -102,6 +95,7 @@ class DocumentsFormContainer extends React.Component<IProps, IState> {
 const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) => {
 	const governmentDictionary = getGovernmentDictionary(state);
 	const docTypesDictionary = getDocTypesDictionary(state);
+	const cheatTypesDictionary = getCheatTypesDictionary(state);
 	const requireDocs = getNeedDocuments(state);
 	const form = documentsFormSelector(state);
 	const subTypesDocDictionary = getSubTypesDocDictionary(state);
@@ -109,6 +103,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) 
 	return {
 		subTypesDocDictionary,
 		docTypesDictionary,
+		cheatTypesDictionary,
 		governmentDictionary,
 		documents: form.documents,
 		requireDocs,

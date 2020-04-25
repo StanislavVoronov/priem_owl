@@ -3,6 +3,7 @@ import { TextInput, Select, IFormField, Column, DownloadFile, Checkbox } from '@
 import { noop, IDocument, validateRequireTextField } from '$common';
 import { isNotEmptyArray, ITransaction } from '@black_bird/utils';
 import classes from './DocumentForm.module.css';
+import { DEFAULT_TRANSACTION } from '../../store/selectors/defaults';
 
 type IDictionary = Record<any, any>;
 
@@ -13,6 +14,7 @@ interface IDocumentFormProps {
 	dictionaryTypes?: ITransaction<IDictionary[]>;
 	dictionarySubTypes?: ITransaction<IDictionary[]>;
 	dictionaryGovernment?: ITransaction<IDictionary[]>;
+	dictionaryCheatTypes?: ITransaction<IDictionary[]>;
 	governmentTitle: string;
 	title: string;
 	subTitle: string;
@@ -66,10 +68,21 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 			},
 		});
 	};
+	onChangeType = (field: IFormField) => {
+		const { document, onChange, name } = this.props;
 
+		onChange({
+			name,
+			value: {
+				...document,
+				[field.name]: field.value,
+				subType: null,
+				cheatType: null,
+			},
+		});
+	};
 	render() {
 		const {
-			name,
 			dictionaryGovernment,
 			governmentTitle,
 			dictionaryTypes,
@@ -79,8 +92,17 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 			title,
 			endFields,
 			startFields,
+			dictionaryCheatTypes,
 		} = this.props;
-		const { type, file = null, government, subType, num, series, issieBy } = this.props.document;
+		const { type, file = null, government, cheatType = null, subType, num, series, issieBy } = this.props.document;
+
+		const filteredSubTypesDocDictionary = dictionarySubTypes
+			? {
+					...dictionarySubTypes,
+					result: dictionarySubTypes.result.filter((item) => item.type === type?.id),
+			  }
+			: { result: [], exception: null, isFetching: false };
+
 		const { noNumber } = this.state;
 		const needInfo = type && type.need_info;
 		const hasNumber = (type && type.has_num) || false;
@@ -92,7 +114,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 
 					{title && (
 						<Select
-							onChange={this.onChange}
+							onChange={this.onChangeType}
 							value={type}
 							name="type"
 							required
@@ -103,14 +125,27 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 						/>
 					)}
 
-					{subTitle && (
+					{type && type.id === 26 && (
+						<Select
+							onChange={this.onChange}
+							value={cheatType}
+							name="cheatType"
+							required
+							error={dictionaryCheatTypes?.exception?.comment}
+							options={dictionaryCheatTypes?.result}
+							placeholder={`Выберите категорию зачисления`}
+							title="Категория зачисления"
+						/>
+					)}
+
+					{subTitle && isNotEmptyArray(filteredSubTypesDocDictionary.result) && (
 						<Select
 							onChange={this.onChange}
 							name="subType"
 							required
 							value={subType}
-							error={dictionarySubTypes?.exception?.comment}
-							options={dictionarySubTypes?.result}
+							error={filteredSubTypesDocDictionary?.exception?.comment}
+							options={filteredSubTypesDocDictionary?.result}
 							placeholder={`Выберите ${this.props.subTitle.toLowerCase()}`}
 							title={this.props.subTitle}
 						/>
@@ -182,6 +217,14 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 								multiline
 							/>
 						</>
+					) : null}
+					{type && type.id === 1 && subType && subType.id === 1 ? (
+						<TextInput
+							name="codeDepartment"
+							onChange={this.onChange}
+							label="Код подразделения"
+							placeholder={'Введите код подразделения'}
+						/>
 					) : null}
 					{endFields}
 				</Column>

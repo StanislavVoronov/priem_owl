@@ -4,14 +4,22 @@
 	height: 64px;
 	position: absolute;
 	top: 0;
-	left: 14px;
+	left: 20px;
 	cursor: pointer;
 }
 
 .link {
 	font-size: 1rem;
 }
-
+.container {
+	display: grid;
+	padding: 20px;
+	grid-template-columns: 1fr;
+	height: 44px;
+	justify-items: center;
+	background-color: #e8f0ff;
+	width: 100%;
+}
 .nav {
 	display: grid;
 	height: 100%;

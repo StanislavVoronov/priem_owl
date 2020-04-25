@@ -13,8 +13,6 @@ import {
 	VerAccountForm,
 	ApplicationsForm,
 } from '$containers';
-import { IProxyElementProps, ProxyElement } from '@black_bird/components';
-import { noop } from '$common';
 
 interface IProps {
 	loading: boolean;
@@ -47,12 +45,11 @@ export class EnrollView extends React.PureComponent<IProps> {
 				return <EducationForm />;
 			}
 			case 4: {
-				return <ApplicationsForm />;
-			}
-			case 5: {
 				return <DocumentsForm />;
 			}
-
+			case 5: {
+				return <ApplicationsForm />;
+			}
 			case 6: {
 				return <VerAccountForm />;
 			}
@@ -68,7 +65,6 @@ export class EnrollView extends React.PureComponent<IProps> {
 		return (
 			<>
 				<EnrollHeader />
-				<h2 className={styles.namePageTitle}>Подача документов для поступения в Университет</h2>
 				<Stepper
 					classes={{ root: classes.root }}
 					className={classes.stepper}

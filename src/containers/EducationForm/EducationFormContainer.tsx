@@ -30,7 +30,7 @@ type Props = IPropsState & IDispatchToProps;
 
 class EducationFormContainer extends React.PureComponent<Props> {
 	disabledForm = ({ values }: { values: IEducationForm }) => {
-		return isVoid(values.document.file);
+		return isVoid(values.document.file); // && !validateDocument(values.document);
 	};
 
 	renderForm = (form: IFormProps<any>) => {

@@ -3,7 +3,7 @@ import { Form, IFormProps } from '@black_bird/components';
 import ContactsFormView from './ContactsFormView';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { contactsFormSelector, getGovernmentDictionary, IRootState, submitContactsFormAction } from '$store';
-import { IContactsForm, IDictionary, IPersonForm } from '$common';
+import { IContactsForm, IDictionary, IPersonForm, validateDocument } from '$common';
 import { isVoid, ITransaction } from '@black_bird/utils';
 
 interface IPropsState {
@@ -19,7 +19,7 @@ type Props = IPropsState & IDispatchToProps;
 
 class ContactsFormContainer extends React.PureComponent<Props> {
 	disabledForm = ({ values }: { values: IContactsForm }) => {
-		return isVoid(values.regDoc.file);
+		return isVoid(values.regDoc.file); // && !validateDocument(values.regDoc);
 	};
 	renderForm = (form: IFormProps<any>) => {
 		return <ContactsFormView form={form} governmentDictionary={this.props.governmentDictionary} />;
