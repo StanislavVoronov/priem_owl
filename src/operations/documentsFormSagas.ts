@@ -6,12 +6,12 @@ import {
 	openLigotaPriemAction,
 	submitDocumentsFormAction,
 } from '$store';
-import { IDocument, IDocumentsForm } from '$common';
+import { IDocument } from '$common';
 
 export function* checkLigotaPriemStatus() {
-	const data: IDocument = yield sagaEffects.select(getLigotaDocument);
+	const data: IDocument | undefined = yield sagaEffects.select(getLigotaDocument);
 
-	if (data.cheatType) {
+	if (data && data.cheatType) {
 		yield sagaEffects.put(openLigotaPriemAction());
 	} else {
 		yield sagaEffects.put(closeLigotaPriemAction());

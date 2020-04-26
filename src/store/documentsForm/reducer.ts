@@ -1,10 +1,14 @@
 import { createReducer, forAction, combineReducers } from '@black_bird/utils';
 import { defaultDocument, IDocument } from '$common';
-import { admNeedDocChangedStatusAction, newDocumentAdded, submitDocumentsFormAction } from './actions';
+import {
+	admNeedDocChangedStatusAction,
+	newDocumentAdded,
+	submitDocumentsFormAction,
+} from './actions';
 
 const documentsReducer = createReducer<IDocument[]>(
 	[forAction(submitDocumentsFormAction, (state, payload) => payload)],
-	[defaultDocument],
+	[],
 );
 
 const admNeedDocReducer = createReducer<boolean>(
@@ -12,6 +16,9 @@ const admNeedDocReducer = createReducer<boolean>(
 	false,
 );
 
-const documentsFormReducer = combineReducers({ needDocStatus: admNeedDocReducer, documents: documentsReducer });
+const documentsFormReducer = combineReducers({
+	needDocStatus: admNeedDocReducer,
+	documents: documentsReducer,
+});
 
 export default documentsFormReducer;
