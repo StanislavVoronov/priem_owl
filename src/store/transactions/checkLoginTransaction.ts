@@ -4,7 +4,7 @@ import {
 	createSelector,
 	sagaEffects,
 } from '@black_bird/utils';
-import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
+import { TRANSACTION_NAMES } from '$common';
 import { checkLoginRest } from '$rests';
 import { transactionSelector } from './selectors';
 

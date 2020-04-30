@@ -6,7 +6,7 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { priemLogoutRest } from '$rests';
-import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
+import { TRANSACTION_NAMES } from '$common';
 import { transactionSelector } from './selectors';
 
 export const priemLogoutTransactionActions = createTransactionActions(

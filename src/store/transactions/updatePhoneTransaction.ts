@@ -5,7 +5,7 @@ import {
 	prop,
 	sagaEffects,
 } from '@black_bird/utils';
-import { AUTO_REQUEST_RETRY, PhoneType, TRANSACTION_NAMES } from '$common';
+import { PhoneType, TRANSACTION_NAMES } from '$common';
 import { ITransactionsState } from './transactionsModels';
 import { updatePhoneRest } from '$rests';
 

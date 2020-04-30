@@ -1,6 +1,6 @@
 import { createTransactionActions, createTransactionReducer, sagaEffects } from '@black_bird/utils';
 import { createSelector } from '@black_bird/utils';
-import { AUTO_REQUEST_RETRY, IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
+import { IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
 import { priemAdmGroupsRest } from '$rests';
 import { transactionSelector } from './selectors';
 

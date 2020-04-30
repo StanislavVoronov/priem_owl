@@ -1,4 +1,4 @@
-import { AUTO_REQUEST_RETRY, IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
+import { IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
 import {
 	createSelector,
 	createTransactionActions,

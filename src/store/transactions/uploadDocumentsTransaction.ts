@@ -1,6 +1,6 @@
 import { createTransactionActions, createTransactionReducer, sagaEffects } from '@black_bird/utils';
 import { createSelector, prop } from '@black_bird/utils';
-import { AUTO_REQUEST_RETRY, IDocument, TRANSACTION_NAMES } from '$common';
+import { IDocument, TRANSACTION_NAMES } from '$common';
 import { ITransactionsState } from './transactionsModels';
 import { uploadDocumentRest } from '$rests';
 

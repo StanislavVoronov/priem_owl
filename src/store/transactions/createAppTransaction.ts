@@ -7,12 +7,7 @@ import {
 } from '@black_bird/utils';
 import { ITransactionsState } from './transactionsModels';
 import { createApplicationRest } from '$rests';
-import {
-	IAdmDictionaryItem,
-	TRANSACTION_NAMES,
-	APPLICATION_FLOW,
-	AUTO_REQUEST_RETRY,
-} from '$common';
+import { IAdmDictionaryItem, TRANSACTION_NAMES, APPLICATION_FLOW } from '$common';
 import { transactionSelector } from './selectors';
 
 export const createAppTransactionActions = createTransactionActions(

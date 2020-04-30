@@ -6,7 +6,7 @@ import {
 } from '@black_bird/utils';
 import { updateLoginRest } from '$rests';
 import { transactionSelector } from './selectors';
-import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
+import { TRANSACTION_NAMES } from '$common';
 
 export const updateLoginTrnActions = createTransactionActions(
 	TRANSACTION_NAMES.UPDATE_LOGIN,

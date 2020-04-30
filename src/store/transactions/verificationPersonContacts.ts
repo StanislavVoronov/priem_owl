@@ -4,7 +4,7 @@ import {
 	createTransactionReducer,
 	sagaEffects,
 } from '@black_bird/utils';
-import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
+import { TRANSACTION_NAMES } from '$common';
 import { verPersonContactsRest } from '$rests';
 import { transactionSelector } from './selectors';
 

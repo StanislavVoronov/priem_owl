@@ -1,6 +1,6 @@
 import { createTransactionActions, createTransactionReducer, sagaEffects } from '@black_bird/utils';
 import { createSelector, prop } from '@black_bird/utils';
-import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
+import { TRANSACTION_NAMES } from '$common';
 import { createPersonRest, ICreatePersonPayload } from '$rests';
 import { transactionSelector } from './selectors';
 

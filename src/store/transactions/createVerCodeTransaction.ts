@@ -1,6 +1,6 @@
 import { createTransactionActions, createTransactionReducer, sagaEffects } from '@black_bird/utils';
 import { createSelector } from '@black_bird/utils';
-import { VerificationMethod, TRANSACTION_NAMES, AUTO_REQUEST_RETRY } from '$common';
+import { VerificationMethod, TRANSACTION_NAMES } from '$common';
 import { createVerCodeRest } from '$rests';
 import { transactionSelector } from './selectors';
 

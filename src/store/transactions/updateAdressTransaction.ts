@@ -6,7 +6,7 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { updateAddressRest } from '$rests';
-import { AddressType, AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
+import { AddressType, TRANSACTION_NAMES } from '$common';
 import { transactionSelector } from './selectors';
 
 export const updateAddressTransactionActions = createTransactionActions(

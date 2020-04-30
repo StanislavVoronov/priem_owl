@@ -6,7 +6,7 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 
-import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
+import { TRANSACTION_NAMES } from '$common';
 import { transactionSelector } from './selectors';
 import { setExistPersonVerCodeRest } from '$rests';
 
