@@ -1,22 +1,47 @@
 import { createSelector } from '@black_bird/utils';
-import { DOCUMENT_TYPE, EDictionaryNameList, IDictionary, IDocument, validateDocument } from '$common';
+import {
+	DOCUMENT_TYPE,
+	EDictionaryNameList,
+	IDictionary,
+	IDocument,
+	INamesDictionary,
+	validateDocument,
+} from '$common';
 import { IRootState } from '../models';
-import { applicationsFormSelector, educationFormSelector, isForeignerSelector } from './formSelectors';
+import {
+	applicationsFormSelector,
+	educationFormSelector,
+	isForeignerSelector,
+} from './formSelectors';
 import { DEFAULT_TRANSACTION } from './defaults';
 
 export const dictionaryStateSelector = (state: IRootState) => {
 	return state.dictionaries;
 };
 
-export const getFirstNamesDictionary = createSelector(
-	dictionaryStateSelector,
-	(state) => state[EDictionaryNameList.FirstNames] || DEFAULT_TRANSACTION,
-);
+export const getFirstNamesDictionary = createSelector(dictionaryStateSelector, (state) => {
+	const transaction = state[EDictionaryNameList.Names];
+	if (transaction) {
+		return {
+			...transaction,
+			result: transaction.result.filter((item: INamesDictionary) => item.type === 0),
+		};
+	}
 
-export const getMiddleNamesDictionary = createSelector(
-	dictionaryStateSelector,
-	(state) => state[EDictionaryNameList.MiddleNames] || DEFAULT_TRANSACTION,
-);
+	return DEFAULT_TRANSACTION;
+});
+
+export const getMiddleNamesDictionary = createSelector(dictionaryStateSelector, (state) => {
+	const transaction = state[EDictionaryNameList.Names];
+	if (transaction) {
+		return {
+			...transaction,
+			result: transaction.result.filter((item: INamesDictionary) => item.type === 1),
+		};
+	}
+
+	return DEFAULT_TRANSACTION;
+});
 
 export const getPersonTypesDocDictionary = createSelector(dictionaryStateSelector, (state) => {
 	const transaction = state[EDictionaryNameList.DocSubTypes];
@@ -48,7 +73,9 @@ export const getNeedDocuments = createSelector(
 
 		const needDocuments = [
 			...(needSpravka ? [DOCUMENT_TYPE.SPRAVKA_086] : []),
-			...(isComplexDoc ? [DOCUMENT_TYPE.DIPLOMA_F_SIDE_MARKS, DOCUMENT_TYPE.DIPLOMA_S_SIDE_MARKS] : []),
+			...(isComplexDoc
+				? [DOCUMENT_TYPE.DIPLOMA_F_SIDE_MARKS, DOCUMENT_TYPE.DIPLOMA_S_SIDE_MARKS]
+				: []),
 		];
 
 		const dictionary: IDictionary[] = dictionaries[EDictionaryNameList.DocTypes]

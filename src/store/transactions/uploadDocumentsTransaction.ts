@@ -30,7 +30,4 @@ export const uploadDocumentsTransactionSelector = createSelector(
 export const uploadDocumentsSaga = sagaEffects.rest(
 	uploadDocumentTransactionActions,
 	({ payload }) => uploadDocumentRest(payload.document),
-	{
-		autoRetry: AUTO_REQUEST_RETRY,
-	},
 );

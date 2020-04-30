@@ -1,4 +1,5 @@
 import { isNull, omitBy } from '$common';
+import { retryFetch } from '@black_bird/utils';
 
 export class JsonRequest {
 	host: string = '';
@@ -16,38 +17,42 @@ export class JsonRequest {
 
 		this.body = body;
 	}
-	select = (): any => {
-		return fetch(`${this.host}${this.path}`, {
-			method: 'POST',
-			credentials: 'include',
-			body: this.body,
-		})
-			.then((response) => {
-				return response.json();
-			})
+	select = (retry: number = 3): any => {
+		return retryFetch(
+			`${this.host}${this.path}`,
+			{
+				method: 'POST',
+				credentials: 'include',
+				body: this.body,
+			},
+			retry,
+		)
+			.then((response: any) => response.json())
 			.then((data: any) => {
 				if (data.error) {
 					throw new Error(data.error.string);
 				}
 
-				return Promise.resolve(data.result);
+				return data.result;
 			});
 	};
-	post = (): any => {
-		return fetch(`${this.host}${this.path}`, {
-			method: 'POST',
-			credentials: 'include',
-			body: this.body,
-		})
-			.then((response) => {
-				return response.json();
-			})
+	post = (retry: number = 3): any => {
+		return retryFetch(
+			`${this.host}${this.path}`,
+			{
+				method: 'POST',
+				credentials: 'include',
+				body: this.body,
+			},
+			retry,
+		)
+			.then((response: any) => response.json())
 			.then((data: any) => {
 				if (data.error) {
 					throw new Error(data.error.string);
 				}
 
-				return Promise.resolve(data);
+				return data;
 			});
 	};
 }

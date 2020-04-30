@@ -6,16 +6,15 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { priemFilialsRest } from '$rests';
-import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
+import { TRANSACTION_NAMES } from '$common';
 import { disabledPayFormSelector } from '../selectors';
 import { transactionSelector } from './selectors';
+import { submitApplicationFormAction } from '../applicationsForm';
 
-export const priemFilialsTransactionActions = createTransactionActions(
-	TRANSACTION_NAMES.FetchPriemFilials,
-);
+export const priemFilialsTrnActions = createTransactionActions(TRANSACTION_NAMES.FetchPriemFilials);
 
-export const priemFilialsReducer = createTransactionReducer(priemFilialsTransactionActions, {
-	cleanActions: [priemFilialsTransactionActions.trigger],
+export const priemFilialsReducer = createTransactionReducer(priemFilialsTrnActions, {
+	cleanActions: [submitApplicationFormAction],
 });
 
 export const priemFilialsTransactionSelector = createSelector(
@@ -23,12 +22,8 @@ export const priemFilialsTransactionSelector = createSelector(
 	prop('priemFilials'),
 );
 
-export const priemFilialsSaga = sagaEffects.rest(
-	priemFilialsTransactionActions,
-	function* () {
-		const payForms = yield sagaEffects.select(disabledPayFormSelector);
+export const priemFilialsSaga = sagaEffects.rest(priemFilialsTrnActions, function* () {
+	const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
-		return yield priemFilialsRest(payForms);
-	},
-	{ autoRetry: AUTO_REQUEST_RETRY },
-);
+	return yield priemFilialsRest(payForms);
+});

@@ -10,6 +10,7 @@ import { ITransactionsState } from './transactionsModels';
 import { priemEducFormsRest } from '$rests';
 import { disabledPayFormSelector } from '../selectors';
 import { transactionSelector } from './selectors';
+import { priemProfilesTransactionActions } from './priemProfilesTransaction';
 
 export const priemEducFormsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemEducationForms,
@@ -27,7 +28,7 @@ export const priemEducFormsTransactionActions = createTransactionActions(
 );
 
 export const priemEducFormsReducer = createTransactionReducer(priemEducFormsTransactionActions, {
-	cleanActions: [priemEducFormsTransactionActions.trigger],
+	cleanActions: [priemProfilesTransactionActions.trigger],
 });
 
 export const priemEducFormsTransactionSelector = createSelector(
@@ -35,17 +36,15 @@ export const priemEducFormsTransactionSelector = createSelector(
 	prop('priemEducForms'),
 );
 
-export const educFormsSaga = sagaEffects.rest(
-	priemEducFormsTransactionActions,
-	function* ({ payload }) {
-		const payForms = yield sagaEffects.select(disabledPayFormSelector);
+export const educFormsSaga = sagaEffects.rest(priemEducFormsTransactionActions, function* ({
+	payload,
+}) {
+	const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
-		return yield priemEducFormsRest(
-			payload.filial.ID,
-			payload.inst.ID,
-			payload.direction.ID,
-			payForms,
-		);
-	},
-	{ autoRetry: AUTO_REQUEST_RETRY },
-);
+	return yield priemEducFormsRest(
+		payload.filial.ID,
+		payload.inst.ID,
+		payload.direction.ID,
+		payForms,
+	);
+});

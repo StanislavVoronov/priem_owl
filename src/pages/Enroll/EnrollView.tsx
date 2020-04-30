@@ -2,7 +2,15 @@ import * as React from 'react';
 
 import styles from './styles.module.css';
 
-import { Step, StepButton, StepContent, Stepper, Title, LoadingText, EnrollHeader } from '$components';
+import {
+	Step,
+	StepButton,
+	StepContent,
+	Stepper,
+	Title,
+	LoadingText,
+	EnrollHeader,
+} from '$components';
 import classes from './styles.module.css';
 import {
 	RegistrationForm,
@@ -13,6 +21,7 @@ import {
 	VerAccountForm,
 	ApplicationsForm,
 } from '$containers';
+import { IException, isVoid } from '@black_bird/utils';
 
 interface IProps {
 	loading: boolean;
@@ -20,6 +29,7 @@ interface IProps {
 	activeStep: number;
 	passedStep: number;
 	steps: string[];
+	exception: IException | null;
 }
 export class EnrollView extends React.PureComponent<IProps> {
 	static defaultProps = {
@@ -60,7 +70,7 @@ export class EnrollView extends React.PureComponent<IProps> {
 	};
 
 	render() {
-		const { activeStep, passedStep } = this.props;
+		const { activeStep, passedStep, exception } = this.props;
 
 		return (
 			<>
@@ -70,7 +80,11 @@ export class EnrollView extends React.PureComponent<IProps> {
 					className={classes.stepper}
 					activeStep={this.props.activeStep}
 					orientation={'vertical'}>
-					{!this.props.loading ? (
+					{exception ? (
+						<h3 className={classes.error}>
+							{exception.message || exception.stack || exception.comment}
+						</h3>
+					) : !this.props.loading ? (
 						this.props.steps.map((label, index) => (
 							<Step expanded={activeStep === index} active={activeStep === index}>
 								<StepButton

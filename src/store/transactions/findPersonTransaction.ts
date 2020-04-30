@@ -22,20 +22,11 @@ export const isPersonFoundTransactionSelector = createSelector(transactionSelect
 
 	return {
 		isFetching,
-		exception: isFound
-			? {
-					message:
-						'Личное дело абитуриента найдено. Просьба обратиться в приемную комиссию за дополнительной информацией.',
-			  }
-			: exception,
+		exception,
 		result: isFound && result[0],
 	};
 });
 
-export const findPersonSaga = sagaEffects.rest(
-	findPersonTransactionActions,
-	({ payload }) => findPersonRest(payload.data),
-	{
-		autoRetry: AUTO_REQUEST_RETRY,
-	},
+export const findPersonSaga = sagaEffects.rest(findPersonTransactionActions, ({ payload }) =>
+	findPersonRest(payload.data),
 );

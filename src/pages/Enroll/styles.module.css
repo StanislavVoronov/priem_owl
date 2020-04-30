@@ -23,9 +23,10 @@
 
 .stepper {
 	display: flex;
-	margin: 20px;
+	margin: 24px;
+	padding: 16px;
 	background-color: #fdfdff;
-	border-radius: 10px;
+	border-radius: 12px;
 	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
 }
 
@@ -35,4 +36,10 @@
 
 .stepButton {
 	justify-content: flex-start;
+}
+
+.error {
+	color: red;
+	text-align: center;
+	justify-content: center;
 }

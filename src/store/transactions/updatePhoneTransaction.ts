@@ -27,10 +27,6 @@ export const updatePhoneTransactionSelector = createSelector(
 	(state: ITransactionsState, phone: string) => state.updatePhones[phone],
 );
 
-export const updatePhoneSaga = sagaEffects.rest(
-	updatePhoneTransactionActions,
-	({ payload }) => updatePhoneRest(payload.phone, payload.type),
-	{
-		autoRetry: AUTO_REQUEST_RETRY,
-	},
+export const updatePhoneSaga = sagaEffects.rest(updatePhoneTransactionActions, ({ payload }) =>
+	updatePhoneRest(payload.phone, payload.type),
 );

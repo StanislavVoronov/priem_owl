@@ -17,30 +17,26 @@ import { checkLoginRest } from '$rests';
 import { generatePassword } from '$common';
 import { setExistPersonVerCodeTrnActions } from '$store';
 
-function* createNewLogin() {
-	let creatingNewLogin = true;
+function* createNewLogin(): any {
+	const login = guid();
 
-	do {
-		const login = guid();
+	try {
+		yield sagaEffects.put(checkLoginTransactionActions.request());
 
-		try {
-			yield sagaEffects.put(checkLoginTransactionActions.request());
+		const result = yield sagaEffects.call(checkLoginRest, login);
 
-			const result = yield sagaEffects.call(checkLoginRest, login);
+		yield sagaEffects.put(checkLoginTransactionActions.success(result));
 
-			yield sagaEffects.put(checkLoginTransactionActions.success(result));
+		const isUniqueLogin = yield sagaEffects.select(isUniqueLoginTransactionSelector);
 
-			const isUniqueLogin = yield sagaEffects.select(isUniqueLoginTransactionSelector);
-
-			if (isUniqueLogin.result) {
-				creatingNewLogin = false;
-
-				yield sagaEffects.put(generateUserPasswordAction(login));
-			}
-		} catch (e) {
-			yield sagaEffects.put(checkLoginTransactionActions.failure(e));
+		if (isUniqueLogin.result) {
+			yield sagaEffects.put(generateUserPasswordAction(login));
+		} else {
+			yield sagaEffects.call(createNewLogin);
 		}
-	} while (creatingNewLogin);
+	} catch (e) {
+		yield sagaEffects.put(checkLoginTransactionActions.failure(e));
+	}
 }
 
 export const regFormSagas = [
@@ -61,13 +57,13 @@ export const regFormSagas = [
 		yield sagaEffects.put(createLoginTransactionActions.trigger(payload, password));
 	}),
 	sagaEffects.takeLatest(findPersonTransactionActions.success, function* ({ payload }: any) {
-		console.log('payload', payload);
 		if (isEmptyArray(payload.response)) {
 			yield sagaEffects.put(goToNextStep());
 		} else {
 			const npId = yield sagaEffects.select(isPersonFoundTransactionSelector);
 
 			yield sagaEffects.put(verPersonTrnActions.trigger(npId.result.ID));
+
 			yield sagaEffects.put(verPersonContactsTrnActions.trigger(npId.result.ID));
 		}
 	}),

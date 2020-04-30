@@ -1,6 +1,5 @@
 export enum EDictionaryNameList {
-	FirstNames = 'directory_doc_first_names',
-	MiddleNames = 'directory_doc_middle_names',
+	Names = 'directory_doc_first_names',
 	CoolnessTypes = 'directory_coolness_types',
 	DocTypes = 'directory_doc_types',
 	DocSubTypes = 'directory_doc_subtypes',

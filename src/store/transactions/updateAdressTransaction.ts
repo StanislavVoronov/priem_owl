@@ -29,8 +29,6 @@ export const updateAddressesTransactionSelector = createSelector(
 	prop('updateAddresses'),
 );
 
-export const updateAddressSaga = sagaEffects.rest(
-	updateAddressTransactionActions,
-	({ payload }) => updateAddressRest(payload.address, payload.kind),
-	{ autoRetry: AUTO_REQUEST_RETRY },
+export const updateAddressSaga = sagaEffects.rest(updateAddressTransactionActions, ({ payload }) =>
+	updateAddressRest(payload.address, payload.kind),
 );

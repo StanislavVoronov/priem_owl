@@ -9,8 +9,10 @@ import {
 import { priemDirectionRest } from '$rests';
 import { disabledPayFormSelector } from '../selectors';
 import { transactionSelector } from './selectors';
+import { priemEducLevelsTrnActions } from './priemEducLevelsTransaction';
+import { priemInstitutesTrnActions } from './priemInstitutesTransaction';
 
-export const priemDirectionsTransactionActions = createTransactionActions(
+export const priemDirectionsTrnActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemDirections,
 	(filial: IAdmDictionaryItem, educLevel: IAdmDictionaryItem, inst: IAdmDictionaryItem) => ({
 		filial,
@@ -19,8 +21,8 @@ export const priemDirectionsTransactionActions = createTransactionActions(
 	}),
 );
 
-export const priemDirectionsReducer = createTransactionReducer(priemDirectionsTransactionActions, {
-	cleanActions: [priemDirectionsTransactionActions.trigger],
+export const priemDirectionsReducer = createTransactionReducer(priemDirectionsTrnActions, {
+	cleanActions: [priemInstitutesTrnActions.trigger],
 });
 
 export const priemDirectionsTransactionSelector = createSelector(
@@ -28,17 +30,15 @@ export const priemDirectionsTransactionSelector = createSelector(
 	prop('priemDirections'),
 );
 
-export const priemDirectionSaga = sagaEffects.rest(
-	priemDirectionsTransactionActions,
-	function* ({ payload }) {
-		const payForms = yield sagaEffects.select(disabledPayFormSelector);
+export const priemDirectionSaga = sagaEffects.rest(priemDirectionsTrnActions, function* ({
+	payload,
+}) {
+	const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
-		return yield priemDirectionRest(
-			payload.filial.ID,
-			payload.educLevel.ID,
-			payload.inst.ID,
-			payForms,
-		);
-	},
-	{ autoRetry: AUTO_REQUEST_RETRY },
-);
+	return yield priemDirectionRest(
+		payload.filial.ID,
+		payload.educLevel.ID,
+		payload.inst.ID,
+		payForms,
+	);
+});

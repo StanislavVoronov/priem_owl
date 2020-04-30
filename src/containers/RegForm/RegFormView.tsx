@@ -101,7 +101,7 @@ const RegFormView = (props: IProps) => {
 				required
 				items={GENDERS}
 			/>
-			{email && 'Прием абитуриентов с существующим личным делом будет открыт 10 мая 2020 года'}
+
 			{/*{email && (*/}
 			{/*	<>*/}
 			{/*		<div className={classes.title}>*/}

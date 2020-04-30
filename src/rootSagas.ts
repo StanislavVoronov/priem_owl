@@ -1,12 +1,10 @@
 import { sagaEffects } from '@black_bird/utils';
-import { classifiersSagas } from '@black_bird/dictionaries';
+import { classifiersSagas, fetchClassifiersAction } from '@black_bird/dictionaries';
 import { contactsFormSagas } from './operations/contactsFormSagas';
 import {
 	applicationFormSagas,
 	educationFormSagas,
 	personFormSagas,
-	fetchFullDictionaries,
-	fetchShortDictionaries,
 	regFormSagas,
 	createNewFolderSagas,
 	documentsFormSagas,
@@ -14,18 +12,18 @@ import {
 	createPersonContactsSagas,
 	uploadDocumentsSagas,
 	createApplicationSagas,
-	priemLogoutSagas,
 } from '$operations';
 
 import {
 	findPersonTransactionActions,
 	initAction,
 	isPersonFoundTransactionSelector,
+	priemLogoutTransactionActions,
 	transactionsSagas,
 } from '$store';
+import { FULL_DICTIONARY_LIST, SHORT_DICTIONARY_LIST } from './dictionaries';
 
 const rootSagas = [
-	...priemLogoutSagas,
 	...createApplicationSagas,
 	...uploadDocumentsSagas,
 	...createPersonContactsSagas,
@@ -39,12 +37,28 @@ const rootSagas = [
 	...educationFormSagas,
 	...applicationFormSagas,
 	...classifiersSagas,
-	sagaEffects.takeEvery(initAction, fetchShortDictionaries),
+	sagaEffects.takeLatest(initAction, function* () {
+		yield sagaEffects.put(priemLogoutTransactionActions.trigger());
+
+		yield sagaEffects.put(
+			fetchClassifiersAction({
+				dictionaries: SHORT_DICTIONARY_LIST,
+				url: '/dev-bin/priem_api.fcgi',
+				version: 2,
+			}),
+		);
+	}),
 	sagaEffects.takeLatest(findPersonTransactionActions.success, function* () {
 		const { result } = yield sagaEffects.select(isPersonFoundTransactionSelector);
 
 		if (!result) {
-			yield fetchFullDictionaries();
+			yield sagaEffects.put(
+				fetchClassifiersAction({
+					dictionaries: FULL_DICTIONARY_LIST,
+					url: '/dev-bin/priem_api.fcgi',
+					version: 2,
+				}),
+			);
 		}
 	}),
 ];

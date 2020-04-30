@@ -6,7 +6,7 @@ import {
 	IRootState,
 	onChangeFilialAction,
 	applicationsFormSelector,
-	priemFilialsTransactionActions,
+	priemFilialsTrnActions,
 	priemFilialsTransactionSelector,
 	priemInstitutesTransactionSelector,
 	onChangeInstAction,
@@ -123,7 +123,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) 
 };
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {
-	fetchPriemFilials: priemFilialsTransactionActions.trigger,
+	fetchPriemFilials: priemFilialsTrnActions.trigger,
 	onChangeFilial: onChangeFilialAction,
 	onChangeInst: onChangeInstAction,
 	onChangeEducLevel: onChangeEducLevelAction,

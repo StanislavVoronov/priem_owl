@@ -7,44 +7,39 @@ import {
 	onChangeFilialAction,
 	onChangeInstAction,
 	onChangeProfilesAction,
-	priemDirectionsTransactionActions,
+	priemDirectionsTrnActions,
 	priemEducFormsTransactionActions,
-	priemEducLevelsTransactionActions,
-	priemInstitutesTransactionActions,
+	priemEducLevelsTrnActions,
+	priemInstitutesTrnActions,
 	priemPayFormsTransactionActions,
 	priemProfilesTransactionActions,
 	newPriemAppAddedAction,
 	priemAdmGroupsTransactionActions,
 	newAdmGroupsAddedAction,
-	priemFilialsTransactionActions,
+	priemFilialsTrnActions,
 } from '$store';
 import { sagaEffects, guid } from '@black_bird/utils';
 import { checkLigotaPriemStatus } from './documentsFormSagas';
 
 export const applicationFormSagas = [
-	sagaEffects.takeEvery(priemFilialsTransactionActions.trigger, function* () {
-		yield sagaEffects.call(checkLigotaPriemStatus);
-	}),
 	sagaEffects.takeEvery(onChangeFilialAction, function* () {
 		const { filial } = yield sagaEffects.select(applicationsFormSelector);
 
 		if (filial) {
-			yield sagaEffects.put(priemEducLevelsTransactionActions.trigger(filial));
+			yield sagaEffects.put(priemEducLevelsTrnActions.trigger(filial));
 		}
 	}),
 	sagaEffects.takeEvery(onChangeInstAction, function* () {
 		const { filial, institute, educLevel } = yield sagaEffects.select(applicationsFormSelector);
 
 		if (filial && institute && educLevel) {
-			yield sagaEffects.put(
-				priemDirectionsTransactionActions.trigger(filial, educLevel, institute),
-			);
+			yield sagaEffects.put(priemDirectionsTrnActions.trigger(filial, educLevel, institute));
 		}
 	}),
 	sagaEffects.takeEvery(onChangeEducLevelAction, function* () {
 		const { filial, educLevel } = yield sagaEffects.select(applicationsFormSelector);
 
-		yield sagaEffects.put(priemInstitutesTransactionActions.trigger(filial, educLevel));
+		yield sagaEffects.put(priemInstitutesTrnActions.trigger(filial, educLevel));
 	}),
 	sagaEffects.takeEvery(onChangeDirectionAction, function* () {
 		const { filial, institute, direction } = yield sagaEffects.select(applicationsFormSelector);

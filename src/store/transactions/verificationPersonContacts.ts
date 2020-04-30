@@ -24,7 +24,4 @@ export const verPersonContactsTrnSelector = createSelector(transactionSelector, 
 export const verPersonContactsTrnSaga = sagaEffects.rest(
 	verPersonContactsTrnActions,
 	({ payload }) => verPersonContactsRest(payload.npId),
-	{
-		autoRetry: AUTO_REQUEST_RETRY,
-	},
 );

@@ -43,5 +43,4 @@ export const priemAdmGroupsSaga = sagaEffects.rest(
 			payload.educForm.ID,
 			payload.payForm.ID,
 		),
-	{ autoRetry: AUTO_REQUEST_RETRY },
 );

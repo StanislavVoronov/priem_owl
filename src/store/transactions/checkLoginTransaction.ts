@@ -23,10 +23,6 @@ export const isUniqueLoginTransactionSelector = createSelector(transactionSelect
 	return { isFetching, exception, result: result.length ? result[0].COUNT === 0 : false };
 });
 
-export const checkLoginSaga = sagaEffects.rest(
-	checkLoginTransactionActions,
-	({ payload }) => checkLoginRest(payload.login),
-	{
-		autoRetry: AUTO_REQUEST_RETRY,
-	},
+export const checkLoginSaga = sagaEffects.rest(checkLoginTransactionActions, ({ payload }) =>
+	checkLoginRest(payload.login),
 );

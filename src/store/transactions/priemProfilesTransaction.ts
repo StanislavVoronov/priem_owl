@@ -9,6 +9,7 @@ import {
 import { priemProfilesRest } from '$rests';
 import { disabledPayFormSelector } from '../selectors';
 import { transactionSelector } from './selectors';
+import { priemDirectionsTrnActions } from './priemDirectionsTransaction';
 
 export const priemProfilesTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemProfiles,
@@ -19,7 +20,7 @@ export const priemProfilesTransactionActions = createTransactionActions(
 	}),
 );
 export const priemProfilesReducer = createTransactionReducer(priemProfilesTransactionActions, {
-	cleanActions: [priemProfilesTransactionActions.trigger],
+	cleanActions: [priemDirectionsTrnActions.trigger],
 });
 
 export const priemProfilesTransactionSelector = createSelector(
@@ -27,17 +28,15 @@ export const priemProfilesTransactionSelector = createSelector(
 	prop('priemProfiles'),
 );
 
-export const priemProfilesSaga = sagaEffects.rest(
-	priemProfilesTransactionActions,
-	function* ({ payload }) {
-		const payForms = yield sagaEffects.select(disabledPayFormSelector);
+export const priemProfilesSaga = sagaEffects.rest(priemProfilesTransactionActions, function* ({
+	payload,
+}) {
+	const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
-		return yield priemProfilesRest(
-			payload.filial.ID,
-			payload.inst.ID,
-			payload.direction.ID,
-			payForms,
-		);
-	},
-	{ autoRetry: AUTO_REQUEST_RETRY },
-);
+	return yield priemProfilesRest(
+		payload.filial.ID,
+		payload.inst.ID,
+		payload.direction.ID,
+		payForms,
+	);
+});

@@ -46,11 +46,6 @@ export const createAppTransactionSelector = createSelector(
 	},
 );
 
-export const createApplicationSaga = sagaEffects.rest(
-	createAppTransactionActions,
-	({ payload }) =>
-		createApplicationRest(payload.adm, payload.prof, payload.priority, APPLICATION_FLOW),
-	{
-		autoRetry: AUTO_REQUEST_RETRY,
-	},
+export const createApplicationSaga = sagaEffects.rest(createAppTransactionActions, ({ payload }) =>
+	createApplicationRest(payload.adm, payload.prof, payload.priority, APPLICATION_FLOW),
 );

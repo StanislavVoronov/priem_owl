@@ -15,10 +15,6 @@ export const createPersonTransactionSelector = createSelector(
 	prop('createPerson'),
 );
 
-export const createPersonSaga = sagaEffects.rest(
-	createPersonTransactionActions,
-	({ payload }) => createPersonRest(payload),
-	{
-		autoRetry: AUTO_REQUEST_RETRY,
-	},
+export const createPersonSaga = sagaEffects.rest(createPersonTransactionActions, ({ payload }) =>
+	createPersonRest(payload),
 );

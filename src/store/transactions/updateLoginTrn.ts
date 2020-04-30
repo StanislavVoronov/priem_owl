@@ -20,10 +20,6 @@ export const updateLoginTransactionSelector = createSelector(
 	(state) => state.updatePhones,
 );
 
-export const updateLoginSaga = sagaEffects.rest(
-	updateLoginTrnActions,
-	({ payload }) => updateLoginRest(payload),
-	{
-		autoRetry: AUTO_REQUEST_RETRY,
-	},
+export const updateLoginSaga = sagaEffects.rest(updateLoginTrnActions, ({ payload }) =>
+	updateLoginRest(payload),
 );

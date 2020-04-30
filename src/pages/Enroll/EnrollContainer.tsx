@@ -3,10 +3,15 @@ import EnrollView from './EnrollView';
 import { connect, MapStateToProps } from 'react-redux';
 import { NEW_PERSON_STEPS } from '../../dictionaries';
 
-import { IRootState, enrollSelector } from '$store';
+import {
+	enrollSelector,
+	getFirstNamesDictionary,
+	initAction,
+	IRootState,
+	navigateToStep,
+} from '$store';
 import { IDictionaryConfig } from '@black_bird/dictionaries';
-import { initAction, navigateToStep, getFirstNamesDictionary } from '$store';
-import { ITransaction, noop } from '@black_bird/utils';
+import { ITransaction, noop, TransactionStatus } from '@black_bird/utils';
 
 interface IState {
 	dictionaries: IDictionaryConfig[];
@@ -41,12 +46,13 @@ class EnrollContainer extends React.Component<IProps, IState> {
 	render() {
 		const { step, passedStep, firstNameDictionary } = this.props;
 
-		const loading = firstNameDictionary.isFetching;
+		const isCompleted = firstNameDictionary.status === TransactionStatus.COMPLETED;
 
 		return (
 			<EnrollView
+				exception={firstNameDictionary.exception}
 				steps={NEW_PERSON_STEPS}
-				loading={loading}
+				loading={!isCompleted}
 				handleStep={this.handleStep}
 				activeStep={step}
 				passedStep={passedStep}

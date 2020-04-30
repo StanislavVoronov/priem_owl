@@ -12,33 +12,29 @@ import {
 	disabledFreePayFormAction,
 	openLigotaPriemAction,
 	closeLigotaPriemAction,
+	submitApplicationFormAction,
 } from './actions';
 import { combineReducers, createReducer, forAction } from '@black_bird/utils';
 import { IAdmGroup } from './models';
-import { priemEducLevelsTransactionActions, priemFilialsTransactionActions } from '$store';
+import { submitDocumentsFormAction } from '../documentsForm';
 
 const filialReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(onChangeFilialAction, (state, payload) => payload)],
 	null,
-	{ cleanActions: [priemFilialsTransactionActions.trigger] },
+	{ cleanActions: [submitDocumentsFormAction] },
 );
 
 const educLevelReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(onChangeEducLevelAction, (state, payload) => payload)],
 	null,
-	{ cleanActions: [priemFilialsTransactionActions.trigger, onChangeFilialAction] },
+	{ cleanActions: [onChangeFilialAction] },
 );
 
 const profileReducer = createReducer<IAdmDictionaryItem[]>(
 	[forAction(onChangeProfilesAction, (state, payload) => payload)],
 	[],
 	{
-		cleanActions: [
-			onChangeEducLevelAction,
-			onChangeDirectionAction,
-			newAdmGroupsAddedAction,
-			priemFilialsTransactionActions.trigger,
-		],
+		cleanActions: [onChangeEducLevelAction, onChangeDirectionAction, newAdmGroupsAddedAction],
 	},
 );
 
@@ -46,12 +42,7 @@ const instituteReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(onChangeInstAction, (state, payload) => payload)],
 	null,
 	{
-		cleanActions: [
-			onChangeEducLevelAction,
-			onChangeFilialAction,
-			newAdmGroupsAddedAction,
-			priemEducLevelsTransactionActions.success,
-		],
+		cleanActions: [onChangeEducLevelAction, onChangeFilialAction, newAdmGroupsAddedAction],
 	},
 );
 

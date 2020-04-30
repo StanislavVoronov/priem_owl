@@ -29,7 +29,4 @@ export const setExistPersonVerCodeTrnSelector = createSelector(
 export const setExistPersonVerCodeTrnSaga = sagaEffects.rest(
 	setExistPersonVerCodeTrnActions,
 	({ payload }) => setExistPersonVerCodeRest(payload.npId, payload.code),
-	{
-		autoRetry: AUTO_REQUEST_RETRY,
-	},
 );

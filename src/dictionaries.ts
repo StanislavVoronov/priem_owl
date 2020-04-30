@@ -2,16 +2,9 @@ import { EDictionaryNameList, IDictionary } from '$common';
 
 export const SHORT_DICTIONARY_LIST = [
 	{
-		name: EDictionaryNameList.FirstNames,
+		name: EDictionaryNameList.Names,
 		dictionary: 'directory_names',
 		columns: ['id', 'name', 'type', 'sex'],
-		filter: (item: IDictionary) => item.type === 0,
-	},
-	{
-		name: EDictionaryNameList.MiddleNames,
-		dictionary: 'directory_names',
-		columns: ['id', 'name', 'type', 'sex'],
-		filter: (item: IDictionary) => item.type === 1,
 	},
 ];
 
@@ -30,12 +23,6 @@ export const FULL_DICTIONARY_LIST = [
 		name: EDictionaryNameList.DocSubTypes,
 		dictionary: 'directory_doc_subtypes',
 		columns: ['id', 'name', 'type', 'hide', 'complex'],
-	},
-	{
-		name: EDictionaryNameList.FirstNames,
-		dictionary: 'directory_names',
-		columns: ['id', 'name', 'type', 'sex'],
-		filter: (item: IDictionary) => item.type === 0,
 	},
 	{
 		dictionary: EDictionaryNameList.PreviousEducation,
