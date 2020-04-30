@@ -2,11 +2,9 @@ import {
 	createSelector,
 	createTransactionActions,
 	createTransactionReducer,
-	prop,
 	sagaEffects,
 } from '@black_bird/utils';
-import { TRANSACTION_NAMES } from '$actions';
-import { ITransactionsState } from './transactionsModels';
+import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
 import { IRegForm } from '$common';
 import { findPersonRest } from '$rests';
 import { transactionSelector } from './selectors';
@@ -34,6 +32,10 @@ export const isPersonFoundTransactionSelector = createSelector(transactionSelect
 	};
 });
 
-export const findPersonSaga = sagaEffects.rest(findPersonTransactionActions, ({ payload }) =>
-	findPersonRest(payload.data),
+export const findPersonSaga = sagaEffects.rest(
+	findPersonTransactionActions,
+	({ payload }) => findPersonRest(payload.data),
+	{
+		autoRetry: AUTO_REQUEST_RETRY,
+	},
 );

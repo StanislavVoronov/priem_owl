@@ -1,4 +1,4 @@
-import { sagaEffects, TransactionStatus } from '@black_bird/utils';
+import { guid, sagaEffects, TransactionStatus } from '@black_bird/utils';
 import {
 	contactsFormSelector,
 	createPersonTransactionActions,
@@ -8,13 +8,13 @@ import {
 	uploadDocumentsTransactionSelector,
 	uploadDocumentTransactionActions,
 } from '$store';
-import { IDocument } from '$common';
+import { IDocument, IPersonForm } from '$common';
 import { updateCoolnessRest } from '$rests';
 
 export const uploadDocumentsSagas = [
 	sagaEffects.takeEvery(createPersonTransactionActions.success, function* () {
 		const { documents } = yield sagaEffects.select(documentsFormSelector);
-		const personForm = yield sagaEffects.select(personFormSelector);
+		const personForm: IPersonForm = yield sagaEffects.select(personFormSelector);
 
 		const educForm = yield sagaEffects.select(educationFormSelector);
 
@@ -24,7 +24,7 @@ export const uploadDocumentsSagas = [
 			[...documents, educForm.document, personForm.document, regDoc, liveDoc]
 				.filter((item) => item && item.file !== null)
 				.map((doc: IDocument) => {
-					const id = [doc.type ? doc.type.id : '', doc.subType ? doc.subType.id : '', doc.series, doc.num].join('-');
+					const id = guid();
 
 					return sagaEffects.put(uploadDocumentTransactionActions.trigger(doc, id));
 				}),
@@ -33,7 +33,9 @@ export const uploadDocumentsSagas = [
 	sagaEffects.takeEvery(uploadDocumentTransactionActions.success, function* () {
 		const docsTransactions = sagaEffects.select(uploadDocumentsTransactionSelector);
 
-		if (Object.values(docsTransactions).every((item) => item.status === TransactionStatus.COMPLETED)) {
+		if (
+			Object.values(docsTransactions).every((item) => item.status === TransactionStatus.COMPLETED)
+		) {
 			yield sagaEffects.call(updateCoolnessRest);
 		}
 	}),

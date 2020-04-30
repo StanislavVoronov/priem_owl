@@ -1,4 +1,4 @@
-import { sagaEffects, isEmptyArray } from '@black_bird/utils';
+import { sagaEffects, isEmptyArray, guid } from '@black_bird/utils';
 import {
 	checkLoginTransactionActions,
 	regFormSelector,
@@ -13,44 +13,34 @@ import {
 	isPersonFoundTransactionSelector,
 	verPersonContactsTrnActions,
 } from '$store';
-import { checkLoginRest, createLoginRest, findPersonRest } from '$rests';
-import { cyrillToLatin, generatePassword } from '$common';
-import { setExistPersonVerCodeTrnActions } from '../store/transactions/setExistsPersonVerCode';
+import { checkLoginRest } from '$rests';
+import { generatePassword } from '$common';
+import { setExistPersonVerCodeTrnActions } from '$store';
 
 function* createNewLogin() {
-	const data = yield sagaEffects.select(regFormSelector);
-	const lastName = cyrillToLatin(data.lastName);
-	const firstName = cyrillToLatin(data.firstName);
-	const middleName = cyrillToLatin(data.middleName);
+	let creatingNewLogin = true;
 
-	let firstPart = '';
+	do {
+		const login = guid();
 
-	const firstNameList = Array.from(firstName);
-	const secondNameList = Array.from(middleName);
+		try {
+			yield sagaEffects.put(checkLoginTransactionActions.request());
 
-	for (const first of firstNameList) {
-		firstPart += first;
-		let login = `${lastName}.${firstPart}.`;
-		for (const second of secondNameList) {
-			login += second;
-			try {
-				yield sagaEffects.put(checkLoginTransactionActions.request());
+			const result = yield sagaEffects.call(checkLoginRest, login);
 
-				const result = yield sagaEffects.call(checkLoginRest, login);
+			yield sagaEffects.put(checkLoginTransactionActions.success(result));
 
-				yield sagaEffects.put(checkLoginTransactionActions.success(result));
-			} catch (e) {
-				yield sagaEffects.put(checkLoginTransactionActions.failure(e));
-			}
 			const isUniqueLogin = yield sagaEffects.select(isUniqueLoginTransactionSelector);
 
 			if (isUniqueLogin.result) {
-				yield sagaEffects.put(generateUserPasswordAction(login));
+				creatingNewLogin = false;
 
-				return;
+				yield sagaEffects.put(generateUserPasswordAction(login));
 			}
+		} catch (e) {
+			yield sagaEffects.put(checkLoginTransactionActions.failure(e));
 		}
-	}
+	} while (creatingNewLogin);
 }
 
 export const regFormSagas = [
@@ -71,6 +61,7 @@ export const regFormSagas = [
 		yield sagaEffects.put(createLoginTransactionActions.trigger(payload, password));
 	}),
 	sagaEffects.takeLatest(findPersonTransactionActions.success, function* ({ payload }: any) {
+		console.log('payload', payload);
 		if (isEmptyArray(payload.response)) {
 			yield sagaEffects.put(goToNextStep());
 		} else {

@@ -1,15 +1,19 @@
 import { sagaEffects } from '@black_bird/utils';
-import { contactsFormSelector, createPersonTransactionActions, updateAddressTransactionActions } from '$store';
-import { AddressType } from '$common';
+import {
+	contactsFormSelector,
+	createPersonTransactionActions,
+	updateAddressTransactionActions,
+	updateLoginTrnActions,
+} from '$store';
+import { AddressType, IContactsForm } from '$common';
 
-const prepareAddress = (street: string, home: string, block: string, flat: string) => {
-	return `${street ? ', ул. ' + street : ''}${home ? ', д. ' + home : ''}${block ? ', кор. ' + block : ''}${
-		flat ? ', кв.' + flat : ''
-	}`;
+const prepareAddress = (street?: string, home?: string, block?: string, flat?: string) => {
+	return `${street ? ', ул. ' + street : ''}${home ? ', д. ' + home : ''}${
+		block ? ', кор. ' + block : ''
+	}${flat ? ', кв.' + flat : ''}`;
 };
 export const createPersonContactsSagas = [
-	sagaEffects.takeLatest(createPersonTransactionActions.success, function*() {
-		console.log('contacts');
+	sagaEffects.takeLatest(createPersonTransactionActions.success, function* () {
 		const {
 			regDoc,
 			liveDoc,
@@ -28,7 +32,8 @@ export const createPersonContactsSagas = [
 			liveRegion,
 			liveStreet,
 			isRegAddressEqualLive,
-		} = yield sagaEffects.select(contactsFormSelector);
+			email,
+		}: IContactsForm = yield sagaEffects.select(contactsFormSelector);
 
 		const regAddress = `${regIndex}, ${regDoc.government.name}${regRegion ? ', ' + regRegion : ''}${
 			regLocality ? ', ' + regLocality : ''
@@ -43,5 +48,7 @@ export const createPersonContactsSagas = [
 		yield sagaEffects.put(updateAddressTransactionActions.trigger(liveAddress, AddressType.Live));
 
 		yield sagaEffects.put(updateAddressTransactionActions.trigger(regAddress, AddressType.Reg));
+
+		yield sagaEffects.put(updateLoginTrnActions.trigger(email));
 	}),
 ];

@@ -2,11 +2,9 @@ import {
 	createTransactionReducer,
 	createTransactionActions,
 	createSelector,
-	prop,
 	sagaEffects,
 } from '@black_bird/utils';
-import { TRANSACTION_NAMES } from '$actions';
-import { ITransactionsState } from './transactionsModels';
+import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
 import { createLoginRest } from '$rests';
 import { transactionSelector } from './selectors';
 
@@ -24,6 +22,10 @@ export const createLoginTransactionSelector = createSelector(transactionSelector
 	return { isFetching, exception, result: npId };
 });
 
-export const createLoginSaga = sagaEffects.rest(createLoginTransactionActions, ({ payload }) => {
-	return createLoginRest(payload.login, payload.password);
-});
+export const createLoginSaga = sagaEffects.rest(
+	createLoginTransactionActions,
+	({ payload }) => createLoginRest(payload.login, payload.password),
+	{
+		autoRetry: AUTO_REQUEST_RETRY,
+	},
+);

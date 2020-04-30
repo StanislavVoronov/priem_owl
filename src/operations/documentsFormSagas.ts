@@ -11,7 +11,7 @@ import { IDocument } from '$common';
 export function* checkLigotaPriemStatus() {
 	const data: IDocument | undefined = yield sagaEffects.select(getLigotaDocument);
 
-	if (data && data.cheatType) {
+	if (data?.cheatType?.id) {
 		yield sagaEffects.put(openLigotaPriemAction());
 	} else {
 		yield sagaEffects.put(closeLigotaPriemAction());

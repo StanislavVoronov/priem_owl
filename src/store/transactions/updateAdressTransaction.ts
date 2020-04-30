@@ -5,10 +5,8 @@ import {
 	prop,
 	sagaEffects,
 } from '@black_bird/utils';
-import { TRANSACTION_NAMES } from '$actions';
-import { ITransactionsState } from '$store';
 import { updateAddressRest } from '$rests';
-import { AddressType } from '$common';
+import { AddressType, AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
 import { transactionSelector } from './selectors';
 
 export const updateAddressTransactionActions = createTransactionActions(
@@ -21,9 +19,9 @@ export const updateAddressesReducer = createTransactionReducer(updateAddressTran
 });
 
 export const updateAddressTransactionSelector = createSelector(
-	prop('transactions'),
+	transactionSelector,
 	(state: any, key: AddressType) => key,
-	(state: ITransactionsState, phone: AddressType) => state.updateAddresses[phone],
+	(state, phone) => state.updateAddresses[phone],
 );
 
 export const updateAddressesTransactionSelector = createSelector(
@@ -31,8 +29,8 @@ export const updateAddressesTransactionSelector = createSelector(
 	prop('updateAddresses'),
 );
 
-export const updateAddressSaga = sagaEffects.rest(updateAddressTransactionActions, function* ({
-	payload,
-}) {
-	return updateAddressRest(payload.address, payload.kind);
-});
+export const updateAddressSaga = sagaEffects.rest(
+	updateAddressTransactionActions,
+	({ payload }) => updateAddressRest(payload.address, payload.kind),
+	{ autoRetry: AUTO_REQUEST_RETRY },
+);

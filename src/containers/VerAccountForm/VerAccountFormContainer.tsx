@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import {
+	contactsFormSelector,
 	createAppsTransactionSelector,
 	createPersonTransactionSelector,
 	createVerCodeTransactionActions,
@@ -23,6 +24,7 @@ interface IMapStateToProps {
 	error?: IException | null;
 	loading: boolean;
 	folderCreated: boolean;
+	email: string;
 }
 
 interface IDispatchToProps {
@@ -32,7 +34,13 @@ interface IDispatchToProps {
 type IProps = IMapStateToProps & IDispatchToProps;
 class AccountVerificationContainer extends React.Component<IProps> {
 	renderForm = (form: IFormProps<any>) => {
-		return <VerAccountFormView value={prop('verAccountCode')(form.values)} onChange={form.onChange} />;
+		return (
+			<VerAccountFormView
+				email={this.props.email}
+				value={prop('verAccountCode')(form.values)}
+				onChange={form.onChange}
+			/>
+		);
 	};
 	disabledForm = ({ values }: { values: IVerAccountForm }) => {
 		return isEmpty(values.verAccountCode);
@@ -50,7 +58,9 @@ class AccountVerificationContainer extends React.Component<IProps> {
 				loading={loading}
 				disabled={this.disabledForm}
 				loadingText={
-					createCodeTransaction.isFetching ? 'Отправка кода подтверждения учетной записи' : 'Формирование личного дела'
+					createCodeTransaction.isFetching
+						? 'Отправка кода подтверждения учетной записи'
+						: 'Формирование личного дела'
 				}
 				buttonText="Отправить документы для поступления"
 				renderForm={this.renderForm}
@@ -70,6 +80,7 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = (stat
 	const appException = Object.values(appsTransactions).find((item) => item.exception);
 	const docException = Object.values(docsTransactions).find((item) => item.exception);
 	const createCodeTransaction = createVerCodeTransactionSelector(state);
+	const { email } = contactsFormSelector(state);
 
 	return {
 		form,
@@ -80,6 +91,7 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = (stat
 			Object.values(appsTransactions).some((item) => item.isFetching) ||
 			Object.values(docsTransactions).some((item) => item.isFetching),
 		createCodeTransaction,
+		email,
 		error:
 			createPersonDataTransaction.exception ||
 			createCodeTransaction.exception ||
@@ -94,7 +106,9 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = (stat
 			updateLiveAddressTransaction.status === TransactionStatus.COMPLETED &&
 			updateRegAddressTransaction &&
 			updateRegAddressTransaction.status === TransactionStatus.COMPLETED &&
-			Object.values(appsTransactions).every((item) => item.status === TransactionStatus.COMPLETED) &&
+			Object.values(appsTransactions).every(
+				(item) => item.status === TransactionStatus.COMPLETED,
+			) &&
 			Object.values(docsTransactions).every((item) => item.status === TransactionStatus.COMPLETED),
 	};
 };

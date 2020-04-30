@@ -5,9 +5,8 @@ import {
 	prop,
 	sagaEffects,
 } from '@black_bird/utils';
-import { ITransactionsState } from './transactionsModels';
 import { priemFilialsRest } from '$rests';
-import { TRANSACTION_NAMES } from '$actions';
+import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
 import { disabledPayFormSelector } from '../selectors';
 import { transactionSelector } from './selectors';
 
@@ -15,7 +14,9 @@ export const priemFilialsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemFilials,
 );
 
-export const priemFilialsReducer = createTransactionReducer(priemFilialsTransactionActions);
+export const priemFilialsReducer = createTransactionReducer(priemFilialsTransactionActions, {
+	cleanActions: [priemFilialsTransactionActions.trigger],
+});
 
 export const priemFilialsTransactionSelector = createSelector(
 	transactionSelector,
@@ -29,5 +30,5 @@ export const priemFilialsSaga = sagaEffects.rest(
 
 		return yield priemFilialsRest(payForms);
 	},
-	true,
+	{ autoRetry: AUTO_REQUEST_RETRY },
 );

@@ -1,5 +1,4 @@
-import { IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
-import { ITransactionsState } from './transactionsModels';
+import { AUTO_REQUEST_RETRY, IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
 import {
 	createSelector,
 	createTransactionActions,
@@ -20,7 +19,9 @@ export const priemDirectionsTransactionActions = createTransactionActions(
 	}),
 );
 
-export const priemDirectionsReducer = createTransactionReducer(priemDirectionsTransactionActions);
+export const priemDirectionsReducer = createTransactionReducer(priemDirectionsTransactionActions, {
+	cleanActions: [priemDirectionsTransactionActions.trigger],
+});
 
 export const priemDirectionsTransactionSelector = createSelector(
 	transactionSelector,
@@ -39,5 +40,5 @@ export const priemDirectionSaga = sagaEffects.rest(
 			payForms,
 		);
 	},
-	true,
+	{ autoRetry: AUTO_REQUEST_RETRY },
 );

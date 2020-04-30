@@ -86,6 +86,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) 
 			createLoginTransaction.exception ||
 			verPerson.exception ||
 			verPersonContacts.exception ||
+			findPersonTransaction.exception ||
 			setExistPersonVerCode.exception,
 		loading:
 			uniqueLoginTransaction.isFetching ||

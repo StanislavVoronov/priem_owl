@@ -16,6 +16,7 @@ export enum PRIEM_API_NAMES {
 	AddPriemApplication = 'iDATA_APPLICATIONS',
 	PriemLogout = 'enrollLogout',
 	UpdateCoolness = 'updDATA_COOLNESS',
+	UpdateLogin = 'DATA_NP_AUTH.LOGIN',
 }
 
 export enum ENROLL_API_NAMES {

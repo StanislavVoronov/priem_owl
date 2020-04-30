@@ -1,4 +1,4 @@
-import { IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
+import { AUTO_REQUEST_RETRY, IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
 import {
 	createSelector,
 	createTransactionActions,
@@ -6,7 +6,6 @@ import {
 	prop,
 	sagaEffects,
 } from '@black_bird/utils';
-import { ITransactionsState } from './transactionsModels';
 import { priemProfilesRest } from '$rests';
 import { disabledPayFormSelector } from '../selectors';
 import { transactionSelector } from './selectors';
@@ -19,7 +18,9 @@ export const priemProfilesTransactionActions = createTransactionActions(
 		direction,
 	}),
 );
-export const priemProfilesReducer = createTransactionReducer(priemProfilesTransactionActions);
+export const priemProfilesReducer = createTransactionReducer(priemProfilesTransactionActions, {
+	cleanActions: [priemProfilesTransactionActions.trigger],
+});
 
 export const priemProfilesTransactionSelector = createSelector(
 	transactionSelector,
@@ -38,5 +39,5 @@ export const priemProfilesSaga = sagaEffects.rest(
 			payForms,
 		);
 	},
-	true,
+	{ autoRetry: AUTO_REQUEST_RETRY },
 );

@@ -27,16 +27,6 @@ export const PersonFormView = (props: IProps) => {
 			subTitle="Тип документа удостоверяющего личность"
 			endFields={
 				<React.Fragment>
-					{document.subType && document.subType.id === 1 && (
-						<TextInput
-							onChange={onChange}
-							required
-							defaultValue={values.codeDepartment}
-							name="codeDepartment"
-							label="Код подразделения"
-							placeholder="Введите код подразделения"
-						/>
-					)}
 					<TextInput
 						name="birthplace"
 						defaultValue={values.birthplace}
@@ -50,7 +40,9 @@ export const PersonFormView = (props: IProps) => {
 						name="isApplyPersonData"
 						value={values.isApplyPersonData}
 						label={
-							<a href="http://www.mgutm.ru/entrant_2012/files/zayavlenie_na_obrabotku_pd.pdf" target="_blank">
+							<a
+								href="http://www.mgutm.ru/entrant_2012/files/zayavlenie_na_obrabotku_pd.pdf"
+								target="_blank">
 								Согласие на обработку персональных данных
 							</a>
 						}

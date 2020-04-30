@@ -101,21 +101,22 @@ const RegFormView = (props: IProps) => {
 				required
 				items={GENDERS}
 			/>
-			{email && (
-				<>
-					<div className={classes.title}>
-						Личное дело абитуриента существует в приемной комиссии
-					</div>
-					<TextInput
-						name="verAccountCode"
-						onChange={onChange}
-						value={values.verAccountCode}
-						required
-						label="Код подтверждения"
-						helperText={`Код подтверждения был напрален на электронную почту: ${email}`}
-					/>
-				</>
-			)}
+			{email && 'Прием абитуриентов с существующим личным делом будет открыт 10 мая 2020 года'}
+			{/*{email && (*/}
+			{/*	<>*/}
+			{/*		<div className={classes.title}>*/}
+			{/*			Личное дело абитуриента существует в приемной комиссии*/}
+			{/*		</div>*/}
+			{/*		<TextInput*/}
+			{/*			name="verAccountCode"*/}
+			{/*			onChange={onChange}*/}
+			{/*			value={values.verAccountCode}*/}
+			{/*			required*/}
+			{/*			label="Код подтверждения"*/}
+			{/*			helperText={`Код подтверждения был напрален на электронную почту: ${email}`}*/}
+			{/*		/>*/}
+			{/*	</>*/}
+			{/*)}*/}
 		</>
 	);
 };

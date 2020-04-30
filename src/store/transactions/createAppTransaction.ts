@@ -5,12 +5,14 @@ import {
 	prop,
 	sagaEffects,
 } from '@black_bird/utils';
-import { TRANSACTION_NAMES } from '$actions';
 import { ITransactionsState } from './transactionsModels';
-import { createApplicationRest, createPersonRest } from '$rests';
-import { createPersonTransactionActions } from '$store';
-import { IAdmDictionaryItem } from '$common';
-import { APPLICATION_FLOW } from '../../common/constants';
+import { createApplicationRest } from '$rests';
+import {
+	IAdmDictionaryItem,
+	TRANSACTION_NAMES,
+	APPLICATION_FLOW,
+	AUTO_REQUEST_RETRY,
+} from '$common';
 import { transactionSelector } from './selectors';
 
 export const createAppTransactionActions = createTransactionActions(
@@ -44,6 +46,11 @@ export const createAppTransactionSelector = createSelector(
 	},
 );
 
-export const createApplicationSaga = sagaEffects.rest(createAppTransactionActions, ({ payload }) =>
-	createApplicationRest(payload.adm, payload.prof, payload.priority, APPLICATION_FLOW),
+export const createApplicationSaga = sagaEffects.rest(
+	createAppTransactionActions,
+	({ payload }) =>
+		createApplicationRest(payload.adm, payload.prof, payload.priority, APPLICATION_FLOW),
+	{
+		autoRetry: AUTO_REQUEST_RETRY,
+	},
 );

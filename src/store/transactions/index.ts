@@ -21,3 +21,5 @@ export * from './createAppTransaction';
 export * from './priemLogoutTransaction';
 export * from './verificaitonExistPerson';
 export * from './verificationPersonContacts';
+export * from './updateLoginTrn';
+export * from './setExistsPersonVerCode';

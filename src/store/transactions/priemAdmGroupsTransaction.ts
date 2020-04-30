@@ -1,8 +1,6 @@
 import { createTransactionActions, createTransactionReducer, sagaEffects } from '@black_bird/utils';
-import { TRANSACTION_NAMES } from '$actions';
-import { createSelector, prop } from '@black_bird/utils';
-import { IAdmDictionaryItem } from '$common';
-import { ITransactionsState } from './transactionsModels';
+import { createSelector } from '@black_bird/utils';
+import { AUTO_REQUEST_RETRY, IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
 import { priemAdmGroupsRest } from '$rests';
 import { transactionSelector } from './selectors';
 
@@ -37,13 +35,13 @@ export const priemAdmGroupsTransactionSelector = createSelector(
 
 export const priemAdmGroupsSaga = sagaEffects.rest(
 	priemAdmGroupsTransactionActions,
-	({ payload }) => {
-		return priemAdmGroupsRest(
+	({ payload }) =>
+		priemAdmGroupsRest(
 			payload.filial.ID,
 			payload.inst.ID,
 			payload.direction.ID,
 			payload.educForm.ID,
 			payload.payForm.ID,
-		);
-	},
+		),
+	{ autoRetry: AUTO_REQUEST_RETRY },
 );

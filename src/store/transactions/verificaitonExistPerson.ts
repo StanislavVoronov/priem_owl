@@ -6,7 +6,7 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 
-import { TRANSACTION_NAMES } from '$actions';
+import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
 import { verNpRest } from '$rests';
 import { transactionSelector } from './selectors';
 
@@ -20,6 +20,10 @@ export const verPersonTrnActions = createTransactionActions(
 export const verPersonReducer = createTransactionReducer(verPersonTrnActions);
 export const verPersonTrnSelector = createSelector(transactionSelector, prop('verNp'));
 
-export const verPersonTrnSaga = sagaEffects.rest(verPersonTrnActions, function* ({ payload }) {
-	return yield verNpRest(payload.npId, payload.type);
-});
+export const verPersonTrnSaga = sagaEffects.rest(
+	verPersonTrnActions,
+	({ payload }) => verNpRest(payload.npId, payload.type),
+	{
+		autoRetry: AUTO_REQUEST_RETRY,
+	},
+);

@@ -5,7 +5,7 @@ import {
 	IFindPersonResponse,
 	IVerPersonContactsResponse,
 } from '$rests';
-import { ICreatePersonData, IPriemGroup, IDictionary, IAdmDictionaryItem } from '$common';
+import { ICreatePersonData, IPriemGroup, IAdmDictionaryItem } from '$common';
 
 export type IAdmTransactionList = ITransaction<IAdmDictionaryItem[]>;
 
@@ -32,4 +32,5 @@ export interface ITransactionsState {
 	verNp: ITransaction<{ ver_id: number }>;
 	verPersonContacts: ITransaction<IVerPersonContactsResponse>;
 	setExistPersonVerCode: ITransaction<any>;
+	updateLogin: ITransaction<any>;
 }

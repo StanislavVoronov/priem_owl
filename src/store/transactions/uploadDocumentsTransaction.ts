@@ -1,7 +1,6 @@
 import { createTransactionActions, createTransactionReducer, sagaEffects } from '@black_bird/utils';
-import { TRANSACTION_NAMES } from '$actions';
 import { createSelector, prop } from '@black_bird/utils';
-import { IDocument } from '$common';
+import { AUTO_REQUEST_RETRY, IDocument, TRANSACTION_NAMES } from '$common';
 import { ITransactionsState } from './transactionsModels';
 import { uploadDocumentRest } from '$rests';
 
@@ -14,7 +13,7 @@ export const uploadDocumentTransactionActions = createTransactionActions(
 );
 
 export const uploadDocumentsReducer = createTransactionReducer(uploadDocumentTransactionActions, {
-	mapToKey: payload => payload.docKey,
+	mapToKey: (payload) => payload.docKey,
 });
 
 export const uploadDocumentTransactionSelector = createSelector(
@@ -28,6 +27,10 @@ export const uploadDocumentsTransactionSelector = createSelector(
 	(state: ITransactionsState) => state.uploadDocuments,
 );
 
-export const uploadDocumentsSaga = sagaEffects.rest(uploadDocumentTransactionActions, ({ payload }) => {
-	return uploadDocumentRest(payload.document);
-});
+export const uploadDocumentsSaga = sagaEffects.rest(
+	uploadDocumentTransactionActions,
+	({ payload }) => uploadDocumentRest(payload.document),
+	{
+		autoRetry: AUTO_REQUEST_RETRY,
+	},
+);

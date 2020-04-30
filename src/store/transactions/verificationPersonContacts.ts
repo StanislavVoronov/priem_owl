@@ -2,10 +2,9 @@ import {
 	createSelector,
 	createTransactionActions,
 	createTransactionReducer,
-	prop,
 	sagaEffects,
 } from '@black_bird/utils';
-import { TRANSACTION_NAMES } from '$actions';
+import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
 import { verPersonContactsRest } from '$rests';
 import { transactionSelector } from './selectors';
 
@@ -22,8 +21,10 @@ export const verPersonContactsTrnSelector = createSelector(transactionSelector, 
 	result: state.verPersonContacts.result[0],
 }));
 
-export const verPersonContactsTrnSaga = sagaEffects.rest(verPersonContactsTrnActions, function* ({
-	payload,
-}) {
-	return yield verPersonContactsRest(payload.npId);
-});
+export const verPersonContactsTrnSaga = sagaEffects.rest(
+	verPersonContactsTrnActions,
+	({ payload }) => verPersonContactsRest(payload.npId),
+	{
+		autoRetry: AUTO_REQUEST_RETRY,
+	},
+);

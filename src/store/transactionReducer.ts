@@ -18,10 +18,10 @@ import {
 	priemLogoutReducer,
 	createApplicationReducer,
 	verPersonReducer,
-	ITransactionsState,
 	verPersonContactsReducer,
+	setExistPersonVerCodeReducer,
+	updateLoginTrnReducer,
 } from './transactions';
-import { setExistPersonVerCodeReducer } from './transactions/setExistsPersonVerCode';
 
 const transactionsReducer = combineReducers({
 	checkLogin: checkLoginReducer,
@@ -44,6 +44,7 @@ const transactionsReducer = combineReducers({
 	verNp: verPersonReducer,
 	verPersonContacts: verPersonContactsReducer,
 	setExistPersonVerCode: setExistPersonVerCodeReducer,
+	updateLogin: updateLoginTrnReducer,
 });
 
 export default transactionsReducer;

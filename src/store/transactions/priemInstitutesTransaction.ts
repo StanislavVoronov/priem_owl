@@ -1,4 +1,4 @@
-import { IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
+import { AUTO_REQUEST_RETRY, IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
 import {
 	createSelector,
 	createTransactionActions,
@@ -6,7 +6,6 @@ import {
 	createTransactionReducer,
 	sagaEffects,
 } from '@black_bird/utils';
-import { ITransactionsState } from './transactionsModels';
 import { priemInstRest } from '$rests';
 import { disabledPayFormSelector } from '../selectors';
 import { transactionSelector } from './selectors';
@@ -16,7 +15,9 @@ export const priemInstitutesTransactionActions = createTransactionActions(
 	(filial: IAdmDictionaryItem, eduLevel: IAdmDictionaryItem) => ({ filial, eduLevel }),
 );
 
-export const priemInstitutesReducer = createTransactionReducer(priemInstitutesTransactionActions);
+export const priemInstitutesReducer = createTransactionReducer(priemInstitutesTransactionActions, {
+	cleanActions: [priemInstitutesTransactionActions.trigger],
+});
 
 export const priemInstitutesTransactionSelector = createSelector(
 	transactionSelector,
@@ -30,5 +31,5 @@ export const priemInstsSaga = sagaEffects.rest(
 
 		return yield priemInstRest(payload.filial.ID, payload.eduLevel.ID, payForms);
 	},
-	true,
+	{ autoRetry: AUTO_REQUEST_RETRY },
 );

@@ -139,3 +139,12 @@ export const ARRAY_RUS_ALPHABET = new Array(
 );
 
 export const APPLICATION_FLOW = 2;
+
+export const FILE_MAX_SIZE = 5;
+
+export const TYPE_DOCS = ['jpeg', 'jpg'];
+
+export const AUTO_REQUEST_RETRY = {
+	maxTries: 5,
+	delayLength: 100,
+};

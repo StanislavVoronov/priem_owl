@@ -6,7 +6,7 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 
-import { TRANSACTION_NAMES } from '$actions';
+import { AUTO_REQUEST_RETRY, TRANSACTION_NAMES } from '$common';
 import { transactionSelector } from './selectors';
 import { setExistPersonVerCodeRest } from '$rests';
 
@@ -28,7 +28,8 @@ export const setExistPersonVerCodeTrnSelector = createSelector(
 
 export const setExistPersonVerCodeTrnSaga = sagaEffects.rest(
 	setExistPersonVerCodeTrnActions,
-	function* ({ payload }) {
-		return yield setExistPersonVerCodeRest(payload.npId, payload.code);
+	({ payload }) => setExistPersonVerCodeRest(payload.npId, payload.code),
+	{
+		autoRetry: AUTO_REQUEST_RETRY,
 	},
 );

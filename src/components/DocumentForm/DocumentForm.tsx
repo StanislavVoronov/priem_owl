@@ -1,9 +1,16 @@
 import React, { ReactElement } from 'react';
-import { TextInput, Select, IFormField, Column, DownloadFile, Checkbox } from '@black_bird/components';
+import {
+	TextInput,
+	Select,
+	IFormField,
+	Column,
+	DownloadFile,
+	Checkbox,
+} from '@black_bird/components';
 import { noop, IDocument, validateRequireTextField } from '$common';
 import { isNotEmptyArray, ITransaction } from '@black_bird/utils';
 import classes from './DocumentForm.module.css';
-import { DEFAULT_TRANSACTION } from '../../store/selectors/defaults';
+import { FILE_MAX_SIZE, TYPE_DOCS } from '../../common';
 
 type IDictionary = Record<any, any>;
 
@@ -94,7 +101,16 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 			startFields,
 			dictionaryCheatTypes,
 		} = this.props;
-		const { type, file = null, government, cheatType = null, subType, num, series, issieBy } = this.props.document;
+		const {
+			type,
+			file = null,
+			government,
+			cheatType = null,
+			subType,
+			num,
+			series,
+			issieBy,
+		} = this.props.document;
 
 		const filteredSubTypesDocDictionary = dictionarySubTypes
 			? {
@@ -206,7 +222,13 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 
 					{needInfo ? (
 						<>
-							<TextInput onChange={this.onChange} required type="date" name="date" label="Дата выдачи документа" />
+							<TextInput
+								onChange={this.onChange}
+								required
+								type="date"
+								name="date"
+								label="Дата выдачи документа"
+							/>
 							<TextInput
 								required
 								value={issieBy}
@@ -228,7 +250,14 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 					) : null}
 					{endFields}
 				</Column>
-				<DownloadFile name="file" file={file} onChange={this.onDownloadFile} title={fileTitle} />
+				<DownloadFile
+					formats={TYPE_DOCS}
+					maxSize={FILE_MAX_SIZE}
+					name="file"
+					file={file}
+					onChange={this.onDownloadFile}
+					title={fileTitle}
+				/>
 			</div>
 		);
 	}

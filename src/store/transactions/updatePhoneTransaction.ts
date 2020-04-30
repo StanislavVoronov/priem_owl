@@ -5,7 +5,7 @@ import {
 	prop,
 	sagaEffects,
 } from '@black_bird/utils';
-import { PhoneType, TRANSACTION_NAMES } from '$common';
+import { AUTO_REQUEST_RETRY, PhoneType, TRANSACTION_NAMES } from '$common';
 import { ITransactionsState } from './transactionsModels';
 import { updatePhoneRest } from '$rests';
 
@@ -14,9 +14,12 @@ export const updatePhoneTransactionActions = createTransactionActions(
 	(phone: string, type: PhoneType) => ({ phone, type }),
 );
 
-export const updatePhoneTransactionReducer = createTransactionReducer(updatePhoneTransactionActions, {
-	mapToKey: payload => payload.type,
-});
+export const updatePhoneTransactionReducer = createTransactionReducer(
+	updatePhoneTransactionActions,
+	{
+		mapToKey: (payload) => payload.type,
+	},
+);
 
 export const updatePhoneTransactionSelector = createSelector(
 	prop('transactions'),
@@ -24,6 +27,10 @@ export const updatePhoneTransactionSelector = createSelector(
 	(state: ITransactionsState, phone: string) => state.updatePhones[phone],
 );
 
-export const updatePhoneSaga = sagaEffects.rest(updatePhoneTransactionActions, function*({ payload }) {
-	return updatePhoneRest(payload.phone, payload.type);
-});
+export const updatePhoneSaga = sagaEffects.rest(
+	updatePhoneTransactionActions,
+	({ payload }) => updatePhoneRest(payload.phone, payload.type),
+	{
+		autoRetry: AUTO_REQUEST_RETRY,
+	},
+);

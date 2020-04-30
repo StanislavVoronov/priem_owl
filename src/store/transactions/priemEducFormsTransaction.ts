@@ -1,4 +1,4 @@
-import { IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
+import { AUTO_REQUEST_RETRY, IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
 import {
 	createSelector,
 	createTransactionActions,
@@ -26,7 +26,9 @@ export const priemEducFormsTransactionActions = createTransactionActions(
 	}),
 );
 
-export const priemEducFormsReducer = createTransactionReducer(priemEducFormsTransactionActions);
+export const priemEducFormsReducer = createTransactionReducer(priemEducFormsTransactionActions, {
+	cleanActions: [priemEducFormsTransactionActions.trigger],
+});
 
 export const priemEducFormsTransactionSelector = createSelector(
 	transactionSelector,
@@ -45,5 +47,5 @@ export const educFormsSaga = sagaEffects.rest(
 			payForms,
 		);
 	},
-	true,
+	{ autoRetry: AUTO_REQUEST_RETRY },
 );

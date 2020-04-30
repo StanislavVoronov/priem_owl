@@ -20,3 +20,4 @@ export * from './updateCoolness';
 export * from './verPerson';
 export * from './verPersonCotacts';
 export * from './setExistPersonVerCode';
+export * from './updateLogin';
