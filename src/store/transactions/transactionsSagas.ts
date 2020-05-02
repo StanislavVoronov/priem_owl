@@ -20,6 +20,7 @@ import { verPersonTrnSaga } from './verificaitonExistPerson';
 import { verPersonContactsTrnSaga } from './verificationPersonContacts';
 import { setExistPersonVerCodeTrnSaga } from './setExistsPersonVerCode';
 import { updateLoginSaga } from './updateLoginTrn';
+import { priemAdmTypeSaga } from './priemAdmTypesTransaction';
 
 export const transactionsSagas = [
 	priemLogoutSaga,
@@ -44,4 +45,5 @@ export const transactionsSagas = [
 	verPersonContactsTrnSaga,
 	setExistPersonVerCodeTrnSaga,
 	updateLoginSaga,
+	priemAdmTypeSaga,
 ];

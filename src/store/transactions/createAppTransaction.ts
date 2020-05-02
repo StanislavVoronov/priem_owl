@@ -7,12 +7,12 @@ import {
 } from '@black_bird/utils';
 import { ITransactionsState } from './transactionsModels';
 import { createApplicationRest } from '$rests';
-import { IAdmDictionaryItem, TRANSACTION_NAMES, APPLICATION_FLOW } from '$common';
+import { IAdmDictionaryItem, TRANSACTION_NAMES, APPLICATION_FLOW, IAdmGroupItem } from '$common';
 import { transactionSelector } from './selectors';
 
 export const createAppTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.CreateApplication,
-	(adm: IAdmDictionaryItem, prof: IAdmDictionaryItem, priority: number, app: string) => ({
+	(adm: IAdmGroupItem, prof: IAdmDictionaryItem, priority: number, app: string) => ({
 		adm: adm.ID,
 		prof: prof.ID,
 		priority,

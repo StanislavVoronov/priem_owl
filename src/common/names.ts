@@ -14,6 +14,7 @@ export enum TRANSACTION_NAMES {
 	FetchPriemProfiles = 'FETCH_PRIEM_PROFILES',
 	FetchPriemPayForms = 'FETCH_PRIEM_PAY_FORMS',
 	FetchPriemEducationForms = 'FETCH_PRIEM_EDUC_FORMS',
+	FetchPriemAdmTypes = 'FETCH_PRIEM_ADM_TYPES',
 	CreateApplication = 'CREATE_APP',
 	FetchPriemGroups = 'FETCH_PRIEM_GROUPS',
 	PriemLogout = 'PRIEM_LOGOUT',

@@ -14,16 +14,10 @@ import { priemProfilesTransactionActions } from './priemProfilesTransaction';
 
 export const priemEducFormsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemEducationForms,
-	(
-		filial: IAdmDictionaryItem,
-		inst: IAdmDictionaryItem,
-		direction: IAdmDictionaryItem,
-		educForms: IAdmDictionaryItem[],
-	) => ({
+	(filial: IAdmDictionaryItem, inst: IAdmDictionaryItem, direction: IAdmDictionaryItem) => ({
 		filial,
 		inst,
 		direction,
-		educForms,
 	}),
 );
 

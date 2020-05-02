@@ -21,6 +21,7 @@ import {
 	verPersonContactsReducer,
 	setExistPersonVerCodeReducer,
 	updateLoginTrnReducer,
+	priemAdmTypesReducer,
 } from './transactions';
 
 const transactionsReducer = combineReducers({

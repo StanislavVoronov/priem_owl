@@ -21,3 +21,4 @@ export * from './verPerson';
 export * from './verPersonCotacts';
 export * from './setExistPersonVerCode';
 export * from './updateLogin';
+export * from './priemAdmType';

@@ -23,3 +23,4 @@ export * from './verificaitonExistPerson';
 export * from './verificationPersonContacts';
 export * from './updateLoginTrn';
 export * from './setExistsPersonVerCode';
+export * from './priemAdmTypesTransaction';

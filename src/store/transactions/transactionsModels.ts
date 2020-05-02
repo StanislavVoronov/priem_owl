@@ -33,4 +33,5 @@ export interface ITransactionsState {
 	verPersonContacts: ITransaction<IVerPersonContactsResponse>;
 	setExistPersonVerCode: ITransaction<any>;
 	updateLogin: ITransaction<any>;
+	priemAdmTypes: IAdmTransactionList;
 }

@@ -17,9 +17,11 @@ import {
 	priemAdmGroupsTransactionActions,
 	newAdmGroupsAddedAction,
 	priemFilialsTrnActions,
+	priemAdmTypesTrnActions,
 } from '$store';
 import { sagaEffects, guid } from '@black_bird/utils';
 import { checkLigotaPriemStatus } from './documentsFormSagas';
+import { IAdmDictionaryItem, SPO_FILIAL_ID } from '$common';
 
 export const applicationFormSagas = [
 	sagaEffects.takeEvery(onChangeFilialAction, function* () {
@@ -32,7 +34,11 @@ export const applicationFormSagas = [
 	sagaEffects.takeEvery(onChangeInstAction, function* () {
 		const { filial, institute, educLevel } = yield sagaEffects.select(applicationsFormSelector);
 
-		if (filial && institute && educLevel) {
+		if (filial.ID === SPO_FILIAL_ID) {
+			yield sagaEffects.put(
+				priemAdmTypesTrnActions.trigger({ filial, eduLevel: educLevel, inst: institute }),
+			);
+		} else {
 			yield sagaEffects.put(priemDirectionsTrnActions.trigger(filial, educLevel, institute));
 		}
 	}),
@@ -61,7 +67,7 @@ export const applicationFormSagas = [
 		);
 	}),
 	sagaEffects.takeEvery(newPriemAppAddedAction, function* () {
-		const { filial, institute, direction, payForms, educForms } = yield sagaEffects.select(
+		const { filial, institute, direction, payForms, educForms, admType } = yield sagaEffects.select(
 			applicationsFormSelector,
 		);
 		const key = guid();
@@ -69,7 +75,15 @@ export const applicationFormSagas = [
 		for (const educ of educForms) {
 			for (const pay of payForms) {
 				yield sagaEffects.put(
-					priemAdmGroupsTransactionActions.trigger(filial, institute, direction, educ, pay, key),
+					priemAdmGroupsTransactionActions.trigger(
+						filial,
+						institute,
+						direction,
+						educ,
+						pay,
+						admType,
+						key,
+					),
 				);
 			}
 		}

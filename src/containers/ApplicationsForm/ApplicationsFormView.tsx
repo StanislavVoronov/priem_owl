@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { isEmptyArray, isNotEmptyArray, ITransaction, prop } from '@black_bird/utils';
-import { IAdmDictionaryItem, IDictionary, SPO_EDU_LEVEL_ID } from '$common';
+import { IAdmDictionaryItem, IDictionary, SPO_FILIAL_ID } from '$common';
 import { ApplicationsTable } from './components';
 
 import classes from './styles.module.css';
@@ -89,9 +89,9 @@ const ApplicationsFormView = (props: IProps) => {
 		? new Set([direction.ID, ...applications.map((item) => item.dir.ID)]).size > 3
 		: false;
 
-	const spoVisiable = educLevel?.ID === SPO_EDU_LEVEL_ID;
+	const spoVisiable = filial?.ID === SPO_FILIAL_ID;
 
-	console.log("educLevel", educLevel);
+	console.log('educLevel', educLevel);
 
 	return (
 		<Column>
