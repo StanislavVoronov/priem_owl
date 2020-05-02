@@ -5,28 +5,16 @@ interface IPriemDirectionsResponse {
 	NAME: string;
 }
 
-interface IPriemDirectionsRequest {
+interface IPayload {
 	filial: number;
 	inst: number;
-	educLevel: number;
+	eduLevel: number;
 	noPayForms: number[];
+	admType: number;
 }
 
-export const priemDirectionRest = (
-	filial: number,
-	educLevel: number,
-	inst: number,
-	noPayForms: number[] = [16, 20],
-) => {
-	const payload = {
-		filial,
-		inst,
-		educLevel,
-		noPayForms,
-	};
-
-	return PriemApi.select<IPriemDirectionsRequest, IPriemDirectionsResponse>(
+export const priemDirectionRest = (payload: IPayload) =>
+	PriemApi.select<IPayload, IPriemDirectionsResponse>(
 		PRIEM_API_NAMES.FetchPriemDirections,
 		payload,
 	);
-};

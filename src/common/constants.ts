@@ -143,3 +143,5 @@ export const APPLICATION_FLOW = 2;
 export const FILE_MAX_SIZE = 5;
 
 export const TYPE_DOCS = ['jpeg', 'jpg'];
+
+export const SPO_EDU_LEVEL_ID = 34;

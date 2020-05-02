@@ -33,14 +33,12 @@ export const priemAdmGroupsTransactionSelector = createSelector(
 	(state, id) => state.priemAdmGroups[id],
 );
 
-export const priemAdmGroupsSaga = sagaEffects.rest(
-	priemAdmGroupsTransactionActions,
-	({ payload }) =>
-		priemAdmGroupsRest(
-			payload.filial.ID,
-			payload.inst.ID,
-			payload.direction.ID,
-			payload.educForm.ID,
-			payload.payForm.ID,
-		),
+export const priemAdmGroupsSaga = sagaEffects.rest(priemAdmGroupsTransactionActions, (payload) =>
+	priemAdmGroupsRest(
+		payload.filial.ID,
+		payload.inst.ID,
+		payload.direction.ID,
+		payload.educForm.ID,
+		payload.payForm.ID,
+	),
 );

@@ -5,20 +5,17 @@ interface IFetchResponse {
 	NAME: string;
 }
 
-interface IFetchRequest {
+interface IPayload {
 	filial: number;
 	inst: number;
 	dir: number;
 	noPayForms: number[];
+	admType: number;
 }
 
-export const priemEducFormsRest = (filial: number, inst: number, dir: number, noPayForms: number[] = [16, 20]) => {
-	const payload = {
-		filial,
-		inst,
-		dir,
-		noPayForms,
-	};
-
-	return PriemApi.select<IFetchRequest, IFetchResponse>(PRIEM_API_NAMES.FetchPriemEducationForms, payload);
+export const priemEducFormsRest = (payload: IPayload) => {
+	return PriemApi.select<IPayload, IFetchResponse>(
+		PRIEM_API_NAMES.FetchPriemEducationForms,
+		payload,
+	);
 };

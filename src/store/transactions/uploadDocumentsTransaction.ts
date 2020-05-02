@@ -27,7 +27,6 @@ export const uploadDocumentsTransactionSelector = createSelector(
 	(state: ITransactionsState) => state.uploadDocuments,
 );
 
-export const uploadDocumentsSaga = sagaEffects.rest(
-	uploadDocumentTransactionActions,
-	({ payload }) => uploadDocumentRest(payload.document),
+export const uploadDocumentsSaga = sagaEffects.rest(uploadDocumentTransactionActions, (payload) =>
+	uploadDocumentRest(payload.document),
 );

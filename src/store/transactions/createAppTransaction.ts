@@ -41,6 +41,6 @@ export const createAppTransactionSelector = createSelector(
 	},
 );
 
-export const createApplicationSaga = sagaEffects.rest(createAppTransactionActions, ({ payload }) =>
+export const createApplicationSaga = sagaEffects.rest(createAppTransactionActions, (payload) =>
 	createApplicationRest(payload.adm, payload.prof, payload.priority, APPLICATION_FLOW),
 );

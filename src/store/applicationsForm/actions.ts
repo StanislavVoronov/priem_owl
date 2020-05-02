@@ -49,6 +49,10 @@ export const applicationDeletedAction = createAction(
 	`${NAMESPACE}/APPLICATION_DELETED`,
 	(index: number) => index,
 );
+export const onChangeAdmTypeAction = createAction(
+	`${NAMESPACE}/ON_CHANGE_ADM_TYPE`,
+	(field: IFormField<IDictionary>) => field.value,
+);
 
 export const newPriemAppAddedAction = createAction(`${NAMESPACE}/NEW_PRIEM_APPLICATION_ADDED`);
 

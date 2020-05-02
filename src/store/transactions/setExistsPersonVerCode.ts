@@ -28,5 +28,5 @@ export const setExistPersonVerCodeTrnSelector = createSelector(
 
 export const setExistPersonVerCodeTrnSaga = sagaEffects.rest(
 	setExistPersonVerCodeTrnActions,
-	({ payload }) => setExistPersonVerCodeRest(payload.npId, payload.code),
+	(payload) => setExistPersonVerCodeRest(payload.npId, payload.code),
 );

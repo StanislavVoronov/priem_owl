@@ -1,4 +1,4 @@
-import { IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
+import { IAdmDictionaryItem, IDictionary, TRANSACTION_NAMES } from '$common';
 import {
 	createSelector,
 	createTransactionActions,
@@ -7,7 +7,7 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { priemInstRest } from '$rests';
-import { disabledPayFormSelector } from '../selectors';
+import { applicationAmdTypeSelector, disabledPayFormSelector } from '../selectors';
 import { transactionSelector } from './selectors';
 import { priemEducLevelsTrnActions } from './priemEducLevelsTransaction';
 
@@ -25,8 +25,12 @@ export const priemInstitutesTransactionSelector = createSelector(
 	prop('priemInstitutes'),
 );
 
-export const priemInstsSaga = sagaEffects.rest(priemInstitutesTrnActions, function* ({ payload }) {
-	const payForms = yield sagaEffects.select(disabledPayFormSelector);
+export const priemInstsSaga = sagaEffects.rest(priemInstitutesTrnActions, function* (payload) {
+	const noPayForms: number[] = yield sagaEffects.select(disabledPayFormSelector);
 
-	return yield priemInstRest(payload.filial.ID, payload.eduLevel.ID, payForms);
+	return yield priemInstRest({
+		filial: payload.filial.ID,
+		eduLevel: payload.eduLevel.ID,
+		noPayForms,
+	});
 });

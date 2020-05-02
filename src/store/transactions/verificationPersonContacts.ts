@@ -21,7 +21,6 @@ export const verPersonContactsTrnSelector = createSelector(transactionSelector, 
 	result: state.verPersonContacts.result[0],
 }));
 
-export const verPersonContactsTrnSaga = sagaEffects.rest(
-	verPersonContactsTrnActions,
-	({ payload }) => verPersonContactsRest(payload.npId),
+export const verPersonContactsTrnSaga = sagaEffects.rest(verPersonContactsTrnActions, (payload) =>
+	verPersonContactsRest(payload.npId),
 );

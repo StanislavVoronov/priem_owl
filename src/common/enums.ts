@@ -6,6 +6,7 @@ export enum EDictionaryNameList {
 	Governments = 'directory_goverments',
 	PreviousEducation = 'directory_prev_educations',
 	CheatTypes = 'directory_cheat_types',
+	SpoTypes = 'directory_admission_type',
 }
 
 export enum Gender {

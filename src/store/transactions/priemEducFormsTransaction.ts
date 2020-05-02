@@ -1,4 +1,4 @@
-import { IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
+import { IAdmDictionaryItem, IDictionary, TRANSACTION_NAMES } from '$common';
 import {
 	createSelector,
 	createTransactionActions,
@@ -8,7 +8,7 @@ import {
 } from '@black_bird/utils';
 import { ITransactionsState } from './transactionsModels';
 import { priemEducFormsRest } from '$rests';
-import { disabledPayFormSelector } from '../selectors';
+import { applicationAmdTypeSelector, disabledPayFormSelector } from '../selectors';
 import { transactionSelector } from './selectors';
 import { priemProfilesTransactionActions } from './priemProfilesTransaction';
 
@@ -36,15 +36,17 @@ export const priemEducFormsTransactionSelector = createSelector(
 	prop('priemEducForms'),
 );
 
-export const educFormsSaga = sagaEffects.rest(priemEducFormsTransactionActions, function* ({
+export const educFormsSaga = sagaEffects.rest(priemEducFormsTransactionActions, function* (
 	payload,
-}) {
-	const payForms = yield sagaEffects.select(disabledPayFormSelector);
+) {
+	const noPayForms: number[] = yield sagaEffects.select(disabledPayFormSelector);
+	const admType: IDictionary = yield sagaEffects.select(applicationAmdTypeSelector);
 
-	return yield priemEducFormsRest(
-		payload.filial.ID,
-		payload.inst.ID,
-		payload.direction.ID,
-		payForms,
-	);
+	return yield priemEducFormsRest({
+		filial: payload.filial.ID,
+		inst: payload.inst.ID,
+		dir: payload.direction.ID,
+		noPayForms,
+		admType: admType.id,
+	});
 });

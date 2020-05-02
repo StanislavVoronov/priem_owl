@@ -15,6 +15,6 @@ export const createPersonTransactionSelector = createSelector(
 	prop('createPerson'),
 );
 
-export const createPersonSaga = sagaEffects.rest(createPersonTransactionActions, ({ payload }) =>
+export const createPersonSaga = sagaEffects.rest(createPersonTransactionActions, (payload) =>
 	createPersonRest(payload),
 );

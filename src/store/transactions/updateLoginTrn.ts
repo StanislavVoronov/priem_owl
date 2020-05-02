@@ -20,6 +20,6 @@ export const updateLoginTransactionSelector = createSelector(
 	(state) => state.updatePhones,
 );
 
-export const updateLoginSaga = sagaEffects.rest(updateLoginTrnActions, ({ payload }) =>
+export const updateLoginSaga = sagaEffects.rest(updateLoginTrnActions, (payload) =>
 	updateLoginRest(payload),
 );

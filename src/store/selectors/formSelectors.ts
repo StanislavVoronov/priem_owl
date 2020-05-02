@@ -37,9 +37,13 @@ export const applicationsFormSelector = (state: IRootState) => {
 	return state.applicationsForm;
 };
 
-export const disabledPayFormSelector = (state: IRootState) => {
-	return state.applicationsForm.disabledPayForms;
-};
+export const disabledPayFormSelector = createSelector(applicationsFormSelector, (state) => {
+	return state.disabledPayForms;
+});
+
+export const applicationAmdTypeSelector = createSelector(applicationsFormSelector, (state) => {
+	return state.admType;
+});
 
 export const getLigotaDocument = createSelector(documentsFormSelector, (data) => {
 	return data.documents.find((item) => item.cheatType && item.cheatType.id);

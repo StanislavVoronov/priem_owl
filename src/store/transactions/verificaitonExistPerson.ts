@@ -20,6 +20,6 @@ export const verPersonTrnActions = createTransactionActions(
 export const verPersonReducer = createTransactionReducer(verPersonTrnActions);
 export const verPersonTrnSelector = createSelector(transactionSelector, prop('verNp'));
 
-export const verPersonTrnSaga = sagaEffects.rest(verPersonTrnActions, ({ payload }) =>
+export const verPersonTrnSaga = sagaEffects.rest(verPersonTrnActions, (payload) =>
 	verNpRest(payload.npId, payload.type),
 );

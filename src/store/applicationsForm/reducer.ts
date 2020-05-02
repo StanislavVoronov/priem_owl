@@ -12,7 +12,7 @@ import {
 	disabledFreePayFormAction,
 	openLigotaPriemAction,
 	closeLigotaPriemAction,
-	submitApplicationFormAction,
+	onChangeAdmTypeAction,
 } from './actions';
 import { combineReducers, createReducer, forAction } from '@black_bird/utils';
 import { IAdmGroup } from './models';
@@ -35,6 +35,17 @@ const profileReducer = createReducer<IAdmDictionaryItem[]>(
 	[],
 	{
 		cleanActions: [onChangeEducLevelAction, onChangeDirectionAction, newAdmGroupsAddedAction],
+	},
+);
+
+const admTypeReducer = createReducer<IDictionary>(
+	[forAction(onChangeAdmTypeAction, (state, payload) => payload)],
+	{
+		id: 0,
+		name: 'Стандартный',
+	},
+	{
+		cleanActions: [onChangeEducLevelAction, onChangeFilialAction],
 	},
 );
 
@@ -120,6 +131,7 @@ const applicationsFormReducer = combineReducers<IApplicationForm>({
 	institute: instituteReducer,
 	applications: admGroupsReducer,
 	disabledPayForms: availablePayFormsReducers,
+	admType: admTypeReducer,
 });
 
 export default applicationsFormReducer;

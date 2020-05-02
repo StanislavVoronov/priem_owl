@@ -25,8 +25,10 @@ import {
 	applicationDeletedAction,
 	IAdmGroup,
 	IAdmTransactionList,
+	getAmdTypesDictionary,
+	onChangeAdmTypeAction,
 } from '$store';
-import { IAdmDictionaryItem } from '$common';
+import { IAdmDictionaryItem, IDictionary } from '$common';
 import ApplicationsFormView from './ApplicationsFormView';
 import { disabledAddButtonSelector } from './selectors';
 
@@ -52,6 +54,8 @@ interface IStateToProps {
 	payFormDictionary: IAdmTransactionList;
 	applications: IAdmGroup[];
 	disabledAddButton: boolean;
+
+	admTypesDictionary: ITransaction<IDictionary[]>;
 }
 
 interface IDispatchToProps {
@@ -66,6 +70,7 @@ interface IDispatchToProps {
 	addPriemApplication: () => void;
 	submitApplicationsForm: () => void;
 	onDeleteApplication: (index: number) => void;
+	onChangeAdmType: (admType: IFormField<IDictionary>) => void;
 }
 
 type Props = IStateToProps & IDispatchToProps;
@@ -88,6 +93,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) 
 	const profileDictionary = priemProfilesTransactionSelector(state);
 	const educFormDictionary = priemEducFormsTransactionSelector(state);
 	const payFormDictionary = priemPayFormsTransactionSelector(state);
+	const admTypesDictionary = getAmdTypesDictionary(state);
 
 	const disabledAddButton = disabledAddButtonSelector(state);
 
@@ -119,6 +125,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) 
 		payForms,
 		applications,
 		disabledAddButton,
+		admTypesDictionary,
 	};
 };
 
@@ -129,6 +136,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {
 	onChangeEducLevel: onChangeEducLevelAction,
 	onChangeDirection: onChangeDirectionAction,
 	onChangeProfiles: onChangeProfilesAction,
+	onChangeAdmType: onChangeAdmTypeAction,
 	onChangeEducForms: onChangeEducFormsAction,
 	onChangePayForms: onChangePayFormsAction,
 	addPriemApplication: newPriemAppAddedAction,

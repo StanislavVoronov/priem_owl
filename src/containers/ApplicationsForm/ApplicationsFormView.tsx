@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { isEmptyArray, isNotEmptyArray, ITransaction, prop } from '@black_bird/utils';
-import { IAdmDictionaryItem } from '$common';
+import { IAdmDictionaryItem, IDictionary, SPO_EDU_LEVEL_ID } from '$common';
 import { ApplicationsTable } from './components';
 
 import classes from './styles.module.css';
@@ -42,6 +42,8 @@ interface IProps {
 	addPriemApplication: () => void;
 	submitApplicationsForm: () => void;
 	onDeleteApplication: (index: number) => void;
+	admTypesDictionary: ITransaction<IDictionary[]>;
+	onChangeAdmType: (field: IFormField<IDictionary>) => void;
 }
 
 const getId: any = prop('ID');
@@ -78,12 +80,18 @@ const ApplicationsFormView = (props: IProps) => {
 		submitApplicationsForm,
 		onDeleteApplication,
 		disabledAddButton,
+		admTypesDictionary,
+		onChangeAdmType,
 	} = props;
 
 	const nextButtonDisabled = isEmptyArray(applications);
 	const countExceeded = direction
 		? new Set([direction.ID, ...applications.map((item) => item.dir.ID)]).size > 3
 		: false;
+
+	const spoVisiable = educLevel?.ID === SPO_EDU_LEVEL_ID;
+
+	console.log("educLevel", educLevel);
 
 	return (
 		<Column>
@@ -130,6 +138,23 @@ const ApplicationsFormView = (props: IProps) => {
 					placeholder={`Выберите институт`}
 					title={'Институт'}
 					loading={instituteDictionary.isFetching}
+				/>
+			)}
+
+			{spoVisiable && (
+				<Select
+					isCleanable
+					required
+					value={institute}
+					onChange={onChangeAdmType}
+					getOptionValue={getId}
+					error={admTypesDictionary.exception?.comment}
+					getOptionLabel={prop('name')}
+					name="admType"
+					options={admTypesDictionary.result}
+					placeholder={`Выберите значение`}
+					title={'Класс'}
+					loading={admTypesDictionary.isFetching}
 				/>
 			)}
 

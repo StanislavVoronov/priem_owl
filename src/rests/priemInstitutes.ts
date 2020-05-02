@@ -3,17 +3,11 @@ interface IFetchResponse {
 	ID: number;
 	NAME: string;
 }
-interface IFetchRequest {
+
+interface IPayload {
 	filial: number;
-	educLevel: number;
+	eduLevel: number;
 	noPayForms: number[];
 }
-export const priemInstRest = (filialId: number, eduLevelId: number, noPayForms: number[] = [16, 20]) => {
-	const payload = {
-		filial: filialId,
-		educLevel: eduLevelId,
-		noPayForms,
-	};
-
-	return PriemApi.select<IFetchRequest, IFetchResponse>(PRIEM_API_NAMES.FetchPriemInstitutes, payload);
-};
+export const priemInstRest = (payload: IPayload) =>
+	PriemApi.select<IPayload, IFetchResponse>(PRIEM_API_NAMES.FetchPriemInstitutes, payload);

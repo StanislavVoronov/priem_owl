@@ -52,6 +52,10 @@ export const getPersonTypesDocDictionary = createSelector(dictionaryStateSelecto
 	return DEFAULT_TRANSACTION;
 });
 
+export const getAmdTypesDictionary = createSelector(dictionaryStateSelector, (state) => {
+	return state[EDictionaryNameList.SpoTypes] || DEFAULT_TRANSACTION;
+});
+
 export const getEducTypeDocDictionary = createSelector(dictionaryStateSelector, (state) => {
 	const transaction = state[EDictionaryNameList.DocSubTypes];
 	if (transaction) {

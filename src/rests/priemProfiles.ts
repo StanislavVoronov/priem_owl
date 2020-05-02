@@ -5,20 +5,25 @@ interface IPriemProfilesResponse {
 	NAME: string;
 }
 
-interface IPriemProfilesRequest {
+interface IPayload {
 	filial: number;
 	inst: number;
 	dir: number;
 	noPayForms: number[];
+	admType: number;
 }
 
-export const priemProfilesRest = (filial: number, inst: number, dir: number, noPayForms: number[] = [16, 20]) => {
+export const priemProfilesRest = ({ filial, inst, dir, noPayForms, admType }: IPayload) => {
 	const payload = {
 		filial,
 		inst,
 		dir,
 		noPayForms,
+		admType,
 	};
 
-	return PriemApi.select<IPriemProfilesRequest, IPriemProfilesResponse>(PRIEM_API_NAMES.FetchPriemProfiles, payload);
+	return PriemApi.select<IPayload, IPriemProfilesResponse>(
+		PRIEM_API_NAMES.FetchPriemProfiles,
+		payload,
+	);
 };

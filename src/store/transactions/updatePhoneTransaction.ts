@@ -27,6 +27,6 @@ export const updatePhoneTransactionSelector = createSelector(
 	(state: ITransactionsState, phone: string) => state.updatePhones[phone],
 );
 
-export const updatePhoneSaga = sagaEffects.rest(updatePhoneTransactionActions, ({ payload }) =>
+export const updatePhoneSaga = sagaEffects.rest(updatePhoneTransactionActions, (payload) =>
 	updatePhoneRest(payload.phone, payload.type),
 );

@@ -43,7 +43,7 @@ const EducationFormView = (props: IProps) => {
 							value={values.firstHighEducation}
 							onChange={onChangeFirstHigh}
 							name="firstHighEducation"
-							label="Получение высшего образования впервые"
+							label="Получение среднего специального/высшего образования впервые"
 						/>
 						<Select
 							onChange={onChange}
