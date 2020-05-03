@@ -6,7 +6,6 @@ import {
 	createTransactionReducer,
 	sagaEffects,
 } from '@black_bird/utils';
-import { ITransactionsState } from './transactionsModels';
 import { priemEducFormsRest } from '$rests';
 import { applicationAmdTypeSelector, disabledPayFormSelector } from '../selectors';
 import { transactionSelector } from './selectors';
@@ -21,9 +20,12 @@ export const priemEducFormsTransactionActions = createTransactionActions(
 	}),
 );
 
-export const priemEducFormsReducer = createTransactionReducer(priemEducFormsTransactionActions, {
-	cleanActions: [priemProfilesTransactionActions.trigger],
-});
+export const priemEducFormsReducer = createTransactionReducer<IAdmDictionaryItem[]>(
+	priemEducFormsTransactionActions,
+	{
+		cleanActions: [priemProfilesTransactionActions.trigger],
+	},
+);
 
 export const priemEducFormsTransactionSelector = createSelector(
 	transactionSelector,

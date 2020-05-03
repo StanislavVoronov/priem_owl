@@ -12,7 +12,7 @@ import {
 	uploadDocumentsTransactionSelector,
 	verAccountFormSelector,
 } from '$store';
-import { AddressType, IContactsForm, IVerAccountForm } from '$common';
+import { AddressType, IVerAccountForm } from '$common';
 import VerAccountFormView from './VerAccountFormView';
 import { Form, IFormField, IFormProps } from '@black_bird/components';
 import { IException, isEmpty, ITransaction, prop, TransactionStatus } from '@black_bird/utils';

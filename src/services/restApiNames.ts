@@ -13,7 +13,6 @@ export enum PRIEM_API_NAMES {
 	FetchPriemPayForms = 'ADM_FIN',
 	FetchPriemEducationForms = 'ADM_FOE',
 	FetchAdmTypes = 'ADM_TYPES',
-
 	FetchPriemGroups = 'ADM_ID',
 	AddPriemApplication = 'iDATA_APPLICATIONS',
 	PriemLogout = 'enrollLogout',

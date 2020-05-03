@@ -28,9 +28,12 @@ export const priemPayFormsTransactionActions = createTransactionActions(
 	}),
 );
 
-export const priemPayFormsReducer = createTransactionReducer(priemPayFormsTransactionActions, {
-	cleanActions: [priemEducFormsTransactionActions.trigger],
-});
+export const priemPayFormsReducer = createTransactionReducer<IAdmDictionaryItem[]>(
+	priemPayFormsTransactionActions,
+	{
+		cleanActions: [priemEducFormsTransactionActions.trigger],
+	},
+);
 
 export const priemPayFormsTransactionSelector = createSelector(
 	transactionSelector,

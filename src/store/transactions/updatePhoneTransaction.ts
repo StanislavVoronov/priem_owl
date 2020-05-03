@@ -6,15 +6,15 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { PhoneType, TRANSACTION_NAMES } from '$common';
-import { ITransactionsState } from './transactionsModels';
 import { updatePhoneRest } from '$rests';
+import { ITransactionsState } from '../transactionReducer';
 
 export const updatePhoneTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.UpdatePhone,
 	(phone: string, type: PhoneType) => ({ phone, type }),
 );
 
-export const updatePhoneTransactionReducer = createTransactionReducer(
+export const updatePhoneTransactionReducer = createTransactionReducer<string, { type: string }>(
 	updatePhoneTransactionActions,
 	{
 		mapToKey: (payload) => payload.type,
@@ -23,7 +23,7 @@ export const updatePhoneTransactionReducer = createTransactionReducer(
 
 export const updatePhoneTransactionSelector = createSelector(
 	prop('transactions'),
-	(state: any, key: string) => key,
+	(state: unknown, key: string) => key,
 	(state: ITransactionsState, phone: string) => state.updatePhones[phone],
 );
 

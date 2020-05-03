@@ -5,7 +5,7 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { TRANSACTION_NAMES } from '$common';
-import { verPersonContactsRest } from '$rests';
+import { IVerPersonContactsResponse, verPersonContactsRest } from '$rests';
 import { transactionSelector } from './selectors';
 
 export const verPersonContactsTrnActions = createTransactionActions(
@@ -14,7 +14,9 @@ export const verPersonContactsTrnActions = createTransactionActions(
 		npId,
 	}),
 );
-export const verPersonContactsReducer = createTransactionReducer(verPersonContactsTrnActions);
+export const verPersonContactsReducer = createTransactionReducer<IVerPersonContactsResponse>(
+	verPersonContactsTrnActions,
+);
 
 export const verPersonContactsTrnSelector = createSelector(transactionSelector, (state) => ({
 	...state.verPersonContacts,

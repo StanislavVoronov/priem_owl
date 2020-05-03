@@ -1,5 +1,6 @@
-import { ITransactionsState } from '$store';
 import { ITransaction } from '@black_bird/utils';
+
+import { ITransactionsState } from './transactionReducer';
 
 import {
 	IEducationForm,
@@ -10,6 +11,7 @@ import {
 	IVerAccountForm,
 	IApplicationForm,
 	IEnrollState,
+	IAdmDictionaryItem,
 } from '$common';
 
 export interface IRootState {
@@ -24,3 +26,5 @@ export interface IRootState {
 	applicationsForm: IApplicationForm;
 	transactions: ITransactionsState;
 }
+
+export type IAdmTransactionList = ITransaction<IAdmDictionaryItem[]>;

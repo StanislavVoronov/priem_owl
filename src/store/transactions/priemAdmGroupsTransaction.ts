@@ -1,8 +1,9 @@
 import { createTransactionActions, createTransactionReducer, sagaEffects } from '@black_bird/utils';
 import { createSelector } from '@black_bird/utils';
-import { IAdmDictionaryItem, IDictionary, TRANSACTION_NAMES } from '$common';
+import { IAdmDictionaryItem, IDictionary, IPriemGroup, TRANSACTION_NAMES } from '$common';
 import { priemAdmGroupsRest } from '$rests';
 import { transactionSelector } from './selectors';
+import { IAdmGroup } from '../applicationsForm';
 
 export const priemAdmGroupsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemGroups,
@@ -25,9 +26,12 @@ export const priemAdmGroupsTransactionActions = createTransactionActions(
 	}),
 );
 
-export const priemAdmGroupsReducer = createTransactionReducer(priemAdmGroupsTransactionActions, {
-	mapToKey: (payload) => payload.admGroup,
-});
+export const priemAdmGroupsReducer = createTransactionReducer<IPriemGroup[], { admGroup: string }>(
+	priemAdmGroupsTransactionActions,
+	{
+		mapToKey: (payload) => payload.admGroup,
+	},
+);
 
 export const priemAdmGroupsTransactionSelector = createSelector(
 	transactionSelector,

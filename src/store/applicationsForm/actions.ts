@@ -51,7 +51,7 @@ export const applicationDeletedAction = createAction(
 );
 export const onChangeAdmTypeAction = createAction(
 	`${NAMESPACE}/ON_CHANGE_ADM_TYPE`,
-	(field: IFormField<IDictionary>) => field.value,
+	(field: IFormField<IAdmDictionaryItem>) => field.value,
 );
 
 export const newPriemAppAddedAction = createAction(`${NAMESPACE}/NEW_PRIEM_APPLICATION_ADDED`);

@@ -1,10 +1,17 @@
 import { IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
-import { createTransactionActions, createTransactionReducer, sagaEffects } from '@black_bird/utils';
+import {
+	createSelector,
+	createTransactionActions,
+	createTransactionReducer,
+	prop,
+	sagaEffects,
+} from '@black_bird/utils';
 import { priemAdmTypeRest } from '$rests';
 import { disabledPayFormSelector } from '../selectors';
 import { priemFilialsTrnActions } from './priemFilialsTransaction';
 import { onChangeEducLevelAction, onChangeFilialAction } from '../applicationsForm';
-import { priemEducFormsTransactionActions } from '$store';
+import { priemEducFormsTransactionActions } from '../transactions';
+import { transactionSelector } from './selectors';
 
 interface IAdmTypePayload {
 	filial: IAdmDictionaryItem;
@@ -16,14 +23,19 @@ export const priemAdmTypesTrnActions = createTransactionActions(
 	(payload: IAdmTypePayload) => payload,
 );
 
-export const priemAdmTypesReducer = createTransactionReducer(priemAdmTypesTrnActions, {
-	cleanActions: [
-		priemFilialsTrnActions.trigger,
-		onChangeFilialAction,
-		onChangeEducLevelAction,
-		priemEducFormsTransactionActions.trigger,
-	],
-});
+export const priemAdmTypesReducer = createTransactionReducer<IAdmDictionaryItem[]>(
+	priemAdmTypesTrnActions,
+	{
+		cleanActions: [
+			priemFilialsTrnActions.trigger,
+			onChangeFilialAction,
+			onChangeEducLevelAction,
+			priemEducFormsTransactionActions.trigger,
+		],
+	},
+);
+
+export const priemAdmTypesTrnSelector = createSelector(transactionSelector, prop('priemAdmTypes'));
 
 export const priemAdmTypeSaga = sagaEffects.rest(priemAdmTypesTrnActions, function* (payload) {
 	const noPayForms: number[] = yield sagaEffects.select(disabledPayFormSelector);

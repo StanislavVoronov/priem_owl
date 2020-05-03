@@ -5,7 +5,7 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { TRANSACTION_NAMES } from '$common';
-import { createLoginRest } from '$rests';
+import { createLoginRest, ICreateLoginResponse } from '$rests';
 import { transactionSelector } from './selectors';
 
 export const createLoginTransactionActions = createTransactionActions(
@@ -13,7 +13,9 @@ export const createLoginTransactionActions = createTransactionActions(
 	(login: string, password: string) => ({ login, password }),
 );
 
-export const createLoginReducer = createTransactionReducer(createLoginTransactionActions);
+export const createLoginReducer = createTransactionReducer<ICreateLoginResponse>(
+	createLoginTransactionActions,
+);
 
 export const createLoginTransactionSelector = createSelector(transactionSelector, (state) => {
 	const { isFetching, exception, result } = state.createLogin;

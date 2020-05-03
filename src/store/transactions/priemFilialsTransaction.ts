@@ -6,16 +6,19 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { priemFilialsRest } from '$rests';
-import { TRANSACTION_NAMES } from '$common';
+import { IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
 import { disabledPayFormSelector } from '../selectors';
 import { transactionSelector } from './selectors';
 import { submitApplicationFormAction } from '../applicationsForm';
 
 export const priemFilialsTrnActions = createTransactionActions(TRANSACTION_NAMES.FetchPriemFilials);
 
-export const priemFilialsReducer = createTransactionReducer(priemFilialsTrnActions, {
-	cleanActions: [submitApplicationFormAction],
-});
+export const priemFilialsReducer = createTransactionReducer<IAdmDictionaryItem[]>(
+	priemFilialsTrnActions,
+	{
+		cleanActions: [submitApplicationFormAction],
+	},
+);
 
 export const priemFilialsTransactionSelector = createSelector(
 	transactionSelector,

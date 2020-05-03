@@ -5,7 +5,6 @@ import {
 	prop,
 	sagaEffects,
 } from '@black_bird/utils';
-import { ITransactionsState } from './transactionsModels';
 import { createApplicationRest } from '$rests';
 import { IAdmDictionaryItem, TRANSACTION_NAMES, APPLICATION_FLOW, IAdmGroupItem } from '$common';
 import { transactionSelector } from './selectors';
@@ -20,15 +19,16 @@ export const createAppTransactionActions = createTransactionActions(
 	}),
 );
 
-export const createApplicationReducer = createTransactionReducer(createAppTransactionActions, {
-	mapToKey: (payload) => payload.app,
-});
+export const createApplicationReducer = createTransactionReducer<string, { app: string }>(
+	createAppTransactionActions,
+	{
+		mapToKey: (payload) => payload.app,
+	},
+);
 
 export const createAppsTransactionSelector = createSelector(
-	prop('transactions'),
-	(state: ITransactionsState) => {
-		return state.createApplications;
-	},
+	transactionSelector,
+	prop('createApplications'),
 );
 
 export const createAppTransactionSelector = createSelector(

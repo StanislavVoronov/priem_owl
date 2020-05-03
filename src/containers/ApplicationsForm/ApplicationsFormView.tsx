@@ -15,7 +15,7 @@ interface IProps {
 	instituteDictionary: IAdmTransactionList;
 	filial: IAdmDictionaryItem | null;
 	institute: IAdmDictionaryItem | null;
-
+	admType: IAdmDictionaryItem;
 	onChangeFilial: (item: IFormField<IAdmDictionaryItem>) => void;
 	onChangeInst: (item: IFormField<IAdmDictionaryItem>) => void;
 	onChangeEducLevel: (item: IFormField<IAdmDictionaryItem>) => void;
@@ -42,8 +42,8 @@ interface IProps {
 	addPriemApplication: () => void;
 	submitApplicationsForm: () => void;
 	onDeleteApplication: (index: number) => void;
-	admTypesDictionary: ITransaction<IDictionary[]>;
-	onChangeAdmType: (field: IFormField<IDictionary>) => void;
+	admTypesDictionary: ITransaction<IAdmDictionaryItem[]>;
+	onChangeAdmType: (field: IFormField<IAdmDictionaryItem>) => void;
 }
 
 const getId: any = prop('ID');
@@ -82,6 +82,7 @@ const ApplicationsFormView = (props: IProps) => {
 		disabledAddButton,
 		admTypesDictionary,
 		onChangeAdmType,
+		admType,
 	} = props;
 
 	const nextButtonDisabled = isEmptyArray(applications);
@@ -145,11 +146,11 @@ const ApplicationsFormView = (props: IProps) => {
 				<Select
 					isCleanable
 					required
-					value={institute}
+					value={admType}
 					onChange={onChangeAdmType}
 					getOptionValue={getId}
 					error={admTypesDictionary.exception?.comment}
-					getOptionLabel={prop('name')}
+					getOptionLabel={prop('NAME')}
 					name="admType"
 					options={admTypesDictionary.result}
 					placeholder={`Выберите значение`}

@@ -17,9 +17,12 @@ export const priemEducLevelsTrnActions = createTransactionActions(
 	(filial: IAdmDictionaryItem) => ({ filial }),
 );
 
-export const priemEducLevelsReducer = createTransactionReducer(priemEducLevelsTrnActions, {
-	cleanActions: [priemFilialsTrnActions.trigger, onChangeFilialAction],
-});
+export const priemEducLevelsReducer = createTransactionReducer<IAdmDictionaryItem[]>(
+	priemEducLevelsTrnActions,
+	{
+		cleanActions: [priemFilialsTrnActions.trigger, onChangeFilialAction],
+	},
+);
 
 export const priemEducLevelsTransactionSelector = createSelector(
 	transactionSelector,

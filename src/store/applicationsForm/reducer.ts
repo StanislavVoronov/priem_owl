@@ -38,11 +38,11 @@ const profileReducer = createReducer<IAdmDictionaryItem[]>(
 	},
 );
 
-const admTypeReducer = createReducer<IDictionary>(
+const admTypeReducer = createReducer<IAdmDictionaryItem>(
 	[forAction(onChangeAdmTypeAction, (state, payload) => payload)],
 	{
-		id: 0,
-		name: 'Стандартный',
+		ID: 0,
+		NAME: 'Стандартный',
 	},
 	{
 		cleanActions: [onChangeEducLevelAction, onChangeFilialAction],

@@ -19,9 +19,12 @@ export const priemProfilesTransactionActions = createTransactionActions(
 		direction,
 	}),
 );
-export const priemProfilesReducer = createTransactionReducer(priemProfilesTransactionActions, {
-	cleanActions: [priemDirectionsTrnActions.trigger],
-});
+export const priemProfilesReducer = createTransactionReducer<IAdmDictionaryItem[]>(
+	priemProfilesTransactionActions,
+	{
+		cleanActions: [priemDirectionsTrnActions.trigger],
+	},
+);
 
 export const priemProfilesTransactionSelector = createSelector(
 	transactionSelector,

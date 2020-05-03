@@ -6,7 +6,7 @@ import {
 } from '@black_bird/utils';
 import { TRANSACTION_NAMES } from '$common';
 import { IRegForm } from '$common';
-import { findPersonRest } from '$rests';
+import { findPersonRest, IFindPersonResponse } from '$rests';
 import { transactionSelector } from './selectors';
 
 export const findPersonTransactionActions = createTransactionActions(
@@ -14,7 +14,9 @@ export const findPersonTransactionActions = createTransactionActions(
 	(data: IRegForm) => ({ data }),
 );
 
-export const findPersonReducer = createTransactionReducer(findPersonTransactionActions);
+export const findPersonReducer = createTransactionReducer<IFindPersonResponse>(
+	findPersonTransactionActions,
+);
 
 export const isPersonFoundTransactionSelector = createSelector(transactionSelector, (state) => {
 	const { isFetching, exception, result } = state.findPerson;

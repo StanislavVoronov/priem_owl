@@ -34,6 +34,7 @@ export const applicationFormSagas = [
 	sagaEffects.takeEvery(onChangeInstAction, function* () {
 		const { filial, institute, educLevel } = yield sagaEffects.select(applicationsFormSelector);
 
+		console.log('filial', filial.ID === SPO_FILIAL_ID, filial);
 		if (filial.ID === SPO_FILIAL_ID) {
 			yield sagaEffects.put(
 				priemAdmTypesTrnActions.trigger({ filial, eduLevel: educLevel, inst: institute }),

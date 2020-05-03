@@ -9,12 +9,16 @@ export interface ICreateVerificationCodeRequest {
 	mobile_phone: string;
 }
 
-export interface ICreateVerificationCodeResponse {
+export interface ICreateVerCodeResponse {
 	id: number;
 	count: number;
 }
 
-export const createVerCodeRest = (email: string, mobilePhone: string, typeTransport?: VerificationMethod) => {
+export const createVerCodeRest = (
+	email: string,
+	mobilePhone: string,
+	typeTransport?: VerificationMethod,
+) => {
 	const payload: ICreateVerificationCodeRequest = {
 		email,
 		mobile_phone: mobilePhone,
@@ -26,7 +30,7 @@ export const createVerCodeRest = (email: string, mobilePhone: string, typeTransp
 		payload.not_use_email = 1;
 	}
 
-	return EnrollApi.post<ICreateVerificationCodeRequest, ICreateVerificationCodeResponse>(
+	return EnrollApi.post<ICreateVerificationCodeRequest, ICreateVerCodeResponse>(
 		ENROLL_API_NAMES.VerNewNp,
 		payload,
 	);

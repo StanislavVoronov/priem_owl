@@ -2,6 +2,7 @@ import {
 	createSelector,
 	createTransactionActions,
 	createTransactionReducer,
+	ITransaction,
 	prop,
 	sagaEffects,
 } from '@black_bird/utils';
@@ -14,9 +15,12 @@ export const updateAddressTransactionActions = createTransactionActions(
 	(address: string, kind: AddressType) => ({ address, kind }),
 );
 
-export const updateAddressesReducer = createTransactionReducer(updateAddressTransactionActions, {
-	mapToKey: (payload) => payload.kind,
-});
+export const updateAddressesReducer = createTransactionReducer<string, { kind: string }>(
+	updateAddressTransactionActions,
+	{
+		mapToKey: (payload) => payload.kind,
+	},
+);
 
 export const updateAddressTransactionSelector = createSelector(
 	transactionSelector,
