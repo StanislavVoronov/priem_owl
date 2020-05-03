@@ -54,6 +54,7 @@ export const onChangeAdmTypeAction = createAction(
 	(field: IFormField<IAdmDictionaryItem>) => field.value,
 );
 
+export const cleanDefaultAdmTypeAction = createAction(`${NAMESPACE}/CLEAN_DEFAULT_ADM_TYPE`);
 export const newPriemAppAddedAction = createAction(`${NAMESPACE}/NEW_PRIEM_APPLICATION_ADDED`);
 
 export const newAdmGroupsAddedAction = createAction(

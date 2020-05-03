@@ -25,11 +25,6 @@ export const FULL_DICTIONARY_LIST = [
 		columns: ['id', 'name', 'type', 'hide', 'complex'],
 	},
 	{
-		dictionary: EDictionaryNameList.SpoTypes,
-		columns: ['id', 'name'],
-		filter: (item: IDictionary) => item.id === 1 || item.id === 2,
-	},
-	{
 		dictionary: EDictionaryNameList.PreviousEducation,
 		columns: ['id', 'name'],
 	},

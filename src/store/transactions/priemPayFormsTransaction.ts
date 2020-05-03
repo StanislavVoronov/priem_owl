@@ -42,7 +42,7 @@ export const priemPayFormsTransactionSelector = createSelector(
 
 export const payFormsSaga = sagaEffects.rest(priemPayFormsTransactionActions, function* (payload) {
 	const noPayForms: number[] = yield sagaEffects.select(disabledPayFormSelector);
-	const admType: IDictionary = yield sagaEffects.select(applicationAmdTypeSelector);
+	const admType: IAdmDictionaryItem = yield sagaEffects.select(applicationAmdTypeSelector);
 
 	return yield priemPayFormsRest({
 		filial: payload.filial.ID,
@@ -50,6 +50,6 @@ export const payFormsSaga = sagaEffects.rest(priemPayFormsTransactionActions, fu
 		dir: payload.direction.ID,
 		educForms: payload.educForms.map((item) => item.ID),
 		noPayForms,
-		admType: admType.id,
+		admType: admType.ID,
 	});
 });

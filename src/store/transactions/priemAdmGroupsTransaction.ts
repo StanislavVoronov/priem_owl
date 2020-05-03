@@ -1,9 +1,8 @@
 import { createTransactionActions, createTransactionReducer, sagaEffects } from '@black_bird/utils';
 import { createSelector } from '@black_bird/utils';
-import { IAdmDictionaryItem, IDictionary, IPriemGroup, TRANSACTION_NAMES } from '$common';
+import { IAdmDictionaryItem, IPriemGroup, TRANSACTION_NAMES } from '$common';
 import { priemAdmGroupsRest } from '$rests';
 import { transactionSelector } from './selectors';
-import { IAdmGroup } from '../applicationsForm';
 
 export const priemAdmGroupsTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemGroups,
@@ -13,7 +12,7 @@ export const priemAdmGroupsTransactionActions = createTransactionActions(
 		direction: IAdmDictionaryItem,
 		educForm: IAdmDictionaryItem,
 		payForm: IAdmDictionaryItem,
-		admType: IDictionary,
+		admType: IAdmDictionaryItem,
 		admGroup: string,
 	) => ({
 		admGroup,
@@ -33,10 +32,15 @@ export const priemAdmGroupsReducer = createTransactionReducer<IPriemGroup[], { a
 	},
 );
 
-export const priemAdmGroupsTransactionSelector = createSelector(
+export const priemAdmGroupTransactionSelector = createSelector(
 	transactionSelector,
 	(_: any, id: string) => id,
 	(state, id) => state.priemAdmGroups[id],
+);
+
+export const priemAdmGroupsTrnSelector = createSelector(
+	transactionSelector,
+	(state) => state.priemAdmGroups,
 );
 
 export const priemAdmGroupsSaga = sagaEffects.rest(priemAdmGroupsTransactionActions, (payload) =>
@@ -46,6 +50,6 @@ export const priemAdmGroupsSaga = sagaEffects.rest(priemAdmGroupsTransactionActi
 		dir: payload.direction.ID,
 		educForm: payload.educForm.ID,
 		payForm: payload.payForm.ID,
-		admType: payload.admType.id,
+		admType: payload.admType.ID,
 	}),
 );

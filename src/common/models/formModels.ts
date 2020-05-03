@@ -59,7 +59,6 @@ export interface IApplication extends IPriemGroup {
 	educationForm: IDictionary;
 }
 export interface IApplicationForm {
-	// applications: IApplication[];
 	filial: IAdmDictionaryItem | null;
 	institute: IAdmDictionaryItem | null;
 	educLevel: IAdmDictionaryItem | null;
@@ -69,7 +68,7 @@ export interface IApplicationForm {
 	educForms: IAdmDictionaryItem[];
 	applications: IAdmGroup[];
 	disabledPayForms: number[];
-	admType: IAdmDictionaryItem;
+	admType: IAdmDictionaryItem | null;
 }
 export interface IRegForm {
 	lastName: string;

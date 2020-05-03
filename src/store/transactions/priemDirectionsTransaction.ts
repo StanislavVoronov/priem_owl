@@ -34,13 +34,13 @@ export const priemDirectionsTransactionSelector = createSelector(
 
 export const priemDirectionSaga = sagaEffects.rest(priemDirectionsTrnActions, function* (payload) {
 	const noPayForms: number[] = yield sagaEffects.select(disabledPayFormSelector);
-	const admType: IDictionary = yield sagaEffects.select(applicationAmdTypeSelector);
+	const admType: IAdmDictionaryItem = yield sagaEffects.select(applicationAmdTypeSelector);
 
 	return yield priemDirectionRest({
 		filial: payload.filial.ID,
 		eduLevel: payload.educLevel.ID,
 		inst: payload.inst.ID,
 		noPayForms,
-		admType: admType.id,
+		admType: admType.ID,
 	});
 });

@@ -13,6 +13,7 @@ import {
 	openLigotaPriemAction,
 	closeLigotaPriemAction,
 	onChangeAdmTypeAction,
+	cleanDefaultAdmTypeAction,
 } from './actions';
 import { combineReducers, createReducer, forAction } from '@black_bird/utils';
 import { IAdmGroup } from './models';
@@ -38,14 +39,17 @@ const profileReducer = createReducer<IAdmDictionaryItem[]>(
 	},
 );
 
-const admTypeReducer = createReducer<IAdmDictionaryItem>(
-	[forAction(onChangeAdmTypeAction, (state, payload) => payload)],
+const admTypeReducer = createReducer<IAdmDictionaryItem | null>(
+	[
+		forAction(onChangeAdmTypeAction, (state, payload) => payload),
+		forAction(cleanDefaultAdmTypeAction, (state) => null),
+	],
 	{
 		ID: 0,
 		NAME: 'Стандартный',
 	},
 	{
-		cleanActions: [onChangeEducLevelAction, onChangeFilialAction],
+		cleanActions: [onChangeEducLevelAction, onChangeFilialAction, onChangeInstAction],
 	},
 );
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { ITransaction } from '@black_bird/utils';
+import { IException, ITransaction } from '@black_bird/utils';
 import { IFormField } from '@black_bird/components';
 import {
 	IRootState,
@@ -27,6 +27,8 @@ import {
 	IAdmTransactionList,
 	onChangeAdmTypeAction,
 	priemAdmTypesTrnSelector,
+	priemAdmGroupsReducer,
+	priemAdmGroupsTrnSelector,
 } from '$store';
 import { IAdmDictionaryItem } from '$common';
 import ApplicationsFormView from './ApplicationsFormView';
@@ -54,8 +56,9 @@ interface IStateToProps {
 	payFormDictionary: IAdmTransactionList;
 	applications: IAdmGroup[];
 	disabledAddButton: boolean;
-	admType: IAdmDictionaryItem;
+	admType: IAdmDictionaryItem | null;
 	admTypesDictionary: ITransaction<IAdmDictionaryItem[]>;
+	applicationException: IException | null;
 }
 
 interface IDispatchToProps {
@@ -95,6 +98,9 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) 
 	const payFormDictionary = priemPayFormsTransactionSelector(state);
 	const admTypesDictionary = priemAdmTypesTrnSelector(state);
 	const disabledAddButton = disabledAddButtonSelector(state);
+	const applicationException = Object.values(priemAdmGroupsTrnSelector(state)).find(
+		(item) => item.exception,
+	);
 
 	const {
 		filial,
@@ -127,6 +133,7 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) 
 		disabledAddButton,
 		admTypesDictionary,
 		admType,
+		applicationException: applicationException ? applicationException.exception : null,
 	};
 };
 

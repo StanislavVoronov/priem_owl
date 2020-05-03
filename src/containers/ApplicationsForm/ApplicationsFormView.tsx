@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { isEmptyArray, isNotEmptyArray, ITransaction, prop } from '@black_bird/utils';
-import { IAdmDictionaryItem, IDictionary, SPO_FILIAL_ID } from '$common';
+import { IException, isEmptyArray, isNotEmptyArray, ITransaction, prop } from '@black_bird/utils';
+import { IAdmDictionaryItem, SPO_FILIAL_ID } from '$common';
 import { ApplicationsTable } from './components';
 
 import classes from './styles.module.css';
@@ -8,14 +8,14 @@ import classes from './styles.module.css';
 import { Button, Column, IFormField, Select, TextInput, Wrapper } from '@black_bird/components';
 import { IAdmGroup, IAdmTransactionList } from '$store';
 import classNames from 'classnames';
-import { ExpandLessIcon, ExpandMoreIcon, ExpansionPanel } from '$components';
+import { ExpandLessIcon, ExpandMoreIcon } from '$components';
 
 interface IProps {
 	filialDictionary: IAdmTransactionList;
 	instituteDictionary: IAdmTransactionList;
 	filial: IAdmDictionaryItem | null;
 	institute: IAdmDictionaryItem | null;
-	admType: IAdmDictionaryItem;
+	admType: IAdmDictionaryItem | null;
 	onChangeFilial: (item: IFormField<IAdmDictionaryItem>) => void;
 	onChangeInst: (item: IFormField<IAdmDictionaryItem>) => void;
 	onChangeEducLevel: (item: IFormField<IAdmDictionaryItem>) => void;
@@ -44,6 +44,7 @@ interface IProps {
 	onDeleteApplication: (index: number) => void;
 	admTypesDictionary: ITransaction<IAdmDictionaryItem[]>;
 	onChangeAdmType: (field: IFormField<IAdmDictionaryItem>) => void;
+	applicationException: IException | null;
 }
 
 const getId: any = prop('ID');
@@ -83,6 +84,7 @@ const ApplicationsFormView = (props: IProps) => {
 		admTypesDictionary,
 		onChangeAdmType,
 		admType,
+		applicationException,
 	} = props;
 
 	const nextButtonDisabled = isEmptyArray(applications);
@@ -91,8 +93,6 @@ const ApplicationsFormView = (props: IProps) => {
 		: false;
 
 	const spoVisiable = filial?.ID === SPO_FILIAL_ID;
-
-	console.log('educLevel', educLevel);
 
 	return (
 		<Column>
@@ -235,6 +235,8 @@ const ApplicationsFormView = (props: IProps) => {
 			{disabledAddButton && (
 				<div className={classes.repeatAppText}>Заявление уже было добавлено ранее</div>
 			)}
+
+			{applicationException && <div className={classes.error}>{applicationException.message}</div>}
 
 			<Wrapper margin="normal" className={classes.buttonWrapper}>
 				<Button
