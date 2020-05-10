@@ -19,7 +19,7 @@ export const findPersonRest = (data: IPerson) => {
 		fname: firstName,
 		lname: lastName,
 		mname: middleName,
-		birthdate: moment(birthday).format('YYYY.MM.DD'),
+		birthdate: moment(birthday.trim()).format('YYYY.MM.DD'),
 	};
 
 	return PriemApi.select<IFindPersonRequest, IFindPersonResponse>(

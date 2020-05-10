@@ -41,7 +41,7 @@ export const PersonFormView = (props: IProps) => {
 						value={values.isApplyPersonData}
 						label={
 							<a
-								href="http://www.mgutm.ru/entrant_2012/files/zayavlenie_na_obrabotku_pd.pdf"
+								href="http://mgutm.ru/wp-content/uploads/doc/entrant/electronic-form/soglasie_na_obrabotku_pd.pdf"
 								target="_blank">
 								Согласие на обработку персональных данных
 							</a>

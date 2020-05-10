@@ -20,6 +20,7 @@ export const createVerCodeTransactionSelector = createSelector(
 	(state) => state.createVerCode,
 );
 
-export const createVerCodeSaga = sagaEffects.rest(createVerCodeTransactionActions, (payload) =>
-	createVerCodeRest(payload.email, payload.phone, payload.method),
+export const createVerCodeSaga = sagaEffects.transaction(
+	createVerCodeTransactionActions,
+	(payload) => createVerCodeRest(payload.email, payload.phone, payload.method),
 );

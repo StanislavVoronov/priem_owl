@@ -32,7 +32,7 @@ export const priemEducFormsTransactionSelector = createSelector(
 	prop('priemEducForms'),
 );
 
-export const educFormsSaga = sagaEffects.rest(priemEducFormsTransactionActions, function* (
+export const educFormsSaga = sagaEffects.transaction(priemEducFormsTransactionActions, function* (
 	payload,
 ) {
 	const noPayForms: number[] = yield sagaEffects.select(disabledPayFormSelector);

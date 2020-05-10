@@ -18,6 +18,8 @@ export enum PRIEM_API_NAMES {
 	PriemLogout = 'enrollLogout',
 	UpdateCoolness = 'updDATA_COOLNESS',
 	UpdateLogin = 'DATA_NP_AUTH.LOGIN',
+	PersonDocuments = 'sDATA_DOCUMENTS',
+	PersonInfo = 'sDATA_NATURAL_PERSONS',
 }
 
 export enum ENROLL_API_NAMES {

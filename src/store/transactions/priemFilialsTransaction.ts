@@ -25,7 +25,7 @@ export const priemFilialsTransactionSelector = createSelector(
 	prop('priemFilials'),
 );
 
-export const priemFilialsSaga = sagaEffects.rest(priemFilialsTrnActions, function* () {
+export const priemFilialsSaga = sagaEffects.transaction(priemFilialsTrnActions, function* () {
 	const payForms = yield sagaEffects.select(disabledPayFormSelector);
 
 	return yield priemFilialsRest(payForms);

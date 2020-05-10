@@ -1,5 +1,5 @@
+import { JsonRequest } from '@black_bird/utils';
 import { ENROLL_API_NAMES } from './restApiNames';
-import { JsonRequest } from './JsonRequest';
 
 class EnrollApi extends JsonRequest {
 	public static host = '/dev-bin';

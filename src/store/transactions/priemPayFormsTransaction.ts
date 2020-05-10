@@ -40,7 +40,9 @@ export const priemPayFormsTransactionSelector = createSelector(
 	prop('priemPayForms'),
 );
 
-export const payFormsSaga = sagaEffects.rest(priemPayFormsTransactionActions, function* (payload) {
+export const payFormsSaga = sagaEffects.transaction(priemPayFormsTransactionActions, function* (
+	payload,
+) {
 	const noPayForms: number[] = yield sagaEffects.select(disabledPayFormSelector);
 	const admType: IAdmDictionaryItem = yield sagaEffects.select(applicationAmdTypeSelector);
 

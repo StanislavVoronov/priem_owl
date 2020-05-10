@@ -1,3 +1,5 @@
+import { ITransactionOptions } from '@black_bird/utils';
+
 export const RUS_ALPHABET = /^[аАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ\.-\s]+$/;
 export const ENG_ALPHABET = /^[A-Za-z]+$/;
 export const ARRAY_ENG_ALPHABET = new Array(
@@ -144,4 +146,11 @@ export const FILE_MAX_SIZE = 5;
 
 export const TYPE_DOCS = ['jpeg', 'jpg'];
 
-export const SPO_FILIAL_ID = 66;
+export const SPO_EDU_LEVEL_ID = 34;
+
+export const AUTO_RETRY_REQUEST: ITransactionOptions = {
+	autoRetry: {
+		maxTries: 2,
+		delayLength: 1000,
+	},
+};

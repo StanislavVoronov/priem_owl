@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { IException, isEmptyArray, isNotEmptyArray, ITransaction, prop } from '@black_bird/utils';
-import { IAdmDictionaryItem, SPO_FILIAL_ID } from '$common';
+import { IAdmDictionaryItem, SPO_EDU_LEVEL_ID } from '$common';
 import { ApplicationsTable } from './components';
 
 import classes from './styles.module.css';
 
-import { Button, Column, IFormField, Select, TextInput, Wrapper } from '@black_bird/components';
+import {
+	Button,
+	Column,
+	IFormField,
+	Loading,
+	Select,
+	TextInput,
+	Wrapper,
+} from '@black_bird/components';
 import { IAdmGroup, IAdmTransactionList } from '$store';
 import classNames from 'classnames';
 import { ExpandLessIcon, ExpandMoreIcon } from '$components';
@@ -92,7 +100,7 @@ const ApplicationsFormView = (props: IProps) => {
 		? new Set([direction.ID, ...applications.map((item) => item.dir.ID)]).size > 3
 		: false;
 
-	const spoVisiable = filial?.ID === SPO_FILIAL_ID;
+	const spoVisiable = educLevel?.ID === SPO_EDU_LEVEL_ID;
 
 	return (
 		<Column>
@@ -125,23 +133,6 @@ const ApplicationsFormView = (props: IProps) => {
 				/>
 			)}
 
-			{educLevel && (
-				<Select
-					isCleanable
-					required
-					value={institute}
-					onChange={onChangeInst}
-					getOptionValue={getId}
-					error={instituteDictionary.exception?.comment}
-					getOptionLabel={prop('NAME')}
-					name="inst"
-					options={instituteDictionary.result}
-					placeholder={`Выберите институт`}
-					title={'Институт'}
-					loading={instituteDictionary.isFetching}
-				/>
-			)}
-
 			{spoVisiable && (
 				<Select
 					isCleanable
@@ -156,6 +147,23 @@ const ApplicationsFormView = (props: IProps) => {
 					placeholder={`Выберите значение`}
 					title={'Класс'}
 					loading={admTypesDictionary.isFetching}
+				/>
+			)}
+
+			{((educLevel && !spoVisiable) || (spoVisiable && admType)) && (
+				<Select
+					isCleanable
+					required
+					value={institute}
+					onChange={onChangeInst}
+					getOptionValue={getId}
+					error={instituteDictionary.exception?.comment}
+					getOptionLabel={prop('NAME')}
+					name="inst"
+					options={instituteDictionary.result}
+					placeholder={`Выберите институт`}
+					title={'Институт'}
+					loading={instituteDictionary.isFetching}
 				/>
 			)}
 

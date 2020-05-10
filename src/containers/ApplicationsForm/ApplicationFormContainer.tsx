@@ -27,7 +27,6 @@ import {
 	IAdmTransactionList,
 	onChangeAdmTypeAction,
 	priemAdmTypesTrnSelector,
-	priemAdmGroupsReducer,
 	priemAdmGroupsTrnSelector,
 } from '$store';
 import { IAdmDictionaryItem } from '$common';
@@ -97,10 +96,12 @@ const mapStateToProps: MapStateToProps<IStateToProps, {}, IRootState> = (state) 
 	const educFormDictionary = priemEducFormsTransactionSelector(state);
 	const payFormDictionary = priemPayFormsTransactionSelector(state);
 	const admTypesDictionary = priemAdmTypesTrnSelector(state);
-	const disabledAddButton = disabledAddButtonSelector(state);
+
 	const applicationException = Object.values(priemAdmGroupsTrnSelector(state)).find(
 		(item) => item.exception,
 	);
+
+	const disabledAddButton = disabledAddButtonSelector(state);
 
 	const {
 		filial,

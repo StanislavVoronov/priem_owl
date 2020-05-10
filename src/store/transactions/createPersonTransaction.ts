@@ -1,6 +1,6 @@
 import { createTransactionActions, createTransactionReducer, sagaEffects } from '@black_bird/utils';
 import { createSelector, prop } from '@black_bird/utils';
-import { ICreatePersonData, TRANSACTION_NAMES } from '$common';
+import { AUTO_RETRY_REQUEST, ICreatePersonData, TRANSACTION_NAMES } from '$common';
 import { createPersonRest, ICreatePersonPayload } from '$rests';
 import { transactionSelector } from './selectors';
 
@@ -17,6 +17,8 @@ export const createPersonTransactionSelector = createSelector(
 	prop('createPerson'),
 );
 
-export const createPersonSaga = sagaEffects.rest(createPersonTransactionActions, (payload) =>
-	createPersonRest(payload),
+export const createPersonSaga = sagaEffects.transaction(
+	createPersonTransactionActions,
+	(payload) => createPersonRest(payload),
+	AUTO_RETRY_REQUEST,
 );

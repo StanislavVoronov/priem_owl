@@ -29,8 +29,8 @@ export const createNewFolderSagas = [
 		const phoneCode = verAccountMethod === VerificationMethod.Phone ? verAccountCode : '000000';
 
 		const payload = {
-			verEmailCode: emailCode,
-			verPhoneCode: phoneCode,
+			verEmailCode: emailCode.trim(),
+			verPhoneCode: phoneCode.trim(),
 			lastName,
 			firstName,
 			middleName,

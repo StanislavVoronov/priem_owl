@@ -1,4 +1,4 @@
-import { sagaEffects } from '@black_bird/utils';
+import { guid, sagaEffects } from '@black_bird/utils';
 import {
 	applicationsFormSelector,
 	createAppTransactionActions,
@@ -12,10 +12,11 @@ export const createApplicationSagas = [
 
 		yield sagaEffects.all(
 			applications.map((app: IAdmGroup, index: number) => {
-				const key = [app.admGroup.ID, app.profile].join('-');
+				const key = guid();
+				const flow = app.filial.ID === 1 ? 2 : 10;
 
 				return sagaEffects.put(
-					createAppTransactionActions.trigger(app.admGroup, app.profile, index, key),
+					createAppTransactionActions.trigger(flow, app.admGroup, app.profile, index + 1, key),
 				);
 			}),
 		);

@@ -7,7 +7,6 @@ interface IFetchResponse {
 
 interface IPayload {
 	filial: number;
-	inst: number;
 	eduLevel: number;
 	noPayForms: number[];
 }

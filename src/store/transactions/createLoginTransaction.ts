@@ -24,6 +24,6 @@ export const createLoginTransactionSelector = createSelector(transactionSelector
 	return { isFetching, exception, result: npId };
 });
 
-export const createLoginSaga = sagaEffects.rest(createLoginTransactionActions, (payload) =>
+export const createLoginSaga = sagaEffects.transaction(createLoginTransactionActions, (payload) =>
 	createLoginRest(payload.login, payload.password),
 );

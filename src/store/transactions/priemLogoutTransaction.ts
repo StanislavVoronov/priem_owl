@@ -20,4 +20,7 @@ export const priemLogoutTransactionSelector = createSelector(
 	prop('priemLogout'),
 );
 
-export const priemLogoutSaga = sagaEffects.rest(priemLogoutTransactionActions, priemLogoutRest);
+export const priemLogoutSaga = sagaEffects.transaction(
+	priemLogoutTransactionActions,
+	priemLogoutRest,
+);

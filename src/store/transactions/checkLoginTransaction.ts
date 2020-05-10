@@ -5,7 +5,7 @@ import {
 	sagaEffects,
 	ITransaction,
 } from '@black_bird/utils';
-import { TRANSACTION_NAMES } from '$common';
+import { AUTO_RETRY_REQUEST, TRANSACTION_NAMES } from '$common';
 import { checkLoginRest, ICheckLoginResponse } from '$rests';
 import { transactionSelector } from './selectors';
 
@@ -26,6 +26,8 @@ export const isUniqueLoginTransactionSelector = createSelector(transactionSelect
 	return { isFetching, exception, result: result.length ? result[0].COUNT === 0 : false };
 });
 
-export const checkLoginSaga = sagaEffects.rest(checkLoginTransactionActions, (payload) =>
-	checkLoginRest(payload.login),
+export const checkLoginSaga = sagaEffects.transaction(
+	checkLoginTransactionActions,
+	(payload) => checkLoginRest(payload.login),
+	AUTO_RETRY_REQUEST,
 );

@@ -23,8 +23,16 @@ import {
 	updateLoginTrnReducer,
 	priemAdmTypesReducer,
 	updatePhoneTransactionReducer,
+	personDocumentsReducer,
+	personInfoReducer,
 } from './transactions';
-import { IAdmDictionaryItem, ICreatePersonData, IPriemGroup } from '$common';
+import {
+	IAdmDictionaryItem,
+	ICreatePersonData,
+	IPersonDocument,
+	IPersonInfo,
+	IPriemGroup,
+} from '$common';
 import {
 	ICheckLoginResponse,
 	ICreateLoginResponse,
@@ -44,7 +52,7 @@ export interface ITransactionsState {
 	priemDirections: IAdmTransactionList;
 	priemInstitutes: IAdmTransactionList;
 	priemEducLevels: IAdmTransactionList;
-	priemAdmGroups: Record<string, ITransaction<IPriemGroup[]>>;
+	priemAdmGroups: Record<string, ITransaction<IPriemGroup>>;
 	createVerCode: ITransaction<ICreateVerCodeResponse>;
 	priemAdmTypes: IAdmTransactionList;
 	priemPayForms: IAdmTransactionList;
@@ -58,6 +66,8 @@ export interface ITransactionsState {
 	verPersonContacts: ITransaction<IVerPersonContactsResponse>;
 	setExistPersonVerCode: ITransaction<any>;
 	updateLogin: ITransaction<any>;
+	personDocuments: ITransaction<IPersonDocument[]>;
+	personInfo: ITransaction<IPersonInfo>;
 }
 
 const transactionsReducer = combineReducers<ITransactionsState>({
@@ -84,6 +94,8 @@ const transactionsReducer = combineReducers<ITransactionsState>({
 	setExistPersonVerCode: setExistPersonVerCodeReducer,
 	updateLogin: updateLoginTrnReducer,
 	updatePhones: updatePhoneTransactionReducer,
+	personDocuments: personDocumentsReducer,
+	personInfo: personInfoReducer,
 });
 
 export default transactionsReducer;

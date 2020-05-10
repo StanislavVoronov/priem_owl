@@ -19,8 +19,8 @@
 	},
 	"dependencies": {
 		"@black_bird/components": "^0.0.139",
-		"@black_bird/dictionaries": "^0.0.29",
-		"@black_bird/utils": "^0.6.10",
+		"@black_bird/dictionaries": "^0.0.33",
+		"@black_bird/utils": "^0.6.18",
 		"@mgutm-fcu/auth": "^0.21.26",
 		"autoprefixer": "^9.5.0",
 		"autosuggest-highlight": "latest",

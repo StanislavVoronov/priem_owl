@@ -29,7 +29,9 @@ export const priemEducLevelsTransactionSelector = createSelector(
 	prop('priemEducLevels'),
 );
 
-export const priemEducLevelSaga = sagaEffects.rest(priemEducLevelsTrnActions, function* (payload) {
+export const priemEducLevelSaga = sagaEffects.transaction(priemEducLevelsTrnActions, function* (
+	payload,
+) {
 	const payForms: number[] = yield sagaEffects.select(disabledPayFormSelector);
 
 	return yield priemEducLevelsRest(payload.filial.ID, payForms);

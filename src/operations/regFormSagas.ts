@@ -1,21 +1,30 @@
-import { sagaEffects, isEmptyArray, guid } from '@black_bird/utils';
+import {
+	guid,
+	isEmptyArray,
+	ITransaction,
+	sagaEffects,
+	TransactionStatus,
+} from '@black_bird/utils';
 import {
 	checkLoginTransactionActions,
-	regFormSelector,
-	submitRegFormAction,
 	createLoginTransactionActions,
-	generateUserPasswordAction,
 	findPersonTransactionActions,
-	navigateToStep,
-	isUniqueLoginTransactionSelector,
+	generateUserPasswordAction,
 	goToNextStep,
-	verPersonTrnActions,
 	isPersonFoundTransactionSelector,
+	isUniqueLoginTransactionSelector,
+	personDocumentsTrnActions,
+	personDocumentsTrnSelector,
+	personInfoTrnActions,
+	personInfoTrnSelector,
+	regFormSelector,
+	setExistPersonVerCodeTrnActions,
+	submitRegFormAction,
 	verPersonContactsTrnActions,
+	verPersonTrnActions,
 } from '$store';
 import { checkLoginRest } from '$rests';
-import { generatePassword } from '$common';
-import { setExistPersonVerCodeTrnActions } from '$store';
+import { generatePassword, IPersonDocument, IPersonInfo } from '$common';
 
 function* createNewLogin(): any {
 	const login = guid();
@@ -39,6 +48,15 @@ function* createNewLogin(): any {
 	}
 }
 
+function* setPersonData() {
+	const documents: ITransaction<IPersonDocument[]> = yield sagaEffects.select(
+		personDocumentsTrnSelector,
+	);
+	const personInfo: ITransaction<IPersonInfo> = yield sagaEffects.select(personInfoTrnSelector);
+
+	console.log('documents', documents);
+	console.log('personInfo', personInfo);
+}
 export const regFormSagas = [
 	sagaEffects.takeEvery(submitRegFormAction, function* ({ payload }) {
 		if (payload.verAccountCode) {
@@ -73,6 +91,24 @@ export const regFormSagas = [
 		yield sagaEffects.put(findPersonTransactionActions.trigger(data));
 	}),
 	sagaEffects.takeEvery(setExistPersonVerCodeTrnActions.success, function* () {
-		yield sagaEffects.put(goToNextStep());
+		yield sagaEffects.put(personInfoTrnActions.trigger());
+		yield sagaEffects.put(personDocumentsTrnActions.trigger());
+	}),
+	sagaEffects.takeEvery(personDocumentsTrnActions.success, function* () {
+		const personInfo: ITransaction<any> = yield sagaEffects.select(personInfoTrnSelector);
+		if (personInfo.status === TransactionStatus.COMPLETED) {
+			yield setPersonData();
+			yield sagaEffects.put(goToNextStep());
+		}
+	}),
+	sagaEffects.takeEvery(personInfoTrnActions.success, function* () {
+		const documents: ITransaction<IPersonDocument[]> = yield sagaEffects.select(
+			personDocumentsTrnSelector,
+		);
+
+		if (documents.status === TransactionStatus.COMPLETED) {
+			yield setPersonData();
+			yield sagaEffects.put(goToNextStep());
+		}
 	}),
 ];

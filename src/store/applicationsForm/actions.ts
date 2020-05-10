@@ -56,6 +56,9 @@ export const onChangeAdmTypeAction = createAction(
 
 export const cleanDefaultAdmTypeAction = createAction(`${NAMESPACE}/CLEAN_DEFAULT_ADM_TYPE`);
 export const newPriemAppAddedAction = createAction(`${NAMESPACE}/NEW_PRIEM_APPLICATION_ADDED`);
+export const newFetchPriemAppSuccessAction = createAction(
+	`${NAMESPACE}/NEW_FETCH_PRIEM_APP_SUCCESS`,
+);
 
 export const newAdmGroupsAddedAction = createAction(
 	`${NAMESPACE}/NEW_ADM_GROUPS_ADDED`,

@@ -25,7 +25,7 @@ export const priemAdmGroupsTransactionActions = createTransactionActions(
 	}),
 );
 
-export const priemAdmGroupsReducer = createTransactionReducer<IPriemGroup[], { admGroup: string }>(
+export const priemAdmGroupsReducer = createTransactionReducer<IPriemGroup, { admGroup: string }>(
 	priemAdmGroupsTransactionActions,
 	{
 		mapToKey: (payload) => payload.admGroup,
@@ -43,13 +43,15 @@ export const priemAdmGroupsTrnSelector = createSelector(
 	(state) => state.priemAdmGroups,
 );
 
-export const priemAdmGroupsSaga = sagaEffects.rest(priemAdmGroupsTransactionActions, (payload) =>
-	priemAdmGroupsRest({
-		filial: payload.filial.ID,
-		inst: payload.inst.ID,
-		dir: payload.direction.ID,
-		educForm: payload.educForm.ID,
-		payForm: payload.payForm.ID,
-		admType: payload.admType.ID,
-	}),
+export const priemAdmGroupsSaga = sagaEffects.transaction(
+	priemAdmGroupsTransactionActions,
+	(payload) =>
+		priemAdmGroupsRest({
+			filial: payload.filial.ID,
+			inst: payload.inst.ID,
+			dir: payload.direction.ID,
+			eduForm: payload.educForm.ID,
+			payForm: payload.payForm.ID,
+			admType: payload.admType.ID,
+		}),
 );

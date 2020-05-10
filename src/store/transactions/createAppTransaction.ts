@@ -6,12 +6,19 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { createApplicationRest } from '$rests';
-import { IAdmDictionaryItem, TRANSACTION_NAMES, APPLICATION_FLOW, IAdmGroupItem } from '$common';
+import {
+	IAdmDictionaryItem,
+	TRANSACTION_NAMES,
+	APPLICATION_FLOW,
+	IAdmGroupItem,
+	AUTO_RETRY_REQUEST,
+} from '$common';
 import { transactionSelector } from './selectors';
 
 export const createAppTransactionActions = createTransactionActions(
 	TRANSACTION_NAMES.CreateApplication,
-	(adm: IAdmGroupItem, prof: IAdmDictionaryItem, priority: number, app: string) => ({
+	(flow: number, adm: IAdmGroupItem, prof: IAdmDictionaryItem, priority: number, app: string) => ({
+		flow,
 		adm: adm.ID,
 		prof: prof.ID,
 		priority,
@@ -41,6 +48,8 @@ export const createAppTransactionSelector = createSelector(
 	},
 );
 
-export const createApplicationSaga = sagaEffects.rest(createAppTransactionActions, (payload) =>
-	createApplicationRest(payload.adm, payload.prof, payload.priority, APPLICATION_FLOW),
+export const createApplicationSaga = sagaEffects.transaction(
+	createAppTransactionActions,
+	(payload) => createApplicationRest(payload.adm, payload.prof, payload.priority, payload.flow),
+	AUTO_RETRY_REQUEST,
 );

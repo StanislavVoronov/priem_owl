@@ -5,7 +5,7 @@ import {
 	prop,
 	sagaEffects,
 } from '@black_bird/utils';
-import { PhoneType, TRANSACTION_NAMES } from '$common';
+import { AUTO_RETRY_REQUEST, PhoneType, TRANSACTION_NAMES } from '$common';
 import { updatePhoneRest } from '$rests';
 import { ITransactionsState } from '../transactionReducer';
 
@@ -27,6 +27,8 @@ export const updatePhoneTransactionSelector = createSelector(
 	(state: ITransactionsState, phone: string) => state.updatePhones[phone],
 );
 
-export const updatePhoneSaga = sagaEffects.rest(updatePhoneTransactionActions, (payload) =>
-	updatePhoneRest(payload.phone, payload.type),
+export const updatePhoneSaga = sagaEffects.transaction(
+	updatePhoneTransactionActions,
+	(payload) => updatePhoneRest(payload.phone, payload.type),
+	AUTO_RETRY_REQUEST,
 );

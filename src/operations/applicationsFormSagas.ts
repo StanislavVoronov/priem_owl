@@ -1,29 +1,28 @@
 import {
 	applicationsFormSelector,
-	navigateToStep,
+	cleanDefaultAdmTypeAction,
+	newAdmGroupsAddedAction,
+	newFetchPriemAppSuccessAction,
+	newPriemAppAddedAction,
+	onChangeAdmTypeAction,
 	onChangeDirectionAction,
 	onChangeEducFormsAction,
 	onChangeEducLevelAction,
 	onChangeFilialAction,
 	onChangeInstAction,
 	onChangeProfilesAction,
+	priemAdmGroupsTransactionActions,
+	priemAdmGroupsTrnSelector,
+	priemAdmTypesTrnActions,
 	priemDirectionsTrnActions,
 	priemEducFormsTransactionActions,
 	priemEducLevelsTrnActions,
 	priemInstitutesTrnActions,
 	priemPayFormsTransactionActions,
 	priemProfilesTransactionActions,
-	newPriemAppAddedAction,
-	priemAdmGroupsTransactionActions,
-	newAdmGroupsAddedAction,
-	priemFilialsTrnActions,
-	priemAdmTypesTrnActions,
-	cleanDefaultAdmTypeAction,
-	onChangeAdmTypeAction,
 } from '$store';
-import { sagaEffects, guid } from '@black_bird/utils';
-import { checkLigotaPriemStatus } from './documentsFormSagas';
-import { IAdmDictionaryItem, IApplicationForm, SPO_FILIAL_ID } from '$common';
+import { guid, ITransaction, sagaEffects, TransactionStatus } from '@black_bird/utils';
+import { IPriemGroup, SPO_EDU_LEVEL_ID } from '$common';
 
 export const applicationFormSagas = [
 	sagaEffects.takeEvery(onChangeFilialAction, function* () {
@@ -36,20 +35,22 @@ export const applicationFormSagas = [
 	sagaEffects.takeEvery(onChangeInstAction, function* () {
 		const { filial, institute, educLevel } = yield sagaEffects.select(applicationsFormSelector);
 
-		if (filial.ID === SPO_FILIAL_ID) {
-			yield sagaEffects.put(cleanDefaultAdmTypeAction());
-
-			yield sagaEffects.put(
-				priemAdmTypesTrnActions.trigger({ filial, eduLevel: educLevel, inst: institute }),
-			);
-		} else {
-			yield sagaEffects.put(priemDirectionsTrnActions.trigger(filial, educLevel, institute));
-		}
+		yield sagaEffects.put(priemDirectionsTrnActions.trigger(filial, educLevel, institute));
 	}),
 	sagaEffects.takeEvery(onChangeEducLevelAction, function* () {
 		const { filial, educLevel } = yield sagaEffects.select(applicationsFormSelector);
 
-		yield sagaEffects.put(priemInstitutesTrnActions.trigger(filial, educLevel));
+		if (educLevel.ID === SPO_EDU_LEVEL_ID) {
+			yield sagaEffects.put(cleanDefaultAdmTypeAction());
+
+			yield sagaEffects.put(priemAdmTypesTrnActions.trigger({ filial, eduLevel: educLevel }));
+		} else {
+			yield sagaEffects.put(onChangeAdmTypeAction({ name: '', value: { ID: 0, NAME: '' } }));
+
+			const { admType } = yield sagaEffects.select(applicationsFormSelector);
+
+			yield sagaEffects.put(priemInstitutesTrnActions.trigger(filial, educLevel, admType));
+		}
 	}),
 	sagaEffects.takeEvery(onChangeDirectionAction, function* () {
 		const { filial, institute, direction } = yield sagaEffects.select(applicationsFormSelector);
@@ -71,9 +72,9 @@ export const applicationFormSagas = [
 		);
 	}),
 	sagaEffects.takeEvery(onChangeAdmTypeAction, function* () {
-		const { filial, institute, educLevel } = yield sagaEffects.select(applicationsFormSelector);
+		const { filial, educLevel, admType } = yield sagaEffects.select(applicationsFormSelector);
 
-		yield sagaEffects.put(priemDirectionsTrnActions.trigger(filial, educLevel, institute));
+		yield sagaEffects.put(priemInstitutesTrnActions.trigger(filial, educLevel, admType));
 	}),
 	sagaEffects.takeEvery(newPriemAppAddedAction, function* () {
 		const { filial, institute, direction, payForms, educForms, admType } = yield sagaEffects.select(
@@ -95,6 +96,18 @@ export const applicationFormSagas = [
 					),
 				);
 			}
+		}
+	}),
+	sagaEffects.takeEvery(priemAdmGroupsTransactionActions.success, function* () {
+		const applications: Record<string, ITransaction<IPriemGroup>> = yield sagaEffects.select(
+			priemAdmGroupsTrnSelector,
+		);
+		const downloaded = Object.values(applications).every(
+			(item) => item.status === TransactionStatus.COMPLETED,
+		);
+
+		if (downloaded) {
+			yield sagaEffects.put(newFetchPriemAppSuccessAction());
 		}
 	}),
 	sagaEffects.takeEvery(priemAdmGroupsTransactionActions.success, function* ({ payload }) {

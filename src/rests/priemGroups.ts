@@ -9,7 +9,7 @@ interface IPayload {
 	filial: number;
 	inst: number;
 	dir: number;
-	educForm: number;
+	eduForm: number;
 	payForm: number;
 	admType: number;
 }

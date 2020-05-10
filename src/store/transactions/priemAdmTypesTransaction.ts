@@ -16,7 +16,6 @@ import { transactionSelector } from './selectors';
 interface IAdmTypePayload {
 	filial: IAdmDictionaryItem;
 	eduLevel: IAdmDictionaryItem;
-	inst: IAdmDictionaryItem;
 }
 export const priemAdmTypesTrnActions = createTransactionActions(
 	TRANSACTION_NAMES.FetchPriemAdmTypes,
@@ -37,12 +36,13 @@ export const priemAdmTypesReducer = createTransactionReducer<IAdmDictionaryItem[
 
 export const priemAdmTypesTrnSelector = createSelector(transactionSelector, prop('priemAdmTypes'));
 
-export const priemAdmTypeSaga = sagaEffects.rest(priemAdmTypesTrnActions, function* (payload) {
+export const priemAdmTypeSaga = sagaEffects.transaction(priemAdmTypesTrnActions, function* (
+	payload,
+) {
 	const noPayForms: number[] = yield sagaEffects.select(disabledPayFormSelector);
 
 	return yield priemAdmTypeRest({
 		filial: payload.filial.ID,
-		inst: payload.inst.ID,
 		eduLevel: payload.eduLevel.ID,
 		noPayForms,
 	});

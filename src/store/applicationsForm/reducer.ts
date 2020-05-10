@@ -14,6 +14,7 @@ import {
 	closeLigotaPriemAction,
 	onChangeAdmTypeAction,
 	cleanDefaultAdmTypeAction,
+	newFetchPriemAppSuccessAction,
 } from './actions';
 import { combineReducers, createReducer, forAction } from '@black_bird/utils';
 import { IAdmGroup } from './models';
@@ -35,21 +36,21 @@ const profileReducer = createReducer<IAdmDictionaryItem[]>(
 	[forAction(onChangeProfilesAction, (state, payload) => payload)],
 	[],
 	{
-		cleanActions: [onChangeEducLevelAction, onChangeDirectionAction, newAdmGroupsAddedAction],
+		cleanActions: [
+			onChangeEducLevelAction,
+			onChangeInstAction,
+			onChangeDirectionAction,
+			newFetchPriemAppSuccessAction,
+			onChangeAdmTypeAction,
+		],
 	},
 );
 
 const admTypeReducer = createReducer<IAdmDictionaryItem | null>(
-	[
-		forAction(onChangeAdmTypeAction, (state, payload) => payload),
-		forAction(cleanDefaultAdmTypeAction, (state) => null),
-	],
+	[forAction(onChangeAdmTypeAction, (state, payload) => payload)],
+	null,
 	{
-		ID: 0,
-		NAME: 'Стандартный',
-	},
-	{
-		cleanActions: [onChangeEducLevelAction, onChangeFilialAction, onChangeInstAction],
+		cleanActions: [cleanDefaultAdmTypeAction, onChangeEducLevelAction, onChangeFilialAction],
 	},
 );
 
@@ -57,7 +58,7 @@ const instituteReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(onChangeInstAction, (state, payload) => payload)],
 	null,
 	{
-		cleanActions: [onChangeEducLevelAction, onChangeFilialAction, newAdmGroupsAddedAction],
+		cleanActions: [onChangeEducLevelAction, onChangeAdmTypeAction, onChangeFilialAction],
 	},
 );
 
@@ -69,7 +70,8 @@ const directionReducer = createReducer<IAdmDictionaryItem | null>(
 			onChangeInstAction,
 			onChangeFilialAction,
 			onChangeEducLevelAction,
-			newAdmGroupsAddedAction,
+			onChangeAdmTypeAction,
+			newFetchPriemAppSuccessAction,
 		],
 	},
 );
@@ -84,7 +86,7 @@ const payFormsReducer = createReducer<IAdmDictionaryItem[]>(
 			onChangeDirectionAction,
 			onChangeEducLevelAction,
 			onChangeEducFormsAction,
-			newAdmGroupsAddedAction,
+			newFetchPriemAppSuccessAction,
 		],
 	},
 );
@@ -98,7 +100,7 @@ const educFormsReducer = createReducer<IAdmDictionaryItem[]>(
 			onChangeFilialAction,
 			onChangeInstAction,
 			onChangeDirectionAction,
-			newAdmGroupsAddedAction,
+			newFetchPriemAppSuccessAction,
 		],
 	},
 );

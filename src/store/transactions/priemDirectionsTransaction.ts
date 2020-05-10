@@ -32,7 +32,9 @@ export const priemDirectionsTransactionSelector = createSelector(
 	prop('priemDirections'),
 );
 
-export const priemDirectionSaga = sagaEffects.rest(priemDirectionsTrnActions, function* (payload) {
+export const priemDirectionSaga = sagaEffects.transaction(priemDirectionsTrnActions, function* (
+	payload,
+) {
 	const noPayForms: number[] = yield sagaEffects.select(disabledPayFormSelector);
 	const admType: IAdmDictionaryItem = yield sagaEffects.select(applicationAmdTypeSelector);
 

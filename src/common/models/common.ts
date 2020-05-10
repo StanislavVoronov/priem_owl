@@ -43,3 +43,22 @@ export interface IDocument {
 export interface IStylable {
 	classes: Record<string, string>;
 }
+
+export interface IPersonDocument {
+	ID: string;
+	TYPE: string;
+	SUBTYPE: string;
+	SERIA: string;
+	NUM: string;
+	ISS_ORGANISATION: string;
+	ISS_GOVERMENT: number;
+}
+
+export interface IPersonInfo {
+	ID: string;
+	BIRTHPLACE: string;
+	NEED_HOSTEL: string;
+	EMAIL: string;
+	HIGH_FIRST: string;
+	BEST_PREV_EDU: string;
+}

@@ -29,6 +29,6 @@ export const isPersonFoundTransactionSelector = createSelector(transactionSelect
 	};
 });
 
-export const findPersonSaga = sagaEffects.rest(findPersonTransactionActions, (payload) =>
+export const findPersonSaga = sagaEffects.transaction(findPersonTransactionActions, (payload) =>
 	findPersonRest(payload.data),
 );

@@ -16,7 +16,7 @@ import {
 	verPersonTrnSelector,
 } from '$store';
 import { IRegForm, INamesDictionary } from '$common';
-import { setExistPersonVerCodeTrnSelector } from '../../store/transactions/setExistsPersonVerCode';
+import { setExistPersonVerCodeTrnSelector } from '$store';
 
 interface IStateToProps {
 	firstNameDictionary: ITransaction<INamesDictionary[]>;
