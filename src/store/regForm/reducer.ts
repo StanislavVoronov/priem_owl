@@ -11,7 +11,14 @@ const initial = {
 };
 
 const regFormReducer = createReducer(
-	[forAction(submitRegFormAction, (state, payload) => payload)],
+	[
+		forAction(submitRegFormAction, (state, payload) => ({
+			...payload,
+			lastName: payload.lastName.trim(),
+			middleName: payload.middleName.trim(),
+			firstName: payload.firstName.trim(),
+		})),
+	],
 	initial,
 );
 

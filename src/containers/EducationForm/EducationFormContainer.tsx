@@ -10,8 +10,8 @@ import {
 	IRootState,
 	submitEducationFormAction,
 } from '$store';
-import { IContactsForm, IDictionary, IEducationForm, IPersonForm } from '$common';
-import { isVoid, ITransaction } from '@black_bird/utils';
+import { IContactsForm, IDictionary, IEducationForm, IPersonForm, validateDocument } from '$common';
+import { isEmpty, isVoid, ITransaction } from '@black_bird/utils';
 import EducationFormView from './EducationFormView';
 
 interface IPropsState {
@@ -30,11 +30,16 @@ type Props = IPropsState & IDispatchToProps;
 
 class EducationFormContainer extends React.PureComponent<Props> {
 	disabledForm = ({ values }: { values: IEducationForm }) => {
-		return isVoid(values.document.file); // && !validateDocument(values.document);
+		return !validateDocument(values.document); // && !validateDocument(values.document);
 	};
 
 	renderForm = (form: IFormProps<any>) => {
-		const { educTypeDocDictionary, governmentDictionary, prevEducDictionary, onChangeFirstHighEduc } = this.props;
+		const {
+			educTypeDocDictionary,
+			governmentDictionary,
+			prevEducDictionary,
+			onChangeFirstHighEduc,
+		} = this.props;
 
 		return (
 			<EducationFormView

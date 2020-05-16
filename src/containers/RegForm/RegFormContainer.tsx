@@ -52,18 +52,7 @@ class EnrollRegistrationContainer extends React.Component<Props> {
 
 		return (
 			<Form
-				error={
-					error ||
-					(email
-						? {
-								code: '',
-								comment: '',
-								stack: '',
-								message:
-									'Прием абитуриентов с существующим личным делом будет открыт 10 мая 2020 года',
-						  }
-						: null)
-				}
+				error={error}
 				loading={loading}
 				loadingText="Поиск личного дела"
 				renderForm={this.renderForm}

@@ -26,7 +26,6 @@ export const defaultEducationDataForm: IEducationForm = {
 		type: { id: 2, name: 'Документ об предыдущем образовании', need_info: 1, has_num: 1 },
 	},
 	firstHighEducation: true,
-	coolnessTypes: [],
 	prevEducation: { id: 1, name: 'Среднее общее' },
 	hasEge: false,
 };
@@ -36,3 +35,5 @@ export const initialTransactionState = {
 	result: [],
 	error: null,
 };
+
+export const defaultDocType = { id: 0, name: '' };

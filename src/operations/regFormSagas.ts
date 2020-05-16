@@ -2,6 +2,7 @@ import {
 	guid,
 	isEmptyArray,
 	ITransaction,
+	not,
 	sagaEffects,
 	TransactionStatus,
 } from '@black_bird/utils';
@@ -10,9 +11,16 @@ import {
 	createLoginTransactionActions,
 	findPersonTransactionActions,
 	generateUserPasswordAction,
+	getDocTypesDictionary,
+	getEducTypeDocDictionary,
+	getGovernmentDictionary,
+	getPrevEducTypesDocDictionary,
 	goToNextStep,
+	initDocumentFormAction,
+	initEducationFormAction,
 	isPersonFoundTransactionSelector,
 	isUniqueLoginTransactionSelector,
+	navigateToStep,
 	personDocumentsTrnActions,
 	personDocumentsTrnSelector,
 	personInfoTrnActions,
@@ -24,7 +32,14 @@ import {
 	verPersonTrnActions,
 } from '$store';
 import { checkLoginRest } from '$rests';
-import { generatePassword, IPersonDocument, IPersonInfo } from '$common';
+import {
+	generatePassword,
+	IRemoteDocument,
+	IPersonInfo,
+	documentMapperLocal,
+	IDictionary,
+	anyPass,
+} from '$common';
 
 function* createNewLogin(): any {
 	const login = guid();
@@ -49,13 +64,47 @@ function* createNewLogin(): any {
 }
 
 function* setPersonData() {
-	const documents: ITransaction<IPersonDocument[]> = yield sagaEffects.select(
+	const documents: ITransaction<IRemoteDocument[]> = yield sagaEffects.select(
 		personDocumentsTrnSelector,
 	);
-	const personInfo: ITransaction<IPersonInfo> = yield sagaEffects.select(personInfoTrnSelector);
 
-	console.log('documents', documents);
+	const prevEducDictionary = yield sagaEffects.select(getPrevEducTypesDocDictionary);
+	const personInfo: ITransaction<IPersonInfo> = yield sagaEffects.select(personInfoTrnSelector);
+	const docTypesDictionary = yield sagaEffects.select(getDocTypesDictionary);
+
+	const educDocument = documents.result
+		.map((doc) => {
+			return documentMapperLocal(doc, docTypesDictionary);
+		})
+		.find((item) => item.type?.id === 2);
+
+	const otherDocuments = documents.result.filter((item) =>
+		not(anyPass([() => item.TYPE === 1, () => item.TYPE === 2, () => item.TYPE === 3])),
+	);
+
+	yield sagaEffects.put(
+		initDocumentFormAction(
+			otherDocuments.map((item) => documentMapperLocal(item, docTypesDictionary)),
+		),
+	);
+
 	console.log('personInfo', personInfo);
+	console.log('documents', documents);
+
+	if (educDocument) {
+		yield sagaEffects.put(
+			initEducationFormAction({
+				document: educDocument,
+				firstHighEducation: personInfo.result.HIGH_FIRST === 1,
+				prevEducation:
+					prevEducDictionary.result.find(
+						(item: IDictionary) => item.id === personInfo.result.BEST_PREV_EDU,
+					) || null,
+			}),
+		);
+	}
+
+	yield sagaEffects.put(navigateToStep(3));
 }
 export const regFormSagas = [
 	sagaEffects.takeEvery(submitRegFormAction, function* ({ payload }) {
@@ -98,17 +147,15 @@ export const regFormSagas = [
 		const personInfo: ITransaction<any> = yield sagaEffects.select(personInfoTrnSelector);
 		if (personInfo.status === TransactionStatus.COMPLETED) {
 			yield setPersonData();
-			yield sagaEffects.put(goToNextStep());
 		}
 	}),
 	sagaEffects.takeEvery(personInfoTrnActions.success, function* () {
-		const documents: ITransaction<IPersonDocument[]> = yield sagaEffects.select(
+		const documents: ITransaction<IRemoteDocument[]> = yield sagaEffects.select(
 			personDocumentsTrnSelector,
 		);
 
 		if (documents.status === TransactionStatus.COMPLETED) {
 			yield setPersonData();
-			yield sagaEffects.put(goToNextStep());
 		}
 	}),
 ];

@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, IFormProps } from '@black_bird/components';
 import { isVoid, ITransaction } from '@black_bird/utils';
 
-import { IDictionary, IPersonForm } from '$common';
+import { IDictionary, IPersonForm, validateDocument } from '$common';
 
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import {
@@ -29,7 +29,7 @@ type IProps = IStateToProps & IDispatchToProps;
 
 const PersonFormContainer = (props: IProps) => {
 	const disabledForm = ({ values }: { values: IPersonForm }) => {
-		return isVoid(values.document.file); // && !validateDocument(values.document);;
+		return !validateDocument(values.document);
 	};
 	const renderForm = (form: IFormProps<any>) => {
 		return (

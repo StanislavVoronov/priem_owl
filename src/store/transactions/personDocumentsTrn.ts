@@ -4,7 +4,7 @@ import {
 	createTransactionReducer,
 	sagaEffects,
 } from '@black_bird/utils';
-import { IPersonDocument, TRANSACTION_NAMES } from '$common';
+import { IRemoteDocument, TRANSACTION_NAMES } from '$common';
 import { personDocumentsRest } from '$rests';
 import { transactionSelector } from './selectors';
 
@@ -12,7 +12,7 @@ export const personDocumentsTrnActions = createTransactionActions(
 	TRANSACTION_NAMES.PERSON_DOCUMENTS,
 );
 
-export const personDocumentsReducer = createTransactionReducer<IPersonDocument[]>(
+export const personDocumentsReducer = createTransactionReducer<IRemoteDocument[]>(
 	personDocumentsTrnActions,
 );
 

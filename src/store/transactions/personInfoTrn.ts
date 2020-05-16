@@ -13,7 +13,9 @@ export const personInfoTrnActions = createTransactionActions(TRANSACTION_NAMES.P
 export const personInfoReducer = createTransactionReducer<IPersonInfo>(personInfoTrnActions);
 
 export const personInfoTrnSelector = createSelector(transactionSelector, (state) => {
-	return state.personInfo;
+	const { result } = state.personInfo;
+
+	return { ...state.personInfo, result: result[0] };
 });
 
 export const personInfoSaga = sagaEffects.transaction(personInfoTrnActions, personInfoRest);

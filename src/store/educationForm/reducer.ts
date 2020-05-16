@@ -1,9 +1,14 @@
-import { createReducer, forAction } from '@black_bird/utils';
-import { defaultEducationDataForm, IEducationForm } from '$common';
-import { submitEducationFormAction } from './actions';
+import { combineActions, createReducer, forAction } from '@black_bird/utils';
+import { defaultEducationDataForm } from '$common';
+import { initEducationFormAction, submitEducationFormAction } from './actions';
 
 const educationFormReducer = createReducer(
-	[forAction(submitEducationFormAction, (state, payload) => payload)],
+	[
+		forAction(
+			combineActions(submitEducationFormAction, initEducationFormAction),
+			(state, payload) => payload,
+		),
+	],
 	defaultEducationDataForm,
 );
 

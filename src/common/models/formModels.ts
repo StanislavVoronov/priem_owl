@@ -41,7 +41,6 @@ export interface IChangeFieldAction {
 export interface IEducationForm {
 	document: IDocument;
 	firstHighEducation: boolean;
-	coolnessTypes: IDictionary[];
 	prevEducation: IDictionary | null;
 	hasEge: boolean;
 }

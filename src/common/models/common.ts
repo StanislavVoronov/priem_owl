@@ -44,14 +44,19 @@ export interface IStylable {
 	classes: Record<string, string>;
 }
 
-export interface IPersonDocument {
-	ID: string;
-	TYPE: string;
-	SUBTYPE: string;
+export interface IRemoteDocument {
+	ID: number;
+	TYPE: number;
+	SUBTYPE: number;
 	SERIA: string;
 	NUM: string;
 	ISS_ORGANISATION: string;
 	ISS_GOVERMENT: number;
+	ISS_GOVERMENT_NAME: string;
+	TYPE_NAME: string;
+	SUBTYPE_NAME: string;
+	ISS_DATE: string;
+	file: File | null;
 }
 
 export interface IPersonInfo {
@@ -59,6 +64,6 @@ export interface IPersonInfo {
 	BIRTHPLACE: string;
 	NEED_HOSTEL: string;
 	EMAIL: string;
-	HIGH_FIRST: string;
-	BEST_PREV_EDU: string;
+	HIGH_FIRST: number;
+	BEST_PREV_EDU: number;
 }

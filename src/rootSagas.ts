@@ -20,6 +20,7 @@ import {
 	isPersonFoundTransactionSelector,
 	priemLogoutTransactionActions,
 	transactionsSagas,
+	verPersonContactsTrnActions,
 } from '$store';
 import { FULL_DICTIONARY_LIST, SHORT_DICTIONARY_LIST } from './dictionaries';
 
@@ -60,6 +61,15 @@ const rootSagas = [
 				}),
 			);
 		}
+	}),
+	sagaEffects.takeLatest(verPersonContactsTrnActions.success, function* () {
+		yield sagaEffects.put(
+			fetchClassifiersAction({
+				dictionaries: FULL_DICTIONARY_LIST,
+				url: '/dev-bin/priem_api.fcgi',
+				version: 2,
+			}),
+		);
 	}),
 ];
 

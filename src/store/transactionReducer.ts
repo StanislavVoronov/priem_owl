@@ -29,7 +29,7 @@ import {
 import {
 	IAdmDictionaryItem,
 	ICreatePersonData,
-	IPersonDocument,
+	IRemoteDocument,
 	IPersonInfo,
 	IPriemGroup,
 } from '$common';
@@ -66,7 +66,7 @@ export interface ITransactionsState {
 	verPersonContacts: ITransaction<IVerPersonContactsResponse>;
 	setExistPersonVerCode: ITransaction<any>;
 	updateLogin: ITransaction<any>;
-	personDocuments: ITransaction<IPersonDocument[]>;
+	personDocuments: ITransaction<IRemoteDocument[]>;
 	personInfo: ITransaction<IPersonInfo>;
 }
 

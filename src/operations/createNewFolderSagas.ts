@@ -1,4 +1,4 @@
-import { sagaEffects } from '@black_bird/utils';
+import { sagaEffects, TransactionStatus } from '@black_bird/utils';
 import {
 	contactsFormSelector,
 	createPersonTransactionActions,
@@ -7,7 +7,6 @@ import {
 	personFormSelector,
 	regFormSelector,
 	submitVerAccountForm,
-	updatePhoneTransactionActions,
 	verAccountFormSelector,
 } from '$store';
 import { IDocument, VerificationMethod } from '$common';

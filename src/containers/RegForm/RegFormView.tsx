@@ -1,8 +1,14 @@
 import React from 'react';
 import { RadioButtonGroup } from '$components';
 import { TextInput, IFormProps, Autocomplete, IFormField } from '@black_bird/components';
-import { has, ITransaction, prop } from '@black_bird/utils';
-import { validateRequireTextField, INamesDictionary, IRegForm } from '$common';
+import { has, isEmpty, isNotVoid, ITransaction, prop } from '@black_bird/utils';
+import {
+	validateRequireTextField,
+	INamesDictionary,
+	IRegForm,
+	isValidDate,
+	validateRusTextField,
+} from '$common';
 import classes from './RegForm.module.css';
 
 export const GENDERS = [
@@ -19,10 +25,12 @@ interface IProps {
 
 const RegFormView = (props: IProps) => {
 	const { firstNameDictionary, email, middleNameDictionary } = props;
+
 	const { onChange, values, errors } = props.form;
 	const defaultOnChange = (data: IFormField<string>) => {
 		const genderName = firstNameDictionary.result.find((item) => item.name === data.value);
 
+		console.log('onChange', data);
 		if (genderName) {
 			onChange(data, [{ name: 'gender', value: String(genderName.sex) }]);
 		} else {
@@ -42,11 +50,16 @@ const RegFormView = (props: IProps) => {
 			: items;
 	};
 
+	console.log('errors', errors);
+
 	return (
 		<>
 			<TextInput
 				onChange={onChange}
+				validate={validateRusTextField}
 				defaultValue={values.lastName}
+				error={isNotVoid(errors?.lastName)}
+				helperText={errors?.lastName}
 				required
 				name="lastName"
 				label="Фамилия"
@@ -54,7 +67,7 @@ const RegFormView = (props: IProps) => {
 			/>
 
 			<Autocomplete
-				error={has('firstName')(errors)}
+				error={isNotVoid(errors?.firstName)}
 				helperText={errors?.firstName}
 				title="Имя"
 				defaultValue={values.firstName}
@@ -67,7 +80,7 @@ const RegFormView = (props: IProps) => {
 
 			<Autocomplete
 				title="Отчество"
-				error={has('middleName')(errors)}
+				error={isNotVoid(errors?.middleName)}
 				helperText={errors?.middleName}
 				defaultValue={values.middleName}
 				onChange={defaultOnChange}
@@ -79,9 +92,9 @@ const RegFormView = (props: IProps) => {
 
 			<TextInput
 				onChange={onChange}
-				validate={validateRequireTextField}
+				validate={isValidDate}
 				required
-				error={has('birthday')(errors)}
+				error={isNotVoid(errors?.birthday)}
 				helperText={errors?.birthday}
 				name="birthday"
 				value={values.birthday}
@@ -102,21 +115,21 @@ const RegFormView = (props: IProps) => {
 				items={GENDERS}
 			/>
 
-			{/*{email && (*/}
-			{/*	<>*/}
-			{/*		<div className={classes.title}>*/}
-			{/*			Личное дело абитуриента существует в приемной комиссии*/}
-			{/*		</div>*/}
-			{/*		<TextInput*/}
-			{/*			name="verAccountCode"*/}
-			{/*			onChange={onChange}*/}
-			{/*			value={values.verAccountCode}*/}
-			{/*			required*/}
-			{/*			label="Код подтверждения"*/}
-			{/*			helperText={`Код подтверждения был напрален на электронную почту: ${email}`}*/}
-			{/*		/>*/}
-			{/*	</>*/}
-			{/*)}*/}
+			{email && (
+				<>
+					<div className={classes.title}>
+						Личное дело абитуриента существует в приемной комиссии
+					</div>
+					<TextInput
+						name="verAccountCode"
+						onChange={onChange}
+						value={values.verAccountCode}
+						required
+						label="Код подтверждения"
+						helperText={`Код подтверждения был напрален на электронную почту: ${email}`}
+					/>
+				</>
+			)}
 		</>
 	);
 };

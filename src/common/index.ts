@@ -4,7 +4,8 @@ export * from './enums';
 export * from './validation';
 export * from './defaults';
 export * from './constants';
-export * from './names';
+export * from './transactionNames';
+export * from './mappers';
 
 import moment from 'moment';
 

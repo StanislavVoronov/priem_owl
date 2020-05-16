@@ -1,13 +1,19 @@
-import { createReducer, forAction, combineReducers } from '@black_bird/utils';
+import { createReducer, forAction, combineReducers, combineActions } from '@black_bird/utils';
 import { defaultDocument, IDocument } from '$common';
 import {
 	admNeedDocChangedStatusAction,
+	initDocumentFormAction,
 	newDocumentAdded,
 	submitDocumentsFormAction,
 } from './actions';
 
 const documentsReducer = createReducer<IDocument[]>(
-	[forAction(submitDocumentsFormAction, (state, payload) => payload)],
+	[
+		forAction(
+			combineActions(submitDocumentsFormAction, initDocumentFormAction),
+			(state, payload) => payload,
+		),
+	],
 	[],
 );
 

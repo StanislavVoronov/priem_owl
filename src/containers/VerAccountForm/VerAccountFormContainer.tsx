@@ -11,11 +11,19 @@ import {
 	updateAddressTransactionSelector,
 	uploadDocumentsTransactionSelector,
 	verAccountFormSelector,
+	verPersonContactsTrnSelector,
 } from '$store';
 import { AddressType, IVerAccountForm } from '$common';
 import VerAccountFormView from './VerAccountFormView';
 import { Form, IFormField, IFormProps } from '@black_bird/components';
-import { IException, isEmpty, ITransaction, prop, TransactionStatus } from '@black_bird/utils';
+import {
+	IException,
+	isEmpty,
+	isNotVoid,
+	ITransaction,
+	prop,
+	TransactionStatus,
+} from '@black_bird/utils';
 import classes from './styles.module.css';
 
 interface IMapStateToProps {
@@ -25,6 +33,7 @@ interface IMapStateToProps {
 	loading: boolean;
 	folderCreated: boolean;
 	email: string;
+	personExists?: string;
 }
 
 interface IDispatchToProps {
@@ -34,6 +43,10 @@ interface IDispatchToProps {
 type IProps = IMapStateToProps & IDispatchToProps;
 class AccountVerificationContainer extends React.Component<IProps> {
 	renderForm = (form: IFormProps<any>) => {
+		if (this.props.personExists) {
+			return null;
+		}
+
 		return (
 			<VerAccountFormView
 				email={this.props.email}
@@ -81,8 +94,10 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = (stat
 	const docException = Object.values(docsTransactions).find((item) => item.exception);
 	const createCodeTransaction = createVerCodeTransactionSelector(state);
 	const { email } = contactsFormSelector(state);
+	const verPersonContacts = verPersonContactsTrnSelector(state);
 
 	return {
+		personExists: verPersonContacts.result?.email,
 		form,
 		loading:
 			createPersonDataTransaction.isFetching ||
@@ -101,11 +116,12 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = (stat
 			(docException && docException.exception) ||
 			null,
 		folderCreated:
-			createPersonDataTransaction.status === TransactionStatus.COMPLETED &&
-			updateLiveAddressTransaction &&
-			updateLiveAddressTransaction.status === TransactionStatus.COMPLETED &&
-			updateRegAddressTransaction &&
-			updateRegAddressTransaction.status === TransactionStatus.COMPLETED &&
+			((createPersonDataTransaction.status === TransactionStatus.COMPLETED &&
+				updateLiveAddressTransaction &&
+				updateLiveAddressTransaction.status === TransactionStatus.COMPLETED &&
+				updateRegAddressTransaction &&
+				updateRegAddressTransaction.status === TransactionStatus.COMPLETED) ||
+				verPersonContacts.status === TransactionStatus.COMPLETED) &&
 			Object.values(appsTransactions).every(
 				(item) => item.status === TransactionStatus.COMPLETED,
 			) &&

@@ -110,6 +110,8 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 			num,
 			series,
 			issieBy,
+			date,
+			codeDepartment,
 		} = this.props.document;
 
 		const filteredSubTypesDocDictionary = dictionarySubTypes
@@ -225,6 +227,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 							<TextInput
 								onChange={this.onChange}
 								required
+								value={date}
 								type="date"
 								name="date"
 								label="Дата выдачи документа"
@@ -243,6 +246,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 					{type && type.id === 1 && subType && subType.id === 1 ? (
 						<TextInput
 							name="codeDepartment"
+							value={codeDepartment}
 							onChange={this.onChange}
 							label="Код подразделения"
 							placeholder={'Введите код подразделения'}

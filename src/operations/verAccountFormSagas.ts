@@ -14,16 +14,26 @@ import {
 	uploadDocumentsTransactionSelector,
 	uploadDocumentTransactionActions,
 	verAccountFormSelector,
+	verPersonContactsTrnSelector,
 } from '$store';
 import { AddressType } from '$common';
+import { uploadDocumentsSaga } from './uploadDocumentsSagas';
+import { createNewPriemAppSaga } from './createApplication';
 
 export const verAccountFormSagas = [
 	sagaEffects.takeEvery(submitApplicationFormAction, function* () {
 		const { verAccountMethod } = yield sagaEffects.select(verAccountFormSelector);
 		const { mobPhone, email } = yield sagaEffects.select(contactsFormSelector);
-		yield sagaEffects.put(
-			createVerCodeTransactionActions.trigger(email.trim(), mobPhone.trim(), verAccountMethod),
-		);
+		const verPersonContacts = yield sagaEffects.select(verPersonContactsTrnSelector);
+
+		if (verPersonContacts.status === TransactionStatus.COMPLETED) {
+			yield sagaEffects.call(uploadDocumentsSaga);
+			yield sagaEffects.call(createNewPriemAppSaga);
+		} else {
+			yield sagaEffects.put(
+				createVerCodeTransactionActions.trigger(email.trim(), mobPhone.trim(), verAccountMethod),
+			);
+		}
 	}),
 	sagaEffects.takeEvery(
 		[
