@@ -36,6 +36,13 @@ class EnrollContainer extends React.Component<IProps, IState> {
 	}
 
 	componentDidMount() {
+		const script = document.createElement('script');
+
+		script.src = 'https://code.jivosite.com/widget/qarvE25pvy';
+		script.async = true;
+
+		document.body.appendChild(script);
+
 		this.props.init();
 	}
 

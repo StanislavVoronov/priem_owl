@@ -29,7 +29,7 @@ type IProps = IStateToProps & IDispatchToProps;
 
 const PersonFormContainer = (props: IProps) => {
 	const disabledForm = ({ values }: { values: IPersonForm }) => {
-		return !validateDocument(values.document);
+		return !validateDocument(values.document) || !values.isApplyPersonData;
 	};
 	const renderForm = (form: IFormProps<any>) => {
 		return (

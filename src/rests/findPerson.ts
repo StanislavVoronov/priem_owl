@@ -7,6 +7,7 @@ export interface IFindPersonRequest {
 	lname: string;
 	mname: string;
 	birthdate: string;
+	default_birthdate?: string;
 }
 
 export interface IFindPersonResponse {
@@ -20,6 +21,7 @@ export const findPersonRest = (data: IPerson) => {
 		lname: lastName,
 		mname: middleName,
 		birthdate: moment(birthday.trim()).format('YYYY.MM.DD'),
+		default_birthdate: birthday,
 	};
 
 	return PriemApi.select<IFindPersonRequest, IFindPersonResponse>(
