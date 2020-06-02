@@ -1,16 +1,6 @@
 import * as React from 'react';
-
-import styles from './styles.module.css';
-
-import {
-	Step,
-	StepButton,
-	StepContent,
-	Stepper,
-	Title,
-	LoadingText,
-	EnrollHeader,
-} from '$components';
+import { Step, StepButton, StepContent, Stepper, EnrollHeader } from '$components';
+import { LoadingText } from '@black_bird/components';
 import classes from './styles.module.css';
 import {
 	RegistrationForm,
@@ -21,7 +11,7 @@ import {
 	VerAccountForm,
 	ApplicationsForm,
 } from '$containers';
-import { IException, isVoid } from '@black_bird/utils';
+import { IException } from '@black_bird/utils';
 
 interface IProps {
 	loading: boolean;

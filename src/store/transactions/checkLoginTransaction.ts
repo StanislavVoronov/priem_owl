@@ -3,22 +3,17 @@ import {
 	createTransactionActions,
 	createSelector,
 	sagaEffects,
-	ITransaction,
 } from '@black_bird/utils';
 import { AUTO_RETRY_REQUEST, TRANSACTION_NAMES } from '$common';
 import { checkLoginRest, ICheckLoginResponse } from '$rests';
 import { transactionSelector } from './selectors';
 
-export const checkLoginTransactionActions = createTransactionActions(
-	TRANSACTION_NAMES.CheckLogin,
-	(login: string) => ({
-		login,
-	}),
-);
+export const checkLoginTransactionActions = createTransactionActions<
+	ICheckLoginResponse,
+	{ login: string }
+>(TRANSACTION_NAMES.CheckLogin);
 
-export const checkLoginReducer = createTransactionReducer<ICheckLoginResponse>(
-	checkLoginTransactionActions,
-);
+export const checkLoginReducer = createTransactionReducer(checkLoginTransactionActions);
 
 export const isUniqueLoginTransactionSelector = createSelector(transactionSelector, (state) => {
 	const { isFetching, exception, result }: any = state.checkLogin;

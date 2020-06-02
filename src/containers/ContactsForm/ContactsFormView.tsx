@@ -1,9 +1,9 @@
 import React from 'react';
-import { TextInput, Checkbox, Column, Wrapper } from '@black_bird/components';
+import { TextInput, Checkbox, Wrapper } from '@black_bird/components';
 import { IContactsForm, IDictionary } from '$common';
 import { IFormProps } from '@black_bird/components';
 import { ITransaction } from '@black_bird/utils';
-import { DocumentForm, H2 } from '$components';
+import { DocumentForm } from '$components';
 
 interface IProps {
 	governmentDictionary: ITransaction<IDictionary[]>;
@@ -19,7 +19,7 @@ const ContactsFormView = (props: IProps) => {
 
 	return (
 		<>
-			<H2>Адрес регистрации</H2>
+			<h3>Адрес регистрации</h3>
 			<DocumentForm
 				name="regDoc"
 				onChange={onChange}
@@ -51,8 +51,20 @@ const ContactsFormView = (props: IProps) => {
 							required
 							name="regLocality"
 						/>
-						<TextInput onChange={onChange} label={'Улица'} placeholder={'Введите улицу'} required name="regStreet" />
-						<TextInput onChange={onChange} label={'Дом'} placeholder={'Введите дом'} name="regHome" required />
+						<TextInput
+							onChange={onChange}
+							label={'Улица'}
+							placeholder={'Введите улицу'}
+							required
+							name="regStreet"
+						/>
+						<TextInput
+							onChange={onChange}
+							label={'Дом'}
+							placeholder={'Введите дом'}
+							name="regHome"
+							required
+						/>
 						<TextInput onChange={onChange} label={'Корпус'} name="regBlock" />
 						<TextInput onChange={onChange} label={'Квартира'} name="regFlat" />
 						<Checkbox
@@ -74,7 +86,7 @@ const ContactsFormView = (props: IProps) => {
 
 			{!isRegAddressEqualLive && (
 				<Wrapper margin="huge">
-					<H2>Адрес проживания</H2>
+					<h3>Адрес проживания</h3>
 					<DocumentForm
 						name="liveDoc"
 						onChange={onChange}
@@ -148,7 +160,12 @@ const ContactsFormView = (props: IProps) => {
 				label="Мобильный телефон"
 				required
 			/>
-			<TextInput onChange={onChange} value={values.homePhone} name="homePhone" label="Домашний телефон" />
+			<TextInput
+				onChange={onChange}
+				value={values.homePhone}
+				name="homePhone"
+				label="Домашний телефон"
+			/>
 		</>
 	);
 };

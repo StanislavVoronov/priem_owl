@@ -35,7 +35,9 @@ export const applicationFormSagas = [
 	sagaEffects.takeEvery(onChangeInstAction, function* () {
 		const { filial, institute, educLevel } = yield sagaEffects.select(applicationsFormSelector);
 
-		yield sagaEffects.put(priemDirectionsTrnActions.trigger(filial, educLevel, institute));
+		yield sagaEffects.put(
+			priemDirectionsTrnActions.trigger({ filial, educLevel, inst: institute }),
+		);
 	}),
 	sagaEffects.takeEvery(onChangeEducLevelAction, function* () {
 		const { filial, educLevel } = yield sagaEffects.select(applicationsFormSelector);
@@ -49,18 +51,24 @@ export const applicationFormSagas = [
 
 			const { admType } = yield sagaEffects.select(applicationsFormSelector);
 
-			yield sagaEffects.put(priemInstitutesTrnActions.trigger(filial, educLevel, admType));
+			yield sagaEffects.put(
+				priemInstitutesTrnActions.trigger({ filial, eduLevel: educLevel, admType }),
+			);
 		}
 	}),
 	sagaEffects.takeEvery(onChangeDirectionAction, function* () {
 		const { filial, institute, direction } = yield sagaEffects.select(applicationsFormSelector);
 
-		yield sagaEffects.put(priemProfilesTransactionActions.trigger(filial, institute, direction));
+		yield sagaEffects.put(
+			priemProfilesTransactionActions.trigger({ filial, inst: institute, direction }),
+		);
 	}),
 	sagaEffects.takeEvery(onChangeProfilesAction, function* () {
 		const { filial, institute, direction } = yield sagaEffects.select(applicationsFormSelector);
 
-		yield sagaEffects.put(priemEducFormsTransactionActions.trigger(filial, institute, direction));
+		yield sagaEffects.put(
+			priemEducFormsTransactionActions.trigger({ filial, inst: institute, direction }),
+		);
 	}),
 	sagaEffects.takeEvery(onChangeEducFormsAction, function* () {
 		const { filial, institute, direction, educForms } = yield sagaEffects.select(
@@ -68,32 +76,33 @@ export const applicationFormSagas = [
 		);
 
 		yield sagaEffects.put(
-			priemPayFormsTransactionActions.trigger(filial, institute, direction, educForms),
+			priemPayFormsTransactionActions.trigger({ filial, inst: institute, direction, educForms }),
 		);
 	}),
 	sagaEffects.takeEvery(onChangeAdmTypeAction, function* () {
 		const { filial, educLevel, admType } = yield sagaEffects.select(applicationsFormSelector);
 
-		yield sagaEffects.put(priemInstitutesTrnActions.trigger(filial, educLevel, admType));
+		yield sagaEffects.put(
+			priemInstitutesTrnActions.trigger({ filial, eduLevel: educLevel, admType }),
+		);
 	}),
 	sagaEffects.takeEvery(newPriemAppAddedAction, function* () {
 		const { filial, institute, direction, payForms, educForms, admType } = yield sagaEffects.select(
 			applicationsFormSelector,
 		);
-		const key = guid();
 
 		for (const educ of educForms) {
 			for (const pay of payForms) {
 				yield sagaEffects.put(
-					priemAdmGroupsTransactionActions.trigger(
+					priemAdmGroupsTransactionActions.trigger({
 						filial,
-						institute,
+						inst: institute,
 						direction,
-						educ,
-						pay,
+						educForm: educ,
+						payForm: pay,
 						admType,
-						key,
-					),
+						admGroup: guid(),
+					}),
 				);
 			}
 		}
@@ -111,7 +120,7 @@ export const applicationFormSagas = [
 		}
 	}),
 	sagaEffects.takeEvery(priemAdmGroupsTransactionActions.success, function* ({ payload }) {
-		const { response }: any = payload;
+		const { response } = payload;
 		const { filial, institute, direction, educLevel, profiles } = yield sagaEffects.select(
 			applicationsFormSelector,
 		);

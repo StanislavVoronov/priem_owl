@@ -4,10 +4,15 @@ import { PRIEM_API_NAMES } from '$services';
 class PriemApi {
 	static host: string = '/dev-bin';
 	static path: string = '/priem_api.fcgi';
-	static select = <Q, R>(api: string, payload?: Q, errorMessage?: string): Promise<R[]> => {
+	static select = <Q, R>(api: string, payload?: Q, errorMessage?: string): Promise<R> => {
 		const Request = new JsonRequest(PriemApi.host, PriemApi.path, api, payload, errorMessage);
 
 		return Request.select();
+	};
+	static selectList = <Q, R>(api: string, payload?: Q, errorMessage?: string): Promise<R[]> => {
+		const Request = new JsonRequest(PriemApi.host, PriemApi.path, api, payload, errorMessage);
+
+		return Request.selectList();
 	};
 
 	static post = <Q, R>(api: PRIEM_API_NAMES, payload?: Q, errorMessage?: string): Promise<R> => {

@@ -34,10 +34,15 @@ import {
 	IPriemGroup,
 } from '$common';
 import {
+	IAdmGroupResponse,
 	ICheckLoginResponse,
+	IContactResponse,
 	ICreateLoginResponse,
+	ICreatePersonDataResponse,
+	ICreatePriemApplicationResponse,
 	ICreateVerCodeResponse,
 	IFindPersonResponse,
+	IUpdatePhoneResponse,
 	IVerPersonContactsResponse,
 } from '$rests';
 import type { IAdmTransactionList } from './models';
@@ -46,21 +51,21 @@ export interface ITransactionsState {
 	checkLogin: ITransaction<ICheckLoginResponse>;
 	createLogin: ITransaction<ICreateLoginResponse>;
 	findPerson: ITransaction<IFindPersonResponse>;
-	createPerson: ITransaction<ICreatePersonData>;
+	createPerson: ITransaction<ICreatePersonDataResponse>;
 	priemFilials: IAdmTransactionList;
 	priemEducForms: IAdmTransactionList;
 	priemDirections: IAdmTransactionList;
 	priemInstitutes: IAdmTransactionList;
 	priemEducLevels: IAdmTransactionList;
-	priemAdmGroups: Record<string, ITransaction<IPriemGroup>>;
+	priemAdmGroups: Record<string, ITransaction<IAdmGroupResponse>>;
 	createVerCode: ITransaction<ICreateVerCodeResponse>;
 	priemAdmTypes: IAdmTransactionList;
 	priemPayForms: IAdmTransactionList;
 	priemProfiles: IAdmTransactionList;
-	updatePhones: Record<string, ITransaction<string>>;
-	updateAddresses: Record<string, ITransaction<string>>;
+	updatePhones: Record<string, ITransaction<IUpdatePhoneResponse>>;
+	updateAddresses: Record<string, ITransaction<IContactResponse>>;
 	uploadDocuments: Record<string, ITransaction<string>>;
-	createApplications: Record<string, ITransaction<string>>;
+	createApplications: Record<string, ITransaction<ICreatePriemApplicationResponse>>;
 	priemLogout: ITransaction<any>;
 	verNp: ITransaction<{ ver_id: number }>;
 	verPersonContacts: ITransaction<IVerPersonContactsResponse>;
@@ -73,9 +78,9 @@ export interface ITransactionsState {
 const transactionsReducer = combineReducers<ITransactionsState>({
 	checkLogin: checkLoginReducer,
 	createLogin: createLoginReducer,
+	findPerson: findPersonReducer,
 	createPerson: createPersonReducer,
 	priemFilials: priemFilialsReducer,
-	findPerson: findPersonReducer,
 	priemEducForms: priemEducFormsReducer,
 	priemDirections: priemDirectionsReducer,
 	priemInstitutes: priemInstitutesReducer,

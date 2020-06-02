@@ -31,7 +31,11 @@ export const verAccountFormSagas = [
 			yield sagaEffects.call(createNewPriemAppSaga);
 		} else {
 			yield sagaEffects.put(
-				createVerCodeTransactionActions.trigger(email.trim(), mobPhone.trim(), verAccountMethod),
+				createVerCodeTransactionActions.trigger({
+					email: email.trim(),
+					phone: mobPhone.trim(),
+					method: verPersonContacts,
+				}),
 			);
 		}
 	}),

@@ -5,7 +5,7 @@ import {
 	prop,
 	sagaEffects,
 } from '@black_bird/utils';
-import { createApplicationRest } from '$rests';
+import { createApplicationRest, ICreatePriemApplicationResponse } from '$rests';
 import {
 	IAdmDictionaryItem,
 	TRANSACTION_NAMES,
@@ -15,23 +15,14 @@ import {
 } from '$common';
 import { transactionSelector } from './selectors';
 
-export const createAppTransactionActions = createTransactionActions(
-	TRANSACTION_NAMES.CreateApplication,
-	(flow: number, adm: IAdmGroupItem, prof: IAdmDictionaryItem, priority: number, app: string) => ({
-		flow,
-		adm: adm.ID,
-		prof: prof.ID,
-		priority,
-		app,
-	}),
-);
+export const createAppTransactionActions = createTransactionActions<
+	ICreatePriemApplicationResponse,
+	{ flow: number; adm: IAdmGroupItem; prof: IAdmDictionaryItem; priority: number; app: string }
+>(TRANSACTION_NAMES.CreateApplication);
 
-export const createApplicationReducer = createTransactionReducer<string, { app: string }>(
-	createAppTransactionActions,
-	{
-		mapToKey: (payload) => payload.app,
-	},
-);
+export const createApplicationReducer = createTransactionReducer(createAppTransactionActions, {
+	mapToKey: (payload) => payload.app,
+});
 
 export const createAppsTransactionSelector = createSelector(
 	transactionSelector,
@@ -50,6 +41,7 @@ export const createAppTransactionSelector = createSelector(
 
 export const createApplicationSaga = sagaEffects.transaction(
 	createAppTransactionActions,
-	(payload) => createApplicationRest(payload.adm, payload.prof, payload.priority, payload.flow),
+	(payload) =>
+		createApplicationRest(payload.adm.ID, payload.prof.ID, payload.priority, payload.flow),
 	AUTO_RETRY_REQUEST,
 );

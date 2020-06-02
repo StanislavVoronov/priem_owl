@@ -45,9 +45,13 @@ export const createPersonContactsSagas = [
 					liveLocality ? ', ' + liveLocality : ''
 			  }${prepareAddress(liveStreet, liveHome, liveBlock, liveFlat)}`;
 
-		yield sagaEffects.put(updateAddressTransactionActions.trigger(liveAddress, AddressType.Live));
+		yield sagaEffects.put(
+			updateAddressTransactionActions.trigger({ address: liveAddress, kind: AddressType.Live }),
+		);
 
-		yield sagaEffects.put(updateAddressTransactionActions.trigger(regAddress, AddressType.Reg));
+		yield sagaEffects.put(
+			updateAddressTransactionActions.trigger({ address: regAddress, kind: AddressType.Reg }),
+		);
 
 		yield sagaEffects.put(updateLoginTrnActions.trigger(email));
 	}),

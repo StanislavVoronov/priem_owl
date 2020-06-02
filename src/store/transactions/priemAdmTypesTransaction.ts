@@ -17,22 +17,19 @@ interface IAdmTypePayload {
 	filial: IAdmDictionaryItem;
 	eduLevel: IAdmDictionaryItem;
 }
-export const priemAdmTypesTrnActions = createTransactionActions(
-	TRANSACTION_NAMES.FetchPriemAdmTypes,
-	(payload: IAdmTypePayload) => payload,
-);
+export const priemAdmTypesTrnActions = createTransactionActions<
+	IAdmDictionaryItem[],
+	IAdmTypePayload
+>(TRANSACTION_NAMES.FetchPriemAdmTypes);
 
-export const priemAdmTypesReducer = createTransactionReducer<IAdmDictionaryItem[]>(
-	priemAdmTypesTrnActions,
-	{
-		cleanActions: [
-			priemFilialsTrnActions.trigger,
-			onChangeFilialAction,
-			onChangeEducLevelAction,
-			priemEducFormsTransactionActions.trigger,
-		],
-	},
-);
+export const priemAdmTypesReducer = createTransactionReducer(priemAdmTypesTrnActions, {
+	cleanActions: [
+		priemFilialsTrnActions.trigger,
+		onChangeFilialAction,
+		onChangeEducLevelAction,
+		priemEducFormsTransactionActions.trigger,
+	],
+});
 
 export const priemAdmTypesTrnSelector = createSelector(transactionSelector, prop('priemAdmTypes'));
 

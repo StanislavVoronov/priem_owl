@@ -8,14 +8,12 @@ import { TRANSACTION_NAMES } from '$common';
 import { createLoginRest, ICreateLoginResponse } from '$rests';
 import { transactionSelector } from './selectors';
 
-export const createLoginTransactionActions = createTransactionActions(
-	TRANSACTION_NAMES.CreateLogin,
-	(login: string, password: string) => ({ login, password }),
-);
+export const createLoginTransactionActions = createTransactionActions<
+	ICreateLoginResponse,
+	{ login: string; password: string }
+>(TRANSACTION_NAMES.CreateLogin);
 
-export const createLoginReducer = createTransactionReducer<ICreateLoginResponse>(
-	createLoginTransactionActions,
-);
+export const createLoginReducer = createTransactionReducer(createLoginTransactionActions);
 
 export const createLoginTransactionSelector = createSelector(transactionSelector, (state) => {
 	const { isFetching, exception, result } = state.createLogin;

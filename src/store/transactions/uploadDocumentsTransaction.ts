@@ -4,20 +4,14 @@ import { AUTO_RETRY_REQUEST, IDocument, TRANSACTION_NAMES } from '$common';
 import { uploadDocumentRest } from '$rests';
 import { ITransactionsState } from '../transactionReducer';
 
-export const uploadDocumentTransactionActions = createTransactionActions(
-	TRANSACTION_NAMES.UploadDocument,
-	(document: IDocument, docKey: string) => ({
-		docKey,
-		document,
-	}),
-);
+export const uploadDocumentTransactionActions = createTransactionActions<
+	string,
+	{ document: IDocument; docKey: string }
+>(TRANSACTION_NAMES.UploadDocument);
 
-export const uploadDocumentsReducer = createTransactionReducer<string, { docKey: string }>(
-	uploadDocumentTransactionActions,
-	{
-		mapToKey: (payload) => payload.docKey,
-	},
-);
+export const uploadDocumentsReducer = createTransactionReducer(uploadDocumentTransactionActions, {
+	mapToKey: (payload) => payload.docKey,
+});
 
 export const uploadDocumentsTransactionSelector = createSelector(
 	prop('transactions'),

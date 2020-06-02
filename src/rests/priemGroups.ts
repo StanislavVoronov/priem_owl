@@ -1,6 +1,6 @@
 import { PriemApi, PRIEM_API_NAMES } from '$services';
 
-interface IFetchResponse {
+export interface IAdmGroupResponse {
 	ID: number;
 	NEED_DOC: string;
 }
@@ -15,4 +15,4 @@ interface IPayload {
 }
 
 export const priemAdmGroupsRest = (payload: IPayload) =>
-	PriemApi.select<IPayload, IFetchResponse>(PRIEM_API_NAMES.FetchPriemGroups, payload);
+	PriemApi.select<IPayload, IAdmGroupResponse>(PRIEM_API_NAMES.FetchPriemGroups, payload);

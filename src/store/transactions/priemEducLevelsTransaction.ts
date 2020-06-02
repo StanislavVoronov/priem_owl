@@ -12,17 +12,14 @@ import { transactionSelector } from './selectors';
 import { priemFilialsTrnActions } from './priemFilialsTransaction';
 import { onChangeFilialAction } from '../applicationsForm';
 
-export const priemEducLevelsTrnActions = createTransactionActions(
-	TRANSACTION_NAMES.FetchPriemEducationLevels,
-	(filial: IAdmDictionaryItem) => ({ filial }),
-);
+export const priemEducLevelsTrnActions = createTransactionActions<
+	IAdmDictionaryItem[],
+	IAdmDictionaryItem
+>(TRANSACTION_NAMES.FetchPriemEducationLevels);
 
-export const priemEducLevelsReducer = createTransactionReducer<IAdmDictionaryItem[]>(
-	priemEducLevelsTrnActions,
-	{
-		cleanActions: [priemFilialsTrnActions.trigger, onChangeFilialAction],
-	},
-);
+export const priemEducLevelsReducer = createTransactionReducer(priemEducLevelsTrnActions, {
+	cleanActions: [priemFilialsTrnActions.trigger, onChangeFilialAction],
+});
 
 export const priemEducLevelsTransactionSelector = createSelector(
 	transactionSelector,
@@ -34,5 +31,5 @@ export const priemEducLevelSaga = sagaEffects.transaction(priemEducLevelsTrnActi
 ) {
 	const payForms: number[] = yield sagaEffects.select(disabledPayFormSelector);
 
-	return yield priemEducLevelsRest(payload.filial.ID, payForms);
+	return yield priemEducLevelsRest(payload.ID, payForms);
 });

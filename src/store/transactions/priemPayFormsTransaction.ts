@@ -13,27 +13,19 @@ import { priemDirectionsTrnActions } from './priemDirectionsTransaction';
 import { priemProfilesTransactionActions } from './priemProfilesTransaction';
 import { priemEducFormsTransactionActions } from './priemEducFormsTransaction';
 
-export const priemPayFormsTransactionActions = createTransactionActions(
-	TRANSACTION_NAMES.FetchPriemPayForms,
-	(
-		filial: IAdmDictionaryItem,
-		inst: IAdmDictionaryItem,
-		direction: IAdmDictionaryItem,
-		educForms: IAdmDictionaryItem[],
-	) => ({
-		filial,
-		inst,
-		direction,
-		educForms,
-	}),
-);
-
-export const priemPayFormsReducer = createTransactionReducer<IAdmDictionaryItem[]>(
-	priemPayFormsTransactionActions,
+export const priemPayFormsTransactionActions = createTransactionActions<
+	IAdmDictionaryItem[],
 	{
-		cleanActions: [priemEducFormsTransactionActions.trigger],
-	},
-);
+		filial: IAdmDictionaryItem;
+		inst: IAdmDictionaryItem;
+		direction: IAdmDictionaryItem;
+		educForms: IAdmDictionaryItem[];
+	}
+>(TRANSACTION_NAMES.FetchPriemPayForms);
+
+export const priemPayFormsReducer = createTransactionReducer(priemPayFormsTransactionActions, {
+	cleanActions: [priemEducFormsTransactionActions.trigger],
+});
 
 export const priemPayFormsTransactionSelector = createSelector(
 	transactionSelector,

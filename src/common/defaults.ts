@@ -26,7 +26,7 @@ export const defaultEducationDataForm: IEducationForm = {
 		type: { id: 2, name: 'Документ об предыдущем образовании', need_info: 1, has_num: 1 },
 	},
 	firstHighEducation: true,
-	prevEducation: { id: 1, name: 'Среднее общее' },
+	prevEducation: null,
 	hasEge: false,
 };
 

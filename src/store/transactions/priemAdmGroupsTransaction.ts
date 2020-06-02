@@ -1,36 +1,25 @@
 import { createTransactionActions, createTransactionReducer, sagaEffects } from '@black_bird/utils';
 import { createSelector } from '@black_bird/utils';
-import { IAdmDictionaryItem, IPriemGroup, TRANSACTION_NAMES } from '$common';
-import { priemAdmGroupsRest } from '$rests';
+import { IAdmDictionaryItem, TRANSACTION_NAMES } from '$common';
+import { IAdmGroupResponse, priemAdmGroupsRest } from '$rests';
 import { transactionSelector } from './selectors';
 
-export const priemAdmGroupsTransactionActions = createTransactionActions(
-	TRANSACTION_NAMES.FetchPriemGroups,
-	(
-		filial: IAdmDictionaryItem,
-		inst: IAdmDictionaryItem,
-		direction: IAdmDictionaryItem,
-		educForm: IAdmDictionaryItem,
-		payForm: IAdmDictionaryItem,
-		admType: IAdmDictionaryItem,
-		admGroup: string,
-	) => ({
-		admGroup,
-		filial,
-		inst,
-		direction,
-		educForm,
-		payForm,
-		admType,
-	}),
-);
-
-export const priemAdmGroupsReducer = createTransactionReducer<IPriemGroup, { admGroup: string }>(
-	priemAdmGroupsTransactionActions,
+export const priemAdmGroupsTransactionActions = createTransactionActions<
+	IAdmGroupResponse,
 	{
-		mapToKey: (payload) => payload.admGroup,
-	},
-);
+		filial: IAdmDictionaryItem;
+		inst: IAdmDictionaryItem;
+		direction: IAdmDictionaryItem;
+		educForm: IAdmDictionaryItem;
+		payForm: IAdmDictionaryItem;
+		admType: IAdmDictionaryItem;
+		admGroup: string;
+	}
+>(TRANSACTION_NAMES.FetchPriemGroups);
+
+export const priemAdmGroupsReducer = createTransactionReducer(priemAdmGroupsTransactionActions, {
+	mapToKey: (payload) => payload.admGroup,
+});
 
 export const priemAdmGroupTransactionSelector = createSelector(
 	transactionSelector,

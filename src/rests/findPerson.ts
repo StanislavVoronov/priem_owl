@@ -1,5 +1,5 @@
 import { IPerson } from '$common';
-import moment from 'moment';
+import { formatDate } from '@black_bird/utils';
 import { PriemApi, PRIEM_API_NAMES } from '$services';
 
 export interface IFindPersonRequest {
@@ -20,7 +20,7 @@ export const findPersonRest = (data: IPerson) => {
 		fname: firstName,
 		lname: lastName,
 		mname: middleName,
-		birthdate: moment(birthday.trim()).format('YYYY.MM.DD'),
+		birthdate: birthday.trim(),
 		default_birthdate: birthday,
 	};
 

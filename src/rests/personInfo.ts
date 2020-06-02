@@ -1,6 +1,6 @@
 import { PriemApi, PRIEM_API_NAMES } from '$services';
-import { IDocument } from '$common';
+import { IDocument, IPersonInfo } from '$common';
 
 export const personInfoRest = () => {
-	return PriemApi.select<never, IDocument[]>(PRIEM_API_NAMES.PersonInfo);
+	return PriemApi.select<never, IPersonInfo>(PRIEM_API_NAMES.PersonInfo);
 };

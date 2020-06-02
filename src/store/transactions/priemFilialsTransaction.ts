@@ -11,14 +11,13 @@ import { disabledPayFormSelector } from '../selectors';
 import { transactionSelector } from './selectors';
 import { submitApplicationFormAction } from '../applicationsForm';
 
-export const priemFilialsTrnActions = createTransactionActions(TRANSACTION_NAMES.FetchPriemFilials);
-
-export const priemFilialsReducer = createTransactionReducer<IAdmDictionaryItem[]>(
-	priemFilialsTrnActions,
-	{
-		cleanActions: [submitApplicationFormAction],
-	},
+export const priemFilialsTrnActions = createTransactionActions<IAdmDictionaryItem[]>(
+	TRANSACTION_NAMES.FetchPriemFilials,
 );
+
+export const priemFilialsReducer = createTransactionReducer(priemFilialsTrnActions, {
+	cleanActions: [submitApplicationFormAction],
+});
 
 export const priemFilialsTransactionSelector = createSelector(
 	transactionSelector,

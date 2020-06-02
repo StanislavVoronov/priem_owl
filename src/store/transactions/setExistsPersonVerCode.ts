@@ -8,15 +8,12 @@ import {
 
 import { TRANSACTION_NAMES } from '$common';
 import { transactionSelector } from './selectors';
-import { setExistPersonVerCodeRest } from '$rests';
+import { ISetExistPersonVerCodeResponse, setExistPersonVerCodeRest } from '$rests';
 
-export const setExistPersonVerCodeTrnActions = createTransactionActions(
-	TRANSACTION_NAMES.SET_EXIST_PERSON_VER_CODE,
-	(npId: number, code: string) => ({
-		code,
-		npId,
-	}),
-);
+export const setExistPersonVerCodeTrnActions = createTransactionActions<
+	ISetExistPersonVerCodeResponse,
+	{ npId: number; code: string }
+>(TRANSACTION_NAMES.SET_EXIST_PERSON_VER_CODE);
 export const setExistPersonVerCodeReducer = createTransactionReducer(
 	setExistPersonVerCodeTrnActions,
 );

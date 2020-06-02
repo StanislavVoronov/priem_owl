@@ -15,21 +15,14 @@ import {
 import { transactionSelector } from './selectors';
 import { priemEducLevelsTrnActions } from './priemEducLevelsTransaction';
 
-export const priemInstitutesTrnActions = createTransactionActions(
-	TRANSACTION_NAMES.FetchPriemInstitutes,
-	(filial: IAdmDictionaryItem, eduLevel: IAdmDictionaryItem, admType: IAdmDictionaryItem) => ({
-		filial,
-		eduLevel,
-		admType,
-	}),
-);
+export const priemInstitutesTrnActions = createTransactionActions<
+	IAdmDictionaryItem[],
+	{ filial: IAdmDictionaryItem; eduLevel: IAdmDictionaryItem; admType: IAdmDictionaryItem }
+>(TRANSACTION_NAMES.FetchPriemInstitutes);
 
-export const priemInstitutesReducer = createTransactionReducer<IAdmDictionaryItem[]>(
-	priemInstitutesTrnActions,
-	{
-		cleanActions: [priemEducLevelsTrnActions.trigger],
-	},
-);
+export const priemInstitutesReducer = createTransactionReducer(priemInstitutesTrnActions, {
+	cleanActions: [priemEducLevelsTrnActions.trigger],
+});
 
 export const priemInstitutesTransactionSelector = createSelector(
 	transactionSelector,

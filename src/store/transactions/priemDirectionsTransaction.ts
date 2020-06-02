@@ -11,21 +11,14 @@ import { applicationAmdTypeSelector, disabledPayFormSelector } from '../selector
 import { transactionSelector } from './selectors';
 import { priemInstitutesTrnActions } from './priemInstitutesTransaction';
 
-export const priemDirectionsTrnActions = createTransactionActions(
-	TRANSACTION_NAMES.FetchPriemDirections,
-	(filial: IAdmDictionaryItem, educLevel: IAdmDictionaryItem, inst: IAdmDictionaryItem) => ({
-		filial,
-		inst,
-		educLevel,
-	}),
-);
+export const priemDirectionsTrnActions = createTransactionActions<
+	IAdmDictionaryItem[],
+	{ filial: IAdmDictionaryItem; educLevel: IAdmDictionaryItem; inst: IAdmDictionaryItem }
+>(TRANSACTION_NAMES.FetchPriemDirections);
 
-export const priemDirectionsReducer = createTransactionReducer<IAdmDictionaryItem[]>(
-	priemDirectionsTrnActions,
-	{
-		cleanActions: [priemInstitutesTrnActions.trigger],
-	},
-);
+export const priemDirectionsReducer = createTransactionReducer(priemDirectionsTrnActions, {
+	cleanActions: [priemInstitutesTrnActions.trigger],
+});
 
 export const priemDirectionsTransactionSelector = createSelector(
 	transactionSelector,

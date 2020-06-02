@@ -6,15 +6,15 @@ import {
 	sagaEffects,
 } from '@black_bird/utils';
 import { AUTO_RETRY_REQUEST, PhoneType, TRANSACTION_NAMES } from '$common';
-import { updatePhoneRest } from '$rests';
+import { IUpdatePhoneResponse, updatePhoneRest } from '$rests';
 import { ITransactionsState } from '../transactionReducer';
 
-export const updatePhoneTransactionActions = createTransactionActions(
-	TRANSACTION_NAMES.UpdatePhone,
-	(phone: string, type: PhoneType) => ({ phone, type }),
-);
+export const updatePhoneTransactionActions = createTransactionActions<
+	IUpdatePhoneResponse,
+	{ phone: string; type: PhoneType }
+>(TRANSACTION_NAMES.UpdatePhone, ({ phone, type }) => ({ phone, type }));
 
-export const updatePhoneTransactionReducer = createTransactionReducer<string, { type: string }>(
+export const updatePhoneTransactionReducer = createTransactionReducer(
 	updatePhoneTransactionActions,
 	{
 		mapToKey: (payload) => payload.type,

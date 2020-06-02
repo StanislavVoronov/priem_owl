@@ -31,11 +31,15 @@ export function* uploadDocumentsSaga() {
 		isVoid(defaultPersonDocument) ||
 		defaultPersonDocument?.SERIA !== personForm?.document.series
 	) {
-		yield sagaEffects.put(uploadDocumentTransactionActions.trigger(personForm.document, guid()));
+		yield sagaEffects.put(
+			uploadDocumentTransactionActions.trigger({ document: personForm.document, docKey: guid() }),
+		);
 	}
 
 	if (isVoid(defaultEducDocument) || defaultEducDocument?.SERIA !== educForm?.document.series) {
-		yield sagaEffects.put(uploadDocumentTransactionActions.trigger(educForm.document, guid()));
+		yield sagaEffects.put(
+			uploadDocumentTransactionActions.trigger({ document: educForm.document, docKey: guid() }),
+		);
 	}
 
 	const { regDoc, liveDoc } = yield sagaEffects.select(contactsFormSelector);
@@ -44,7 +48,9 @@ export function* uploadDocumentsSaga() {
 		[...documents, regDoc, liveDoc]
 			.filter((item) => item && item.file !== null)
 			.map((doc: IDocument) => {
-				return sagaEffects.put(uploadDocumentTransactionActions.trigger(doc, guid()));
+				return sagaEffects.put(
+					uploadDocumentTransactionActions.trigger({ document: doc, docKey: guid() }),
+				);
 			}),
 	);
 }

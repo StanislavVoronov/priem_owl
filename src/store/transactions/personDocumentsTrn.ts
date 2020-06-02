@@ -8,13 +8,11 @@ import { IRemoteDocument, TRANSACTION_NAMES } from '$common';
 import { personDocumentsRest } from '$rests';
 import { transactionSelector } from './selectors';
 
-export const personDocumentsTrnActions = createTransactionActions(
+export const personDocumentsTrnActions = createTransactionActions<IRemoteDocument[]>(
 	TRANSACTION_NAMES.PERSON_DOCUMENTS,
 );
 
-export const personDocumentsReducer = createTransactionReducer<IRemoteDocument[]>(
-	personDocumentsTrnActions,
-);
+export const personDocumentsReducer = createTransactionReducer(personDocumentsTrnActions);
 
 export const personDocumentsTrnSelector = createSelector(transactionSelector, (state) => {
 	return state.personDocuments;

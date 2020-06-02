@@ -112,7 +112,10 @@ export const regFormSagas = [
 			const data = yield sagaEffects.select(isPersonFoundTransactionSelector);
 
 			yield sagaEffects.put(
-				setExistPersonVerCodeTrnActions.trigger(data.result.ID, payload.verAccountCode),
+				setExistPersonVerCodeTrnActions.trigger({
+					npId: data.result.ID,
+					code: payload.verAccountCode,
+				}),
 			);
 		} else {
 			yield sagaEffects.call(createNewLogin);
@@ -121,17 +124,19 @@ export const regFormSagas = [
 	sagaEffects.takeLatest(generateUserPasswordAction, function* ({ payload }: any) {
 		const password = generatePassword();
 
-		yield sagaEffects.put(createLoginTransactionActions.trigger(payload, password));
+		yield sagaEffects.put(createLoginTransactionActions.trigger({ login: payload, password }));
 	}),
 	sagaEffects.takeLatest(findPersonTransactionActions.success, function* ({ payload }: any) {
 		if (isEmptyArray(payload.response)) {
 			yield sagaEffects.put(goToNextStep());
 		} else {
-			const npId = yield sagaEffects.select(isPersonFoundTransactionSelector);
+			const npId: ITransaction<{ ID: number }> = yield sagaEffects.select(
+				isPersonFoundTransactionSelector,
+			);
 
-			yield sagaEffects.put(verPersonTrnActions.trigger(npId.result.ID));
+			yield sagaEffects.put(verPersonTrnActions.trigger({ npId: npId.result.ID }));
 
-			yield sagaEffects.put(verPersonContactsTrnActions.trigger(npId.result.ID));
+			yield sagaEffects.put(verPersonContactsTrnActions.trigger({ npId: npId.result.ID }));
 		}
 	}),
 	sagaEffects.takeEvery(createLoginTransactionActions.success, function* () {

@@ -1,4 +1,4 @@
-import { isEmpty, moment } from '@black_bird/utils';
+import { isEmpty } from '@black_bird/utils';
 import { IDocument } from '$common';
 import { RUS_ALPHABET } from '../constants';
 import { isNil, not } from '../functions';
@@ -24,7 +24,7 @@ export const validateRequireTextField = (value: string = '') => {
 };
 
 export const isValidDate = (value: string) => {
-	return moment(value).isValid() ? '' : 'Некорректный формат даты';
+	return value ? '' : 'Некорректный формат даты';
 };
 
 export const validateRusTextField = (value: string = '') => {

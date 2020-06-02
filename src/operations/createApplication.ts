@@ -14,7 +14,13 @@ export function* createNewPriemAppSaga() {
 			const flow = app.filial.ID === 1 ? 2 : 10;
 
 			return sagaEffects.put(
-				createAppTransactionActions.trigger(flow, app.admGroup, app.profile, index + 1, key),
+				createAppTransactionActions.trigger({
+					flow,
+					adm: app.admGroup,
+					prof: app.profile,
+					priority: index + 1,
+					app: key,
+				}),
 			);
 		}),
 	);
