@@ -11,12 +11,13 @@ import {
 	submitApplicationFormAction,
 	updateAddressTransactionActions,
 	updateAddressTransactionSelector,
+	updateLoginTrnActions,
 	uploadDocumentsTransactionSelector,
 	uploadDocumentTransactionActions,
 	verAccountFormSelector,
 	verPersonContactsTrnSelector,
 } from '$store';
-import { AddressType } from '$common';
+import { AddressType, IContactsForm } from '$common';
 import { uploadDocumentsSaga } from './uploadDocumentsSagas';
 import { createNewPriemAppSaga } from './createApplication';
 
@@ -71,7 +72,11 @@ export const verAccountFormSagas = [
 					(item: ITransaction<any>) => item.status === TransactionStatus.COMPLETED,
 				);
 
+			const { email }: IContactsForm = yield sagaEffects.select(contactsFormSelector);
+
 			if (folderCreated) {
+				yield sagaEffects.put(updateLoginTrnActions.trigger(email));
+
 				yield sagaEffects.put(priemLogoutTransactionActions.trigger());
 			}
 		},

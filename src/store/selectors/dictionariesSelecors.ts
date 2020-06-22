@@ -87,7 +87,7 @@ export const getNeedDocuments = createSelector(
 			: [];
 
 		return dictionary.filter((item: IDictionary) => {
-			return (isForeigner && item?.need_foreigner) || needDocuments.includes(item.id);
+			return (isForeigner && item?.need_foreigner !== 0) || needDocuments.includes(item.id);
 		});
 	},
 );

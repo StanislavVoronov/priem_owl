@@ -52,7 +52,5 @@ export const createPersonContactsSagas = [
 		yield sagaEffects.put(
 			updateAddressTransactionActions.trigger({ address: regAddress, kind: AddressType.Reg }),
 		);
-
-		yield sagaEffects.put(updateLoginTrnActions.trigger(email));
 	}),
 ];
