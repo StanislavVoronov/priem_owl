@@ -101,7 +101,7 @@ export const applicationFormSagas = [
 						educForm: educ,
 						payForm: pay,
 						admType,
-						admGroup: guid(),
+						admGroup: `${filial?.ID}-${institute?.ID}-${educ?.ID}-${pay?.ID}-${admType?.ID}`,
 					}),
 				);
 			}

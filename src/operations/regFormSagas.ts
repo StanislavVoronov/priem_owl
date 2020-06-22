@@ -1,6 +1,7 @@
 import {
 	guid,
 	isEmptyArray,
+	isVoid,
 	ITransaction,
 	not,
 	sagaEffects,
@@ -127,7 +128,7 @@ export const regFormSagas = [
 		yield sagaEffects.put(createLoginTransactionActions.trigger({ login: payload, password }));
 	}),
 	sagaEffects.takeLatest(findPersonTransactionActions.success, function* ({ payload }: any) {
-		if (isEmptyArray(payload.response)) {
+		if (isVoid(payload.response)) {
 			yield sagaEffects.put(goToNextStep());
 		} else {
 			const npId: ITransaction<{ ID: number }> = yield sagaEffects.select(

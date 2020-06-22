@@ -9,7 +9,7 @@ class PriemApi {
 
 		return Request.select();
 	};
-	static selectList = <Q, R>(api: string, payload?: Q, errorMessage?: string): Promise<R[]> => {
+	static selectList = <Q, R>(api: string, payload?: Q, errorMessage?: string): Promise<R> => {
 		const Request = new JsonRequest(PriemApi.host, PriemApi.path, api, payload, errorMessage);
 
 		return Request.selectList();

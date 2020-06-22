@@ -16,7 +16,7 @@ export const verPersonContactsReducer = createTransactionReducer(verPersonContac
 
 export const verPersonContactsTrnSelector = createSelector(transactionSelector, (state) => ({
 	...state.verPersonContacts,
-	result: state.verPersonContacts.result[0],
+	result: state.verPersonContacts.result,
 }));
 
 export const verPersonContactsTrnSaga = sagaEffects.transaction(

@@ -15,4 +15,4 @@ interface IPayload {
 }
 
 export const priemAdmGroupsRest = (payload: IPayload) =>
-	PriemApi.select<IPayload, IAdmGroupResponse>(PRIEM_API_NAMES.FetchPriemGroups, payload);
+	PriemApi.selectList<IPayload, IAdmGroupResponse>(PRIEM_API_NAMES.FetchPriemGroups, payload);

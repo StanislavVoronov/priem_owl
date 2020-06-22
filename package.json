@@ -20,7 +20,7 @@
 	"dependencies": {
 		"@black_bird/components": "^0.0.142",
 		"@black_bird/dictionaries": "^0.0.33",
-		"@black_bird/utils": "^0.6.41",
+		"@black_bird/utils": "0.6.41",
 		"@mgutm-fcu/auth": "^0.21.26",
 		"autoprefixer": "^9.5.0",
 		"autosuggest-highlight": "latest",
@@ -82,7 +82,7 @@
 		"tslint": "^5.12.1",
 		"tslint-config-prettier": "^1.17.0",
 		"tslint-react": "^3.6.0",
-		"typescript": "^3.8.3",
+		"typescript": "^3.9.5",
 		"url-loader": "1.1.2",
 		"webpack": "^4.28.4",
 		"webpack-cli": "^3.2.1",

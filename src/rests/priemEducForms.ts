@@ -14,7 +14,7 @@ interface IPayload {
 }
 
 export const priemEducFormsRest = (payload: IPayload) => {
-	return PriemApi.select<IPayload, IFetchResponse>(
+	return PriemApi.selectList<IPayload, IFetchResponse>(
 		PRIEM_API_NAMES.FetchPriemEducationForms,
 		payload,
 	);

@@ -35,7 +35,7 @@ export const verAccountFormSagas = [
 				createVerCodeTransactionActions.trigger({
 					email: email.trim(),
 					phone: mobPhone.trim(),
-					method: verPersonContacts,
+					method: verAccountMethod,
 				}),
 			);
 		}

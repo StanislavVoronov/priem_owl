@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"outDir": "owl/lib",
 		"module": "commonjs",
-		"target": "es5",
+		"target": "es6",
 		"lib": ["es5", "es6", "es7", "esnext", "dom"],
 		"sourceMap": true,
 		"allowJs": false,

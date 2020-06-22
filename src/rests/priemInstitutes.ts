@@ -11,4 +11,4 @@ interface IPayload {
 	admType: number;
 }
 export const priemInstRest = (payload: IPayload) =>
-	PriemApi.select<IPayload, IFetchResponse>(PRIEM_API_NAMES.FetchPriemInstitutes, payload);
+	PriemApi.selectList<IPayload, IFetchResponse>(PRIEM_API_NAMES.FetchPriemInstitutes, payload);

@@ -12,5 +12,5 @@ interface IPayload {
 }
 
 export const priemAdmTypeRest = (payload: IPayload) => {
-	return PriemApi.select<IPayload, IFetchResponse>(PRIEM_API_NAMES.FetchAdmTypes, payload);
+	return PriemApi.selectList<IPayload, IFetchResponse>(PRIEM_API_NAMES.FetchAdmTypes, payload);
 };

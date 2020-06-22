@@ -18,7 +18,7 @@ export const checkLoginReducer = createTransactionReducer(checkLoginTransactionA
 export const isUniqueLoginTransactionSelector = createSelector(transactionSelector, (state) => {
 	const { isFetching, exception, result }: any = state.checkLogin;
 
-	return { isFetching, exception, result: result.length ? result[0].COUNT === 0 : false };
+	return { isFetching, exception, result: result.COUNT === 0 };
 });
 
 export const checkLoginSaga = sagaEffects.transaction(

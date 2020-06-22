@@ -30,7 +30,6 @@ const RegFormView = (props: IProps) => {
 	const defaultOnChange = (data: IFormField<string>) => {
 		const genderName = firstNameDictionary.result.find((item) => item.name === data.value);
 
-		console.log('onChange', data);
 		if (genderName) {
 			onChange(data, [{ name: 'gender', value: String(genderName.sex) }]);
 		} else {
@@ -49,8 +48,6 @@ const RegFormView = (props: IProps) => {
 			  })
 			: items;
 	};
-
-	console.log('errors', errors);
 
 	return (
 		<>

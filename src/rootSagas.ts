@@ -1,4 +1,4 @@
-import { sagaEffects } from '@black_bird/utils';
+import { isVoid, sagaEffects } from '@black_bird/utils';
 import { classifiersSagas, fetchClassifiersAction } from '@black_bird/dictionaries';
 import { contactsFormSagas } from './operations/contactsFormSagas';
 import {
@@ -49,10 +49,8 @@ const rootSagas = [
 			}),
 		);
 	}),
-	sagaEffects.takeLatest(findPersonTransactionActions.success, function* () {
-		const { result } = yield sagaEffects.select(isPersonFoundTransactionSelector);
-
-		if (!result) {
+	sagaEffects.takeLatest(findPersonTransactionActions.success, function* ({ payload }) {
+		if (isVoid(payload.response)) {
 			yield sagaEffects.put(
 				fetchClassifiersAction({
 					dictionaries: FULL_DICTIONARY_LIST,

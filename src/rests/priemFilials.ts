@@ -12,5 +12,5 @@ export const priemFilialsRest = (noPayForms: number[] = [16, 20]) => {
 		noPayForms,
 	};
 
-	return PriemApi.select<IPayloadRq, IFetchResponse>(PRIEM_API_NAMES.PriemFilials, payload);
+	return PriemApi.selectList<IPayloadRq, IFetchResponse>(PRIEM_API_NAMES.PriemFilials, payload);
 };

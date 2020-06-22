@@ -14,7 +14,7 @@ interface IPayload {
 }
 
 export const priemDirectionRest = (payload: IPayload) =>
-	PriemApi.select<IPayload, IPriemDirectionsResponse>(
+	PriemApi.selectList<IPayload, IPriemDirectionsResponse>(
 		PRIEM_API_NAMES.FetchPriemDirections,
 		payload,
 	);

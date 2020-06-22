@@ -16,7 +16,7 @@ export const priemEducLevelsRest = (filial: number, noPayForms: number[] = [16, 
 		noPayForms,
 	};
 
-	return PriemApi.select<IPriemEducLevelsRequest, IPriemEducLevelsResponse>(
+	return PriemApi.selectList<IPriemEducLevelsRequest, IPriemEducLevelsResponse>(
 		PRIEM_API_NAMES.FetchPriemEducationLevels,
 		payload,
 	);

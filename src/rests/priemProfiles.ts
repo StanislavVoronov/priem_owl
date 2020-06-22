@@ -22,7 +22,7 @@ export const priemProfilesRest = ({ filial, inst, dir, noPayForms, admType }: IP
 		admType,
 	};
 
-	return PriemApi.select<IPayload, IPriemProfilesResponse>(
+	return PriemApi.selectList<IPayload, IPriemProfilesResponse>(
 		PRIEM_API_NAMES.FetchPriemProfiles,
 		payload,
 	);
