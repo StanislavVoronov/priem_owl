@@ -10,7 +10,9 @@ export const cyrillToLatin = (text: string) => {
 };
 
 export const generatePassword = () => {
-	return Math.random()
-		.toString(36)
-		.slice(-8);
+	return Math.random().toString(36).slice(-8);
+};
+
+export const formatToRemoteDate = (date: string) => {
+	return date.indexOf('.') > -1 ? date.trim().split('.').reverse().join('-') : date.trim();
 };

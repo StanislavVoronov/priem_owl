@@ -154,10 +154,12 @@ const ContactsFormView = (props: IProps) => {
 			{/*options={governmentDictionary ? governmentDictionary.values : []}*/}
 			{/*/>*/}
 			<TextInput
+				prefix="+7"
 				onChange={onChange}
 				value={values.mobPhone}
 				name="mobPhone"
 				label="Мобильный телефон"
+				helperText="Поддерживаются только российские операторы сотовой связи"
 				required
 			/>
 			<TextInput

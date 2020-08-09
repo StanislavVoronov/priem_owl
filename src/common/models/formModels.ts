@@ -5,6 +5,7 @@ import {
 	IDictionary,
 	IAdmDictionaryItem,
 	VerificationMethod,
+	IClassifier,
 } from '$common';
 import { IAdmGroup } from '$store';
 
@@ -97,7 +98,7 @@ export interface ICreatePersonData {
 	npId: number;
 }
 export interface IVerAccountForm {
-	verAccountMethod: VerificationMethod;
+	verAccountMethod: IClassifier<VerificationMethod>;
 	verAccountCode: string;
 }
 export type EnrollForms = IContactsForm & IEducationForm & IPersonForm & IDocument;

@@ -100,8 +100,6 @@ const ApplicationsFormView = (props: IProps) => {
 		? new Set([direction.ID, ...applications.map((item) => item.dir.ID)]).size > 3
 		: false;
 
-	const spoVisiable = educLevel?.ID === SPO_EDU_LEVEL_ID;
-
 	return (
 		<Column>
 			<Select
@@ -133,7 +131,7 @@ const ApplicationsFormView = (props: IProps) => {
 				/>
 			)}
 
-			{spoVisiable && (
+			{educLevel && (
 				<Select
 					isCleanable
 					required
@@ -145,12 +143,12 @@ const ApplicationsFormView = (props: IProps) => {
 					name="admType"
 					options={admTypesDictionary.result}
 					placeholder={`Выберите значение`}
-					title={'Класс'}
+					title={'Формат'}
 					loading={admTypesDictionary.isFetching}
 				/>
 			)}
 
-			{((educLevel && !spoVisiable) || (spoVisiable && admType)) && (
+			{admType && (
 				<Select
 					isCleanable
 					required

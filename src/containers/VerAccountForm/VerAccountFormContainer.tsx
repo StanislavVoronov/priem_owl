@@ -4,40 +4,37 @@ import {
 	contactsFormSelector,
 	createAppsTransactionSelector,
 	createPersonTransactionSelector,
-	createVerCodeTransactionActions,
 	createVerCodeTransactionSelector,
 	IRootState,
 	submitVerAccountForm,
 	updateAddressTransactionSelector,
 	uploadDocumentsTransactionSelector,
 	verAccountFormSelector,
+	verAccountMethodChanged,
 	verPersonContactsTrnSelector,
 } from '$store';
-import { AddressType, IVerAccountForm } from '$common';
+import { AddressType, IClassifier, IVerAccountForm, VerificationMethod } from '$common';
 import VerAccountFormView from './VerAccountFormView';
 import { Form, IFormField, IFormProps } from '@black_bird/components';
-import {
-	IException,
-	isEmpty,
-	isNotVoid,
-	ITransaction,
-	prop,
-	TransactionStatus,
-} from '@black_bird/utils';
+import { IException, isEmpty, ITransaction, TransactionStatus } from '@black_bird/utils';
 import classes from './styles.module.css';
 
 interface IMapStateToProps {
 	form: IVerAccountForm;
 	createCodeTransaction: ITransaction<unknown>;
+	verMethodTrn: ITransaction<any>;
 	error?: IException | null;
 	loading: boolean;
 	folderCreated: boolean;
 	email: string;
 	personExists?: string;
+	mobPhone: string;
+	verMethod: IClassifier<VerificationMethod>;
 }
 
 interface IDispatchToProps {
 	onSubmit: (values: IFormField) => void;
+	onChangeVerMethod: (value: IFormField<IClassifier<VerificationMethod>>) => void;
 }
 
 type IProps = IMapStateToProps & IDispatchToProps;
@@ -46,12 +43,17 @@ class AccountVerificationContainer extends React.Component<IProps> {
 		if (this.props.personExists) {
 			return null;
 		}
+		const { email, mobPhone, onChangeVerMethod, verMethod, verMethodTrn } = this.props;
 
 		return (
 			<VerAccountFormView
-				email={this.props.email}
-				value={prop('verAccountCode')(form.values)}
+				mobPhone={mobPhone}
+				email={email}
+				verMethod={verMethod}
+				values={form.values}
 				onChange={form.onChange}
+				onChangeVerMethod={onChangeVerMethod}
+				verMethodTrn={verMethodTrn}
 			/>
 		);
 	};
@@ -59,10 +61,26 @@ class AccountVerificationContainer extends React.Component<IProps> {
 		return isEmpty(values.verAccountCode);
 	};
 	render() {
-		const { loading, onSubmit, createCodeTransaction, error, form, folderCreated } = this.props;
+		const {
+			loading,
+			onSubmit,
+			createCodeTransaction,
+			verMethodTrn,
+			error,
+			form,
+			folderCreated,
+		} = this.props;
 
 		if (folderCreated) {
-			return <div className={classes.folder}>Документы на поступление успешно отправлены</div>;
+			return (
+				<p>
+					<div className={classes.folder}>Документы на поступление успешно отправлены</div>
+					<p>
+						Процесс поступления в Университет можно контролировать с помощью{' '}
+						<a href="https://monitoring.mgutm.ru/dev/priem/nest/">личного кабинете абитуриента</a>
+					</p>
+				</p>
+			);
 		}
 
 		return (
@@ -71,7 +89,9 @@ class AccountVerificationContainer extends React.Component<IProps> {
 				loading={loading}
 				disabled={this.disabledForm}
 				loadingText={
-					createCodeTransaction.isFetching
+					verMethodTrn.isFetching
+						? 'Формирования кода подтверждения'
+						: createCodeTransaction.isFetching
 						? 'Отправка кода подтверждения учетной записи'
 						: 'Формирование личного дела'
 				}
@@ -93,11 +113,13 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = (stat
 	const appException = Object.values(appsTransactions).find((item) => item.exception);
 	const docException = Object.values(docsTransactions).find((item) => item.exception);
 	const createCodeTransaction = createVerCodeTransactionSelector(state);
-	const { email } = contactsFormSelector(state);
+	const { email, mobPhone } = contactsFormSelector(state);
 	const verPersonContacts = verPersonContactsTrnSelector(state);
+	const verMethodTrn = createVerCodeTransactionSelector(state);
 
 	return {
 		personExists: verPersonContacts.result?.email,
+		verMethod: form.verAccountMethod,
 		form,
 		loading:
 			createPersonDataTransaction.isFetching ||
@@ -106,7 +128,9 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = (stat
 			Object.values(appsTransactions).some((item) => item.isFetching) ||
 			Object.values(docsTransactions).some((item) => item.isFetching),
 		createCodeTransaction,
+		verMethodTrn,
 		email,
+		mobPhone,
 		error:
 			createPersonDataTransaction.exception ||
 			createCodeTransaction.exception ||
@@ -130,6 +154,7 @@ const mapStateToProps: MapStateToProps<IMapStateToProps, {}, IRootState> = (stat
 };
 const mapDispatchToProps: MapDispatchToProps<IDispatchToProps, {}> = {
 	onSubmit: submitVerAccountForm,
+	onChangeVerMethod: verAccountMethodChanged,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountVerificationContainer);

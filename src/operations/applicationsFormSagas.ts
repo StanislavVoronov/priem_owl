@@ -42,19 +42,9 @@ export const applicationFormSagas = [
 	sagaEffects.takeEvery(onChangeEducLevelAction, function* () {
 		const { filial, educLevel } = yield sagaEffects.select(applicationsFormSelector);
 
-		if (educLevel.ID === SPO_EDU_LEVEL_ID) {
-			yield sagaEffects.put(cleanDefaultAdmTypeAction());
+		yield sagaEffects.put(cleanDefaultAdmTypeAction());
 
-			yield sagaEffects.put(priemAdmTypesTrnActions.trigger({ filial, eduLevel: educLevel }));
-		} else {
-			yield sagaEffects.put(onChangeAdmTypeAction({ name: '', value: { ID: 0, NAME: '' } }));
-
-			const { admType } = yield sagaEffects.select(applicationsFormSelector);
-
-			yield sagaEffects.put(
-				priemInstitutesTrnActions.trigger({ filial, eduLevel: educLevel, admType }),
-			);
-		}
+		yield sagaEffects.put(priemAdmTypesTrnActions.trigger({ filial, eduLevel: educLevel }));
 	}),
 	sagaEffects.takeEvery(onChangeDirectionAction, function* () {
 		const { filial, institute, direction } = yield sagaEffects.select(applicationsFormSelector);

@@ -1,4 +1,4 @@
-import { IPerson } from '$common';
+import { formatToRemoteDate, IPerson } from '$common';
 import { formatDate } from '@black_bird/utils';
 import { PriemApi, PRIEM_API_NAMES } from '$services';
 
@@ -20,7 +20,7 @@ export const findPersonRest = (data: IPerson) => {
 		fname: firstName,
 		lname: lastName,
 		mname: middleName,
-		birthdate: birthday.trim(),
+		birthdate: formatToRemoteDate(birthday),
 		default_birthdate: birthday,
 	};
 

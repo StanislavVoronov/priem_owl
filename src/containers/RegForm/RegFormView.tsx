@@ -96,7 +96,7 @@ const RegFormView = (props: IProps) => {
 				name="birthday"
 				value={values.birthday}
 				label="Дата рождения"
-				placeholder="дд.мм.гггг"
+				placeholder="дд-мм-гггг"
 				type="date"
 			/>
 

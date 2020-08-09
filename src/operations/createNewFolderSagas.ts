@@ -20,12 +20,14 @@ export const createNewFolderSagas = [
 			regFormSelector,
 		);
 		const { birthplace } = yield sagaEffects.select(personFormSelector);
-		const { needHostel } = yield sagaEffects.select(contactsFormSelector);
+		const { needHostel, email, mobPhone } = yield sagaEffects.select(contactsFormSelector);
 		const { firstHighEducation, prevEducation } = yield sagaEffects.select(educationFormSelector);
 
-		const emailCode = verAccountMethod === VerificationMethod.Email ? verAccountCode : '000000';
+		const emailCode =
+			verAccountMethod.code === VerificationMethod.Email ? verAccountCode : '000000';
 
-		const phoneCode = verAccountMethod === VerificationMethod.Phone ? verAccountCode : '000000';
+		const phoneCode =
+			verAccountMethod.code === VerificationMethod.Phone ? verAccountCode : '000000';
 
 		const payload = {
 			verEmailCode: emailCode.trim(),
@@ -40,6 +42,8 @@ export const createNewFolderSagas = [
 			highFirst: firstHighEducation,
 			bestPrevEdu: prevEducation,
 			cheatType: document?.cheatType?.id,
+			email,
+			phone: mobPhone,
 		};
 
 		yield sagaEffects.put(createPersonTransactionActions.trigger(payload));

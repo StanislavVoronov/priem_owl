@@ -6,7 +6,6 @@ import {
 	createPersonTransactionActions,
 	createPersonTransactionSelector,
 	createVerCodeTransactionActions,
-	createVerCodeTransactionSelector,
 	priemLogoutTransactionActions,
 	submitApplicationFormAction,
 	updateAddressTransactionActions,
@@ -15,30 +14,38 @@ import {
 	uploadDocumentsTransactionSelector,
 	uploadDocumentTransactionActions,
 	verAccountFormSelector,
+	verAccountMethodChanged,
 	verPersonContactsTrnSelector,
 } from '$store';
-import { AddressType, IContactsForm } from '$common';
+import { AddressType, IContactsForm, VerificationMethod } from '$common';
 import { uploadDocumentsSaga } from './uploadDocumentsSagas';
 import { createNewPriemAppSaga } from './createApplication';
 
 export const verAccountFormSagas = [
 	sagaEffects.takeEvery(submitApplicationFormAction, function* () {
-		const { verAccountMethod } = yield sagaEffects.select(verAccountFormSelector);
-		const { mobPhone, email } = yield sagaEffects.select(contactsFormSelector);
 		const verPersonContacts = yield sagaEffects.select(verPersonContactsTrnSelector);
 
 		if (verPersonContacts.status === TransactionStatus.COMPLETED) {
 			yield sagaEffects.call(uploadDocumentsSaga);
 			yield sagaEffects.call(createNewPriemAppSaga);
 		} else {
+			const { mobPhone } = yield sagaEffects.select(contactsFormSelector);
+
 			yield sagaEffects.put(
-				createVerCodeTransactionActions.trigger({
-					email: email.trim(),
-					phone: mobPhone.trim(),
-					method: verAccountMethod,
-				}),
+				verAccountMethodChanged({ value: { code: VerificationMethod.Phone, value: mobPhone } }),
 			);
 		}
+	}),
+	sagaEffects.takeLatest(verAccountMethodChanged, function* ({ payload }) {
+		const { mobPhone, email } = yield sagaEffects.select(contactsFormSelector);
+
+		yield sagaEffects.put(
+			createVerCodeTransactionActions.trigger({
+				email: email.trim(),
+				phone: mobPhone.trim(),
+				method: payload.value.code,
+			}),
+		);
 	}),
 	sagaEffects.takeEvery(
 		[

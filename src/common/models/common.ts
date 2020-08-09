@@ -20,6 +20,10 @@ export interface IAdmDictionaryItem {
 	ID: number;
 	NAME: string;
 }
+export interface IClassifier<Code> {
+	code: Code;
+	value: string;
+}
 
 export interface IAdmGroupItem {
 	ID: number;
