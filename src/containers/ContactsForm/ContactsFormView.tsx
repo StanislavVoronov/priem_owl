@@ -1,8 +1,8 @@
 import React from 'react';
-import { TextInput, Checkbox, Wrapper } from '@black_bird/components';
-import { IContactsForm, IDictionary } from '$common';
+import { TextInput, Checkbox, Wrapper, IFormField } from '@black_bird/components';
+import { IContactsForm, IDictionary, isEmpty } from '$common';
 import { IFormProps } from '@black_bird/components';
-import { ITransaction } from '@black_bird/utils';
+import { always, cond, equals, identity, isVoid, ITransaction } from '@black_bird/utils';
 import { DocumentForm } from '$components';
 
 interface IProps {
@@ -16,6 +16,16 @@ const ContactsFormView = (props: IProps) => {
 	const isRegAddressEqualLive = props.form.values.isRegAddressEqualLive;
 	const { form, governmentDictionary } = props;
 	const { values, onChange } = form;
+
+	const onChangeMobPhone = (field: IFormField<string>) => {
+		onChange({
+			...field,
+			value: cond([
+				[(value) => value.includes('+7'), identity],
+				[(value) => value.includes('+'), (value) => value.replace(/\+|\-/gi, '+7')],
+			])(field.value),
+		});
+	};
 
 	return (
 		<>
@@ -154,11 +164,11 @@ const ContactsFormView = (props: IProps) => {
 			{/*options={governmentDictionary ? governmentDictionary.values : []}*/}
 			{/*/>*/}
 			<TextInput
-				prefix="+7"
-				onChange={onChange}
+				onChange={onChangeMobPhone}
 				value={values.mobPhone}
 				name="mobPhone"
 				label="Мобильный телефон"
+				type="tel"
 				helperText="Поддерживаются только российские операторы сотовой связи"
 				required
 			/>

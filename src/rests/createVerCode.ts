@@ -20,8 +20,8 @@ export const createVerCodeRest = (
 	typeTransport?: VerificationMethod,
 ) => {
 	const payload: ICreateVerificationCodeRequest = {
-		email,
-		mobile_phone: mobilePhone,
+		email: email.trim(),
+		mobile_phone: mobilePhone.trim(),
 	};
 
 	if (VerificationMethod.Email === typeTransport) {

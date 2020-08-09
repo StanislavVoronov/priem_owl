@@ -18,7 +18,7 @@ const VerificationAccountFormView = (props: IProps) => {
 
 	const options = [
 		{ code: VerificationMethod.Phone, value: mobPhone },
-		{ code: VerificationMethod.Phone, value: email },
+		{ code: VerificationMethod.Email, value: email },
 	];
 
 	return (

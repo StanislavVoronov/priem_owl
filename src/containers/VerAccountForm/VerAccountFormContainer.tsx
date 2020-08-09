@@ -73,12 +73,12 @@ class AccountVerificationContainer extends React.Component<IProps> {
 
 		if (folderCreated) {
 			return (
-				<p>
+				<p className={classes.notification}>
 					<div className={classes.folder}>Документы на поступление успешно отправлены</div>
-					<p>
+					<div className={classes.cabinet}>
 						Процесс поступления в Университет можно контролировать с помощью{' '}
 						<a href="https://monitoring.mgutm.ru/dev/priem/nest/">личного кабинете абитуриента</a>
-					</p>
+					</div>
 				</p>
 			);
 		}

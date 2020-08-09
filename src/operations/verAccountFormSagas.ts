@@ -32,7 +32,9 @@ export const verAccountFormSagas = [
 			const { mobPhone } = yield sagaEffects.select(contactsFormSelector);
 
 			yield sagaEffects.put(
-				verAccountMethodChanged({ value: { code: VerificationMethod.Phone, value: mobPhone } }),
+				verAccountMethodChanged({
+					value: { code: VerificationMethod.Phone, value: mobPhone },
+				}),
 			);
 		}
 	}),
@@ -41,8 +43,8 @@ export const verAccountFormSagas = [
 
 		yield sagaEffects.put(
 			createVerCodeTransactionActions.trigger({
-				email: email.trim(),
-				phone: mobPhone.trim(),
+				email,
+				phone: mobPhone,
 				method: payload.value.code,
 			}),
 		);
@@ -82,10 +84,13 @@ export const verAccountFormSagas = [
 			const { email }: IContactsForm = yield sagaEffects.select(contactsFormSelector);
 
 			if (folderCreated) {
-				yield sagaEffects.put(updateLoginTrnActions.trigger(email));
-
 				yield sagaEffects.put(priemLogoutTransactionActions.trigger());
 			}
 		},
 	),
+	sagaEffects.takeLatest(createPersonTransactionActions.success, function* () {
+		const { email } = yield sagaEffects.select(contactsFormSelector);
+
+		yield sagaEffects.put(updateLoginTrnActions.trigger(email));
+	}),
 ];

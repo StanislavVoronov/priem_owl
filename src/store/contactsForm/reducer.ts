@@ -12,11 +12,14 @@ const initial: IContactsForm = {
 	regStreet: '',
 	regRegion: '',
 	email: '',
-	mobPhone: '',
+	mobPhone: '+7',
 	isRegAddressEqualLive: true,
 	mobileGovernment: { id: 1, name: 'Россия', phone_code: '7' },
 };
 
-const contactsFormReducer = createReducer([forAction(submitContactsFormAction, (state, payload) => payload)], initial);
+const contactsFormReducer = createReducer(
+	[forAction(submitContactsFormAction, (state, payload) => payload)],
+	initial,
+);
 
 export default contactsFormReducer;
