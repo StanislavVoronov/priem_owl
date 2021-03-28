@@ -5,7 +5,7 @@ import {
 	documentsFormSelector,
 	educationFormSelector,
 	personDocumentsTrnSelector,
-	personFormSelector,
+	personFormSelector, uploadDocumentAction,
 	uploadDocumentsTransactionSelector,
 	uploadDocumentTransactionActions,
 } from '$store';
@@ -55,6 +55,11 @@ export function* uploadDocumentsSaga() {
 	);
 }
 export const uploadDocumentsSagas = [
+	sagaEffects.takeLatest(uploadDocumentAction, function*({payload}) {
+		yield sagaEffects.put(
+			uploadDocumentTransactionActions.trigger({ document: { file: payload }, docKey: guid() }),
+		);
+	}),
 	sagaEffects.takeEvery(createPersonTransactionActions.success, uploadDocumentsSaga),
 	sagaEffects.takeEvery(uploadDocumentTransactionActions.success, function* () {
 		const docsTransactions = sagaEffects.select(uploadDocumentsTransactionSelector);

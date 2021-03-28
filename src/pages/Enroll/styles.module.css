@@ -24,14 +24,10 @@
 .stepper {
 	display: flex;
 	margin: 24px;
-	padding: 16px;
+	padding: 24px;
 	background-color: #fdfdff;
 	border-radius: 12px;
 	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
-}
-
-.root {
-	padding: 20px;
 }
 
 .stepButton {

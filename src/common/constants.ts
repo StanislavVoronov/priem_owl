@@ -142,9 +142,9 @@ export const ARRAY_RUS_ALPHABET = new Array(
 
 export const APPLICATION_FLOW = 2;
 
-export const FILE_MAX_SIZE = 5;
+export const FILE_MAX_SIZE = 128;
 
-export const TYPE_DOCS = ['jpeg', 'jpg'];
+export const TYPE_DOCS = ['image/jpeg', 'image/jpg', 'application/pdf'];
 
 export const SPO_EDU_LEVEL_ID = 34;
 

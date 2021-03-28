@@ -6,6 +6,7 @@ export const defaultDocument: IDocument = {
 	file: null,
 	subType: null,
 	government: { id: 1, name: 'Россия' },
+	id: 0
 };
 
 export const defaultPersonForm: IPersonForm = {

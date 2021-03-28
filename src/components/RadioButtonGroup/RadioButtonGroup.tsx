@@ -54,7 +54,6 @@ class RadioButtonGroup extends React.PureComponent<IRadioGroupButton> {
 		validate: noop,
 	};
 	onChange = (event: React.ChangeEvent<{}>, value: string) => {
-		console.log('event', event, value);
 		this.props.onChange({ name: this.props.name, value });
 	};
 	render() {

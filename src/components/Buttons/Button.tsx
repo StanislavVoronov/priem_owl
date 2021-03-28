@@ -11,6 +11,8 @@ interface IProps {
 	primary: boolean;
 	submit: boolean;
 	wrapperClassName: any;
+	variant: 'text' | 'outlined' | 'contained'
+
 }
 class Button extends React.Component<IProps> {
 	static defaultProps = {
@@ -20,13 +22,14 @@ class Button extends React.Component<IProps> {
 		fullWidth: false,
 		submit: false,
 		wrapperClassName: '',
+		variant:  'contained'
 	};
 	render() {
 		return (
 			<div className={this.props.wrapperClassName}>
 				<MaterialButton
 					fullWidth={this.props.fullWidth}
-					variant="contained"
+					variant= {this.props.variant}
 					className={this.props.className}
 					disabled={this.props.disabled}
 					color={this.props.primary ? 'primary' : 'default'}

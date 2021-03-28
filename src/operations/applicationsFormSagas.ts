@@ -114,7 +114,6 @@ export const applicationFormSagas = [
 		const { filial, institute, direction, educLevel, profiles } = yield sagaEffects.select(
 			applicationsFormSelector,
 		);
-		console.log(payload);
 
 		for (const profile of profiles) {
 			yield sagaEffects.put(

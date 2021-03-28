@@ -25,6 +25,7 @@ export interface IRootState {
 	verAccountForm: IVerAccountForm;
 	applicationsForm: IApplicationForm;
 	transactions: ITransactionsState;
+	images: Array<{id: number, name: string; file: File}>
 }
 
 export type IAdmTransactionList = ITransaction<IAdmDictionaryItem[]>;

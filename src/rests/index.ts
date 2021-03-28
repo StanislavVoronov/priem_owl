@@ -24,3 +24,5 @@ export * from './updateLogin';
 export * from './priemAdmType';
 export * from './personDocuments';
 export * from './personInfo';
+export * from './uploadFile';
+export * from './getFileImage'

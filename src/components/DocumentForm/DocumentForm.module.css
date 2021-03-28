@@ -16,3 +16,11 @@
 	align-items: end;
 	width: 100%;
 }
+
+
+.fileWrapper {
+	display: grid;
+	gap: 28px;
+	grid-template-rows: 1fr max-content;
+	text-align: center;
+}

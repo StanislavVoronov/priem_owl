@@ -11,6 +11,12 @@ import { noop, IDocument, validateRequireTextField } from '$common';
 import { isNotEmptyArray, ITransaction } from '@black_bird/utils';
 import classes from './DocumentForm.module.css';
 import { FILE_MAX_SIZE, TYPE_DOCS } from '../../common';
+import { connect } from 'react-redux';
+import { getFileImageRest, uploadFileRest } from '$rests';
+import { addNewFiles } from '../../store/images/actions';
+import { DocsModalDialog } from '../DocsModalDialog';
+import { Button } from '$components';
+import { IRootState } from '$store';
 
 type IDictionary = Record<any, any>;
 
@@ -29,9 +35,14 @@ interface IDocumentFormProps {
 	extraFields?: ReactElement<any> | null;
 	startFields?: ReactElement<any> | null;
 	endFields?: ReactElement<any> | null;
+	upload: (file: Blob, name: string, id: number) => void;
+	hasDownloadImages: boolean;
 }
 
-class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: boolean }> {
+class DocumentForm extends React.PureComponent<
+	IDocumentFormProps,
+	{ noNumber: boolean; opened: boolean }
+> {
 	static defaultProps = {
 		selectDocType: noop,
 		selectDocSubType: noop,
@@ -44,6 +55,7 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 	};
 	state = {
 		noNumber: false,
+		opened: false,
 	};
 	onChangeHasNumber = () => {
 		this.setState({ noNumber: !this.state.noNumber });
@@ -51,6 +63,28 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 		this.props.onChange({
 			name: 'num',
 			value: this.state.noNumber ? '' : '-',
+		});
+	};
+	handleOnClose = () => {
+		this.setState((state) => ({ ...state, opened: false }));
+	};
+	showDocsModal = () => {
+		this.setState((state) => ({ ...state, opened: true }));
+	};
+	handleOnSubmit = (image: { file: File; name: string; id: number }) => {
+		const { document, onChange, name } = this.props;
+
+		this.handleOnClose();
+
+		const newFile = new File([image.file], image.name, { type: 'image/jpeg' });
+
+		onChange({
+			name,
+			value: {
+				...document,
+				id: image.id,
+				file: newFile,
+			},
 		});
 	};
 	onChange = (field: IFormField) => {
@@ -67,12 +101,29 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 	onDownloadFile = (field: IFormField) => {
 		const { document, onChange, name } = this.props;
 
-		onChange({
-			name,
-			value: {
-				...document,
-				[field.name]: field.value,
-			},
+		const file = field.value;
+
+		uploadFileRest(file).then((response: { result: Array<{ ID: number }> }) => {
+			response?.result?.forEach((item) => {
+				getFileImageRest(item.ID).then((image) => {
+					const newFile = new File([image], file.name, { type: 'image/jpeg' });
+
+					this.props.upload(image, file.name, item.ID);
+
+					if (response?.result.length === 1) {
+						onChange({
+							name,
+							value: {
+								...document,
+								id: item.ID,
+								[field.name]: newFile,
+							},
+						});
+					} else {
+						this.setState((state) => ({ ...state, opened: true }));
+					}
+				});
+			});
 		});
 	};
 	onChangeType = (field: IFormField) => {
@@ -254,17 +305,33 @@ class DocumentForm extends React.PureComponent<IDocumentFormProps, { noNumber: b
 					) : null}
 					{endFields}
 				</Column>
-				<DownloadFile
-					formats={TYPE_DOCS}
-					maxSize={FILE_MAX_SIZE}
-					name="file"
-					file={file}
-					onChange={this.onDownloadFile}
-					title={fileTitle}
-				/>
+				<div className={classes.fileWrapper}>
+					<DownloadFile
+						formats={TYPE_DOCS}
+						maxSize={FILE_MAX_SIZE}
+						name="file"
+						file={file}
+						onChange={this.onDownloadFile}
+						title={fileTitle}
+					/>
+					{this.props.hasDownloadImages && (
+						<Button onClick={this.showDocsModal}>Выбрать из загруженных изображений</Button>
+					)}
+				</div>
+				{this.state.opened && (
+					<DocsModalDialog onSubmit={this.handleOnSubmit} onClose={this.handleOnClose} />
+				)}
 			</div>
 		);
 	}
 }
 
-export default DocumentForm;
+const mapStateToProps = (state: IRootState) => ({
+	hasDownloadImages: isNotEmptyArray(state.images),
+});
+
+const mapDispatchToProps = {
+	upload: addNewFiles,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentForm);

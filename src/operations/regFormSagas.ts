@@ -89,9 +89,6 @@ function* setPersonData() {
 		),
 	);
 
-	console.log('personInfo', personInfo);
-	console.log('documents', documents);
-
 	if (educDocument) {
 		yield sagaEffects.put(
 			initEducationFormAction({

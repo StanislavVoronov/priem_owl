@@ -27,11 +27,8 @@ import {
 	personInfoReducer,
 } from './transactions';
 import {
-	IAdmDictionaryItem,
-	ICreatePersonData,
 	IRemoteDocument,
 	IPersonInfo,
-	IPriemGroup,
 } from '$common';
 import {
 	IAdmGroupResponse,
@@ -75,7 +72,7 @@ export interface ITransactionsState {
 	personInfo: ITransaction<IPersonInfo>;
 }
 
-const transactionsReducer = combineReducers<ITransactionsState>({
+const transactionsReducer = combineReducers<any>({
 	checkLogin: checkLoginReducer,
 	createLogin: createLoginReducer,
 	findPerson: findPersonReducer,

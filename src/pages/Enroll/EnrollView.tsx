@@ -66,7 +66,6 @@ export class EnrollView extends React.PureComponent<IProps> {
 			<>
 				<EnrollHeader />
 				<Stepper
-					classes={{ root: classes.root }}
 					className={classes.stepper}
 					activeStep={this.props.activeStep}
 					orientation={'vertical'}>

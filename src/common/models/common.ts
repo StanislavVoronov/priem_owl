@@ -31,9 +31,9 @@ export interface IAdmGroupItem {
 }
 
 export interface IDocument {
-	type: IDictionary | null;
-	subType: IDictionary | null;
-	government: IDictionary;
+	type?: IDictionary | null;
+	subType?: IDictionary | null;
+	government?: IDictionary;
 	series?: string;
 	num?: string;
 	issieBy?: string;
@@ -41,6 +41,7 @@ export interface IDocument {
 	file: File | null;
 	codeDepartment?: string;
 	cheatType?: IDictionary | null;
+	id: number;
 	[key: string]: any;
 }
 

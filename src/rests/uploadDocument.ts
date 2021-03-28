@@ -13,7 +13,9 @@ export const uploadDocumentRest = (doc: IDocument) => {
 		iss_org: doc.issieBy ? `${doc.issieBy}${doc.codeDepartment ? ' ' + doc.codeDepartment : ''}` : '-',
 		iss_date: doc.date ? moment(doc.date).format('DD-MM-YYYY') : '01-01-1970',
 		iss_gov: doc.government ? doc.government.id : 1,
+		page: doc.id
 	};
 
-	return PriemApi.uploadDoc(PRIEM_API_NAMES.AddDocuments, document, doc.file);
+	return PriemApi.uploadDoc(PRIEM_API_NAMES.UploadPersonDocs, document);
 };
+

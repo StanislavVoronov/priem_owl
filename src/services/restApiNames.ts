@@ -4,6 +4,7 @@ export enum PRIEM_API_NAMES {
 	CheckUniqueLogin = 'testUniqueEnroll',
 	AddEnroll = 'addEnroll',
 	AddDocuments = 'iDATA_DOCUMENTS',
+	UploadFiles = 'iSYSTEM_UPLOAD_FILES',
 	UpdatePhone = 'uDATA_PHONES',
 	PriemFilials = 'ADM_FILIAL',
 	FetchPriemInstitutes = 'ADM_INST',
@@ -20,6 +21,8 @@ export enum PRIEM_API_NAMES {
 	UpdateLogin = 'DATA_NP_AUTH.LOGIN',
 	PersonDocuments = 'sDATA_DOCUMENTS',
 	PersonInfo = 'sDATA_NATURAL_PERSONS',
+	GetImage = 'sSYSTEM_UPLOAD_FILES.IMAGE',
+	UploadPersonDocs = 'iDATA_DOCUMENTS.UPLOAD'
 }
 
 export enum ENROLL_API_NAMES {

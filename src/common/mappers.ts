@@ -19,6 +19,7 @@ export const documentMapperLocal = (
 		issieBy: document.ISS_ORGANISATION,
 		date: document.ISS_DATE,
 		file: document.file,
+		id: document.ID,
 		codeDepartment:
 			typeof codeDepartment === 'string' && codeDepartment.search(regExp) !== -1
 				? codeDepartment

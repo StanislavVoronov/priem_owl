@@ -72,6 +72,7 @@ export interface IUploadDocRequest {
 	iss_org: string;
 	iss_date: string;
 	iss_gov: number;
+	page: number
 }
 
 export interface IPriemGroup {

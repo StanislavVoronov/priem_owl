@@ -29,6 +29,15 @@ class PriemApi {
 
 		return Request.post();
 	};
+
+	static downloadFile = <Q, R>(
+		api: PRIEM_API_NAMES,
+		payload: Q,
+	) => {
+		const Request = new JsonRequest(PriemApi.host, PriemApi.path, api, payload);
+
+		return Request.downloadFile();
+	};
 }
 
 export default PriemApi;

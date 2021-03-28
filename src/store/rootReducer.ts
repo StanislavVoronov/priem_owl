@@ -12,6 +12,7 @@ import transactionsReducer from './transactionReducer';
 import { documentsFormReducer } from './documentsForm';
 import { verAccountFormReducer } from './verAccountForm';
 import { IRootState } from './models';
+import { imagesReducer } from './images';
 const composeDevTools = composeWithDevTools({});
 
 export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) => () => {
@@ -27,6 +28,7 @@ export const createCustomStore = () => (...middlewares: Array<Middleware<any>>) 
 			documentsForm: documentsFormReducer,
 			verAccountForm: verAccountFormReducer,
 			transactions: transactionsReducer as any,
+			images: imagesReducer,
 		}),
 		composeDevTools(applyMiddleware(...middlewares)),
 		// process.env.PRIEM_BUILD !== 'production'

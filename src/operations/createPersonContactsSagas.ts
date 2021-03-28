@@ -35,13 +35,13 @@ export const createPersonContactsSagas = [
 			email,
 		}: IContactsForm = yield sagaEffects.select(contactsFormSelector);
 
-		const regAddress = `${regIndex}, ${regDoc.government.name}${regRegion ? ', ' + regRegion : ''}${
+		const regAddress = `${regIndex}, ${regDoc?.government?.name}${regRegion ? ', ' + regRegion : ''}${
 			regLocality ? ', ' + regLocality : ''
 		}${prepareAddress(regStreet, regHome, regBlock, regFlat)}`;
 
 		const liveAddress = isRegAddressEqualLive
 			? regAddress
-			: `${liveIndex}, ${liveDoc.government.name}${liveRegion ? ', ' + liveRegion : ''}${
+			: `${liveIndex}, ${liveDoc?.government?.name}${liveRegion ? ', ' + liveRegion : ''}${
 					liveLocality ? ', ' + liveLocality : ''
 			  }${prepareAddress(liveStreet, liveHome, liveBlock, liveFlat)}`;
 

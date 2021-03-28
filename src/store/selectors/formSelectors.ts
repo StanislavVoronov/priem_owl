@@ -26,7 +26,7 @@ export const documentsFormSelector = (state: IRootState) => {
 };
 
 export const isForeignerSelector = (state: IRootState) => {
-	return state.personForm.document.government.id !== 1;
+	return state.personForm?.document?.government?.id !== 1;
 };
 
 export const verAccountFormSelector = (state: IRootState) => {

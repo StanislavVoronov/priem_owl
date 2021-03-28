@@ -16,6 +16,8 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 
 import DeleteIcon from '@material-ui/icons/Delete';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
 
 export * from './Buttons';
 
@@ -41,4 +43,6 @@ export {
 	ExpansionPanel,
 	ListSubheader,
 	List,
+	ChevronRight,
+	ChevronLeft,
 };

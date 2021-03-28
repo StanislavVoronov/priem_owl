@@ -16,3 +16,5 @@ export const initDocumentFormAction = createAction(
 	`${NAMESPACE}/INIT_DOC_FORM`,
 	(documents: IDocument[]) => documents,
 );
+
+export const uploadDocumentAction = createAction(`${NAMESPACE}/UPLOAD_NEW_DOCUMENT`, (doc: File) => doc);
