@@ -5,7 +5,6 @@ import { PriemApi, PRIEM_API_NAMES } from '$services';
 
 export const uploadDocumentRest = (doc: IDocument) => {
 	const document: IUploadDocRequest = {
-		mime: doc.file ? doc.file.type : 'image/jpeg',
 		type: doc.type ? doc.type.id : 0,
 		stype: doc.subType ? doc.subType.id : null,
 		seria: doc.series || '-',

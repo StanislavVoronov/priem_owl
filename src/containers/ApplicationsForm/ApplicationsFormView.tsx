@@ -97,7 +97,7 @@ const ApplicationsFormView = (props: IProps) => {
 
 	const nextButtonDisabled = isEmptyArray(applications);
 	const countExceeded = direction
-		? new Set([direction.ID, ...applications.map((item) => item.dir.ID)]).size > 3
+		? new Set([direction.ID, ...applications.map((item) => item.dir.ID)]).size > 5
 		: false;
 
 	return (

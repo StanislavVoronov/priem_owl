@@ -42,7 +42,7 @@ interface IDocumentFormProps {
 class DocumentForm extends React.PureComponent<
 	IDocumentFormProps,
 	{ noNumber: boolean; opened: boolean }
-> {
+	> {
 	static defaultProps = {
 		selectDocType: noop,
 		selectDocSubType: noop,
@@ -151,6 +151,7 @@ class DocumentForm extends React.PureComponent<
 			endFields,
 			startFields,
 			dictionaryCheatTypes,
+			hasDownloadImages,
 		} = this.props;
 		const {
 			type,
@@ -165,11 +166,13 @@ class DocumentForm extends React.PureComponent<
 			codeDepartment,
 		} = this.props.document;
 
+		console.log("hasDownloadImages", hasDownloadImages);
+
 		const filteredSubTypesDocDictionary = dictionarySubTypes
 			? {
-					...dictionarySubTypes,
-					result: dictionarySubTypes.result.filter((item) => item.type === type?.id),
-			  }
+				...dictionarySubTypes,
+				result: dictionarySubTypes.result.filter((item) => item.type === type?.id),
+			}
 			: { result: [], exception: null, isFetching: false };
 
 		const { noNumber } = this.state;
@@ -327,7 +330,7 @@ class DocumentForm extends React.PureComponent<
 }
 
 const mapStateToProps = (state: IRootState) => ({
-	hasDownloadImages: isNotEmptyArray(state.images),
+	hasDownloadImages: state.images.length > 0,
 });
 
 const mapDispatchToProps = {
