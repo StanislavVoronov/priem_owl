@@ -10,7 +10,6 @@ interface IPayload {
 	inst: number;
 	eduLevel: number;
 	noPayForms: number[];
-	admType: number;
 }
 
 export const priemDirectionRest = (payload: IPayload) =>

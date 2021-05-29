@@ -38,6 +38,5 @@ export const priemInstsSaga = sagaEffects.transaction(priemInstitutesTrnActions,
 		filial: payload.filial.ID,
 		eduLevel: payload.eduLevel.ID,
 		noPayForms,
-		admType: payload.admType.ID,
 	});
 });

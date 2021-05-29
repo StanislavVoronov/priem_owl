@@ -7,8 +7,11 @@ interface IFetchResponse {
 
 interface IPayload {
 	filial: number;
+	institute: number;
+	direction: number;
+	educForms: number[];
 	eduLevel: number;
-	noPayForms: number[];
+	payForms: number[];
 }
 
 export const priemAdmTypeRest = (payload: IPayload) => {

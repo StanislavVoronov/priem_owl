@@ -16,6 +16,10 @@ import { transactionSelector } from './selectors';
 interface IAdmTypePayload {
 	filial: IAdmDictionaryItem;
 	eduLevel: IAdmDictionaryItem;
+	institute: IAdmDictionaryItem;
+	direction: IAdmDictionaryItem;
+	educForms: IAdmDictionaryItem[];
+	payForms: IAdmDictionaryItem[];
 }
 export const priemAdmTypesTrnActions = createTransactionActions<
 	IAdmDictionaryItem[],
@@ -36,11 +40,13 @@ export const priemAdmTypesTrnSelector = createSelector(transactionSelector, prop
 export const priemAdmTypeSaga = sagaEffects.transaction(priemAdmTypesTrnActions, function* (
 	payload,
 ) {
-	const noPayForms: number[] = yield sagaEffects.select(disabledPayFormSelector);
 
 	return yield priemAdmTypeRest({
 		filial: payload.filial.ID,
+		institute: payload.institute.ID,
 		eduLevel: payload.eduLevel.ID,
-		noPayForms,
+		direction: payload.direction.ID,
+		educForms: payload.educForms.map((item) => item.ID),
+		payForms: payload.payForms.map((item) => item.ID),
 	});
 });

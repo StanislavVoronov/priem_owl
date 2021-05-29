@@ -41,7 +41,6 @@ const profileReducer = createReducer<IAdmDictionaryItem[]>(
 			onChangeInstAction,
 			onChangeDirectionAction,
 			newFetchPriemAppSuccessAction,
-			onChangeAdmTypeAction,
 		],
 	},
 );
@@ -58,7 +57,7 @@ const instituteReducer = createReducer<IAdmDictionaryItem | null>(
 	[forAction(onChangeInstAction, (state, payload) => payload)],
 	null,
 	{
-		cleanActions: [onChangeEducLevelAction, onChangeAdmTypeAction, onChangeFilialAction],
+		cleanActions: [onChangeEducLevelAction, onChangeFilialAction],
 	},
 );
 
@@ -70,7 +69,6 @@ const directionReducer = createReducer<IAdmDictionaryItem | null>(
 			onChangeInstAction,
 			onChangeFilialAction,
 			onChangeEducLevelAction,
-			onChangeAdmTypeAction,
 			newFetchPriemAppSuccessAction,
 		],
 	},

@@ -135,23 +135,6 @@ const ApplicationsFormView = (props: IProps) => {
 				<Select
 					isCleanable
 					required
-					value={admType}
-					onChange={onChangeAdmType}
-					getOptionValue={getId}
-					error={admTypesDictionary.exception?.comment}
-					getOptionLabel={prop('NAME')}
-					name="admType"
-					options={admTypesDictionary.result}
-					placeholder={`Выберите значение`}
-					title={'Формат'}
-					loading={admTypesDictionary.isFetching}
-				/>
-			)}
-
-			{admType && (
-				<Select
-					isCleanable
-					required
 					value={institute}
 					onChange={onChangeInst}
 					getOptionValue={getId}
@@ -235,6 +218,23 @@ const ApplicationsFormView = (props: IProps) => {
 					title={'Форма финансирования'}
 					isMulti
 					loading={payFormDictionary.isFetching}
+				/>
+			)}
+
+			{isNotEmptyArray(payForms) && (
+				<Select
+					isCleanable
+					required
+					value={admType}
+					onChange={onChangeAdmType}
+					getOptionValue={getId}
+					error={admTypesDictionary.exception?.comment}
+					getOptionLabel={prop('NAME')}
+					name="admType"
+					options={admTypesDictionary.result}
+					placeholder={`Выберите значение`}
+					title={'Формат'}
+					loading={admTypesDictionary.isFetching}
 				/>
 			)}
 

@@ -9,7 +9,7 @@ import {
 	onChangeEducFormsAction,
 	onChangeEducLevelAction,
 	onChangeFilialAction,
-	onChangeInstAction,
+	onChangeInstAction, onChangePayFormsAction,
 	onChangeProfilesAction,
 	priemAdmGroupsTransactionActions,
 	priemAdmGroupsTrnSelector,
@@ -42,9 +42,7 @@ export const applicationFormSagas = [
 	sagaEffects.takeEvery(onChangeEducLevelAction, function* () {
 		const { filial, educLevel } = yield sagaEffects.select(applicationsFormSelector);
 
-		yield sagaEffects.put(cleanDefaultAdmTypeAction());
-
-		yield sagaEffects.put(priemAdmTypesTrnActions.trigger({ filial, eduLevel: educLevel }));
+		yield sagaEffects.put(priemInstitutesTrnActions.trigger({ filial, eduLevel: educLevel }));
 	}),
 	sagaEffects.takeEvery(onChangeDirectionAction, function* () {
 		const { filial, institute, direction } = yield sagaEffects.select(applicationsFormSelector);
@@ -69,11 +67,13 @@ export const applicationFormSagas = [
 			priemPayFormsTransactionActions.trigger({ filial, inst: institute, direction, educForms }),
 		);
 	}),
-	sagaEffects.takeEvery(onChangeAdmTypeAction, function* () {
-		const { filial, educLevel, admType } = yield sagaEffects.select(applicationsFormSelector);
+	sagaEffects.takeEvery(onChangePayFormsAction, function* () {
+		const { filial, institute, direction, educForms, payForms, educLevel } = yield sagaEffects.select(
+			applicationsFormSelector,
+		);
 
 		yield sagaEffects.put(
-			priemInstitutesTrnActions.trigger({ filial, eduLevel: educLevel, admType }),
+			priemAdmTypesTrnActions.trigger({ filial, institute, direction, eduLevel: educLevel, educForms, payForms }),
 		);
 	}),
 	sagaEffects.takeEvery(newPriemAppAddedAction, function* () {

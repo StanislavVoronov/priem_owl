@@ -11,7 +11,6 @@ interface IPayload {
 	dir: number;
 	educForms: number[];
 	noPayForms: number[];
-	admType: number;
 }
 
 export const priemPayFormsRest = (payload: IPayload) =>

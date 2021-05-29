@@ -10,16 +10,14 @@ interface IPayload {
 	inst: number;
 	dir: number;
 	noPayForms: number[];
-	admType: number;
 }
 
-export const priemProfilesRest = ({ filial, inst, dir, noPayForms, admType }: IPayload) => {
+export const priemProfilesRest = ({ filial, inst, dir, noPayForms }: IPayload) => {
 	const payload = {
 		filial,
 		inst,
 		dir,
 		noPayForms,
-		admType,
 	};
 
 	return PriemApi.selectList<IPayload, IPriemProfilesResponse>(

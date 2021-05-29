@@ -29,13 +29,11 @@ export const educFormsSaga = sagaEffects.transaction(priemEducFormsTransactionAc
 	payload,
 ) {
 	const noPayForms: number[] = yield sagaEffects.select(disabledPayFormSelector);
-	const admType: IAdmDictionaryItem = yield sagaEffects.select(applicationAmdTypeSelector);
 
 	return yield priemEducFormsRest({
 		filial: payload.filial.ID,
 		inst: payload.inst.ID,
 		dir: payload.direction.ID,
 		noPayForms,
-		admType: admType.ID,
 	});
 });
